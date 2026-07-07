@@ -1,0 +1,4279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBP Restaurant Management System</title>
+    <!-- Leaflet CSS for map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .landing-page {
+            padding: 40px;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero-section h2 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .hero-section p {
+            color: #666;
+            font-size: 1.1em;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .restaurant-types {
+            margin: 40px 0;
+        }
+
+        .restaurant-types h3 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .type-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .type-card h4 {
+            margin-bottom: 10px;
+        }
+
+        .type-card p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+        }
+
+        .btn-map {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .btn-map:hover {
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+            margin: 2px;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .login-section {
+            padding: 40px;
+            max-width: 400px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .login-section.active {
+            display: block;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .setup-wizard {
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .setup-wizard.active {
+            display: block;
+        }
+
+        .wizard-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-bottom: 3px solid #e0e0e0;
+            color: #999;
+        }
+
+        .step.active {
+            border-bottom-color: #667eea;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .wizard-content {
+            display: none;
+        }
+
+        .wizard-content.active {
+            display: block;
+        }
+
+        .wizard-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .dashboard {
+            display: none;
+            padding: 30px;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: #e0e0e0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: #f9f9f9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            opacity: 0.9;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .table th {
+            background: #f0f0f0;
+            font-weight: 600;
+        }
+
+        .table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.active {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            margin-top: 20px;
+        }
+
+        .logout-btn:hover {
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        /* Responsive Design - @media Queries */
+
+        /* Extra Small Mobile (< 360px) */
+        @media (max-width: 359px) {
+            .container {
+                border-radius: 0;
+                margin: 0;
+            }
+
+            .header {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .header p {
+                font-size: 0.9em;
+            }
+
+            .landing-page {
+                padding: 20px 15px;
+            }
+
+            .hero-section {
+                padding: 30px 10px;
+            }
+
+            .hero-section h2 {
+                font-size: 1.5em;
+            }
+
+            .hero-section p {
+                font-size: 0.95em;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .types-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+                width: 100%;
+                margin: 5px 0;
+            }
+
+            .login-section {
+                padding: 20px 15px;
+            }
+
+            .setup-wizard {
+                padding: 20px 15px;
+            }
+
+            .wizard-steps {
+                font-size: 12px;
+            }
+
+            .step {
+                padding: 8px 5px;
+            }
+
+            .dashboard {
+                padding: 15px;
+            }
+
+            .nav-tabs {
+                gap: 5px;
+            }
+
+            .nav-tab {
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .stat-card h4 {
+                font-size: 1.5em;
+            }
+
+            .table th,
+            .table td {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+        }
+
+        /* Small Mobile (360px - 480px) */
+        @media (min-width: 360px) and (max-width: 480px) {
+            .container {
+                border-radius: 10px;
+                margin: 10px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .types-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .btn {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .nav-tab {
+                padding: 10px 18px;
+                font-size: 13px;
+            }
+        }
+
+        /* Tablet (481px - 768px) */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .container {
+                margin: 15px;
+            }
+
+            .header {
+                padding: 35px 25px;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .types-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-tabs {
+                gap: 8px;
+            }
+
+            .nav-tab {
+                padding: 11px 20px;
+            }
+        }
+
+        /* Small Desktop (769px - 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                max-width: 100%;
+                margin: 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .types-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Landscape Mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .landing-page {
+                padding: 15px 20px;
+            }
+
+            .hero-section {
+                padding: 20px 10px;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+
+            .feature-card {
+                padding: 15px;
+            }
+
+            .feature-card h3 {
+                font-size: 1em;
+            }
+
+            .feature-card p {
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ EBP Restaurant Management System</h1>
+            <p>Enterprise Business Platform - Restaurant Module</p>
+        </div>
+
+        <!-- Landing Page -->
+        <div id="landingPage" class="landing-page">
+            <div class="hero-section">
+                <h2>Solusi Manajemen Restoran Terpadu</h2>
+                <p>Platform manajemen restoran enterprise yang mendukung berbagai jenis usaha kuliner dengan fitur
+                    lengkap untuk multi-tenant, multi-cabang, dan multi-role.</p>
+                <button class="btn" id="loginBtn">Login ke Sistem</button>
+                <a href="/map.html" class="btn btn-map" target="_blank">🗺️ Cari Lokasi Restoran</a>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>📊 Multi-Tenant</h3>
+                    <p>Dukung banyak restoran dalam satu platform dengan isolasi data yang aman</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🏢 Multi-Cabang</h3>
+                    <p>Kelola banyak cabang restoran dengan terpusat atau terpisah</p>
+                </div>
+                <div class="feature-card">
+                    <h3>👥 Multi-Role</h3>
+                    <p>Sistem role dan permission yang fleksibel sesuai kebutuhan</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📱 Real-time</h3>
+                    <p>Update order, inventory, dan kitchen display secara real-time</p>
+                </div>
+            </div>
+
+            <div class="restaurant-types">
+                <h3>Jenis Usaha yang Didukung</h3>
+                <div class="types-grid">
+                    <div class="type-card">
+                        <h4>🍽️ Restoran</h4>
+                        <p>Restoran makanan lengkap dengan reservasi</p>
+                    </div>
+                    <div class="type-card">
+                        <h4>☕ Kafe</h4>
+                        <p>Kafe dengan fokus minuman dan makanan ringan</p>
+                    </div>
+                    <div class="type-card">
+                        <h4>🍺 Bar/Pub</h4>
+                        <p>Bar dan pub dengan sistem minuman</p>
+                    </div>
+                    <div class="type-card">
+                        <h4>🍔 Fast Food</h4>
+                        <p>Restoran cepat saji dengan drive-thru</p>
+                    </div>
+                    <div class="type-card">
+                        <h4>🍱 Food Court</h4>
+                        <p>Area makan dengan banyak stall</p>
+                    </div>
+                    <div class="type-card">
+                        <h4>🎂 Catering</h4>
+                        <p>Layanan katering untuk event</p>
+                    </div>
+                    <div class="type-card">
+                        <h4>🍷 Fine Dining</h4>
+                        <p>Restoran mewah dengan layanan premium</p>
+                    </div>
+                    <div class="type-card">
+                        <h4>☕ Coffee Shop</h4>
+                        <p>Kedai kopi dengan roasting</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Section -->
+        <div id="loginSection" class="login-section">
+            <div id="loginMessage" class="message"></div>
+            <h2 style="text-align: center; margin-bottom: 20px; color: #333;">Login</h2>
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <button type="button" class="btn btn-secondary" id="backToLanding">Kembali</button>
+
+                <div class="form-group" style="margin-top: 15px;">
+                    <label for="quickLoginSelect">⚡ Quick Login by F&B Type & Role</label>
+                    <select id="quickLoginSelect" class="form-control">
+                        <option value="">-- Select User --</option>
+                        <optgroup label="🏠 Home-Based Business">
+                            <option value='{"username":"home_owner","password":"password"}'>home_owner — Home Owner
+                            </option>
+                            <option value='{"username":"home_staff","password":"password"}'>home_staff — Home Staff
+                            </option>
+                            <option value='{"username":"kitchen_owner","password":"password"}'>kitchen_owner — Kitchen
+                                Owner</option>
+                            <option value='{"username":"kitchen_staff","password":"password"}'>kitchen_staff — Kitchen
+                                Staff</option>
+                        </optgroup>
+                        <optgroup label="🍽️ Small Restaurant">
+                            <option value='{"username":"resto_owner","password":"password"}'>resto_owner — Restaurant
+                                Owner</option>
+                            <option value='{"username":"resto_manager","password":"password"}'>resto_manager —
+                                Restaurant Manager</option>
+                            <option value='{"username":"resto_waiter","password":"password"}'>resto_waiter — Waiter
+                            </option>
+                            <option value='{"username":"resto_kitchen","password":"password"}'>resto_kitchen — Kitchen
+                                Staff</option>
+                            <option value='{"username":"resto_cashier","password":"password"}'>resto_cashier — Cashier
+                            </option>
+                            <option value='{"username":"cafe_owner","password":"password"}'>cafe_owner — Cafe Owner
+                            </option>
+                            <option value='{"username":"cafe_barista","password":"password"}'>cafe_barista — Barista
+                            </option>
+                            <option value='{"username":"warung_owner","password":"password"}'>warung_owner — Warung
+                                Owner</option>
+                            <option value='{"username":"warung_helper","password":"password"}'>warung_helper — Warung
+                                Helper</option>
+                        </optgroup>
+                        <optgroup label="🏢 Regional Chain">
+                            <option value='{"username":"chain_owner","password":"password"}'>chain_owner — Chain Owner
+                            </option>
+                            <option value='{"username":"area_manager","password":"password"}'>area_manager — Area
+                                Manager</option>
+                            <option value='{"username":"branch_manager","password":"password"}'>branch_manager — Branch
+                                Manager</option>
+                            <option value='{"username":"chain_staff","password":"password"}'>chain_staff — Chain Staff
+                            </option>
+                        </optgroup>
+                        <optgroup label="🌍 National Corporation">
+                            <option value='{"username":"corp_ceo","password":"password"}'>corp_ceo — CEO</option>
+                            <option value='{"username":"corp_coo","password":"password"}'>corp_coo — COO</option>
+                            <option value='{"username":"corp_cfo","password":"password"}'>corp_cfo — CFO</option>
+                            <option value='{"username":"regional_director","password":"password"}'>regional_director —
+                                Regional Director</option>
+                            <option value='{"username":"nat_branch_manager","password":"password"}'>nat_branch_manager —
+                                Branch Manager</option>
+                            <option value='{"username":"corp_staff","password":"password"}'>corp_staff — Corporate Staff
+                            </option>
+                        </optgroup>
+                        <optgroup label="🌐 International Corporation">
+                            <option value='{"username":"global_ceo","password":"password"}'>global_ceo — Global CEO
+                            </option>
+                            <option value='{"username":"global_coo","password":"password"}'>global_coo — Global COO
+                            </option>
+                            <option value='{"username":"country_manager","password":"password"}'>country_manager —
+                                Country Manager</option>
+                            <option value='{"username":"intl_regional_manager","password":"password"}'>
+                                intl_regional_manager — Regional Manager</option>
+                            <option value='{"username":"intl_staff","password":"password"}'>intl_staff — International
+                                Staff</option>
+                        </optgroup>
+                        <optgroup label="🚚 Food Truck">
+                            <option value='{"username":"truck_owner","password":"password"}'>truck_owner — Truck Owner
+                            </option>
+                            <option value='{"username":"truck_driver","password":"password"}'>truck_driver — Truck
+                                Driver</option>
+                            <option value='{"username":"truck_cook","password":"password"}'>truck_cook — Truck Cook
+                            </option>
+                            <option value='{"username":"vendor_owner","password":"password"}'>vendor_owner — Vendor
+                                Owner</option>
+                            <option value='{"username":"vendor_helper","password":"password"}'>vendor_helper — Vendor
+                                Helper</option>
+                        </optgroup>
+                        <optgroup label="🏪 Stall/Kiosk">
+                            <option value='{"username":"stall_owner","password":"password"}'>stall_owner — Stall Owner
+                            </option>
+                            <option value='{"username":"stall_attendant","password":"password"}'>stall_attendant — Stall
+                                Attendant</option>
+                            <option value='{"username":"kiosk_owner","password":"password"}'>kiosk_owner — Kiosk Owner
+                            </option>
+                            <option value='{"username":"kiosk_staff","password":"password"}'>kiosk_staff — Kiosk Staff
+                            </option>
+                        </optgroup>
+                        <optgroup label="☕ Cafe">
+                            <option value='{"username":"cafe_manager","password":"password"}'>cafe_manager — Cafe
+                                Manager</option>
+                            <option value='{"username":"cafe_barista","password":"password"}'>cafe_barista — Barista
+                            </option>
+                            <option value='{"username":"cafe_server","password":"password"}'>cafe_server — Server
+                            </option>
+                            <option value='{"username":"coffee_owner","password":"password"}'>coffee_owner — Coffee
+                                Owner</option>
+                            <option value='{"username":"coffee_barista","password":"password"}'>coffee_barista — Coffee
+                                Barista</option>
+                        </optgroup>
+                        <optgroup label="🍽️ Restaurant">
+                            <option value='{"username":"fine_owner","password":"password"}'>fine_owner — Fine Dining
+                                Owner</option>
+                            <option value='{"username":"fine_manager","password":"password"}'>fine_manager — Fine Dining
+                                Manager</option>
+                            <option value='{"username":"fine_waiter","password":"password"}'>fine_waiter — Fine Dining
+                                Waiter</option>
+                            <option value='{"username":"fine_chef","password":"password"}'>fine_chef — Executive Chef
+                            </option>
+                            <option value='{"username":"casual_owner","password":"password"}'>casual_owner — Casual
+                                Dining Owner</option>
+                            <option value='{"username":"casual_manager","password":"password"}'>casual_manager — Casual
+                                Dining Manager</option>
+                        </optgroup>
+                        <optgroup label="🏨 Hotel">
+                            <option value='{"username":"hotel_gm","password":"password"}'>hotel_gm — Hotel General
+                                Manager</option>
+                            <option value='{"username":"hotel_fb","password":"password"}'>hotel_fb — F&B Manager
+                            </option>
+                            <option value='{"username":"hotel_staff","password":"password"}'>hotel_staff — Hotel Staff
+                            </option>
+                            <option value='{"username":"resort_gm","password":"password"}'>resort_gm — Resort Manager
+                            </option>
+                            <option value='{"username":"resort_fb","password":"password"}'>resort_fb — Resort F&B
+                                Manager</option>
+                        </optgroup>
+                        <optgroup label="✈️ International Facility">
+                            <option value='{"username":"airport_mgr","password":"password"}'>airport_mgr — Airport
+                                Manager</option>
+                            <option value='{"username":"airport_staff","password":"password"}'>airport_staff — Airport
+                                Staff</option>
+                            <option value='{"username":"mall_mgr","password":"password"}'>mall_mgr — Mall Manager
+                            </option>
+                            <option value='{"username":"mall_staff","password":"password"}'>mall_staff — Mall Staff
+                            </option>
+                        </optgroup>
+                        <optgroup label="🔧 Default Admin">
+                            <option value='{"username":"admin","password":"admin123"}'>admin — Default Admin</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </form>
+            <div
+                style="margin-top: 15px; padding: 10px; background-color: #f8f9fa; border-radius: 4px; font-size: 12px; color: #666;">
+                <strong>Default Credentials:</strong><br>
+                Username: <code>admin</code><br>
+                Password: <code>admin123</code>
+            </div>
+        </div>
+
+        <!-- Setup Wizard -->
+        <div id="setupWizard" class="setup-wizard">
+            <div id="setupMessage" class="message"></div>
+            <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Setup Restoran Baru</h2>
+
+            <div class="wizard-steps">
+                <div class="step active" data-step="1">1. Info Dasar</div>
+                <div class="step" data-step="2">2. Jenis Usaha</div>
+                <div class="step" data-step="3">3. Konfigurasi</div>
+                <div class="step" data-step="4">4. Selesai</div>
+            </div>
+
+            <!-- Step 1: Basic Info -->
+            <div class="wizard-content active" data-step="1">
+                <form id="step1Form">
+                    <div class="form-group">
+                        <label for="tenantName">Nama Restoran/Bisnis *</label>
+                        <input type="text" id="tenantName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tenantCode">Kode Tenant *</label>
+                        <input type="text" id="tenantCode" required placeholder="Contoh: MY_RESTAURANT">
+                    </div>
+                    <div class="form-group">
+                        <label for="companyName">Nama Perusahaan *</label>
+                        <input type="text" id="companyName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="branchName">Nama Cabang *</label>
+                        <input type="text" id="branchName" required value="Cabang Utama">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Alamat</label>
+                        <input type="text" id="address" placeholder="Masukkan alamat lengkap">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telepon</label>
+                        <input type="text" id="phone" placeholder="Contoh: 08123456789">
+                    </div>
+                    <div class="form-group">
+                        <label for="logoUpload">Logo Perusahaan</label>
+                        <input type="file" id="logoUpload" accept="image/jpeg,image/png,image/jpg,image/gif,image/webp">
+                        <div id="logoPreview" style="margin-top: 10px; display: none;">
+                            <img id="logoPreviewImg"
+                                style="max-width: 150px; max-height: 150px; border: 1px solid #ccc; border-radius: 4px;">
+                            <button type="button" id="removeLogoBtn"
+                                style="margin-left: 10px; padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Hapus</button>
+                        </div>
+                        <input type="hidden" id="logoUrl">
+                    </div>
+                    <div class="form-group">
+                        <label for="branchImageUpload">Foto Cabang/Restoran</label>
+                        <input type="file" id="branchImageUpload"
+                            accept="image/jpeg,image/png,image/jpg,image/gif,image/webp">
+                        <div id="branchImagePreview" style="margin-top: 10px; display: none;">
+                            <img id="branchImagePreviewImg"
+                                style="max-width: 150px; max-height: 150px; border: 1px solid #ccc; border-radius: 4px;">
+                            <button type="button" id="removeBranchImageBtn"
+                                style="margin-left: 10px; padding: 5px 10px; background-color: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">Hapus</button>
+                        </div>
+                        <input type="hidden" id="branchImageUrl">
+                    </div>
+                    <div class="form-group">
+                        <label for="taxId">NPWP / Tax ID</label>
+                        <input type="text" id="taxId" placeholder="Masukkan NPWP (opsional)">
+                    </div>
+                    <div class="form-group">
+                        <label for="currencyCode">Mata Uang</label>
+                        <select id="currencyCode">
+                            <option value="IDR">IDR - Rupiah Indonesia</option>
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="SGD">SGD - Singapore Dollar</option>
+                            <option value="MYR">MYR - Malaysian Ringgit</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="timeZone">Time Zone</label>
+                        <select id="timeZone">
+                            <option value="Asia/Jakarta">Asia/Jakarta (WIB)</option>
+                            <option value="Asia/Makassar">Asia/Makassar (WITA)</option>
+                            <option value="Asia/Jayapura">Asia/Jayapura (WIT)</option>
+                            <option value="Asia/Singapore">Asia/Singapore</option>
+                            <option value="Asia/Kuala_Lumpur">Asia/Kuala_Lumpur</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Lokasi di Peta (Klik untuk menentukan lokasi)</label>
+                        <div id="map" style="height: 300px; width: 100%; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            Klik pada peta untuk menentukan lokasi restoran. Koordinat akan terisi otomatis.
+                        </small>
+                    </div>
+                    <div class="form-group" style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label for="latitude">Latitude</label>
+                            <input type="text" id="latitude" readonly placeholder="Klik peta untuk isi">
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="longitude">Longitude</label>
+                            <input type="text" id="longitude" readonly placeholder="Klik peta untuk isi">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryRadiusKm">Radius Pengiriman (km)</label>
+                        <input type="number" id="deliveryRadiusKm" min="1" max="50" value="5" step="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label for="taxRate">Pajak (%)</label>
+                        <input type="number" id="taxRate" min="0" max="100" value="0" step="0.1"
+                            placeholder="Contoh: 10">
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceCharge">Service Charge (%)</label>
+                        <input type="number" id="serviceCharge" min="0" max="100" value="0" step="0.1"
+                            placeholder="Contoh: 5">
+                    </div>
+                    <div class="form-group">
+                        <label for="tipConfig">Konfigurasi Tip</label>
+                        <select id="tipConfig">
+                            <option value="OPTIONAL">Opsional</option>
+                            <option value="MANDATORY">Wajib</option>
+                            <option value="DISABLED">Tidak Aktif</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryFee">Biaya Pengiriman</label>
+                        <input type="number" id="deliveryFee" min="0" value="0" step="1000" placeholder="Contoh: 10000">
+                    </div>
+                    <div class="form-group">
+                        <label for="minimumOrderAmount">Minimum Order untuk Delivery</label>
+                        <input type="number" id="minimumOrderAmount" min="0" value="0" step="1000"
+                            placeholder="Contoh: 20000">
+                    </div>
+                    <div class="form-group">
+                        <label for="freeDeliveryThreshold">Gratis Delivery di atas (Rp)</label>
+                        <input type="number" id="freeDeliveryThreshold" min="0" value="0" step="10000"
+                            placeholder="Contoh: 100000">
+                    </div>
+                    <div class="form-group">
+                        <label>Jam Operasional</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div>
+                                <label style="font-size: 12px;">Buka</label>
+                                <input type="time" id="openingTime" value="08:00">
+                            </div>
+                            <div>
+                                <label style="font-size: 12px;">Tutup</label>
+                                <input type="time" id="closingTime" value="22:00">
+                            </div>
+                        </div>
+                        <small style="color: #666;">Jam operasional sama untuk setiap hari</small>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 2: Business Type -->
+            <div class="wizard-content" data-step="2">
+                <form id="step2Form">
+                    <div class="form-group">
+                        <label for="restaurantType">Jenis Usaha Restoran *</label>
+                        <select id="restaurantType" required>
+                            <option value="">-- Pilih Jenis Usaha --</option>
+                            <option value="RESTAURANT">🍽️ Restoran Makanan</option>
+                            <option value="CAFE">☕ Kafe</option>
+                            <option value="BAR_PUB">🍺 Bar/Pub</option>
+                            <option value="FOOD_COURT">🍱 Food Court</option>
+                            <option value="CATERING">🎂 Catering Service</option>
+                            <option value="FAST_FOOD">🍔 Fast Food Restaurant</option>
+                            <option value="FINE_DINING">🍷 Fine Dining</option>
+                            <option value="COFFEE_SHOP">☕ Coffee Shop</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tableCount">Jumlah Meja *</label>
+                        <input type="number" id="tableCount" required min="1" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label for="hasReservations">Sistem Reservasi?</label>
+                        <select id="hasReservations">
+                            <option value="yes">Ya</option>
+                            <option value="no">Tidak</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hasKitchen">Ada Dapur/Kitchen?</label>
+                        <select id="hasKitchen">
+                            <option value="yes">Ya</option>
+                            <option value="no">Tidak</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: Configuration -->
+            <div class="wizard-content" data-step="3">
+                <form id="step3Form">
+                    <div class="form-group">
+                        <label for="adminUsername">Username Admin *</label>
+                        <input type="text" id="adminUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminEmail">Email Admin *</label>
+                        <input type="email" id="adminEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminPassword">Password Admin *</label>
+                        <input type="password" id="adminPassword" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="adminFullName">Nama Lengkap Admin *</label>
+                        <input type="text" id="adminFullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="additionalRoles">Role Tambahan (Opsional)</label>
+                        <select id="additionalRoles" multiple>
+                            <option value="CHEF">Chef</option>
+                            <option value="WAITER">Waiter</option>
+                            <option value="CASHIER">Cashier</option>
+                            <option value="INVENTORY_MANAGER">Inventory Manager</option>
+                            <option value="BARISTA">Barista</option>
+                            <option value="BARTENDER">Bartender</option>
+                            <option value="SOMMELIER">Sommelier</option>
+                            <option value="MAITRE_D">Maitre D'</option>
+                        </select>
+                        <small>Tahan Ctrl/Cmd untuk pilih multiple</small>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 4: Complete -->
+            <div class="wizard-content" data-step="4">
+                <div class="card">
+                    <h3>Setup Selesai!</h3>
+                    <p>Restoran Anda telah berhasil disetup. Berikut adalah ringkasan:</p>
+                    <div id="setupSummary"></div>
+                </div>
+            </div>
+
+            <div class="wizard-buttons">
+                <button class="btn btn-secondary" id="prevStep" style="display: none;">Sebelumnya</button>
+                <button class="btn" id="nextStep">Selanjutnya</button>
+                <button class="btn" id="completeSetup" style="display: none;">Selesai & Login</button>
+            </div>
+        </div>
+
+        <!-- Post-Onboarding Setup Wizard -->
+        <div id="postOnboardingWizard" class="setup-wizard" style="display: none;">
+            <div id="postOnboardingMessage" class="message"></div>
+            <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Setup Tambahan</h2>
+
+            <div class="wizard-steps">
+                <div class="step active" data-step="1">1. Metode Pembayaran</div>
+                <div class="step" data-step="2">2. Diskon & Promo</div>
+                <div class="step" data-step="3">3. Konfigurasi Receipt</div>
+                <div class="step" data-step="4">4. Selesai</div>
+            </div>
+
+            <!-- Step 1: Payment Methods -->
+            <div class="wizard-content active" data-step="1">
+                <form id="postStep1Form">
+                    <div class="form-group">
+                        <label>Metode Pembayaran yang Diterima *</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <label
+                                style="display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                                <input type="checkbox" id="paymentCash" checked> 💵 Tunai
+                            </label>
+                            <label
+                                style="display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                                <input type="checkbox" id="paymentCard"> 💳 Kartu Kredit/Debit
+                            </label>
+                            <label
+                                style="display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                                <input type="checkbox" id="paymentQRIS"> 📱 QRIS
+                            </label>
+                            <label
+                                style="display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                                <input type="checkbox" id="paymentEwallet"> 🔋 E-Wallet (GoPay, OVO, dll)
+                            </label>
+                            <label
+                                style="display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                                <input type="checkbox" id="paymentTransfer"> 🏦 Transfer Bank
+                            </label>
+                            <label
+                                style="display: flex; align-items: center; gap: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                                <input type="checkbox" id="paymentVoucher"> 🎫 Voucher/Gift Card
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="splitPayment">Izinkan Split Payment?</label>
+                        <select id="splitPayment">
+                            <option value="yes">Ya</option>
+                            <option value="no">Tidak</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 2: Discounts & Promos -->
+            <div class="wizard-content" data-step="2">
+                <form id="postStep2Form">
+                    <div class="form-group">
+                        <label for="maxDiscountPercent">Maksimum Diskon (%)</label>
+                        <input type="number" id="maxDiscountPercent" min="0" max="100" value="20" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="managerOverridePassword">Password Manager Override</label>
+                        <input type="password" id="managerOverridePassword"
+                            placeholder="Password untuk override diskon/void">
+                    </div>
+                    <div class="form-group">
+                        <label for="allowVoid">Izinkan Void Order?</label>
+                        <select id="allowVoid">
+                            <option value="yes">Ya (dengan password)</option>
+                            <option value="no">Tidak</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="allowRefund">Izinkan Refund?</label>
+                        <select id="allowRefund">
+                            <option value="yes">Ya (dengan password)</option>
+                            <option value="no">Tidak</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: Receipt Configuration -->
+            <div class="wizard-content" data-step="3">
+                <form id="postStep3Form">
+                    <div class="form-group">
+                        <label for="receiptHeader">Header Receipt</label>
+                        <textarea id="receiptHeader" rows="3"
+                            placeholder="Terima kasih telah berkunjung ke restoran kami"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="receiptFooter">Footer Receipt</label>
+                        <textarea id="receiptFooter" rows="3"
+                            placeholder="Barang yang sudah dibeli tidak dapat ditukar/dikembalikan"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="showCustomerInfo">Tampilkan Info Customer di Receipt?</label>
+                        <select id="showCustomerInfo">
+                            <option value="yes">Ya</option>
+                            <option value="no">Tidak</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="receiptCopies">Jumlah Copy Receipt</label>
+                        <input type="number" id="receiptCopies" min="1" max="3" value="1">
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 4: Complete -->
+            <div class="wizard-content" data-step="4">
+                <div class="card">
+                    <h3>Setup Tambahan Selesai!</h3>
+                    <p>Konfigurasi tambahan telah berhasil disimpan. Anda sekarang siap menggunakan sistem.</p>
+                    <button class="btn" id="goToDashboard">Masuk ke Dashboard</button>
+                </div>
+            </div>
+
+            <div class="wizard-buttons">
+                <button class="btn btn-secondary" id="postPrevStep" style="display: none;">Sebelumnya</button>
+                <button class="btn" id="postNextStep">Selanjutnya</button>
+                <button class="btn" id="postCompleteSetup" style="display: none;">Simpan & Selesai</button>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="overview">Overview</button>
+                <button class="nav-tab" data-tab="menu">Menu</button>
+                <button class="nav-tab" data-tab="tables">Tables</button>
+                <button class="nav-tab" data-tab="orders">Orders</button>
+                <button class="nav-tab" data-tab="inventory">Inventory</button>
+                <button class="nav-tab" data-tab="kitchen">Kitchen</button>
+                <button class="nav-tab" data-tab="users">Users</button>
+                <button class="nav-tab" data-tab="settings">Settings</button>
+                <button class="nav-tab" data-tab="accounting">Accounting</button>
+                <button class="nav-tab" data-tab="reservation">Reservation</button>
+                <button class="nav-tab" data-tab="crm">CRM</button>
+                <button class="nav-tab" data-tab="reports">Reports</button>
+                <button class="nav-tab" data-tab="hr">HR</button>
+                <button class="nav-tab" data-tab="delivery">Delivery</button>
+                <button class="nav-tab" data-tab="ai">AI</button>
+                <button class="nav-tab" data-tab="integration">Integration</button>
+                <button class="nav-tab" data-tab="quality">Quality</button>
+                <button class="nav-tab" data-tab="supplychain">SupplyChain</button>
+                <button class="nav-tab" data-tab="sustainability">Sustainability</button>
+                <button class="nav-tab" data-tab="location">Location</button>
+                <button class="nav-tab" data-tab="maintenance">Maintenance</button>
+                <button class="nav-tab" data-tab="enterprise">Enterprise</button>
+                <button class="nav-tab" data-tab="tenant">Tenant</button>
+                <button class="nav-tab" data-tab="whatsapp">WhatsApp</button>
+            </div>
+
+            <div id="dashboardMessage" class="message"></div>
+
+            <div id="overviewTab" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4 id="totalOrders">0</h4>
+                        <p>Total Orders</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 id="totalRevenue">Rp 0</h4>
+                        <p>Total Revenue</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 id="activeTables">0</h4>
+                        <p>Active Tables</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4 id="pendingOrders">0</h4>
+                        <p>Pending Orders</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Recent Activity</h3>
+                    <div id="recentActivity" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="menuTab" class="tab-content">
+                <div class="card">
+                    <h3>Menu Categories</h3>
+                    <div id="menuMessage" class="message"></div>
+                    <div class="form-group">
+                        <button class="btn role-admin-only" id="showCreateCategoryForm">Add Category</button>
+                    </div>
+                    <div id="createCategoryForm" style="display: none;" class="form-group">
+                        <input type="text" id="categoryCode" placeholder="Category Code">
+                        <input type="text" id="categoryName" placeholder="Category Name">
+                        <select id="categoryStatus">
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
+                        </select>
+                        <button class="btn" id="createCategoryBtn">Create</button>
+                        <button class="btn btn-secondary" id="cancelCategoryBtn">Cancel</button>
+                    </div>
+                    <div id="menuCategories" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Menu Products</h3>
+                    <div id="productMessage" class="message"></div>
+                    <div class="form-group">
+                        <button class="btn role-admin-only" id="showCreateProductForm">Add Product</button>
+                    </div>
+                    <div id="createProductForm" style="display: none;" class="form-group">
+                        <input type="text" id="productCode" placeholder="Product Code">
+                        <input type="text" id="productName" placeholder="Product Name">
+                        <select id="productCategory">
+                            <option value="">Select Category</option>
+                        </select>
+                        <input type="number" id="productPrice" placeholder="Price" step="0.01">
+                        <select id="productStatus">
+                            <option value="ACTIVE">Active</option>
+                            <option value="INACTIVE">Inactive</option>
+                        </select>
+                        <button class="btn" id="createProductBtn">Create</button>
+                        <button class="btn btn-secondary" id="cancelProductBtn">Cancel</button>
+                    </div>
+                    <div id="menuProducts" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tablesTab" class="tab-content">
+                <div class="card">
+                    <h3>All Tables</h3>
+                    <div id="tableMessage" class="message"></div>
+                    <div class="form-group">
+                        <button class="btn role-admin-only" id="showCreateTableForm">Add Table</button>
+                    </div>
+                    <div id="createTableForm" style="display: none;" class="form-group">
+                        <input type="number" id="tableNumber" placeholder="Table Number" min="1">
+                        <input type="number" id="tableCapacity" placeholder="Capacity" min="1">
+                        <select id="tableStatus">
+                            <option value="AVAILABLE">Available</option>
+                            <option value="OCCUPIED">Occupied</option>
+                            <option value="RESERVED">Reserved</option>
+                        </select>
+                        <button class="btn" id="createTableBtn">Create</button>
+                        <button class="btn btn-secondary" id="cancelTableBtn">Cancel</button>
+                    </div>
+                    <div id="tablesList" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Available Tables</h3>
+                    <div id="availableTables" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ordersTab" class="tab-content">
+                <div class="card">
+                    <h3>Orders</h3>
+                    <div id="orderMessage" class="message"></div>
+                    <div class="form-group">
+                        <button class="btn" id="showCreateOrderForm">Create Order</button>
+                    </div>
+                    <div id="createOrderForm" style="display: none;" class="form-group">
+                        <select id="orderTable">
+                            <option value="">Select Table</option>
+                        </select>
+                        <select id="orderProduct">
+                            <option value="">Select Product</option>
+                        </select>
+                        <input type="number" id="orderQuantity" placeholder="Quantity" min="1" value="1">
+                        <button class="btn" id="createOrderBtn">Create Order</button>
+                        <button class="btn btn-secondary" id="cancelOrderBtn">Cancel</button>
+                    </div>
+                    <div id="ordersList" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="inventoryTab" class="tab-content">
+                <div class="card">
+                    <h3>Inventory</h3>
+                    <div id="inventoryMessage" class="message"></div>
+                    <div class="form-group">
+                        <button class="btn role-manager-above" id="showInventoryItemForm">Add Inventory Item</button>
+                    </div>
+                    <div id="inventoryItemForm" style="display: none; margin-top: 20px;" class="form-group">
+                        <input type="text" id="inventoryItemName" placeholder="Item Name">
+                        <input type="text" id="inventoryItemUnit" placeholder="Unit (kg, pcs, etc)">
+                        <input type="number" id="inventoryItemQuantity" placeholder="Quantity" min="0" step="0.01">
+                        <input type="number" id="inventoryItemMinStock" placeholder="Min Stock Level" min="0"
+                            step="0.01">
+                        <button class="btn" id="addInventoryItemBtn">Add Item</button>
+                        <button type="button" class="btn btn-secondary" id="cancelInventoryItemBtn">Cancel</button>
+                    </div>
+                    <div id="inventoryList" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Low Stock Items</h3>
+                    <div id="lowStockList" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="kitchenTab" class="tab-content">
+                <div class="card">
+                    <h3>Kitchen Orders</h3>
+                    <div id="kitchenOrders" class="loading">
+                        <div class="spinner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="usersTab" class="tab-content">
+                <div class="card">
+                    <h3>User Management</h3>
+                    <div id="usersMessage" class="message"></div>
+
+                    <div class="form-group">
+                        <button class="btn role-admin-only" id="showCreateUserForm">Create New User</button>
+                    </div>
+
+                    <div id="createUserForm" style="display: none; margin-top: 20px;">
+                        <h4>Create New User</h4>
+                        <form id="newUserForm">
+                            <div class="form-group">
+                                <label for="newUsername">Username *</label>
+                                <input type="text" id="newUsername" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newEmail">Email *</label>
+                                <input type="email" id="newEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newFullName">Full Name *</label>
+                                <input type="text" id="newFullName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">Password *</label>
+                                <input type="password" id="newPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newRole">Role *</label>
+                                <select id="newRole" required>
+                                    <option value="">-- Select Role --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn">Create User</button>
+                                <button type="button" class="btn" id="cancelCreateUser">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="usersList" style="margin-top: 20px;">
+                        <h4>Existing Users</h4>
+                        <div id="usersTable" class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settingsTab" class="tab-content">
+                <div class="card">
+                    <h3>Settings</h3>
+                    <div id="settingsMessage" class="message"></div>
+
+                    <form id="settingsForm">
+                        <div class="form-group">
+                            <label for="restaurantName">Restaurant Name</label>
+                            <input type="text" id="restaurantName" value="My Restaurant">
+                        </div>
+                        <div class="form-group">
+                            <label for="taxRate">Tax Rate (%)</label>
+                            <input type="number" id="taxRate" value="10" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="currency">Currency</label>
+                            <select id="currency">
+                                <option value="IDR">IDR (Indonesian Rupiah)</option>
+                                <option value="USD">USD (US Dollar)</option>
+                                <option value="EUR">EUR (Euro)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="receiptHeader">Receipt Header</label>
+                            <textarea id="receiptHeader" rows="3">Thank you for dining with us!</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="receiptFooter">Receipt Footer</label>
+                            <textarea id="receiptFooter" rows="3">Please come again!</textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn" id="settingsFormSubmit">Save Settings</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Accounting Tab -->
+            <div id="accountingTab" class="tab-content">
+                <div class="card">
+                    <h3>Accounting</h3>
+                    <div id="accountingMessage" class="message"></div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4 id="totalRevenue">Rp 0</h4>
+                            <p>Total Revenue</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4 id="totalExpenses">Rp 0</h4>
+                            <p>Total Expenses</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4 id="netProfit">Rp 0</h4>
+                            <p>Net Profit</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <h4>Recent Transactions</h4>
+                        <div id="transactionsList" class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reservation Tab -->
+            <div id="reservationTab" class="tab-content">
+                <div class="card">
+                    <h3>Reservations</h3>
+                    <div id="reservationMessage" class="message"></div>
+
+                    <div class="form-group">
+                        <button class="btn" id="showCreateReservationForm">New Reservation</button>
+                    </div>
+
+                    <div id="createReservationForm" style="display: none; margin-top: 20px;">
+                        <h4>Create Reservation</h4>
+                        <form id="newReservationForm">
+                            <div class="form-group">
+                                <label for="reservationCustomer">Customer Name *</label>
+                                <input type="text" id="reservationCustomer" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reservationPhone">Phone *</label>
+                                <input type="tel" id="reservationPhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reservationDate">Date *</label>
+                                <input type="date" id="reservationDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reservationTime">Time *</label>
+                                <input type="time" id="reservationTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reservationGuests">Number of Guests *</label>
+                                <input type="number" id="reservationGuests" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reservationTable">Table</label>
+                                <select id="reservationTable">
+                                    <option value="">-- Select Table --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="reservationNotes">Notes</label>
+                                <textarea id="reservationNotes" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn">Create Reservation</button>
+                                <button type="button" class="btn" id="cancelCreateReservation">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="reservationsList" style="margin-top: 20px;">
+                        <h4>Upcoming Reservations</h4>
+                        <div id="reservationsTable" class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CRM Tab -->
+            <div id="crmTab" class="tab-content">
+                <div class="card">
+                    <h3>Customer Relationship Management</h3>
+                    <div id="crmMessage" class="message"></div>
+
+                    <div class="form-group">
+                        <button class="btn role-manager-above" id="showCreateCustomerForm">Add Customer</button>
+                    </div>
+
+                    <div id="createCustomerForm" style="display: none; margin-top: 20px;">
+                        <h4>Add Customer</h4>
+                        <form id="newCustomerForm">
+                            <div class="form-group">
+                                <label for="customerName">Name *</label>
+                                <input type="text" id="customerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerEmail">Email</label>
+                                <input type="email" id="customerEmail">
+                            </div>
+                            <div class="form-group">
+                                <label for="customerPhone">Phone *</label>
+                                <input type="tel" id="customerPhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerAddress">Address</label>
+                                <textarea id="customerAddress" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerLoyaltyPoints">Loyalty Points</label>
+                                <input type="number" id="customerLoyaltyPoints" value="0" min="0">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn">Add Customer</button>
+                                <button type="button" class="btn" id="cancelCreateCustomer">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="customersList" style="margin-top: 20px;">
+                        <h4>Customers</h4>
+                        <div id="customersTable" class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Tab -->
+            <div id="reportsTab" class="tab-content">
+                <div class="card">
+                    <h3>Reports</h3>
+                    <div id="reportsMessage" class="message"></div>
+
+                    <div class="form-group">
+                        <label for="reportType">Report Type</label>
+                        <select id="reportType">
+                            <option value="sales">Sales Report</option>
+                            <option value="inventory">Inventory Report</option>
+                            <option value="staff">Staff Performance</option>
+                            <option value="financial">Financial Report</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reportStartDate">Start Date</label>
+                        <input type="date" id="reportStartDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="reportEndDate">End Date</label>
+                        <input type="date" id="reportEndDate">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn" id="generateReport">Generate Report</button>
+                        <button class="btn role-manager-above" id="exportReport">Export</button>
+                    </div>
+
+                    <div id="reportResults" style="margin-top: 20px; display: none;">
+                        <h4>Report Results</h4>
+                        <div id="reportContent"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HR Tab -->
+            <div id="hrTab" class="tab-content">
+                <div class="card">
+                    <h3>Human Resources</h3>
+                    <div id="hrMessage" class="message"></div>
+
+                    <div class="form-group">
+                        <button class="btn role-admin-only" id="showCreateEmployeeForm">Add Employee</button>
+                    </div>
+
+                    <div id="createEmployeeForm" style="display: none; margin-top: 20px;">
+                        <h4>Add Employee</h4>
+                        <form id="newEmployeeForm">
+                            <div class="form-group">
+                                <label for="employeeName">Name *</label>
+                                <input type="text" id="employeeName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="employeePosition">Position *</label>
+                                <input type="text" id="employeePosition" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="employeePhone">Phone</label>
+                                <input type="tel" id="employeePhone">
+                            </div>
+                            <div class="form-group">
+                                <label for="employeeEmail">Email</label>
+                                <input type="email" id="employeeEmail">
+                            </div>
+                            <div class="form-group">
+                                <label for="employeeSalary">Salary</label>
+                                <input type="number" id="employeeSalary" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="employeeStartDate">Start Date</label>
+                                <input type="date" id="employeeStartDate">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn">Add Employee</button>
+                                <button type="button" class="btn" id="cancelCreateEmployee">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="employeesList" style="margin-top: 20px;">
+                        <h4>Employees</h4>
+                        <div id="employeesTable" class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Tab -->
+            <div id="deliveryTab" class="tab-content">
+                <div class="card">
+                    <h3>Delivery Management</h3>
+                    <div id="deliveryMessage" class="message"></div>
+
+                    <div class="form-group">
+                        <button class="btn role-manager-above" id="showCreateDeliveryForm">New Delivery Order</button>
+                    </div>
+
+                    <div id="createDeliveryForm" style="display: none; margin-top: 20px;">
+                        <h4>Create Delivery Order</h4>
+                        <form id="newDeliveryForm">
+                            <div class="form-group">
+                                <label for="deliveryCustomer">Customer Name *</label>
+                                <input type="text" id="deliveryCustomer" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="deliveryAddress">Delivery Address *</label>
+                                <textarea id="deliveryAddress" rows="3" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="deliveryPhone">Phone *</label>
+                                <input type="tel" id="deliveryPhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="deliveryTime">Delivery Time</label>
+                                <input type="datetime-local" id="deliveryTime">
+                            </div>
+                            <div class="form-group">
+                                <label for="deliveryFee">Delivery Fee</label>
+                                <input type="number" id="deliveryFee" value="0" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="deliveryDriver">Assign Driver</label>
+                                <select id="deliveryDriver">
+                                    <option value="">-- Select Driver --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn">Create Delivery</button>
+                                <button type="button" class="btn" id="cancelCreateDelivery">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="deliveriesList" style="margin-top: 20px;">
+                        <h4>Active Deliveries</h4>
+                        <div id="deliveriesTable" class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Tab -->
+            <div id="aiTab" class="tab-content">
+                <div class="card">
+                    <h3>AI Features</h3>
+                    <div id="aiMessage" class="message"></div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4>Recommendations</h4>
+                            <p>AI-powered menu suggestions</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Predictions</h4>
+                            <p>Demand forecasting</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Analytics</h4>
+                            <p>Customer behavior analysis</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <h4>AI Insights</h4>
+                        <div id="aiInsights">
+                            <p>AI insights will be displayed here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Integration Tab -->
+            <div id="integrationTab" class="tab-content">
+                <div class="card">
+                    <h3>Integrations</h3>
+                    <div id="integrationMessage" class="message"></div>
+
+                    <div style="margin-top: 20px;">
+                        <h4>Available Integrations</h4>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="paymentGateway"> Payment Gateway
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="posSystem"> POS System
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="accountingSoftware"> Accounting Software
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="socialMedia"> Social Media
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn role-admin-only" id="saveIntegrations">Save Integrations</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quality Tab -->
+            <div id="qualityTab" class="tab-content">
+                <div class="card">
+                    <h3>Quality Control</h3>
+                    <div id="qualityMessage" class="message"></div>
+
+                    <div class="form-group">
+                        <button class="btn role-manager-above" id="showQualityCheckForm">New Quality Check</button>
+                    </div>
+
+                    <div id="qualityChecksList" style="margin-top: 20px;">
+                        <h4>Quality Checks</h4>
+                        <div id="qualityChecksTable" class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SupplyChain Tab -->
+            <div id="supplychainTab" class="tab-content">
+                <div class="card">
+                    <h3>Supply Chain Management</h3>
+                    <div id="supplychainMessage" class="message"></div>
+
+                    <div class="form-group">
+                        <button class="btn role-manager-above" id="showSupplierForm">Add Supplier</button>
+                    </div>
+
+                    <div id="suppliersList" style="margin-top: 20px;">
+                        <h4>Suppliers</h4>
+                        <div id="suppliersTable" class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sustainability Tab -->
+            <div id="sustainabilityTab" class="tab-content">
+                <div class="card">
+                    <h3>Sustainability</h3>
+                    <div id="sustainabilityMessage" class="message"></div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4 id="wasteReduction">0%</h4>
+                            <p>Waste Reduction</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4 id="energyEfficiency">0%</h4>
+                            <p>Energy Efficiency</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4 id="sustainabilityScore">0</h4>
+                            <p>Sustainability Score</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location Tab -->
+            <div id="locationTab" class="tab-content">
+                <div class="card">
+                    <h3>Location Management</h3>
+                    <div id="locationMessage" class="message"></div>
+
+                    <div class="form-group">
+                        <button class="btn role-admin-only" id="showLocationForm">Add Location</button>
+                    </div>
+
+                    <div id="locationsList" style="margin-top: 20px;">
+                        <h4>Locations</h4>
+                        <div id="locationsTable" class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Maintenance Tab -->
+            <div id="maintenanceTab" class="tab-content">
+                <div class="card">
+                    <h3>Maintenance</h3>
+                    <div id="maintenanceMessage" class="message"></div>
+
+                    <div class="form-group">
+                        <button class="btn role-admin-only" id="showMaintenanceForm">Schedule Maintenance</button>
+                    </div>
+
+                    <div id="maintenanceList" style="margin-top: 20px;">
+                        <h4>Maintenance Schedule</h4>
+                        <div id="maintenanceTable" class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enterprise Tab -->
+            <div id="enterpriseTab" class="tab-content">
+                <div class="card">
+                    <h3>Enterprise Features</h3>
+                    <div id="enterpriseMessage" class="message"></div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4 id="totalLocations">0</h4>
+                            <p>Total Locations</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4 id="totalEmployees">0</h4>
+                            <p>Total Employees</p>
+                        </div>
+                        <div class="stat-card">
+                            <h4 id="totalRevenue">Rp 0</h4>
+                            <p>Total Revenue</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tenant Tab -->
+            <div id="tenantTab" class="tab-content">
+                <div class="card">
+                    <h3>Tenant Management</h3>
+                    <div id="tenantMessage" class="message"></div>
+
+                    <div class="form-group">
+                        <button class="btn role-owner-only" id="showTenantForm">Add Tenant</button>
+                    </div>
+
+                    <div id="tenantsList" style="margin-top: 20px;">
+                        <h4>Tenants</h4>
+                        <div id="tenantsTable" class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WhatsApp Tab -->
+            <div id="whatsappTab" class="tab-content">
+                <div class="card">
+                    <h3>WhatsApp Integration</h3>
+                    <div id="whatsappMessage" class="message"></div>
+
+                    <div class="form-group">
+                        <label for="whatsappNumber">WhatsApp Business Number</label>
+                        <input type="tel" id="whatsappNumber" placeholder="+6281234567890">
+                    </div>
+                    <div class="form-group">
+                        <label for="whatsappApiKey">API Key</label>
+                        <input type="text" id="whatsappApiKey">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="whatsappAutoReply"> Enable Auto Reply
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="whatsappOrderNotification"> Send Order Notifications
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn role-admin-only" id="saveWhatsAppSettings">Save Settings</button>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <h4>WhatsApp Orders</h4>
+                        <div id="whatsappOrdersTable" class="loading">
+                            <div class="spinner"></div>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn logout-btn" id="logoutBtn">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api/v1';
+        let authToken = null;
+        let currentUser = null;
+        let currentUserLevel = null;
+        let currentUserRole = null;
+        let currentStep = 1;
+        let setupData = {};
+
+        // Landing page to login
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            document.getElementById('landingPage').style.display = 'none';
+            document.getElementById('loginSection').classList.add('active');
+        });
+
+        // Back to landing
+        document.getElementById('backToLanding').addEventListener('click', () => {
+            document.getElementById('loginSection').classList.remove('active');
+            document.getElementById('landingPage').style.display = 'block';
+        });
+
+        // Quick login dropdown functionality
+        document.getElementById('quickLoginSelect').addEventListener('change', (e) => {
+            const selectedValue = e.target.value;
+            if (selectedValue) {
+                const userData = JSON.parse(selectedValue);
+                document.getElementById('username').value = userData.username;
+                document.getElementById('password').value = userData.password;
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    authToken = data.data.access_token;
+                    currentUser = data.data.user;
+                    currentUserLevel = currentUser.level || 'TENANT_MEMBER';
+                    currentUserRole = currentUser.role || 'Waiter';
+                    document.getElementById('loginSection').classList.remove('active');
+                    // Show dashboard directly (skip post-onboarding for testing)
+                    document.getElementById('dashboard').classList.add('active');
+                    setupMenuByRole();
+                    loadDashboardData();
+                } else {
+                    // Check if user doesn't exist - show setup wizard
+                    if (data.message && data.message.includes('not found')) {
+                        document.getElementById('loginSection').classList.remove('active');
+                        document.getElementById('setupWizard').classList.add('active');
+                    } else {
+                        showMessage('loginMessage', data.message || 'Login failed', 'error');
+                    }
+                }
+            } catch (error) {
+                showMessage('loginMessage', 'Error connecting to server', 'error');
+            }
+        });
+
+        // Setup Wizard Navigation
+        document.getElementById('nextStep').addEventListener('click', () => {
+            if (validateStep(currentStep)) {
+                if (currentStep < 4) {
+                    currentStep++;
+                    updateWizardUI();
+                }
+            }
+        });
+
+        document.getElementById('prevStep').addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateWizardUI();
+            }
+        });
+
+        document.getElementById('completeSetup').addEventListener('click', async () => {
+            await completeSetup();
+        });
+
+        function validateStep(step) {
+            if (step === 1) {
+                const tenantName = document.getElementById('tenantName').value;
+                const tenantCode = document.getElementById('tenantCode').value;
+                const companyName = document.getElementById('companyName').value;
+                const branchName = document.getElementById('branchName').value;
+
+                if (!tenantName || !tenantCode || !companyName || !branchName) {
+                    showMessage('setupMessage', 'Mohon lengkapi semua field yang wajib diisi', 'error');
+                    return false;
+                }
+
+                setupData.tenantName = tenantName;
+                setupData.tenantCode = tenantCode;
+                setupData.companyName = companyName;
+                setupData.branchName = branchName;
+                setupData.address = document.getElementById('address').value;
+                setupData.phone = document.getElementById('phone').value;
+                setupData.latitude = document.getElementById('latitude').value;
+                setupData.longitude = document.getElementById('longitude').value;
+                setupData.deliveryRadiusKm = document.getElementById('deliveryRadiusKm').value;
+                setupData.logoUrl = document.getElementById('logoUrl').value;
+                setupData.branchImageUrl = document.getElementById('branchImageUrl').value;
+                setupData.taxId = document.getElementById('taxId').value;
+                setupData.currencyCode = document.getElementById('currencyCode').value;
+                setupData.timeZone = document.getElementById('timeZone').value;
+                setupData.taxRate = document.getElementById('taxRate').value;
+                setupData.serviceCharge = document.getElementById('serviceCharge').value;
+                setupData.tipConfig = document.getElementById('tipConfig').value;
+                setupData.deliveryFee = document.getElementById('deliveryFee').value;
+                setupData.minimumOrderAmount = document.getElementById('minimumOrderAmount').value;
+                setupData.freeDeliveryThreshold = document.getElementById('freeDeliveryThreshold').value;
+
+                // Build operating hours JSON
+                const openingTime = document.getElementById('openingTime').value;
+                const closingTime = document.getElementById('closingTime').value;
+                setupData.operatingHours = JSON.stringify({
+                    monday: { open: openingTime, close: closingTime },
+                    tuesday: { open: openingTime, close: closingTime },
+                    wednesday: { open: openingTime, close: closingTime },
+                    thursday: { open: openingTime, close: closingTime },
+                    friday: { open: openingTime, close: closingTime },
+                    saturday: { open: openingTime, close: closingTime },
+                    sunday: { open: openingTime, close: closingTime }
+                });
+            }
+
+            if (step === 2) {
+                const restaurantType = document.getElementById('restaurantType').value;
+                const tableCount = document.getElementById('tableCount').value;
+
+                if (!restaurantType || !tableCount) {
+                    showMessage('setupMessage', 'Mohon lengkapi semua field yang wajib diisi', 'error');
+                    return false;
+                }
+
+                setupData.restaurantType = restaurantType;
+                setupData.tableCount = parseInt(tableCount);
+                setupData.hasReservations = document.getElementById('hasReservations').value;
+                setupData.hasKitchen = document.getElementById('hasKitchen').value;
+            }
+
+            if (step === 3) {
+                const adminUsername = document.getElementById('adminUsername').value;
+                const adminEmail = document.getElementById('adminEmail').value;
+                const adminPassword = document.getElementById('adminPassword').value;
+                const adminFullName = document.getElementById('adminFullName').value;
+
+                if (!adminUsername || !adminEmail || !adminPassword || !adminFullName) {
+                    showMessage('setupMessage', 'Mohon lengkapi semua field yang wajib diisi', 'error');
+                    return false;
+                }
+
+                setupData.adminUsername = adminUsername;
+                setupData.adminEmail = adminEmail;
+                setupData.adminPassword = adminPassword;
+                setupData.adminFullName = adminFullName;
+
+                const additionalRolesSelect = document.getElementById('additionalRoles');
+                setupData.additionalRoles = Array.from(additionalRolesSelect.selectedOptions).map(opt => opt.value);
+            }
+
+            return true;
+        }
+
+        function updateWizardUI() {
+            // Update steps
+            document.querySelectorAll('.step').forEach(step => {
+                const stepNum = parseInt(step.dataset.step);
+                step.classList.remove('active', 'completed');
+                if (stepNum < currentStep) {
+                    step.classList.add('completed');
+                } else if (stepNum === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+
+            // Update content
+            document.querySelectorAll('.wizard-content').forEach(content => {
+                content.classList.remove('active');
+                if (parseInt(content.dataset.step) === currentStep) {
+                    content.classList.add('active');
+                }
+            });
+
+            // Update buttons
+            document.getElementById('prevStep').style.display = currentStep > 1 ? 'inline-block' : 'none';
+            document.getElementById('nextStep').style.display = currentStep < 4 ? 'inline-block' : 'none';
+            document.getElementById('completeSetup').style.display = currentStep === 4 ? 'inline-block' : 'none';
+
+            // Show summary on step 4
+            if (currentStep === 4) {
+                showSetupSummary();
+            }
+        }
+
+        function showSetupSummary() {
+            const summary = `
+                <p><strong>Nama Restoran:</strong> ${setupData.tenantName}</p>
+                <p><strong>Kode Tenant:</strong> ${setupData.tenantCode}</p>
+                <p><strong>Perusahaan:</strong> ${setupData.companyName}</p>
+                <p><strong>Cabang:</strong> ${setupData.branchName}</p>
+                <p><strong>Jenis Usaha:</strong> ${setupData.restaurantType}</p>
+                <p><strong>Jumlah Meja:</strong> ${setupData.tableCount}</p>
+                <p><strong>Username Admin:</strong> ${setupData.adminUsername}</p>
+                <p><strong>Email Admin:</strong> ${setupData.adminEmail}</p>
+                <p><strong>Role Tambahan:</strong> ${setupData.additionalRoles.length > 0 ? setupData.additionalRoles.join(', ') : 'Tidak ada'}</p>
+            `;
+            document.getElementById('setupSummary').innerHTML = summary;
+        }
+
+        async function completeSetup() {
+            try {
+                const response = await fetch(`${API_BASE}/tenant/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(setupData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage('setupMessage', 'Setup berhasil! Anda akan login otomatis...', 'success');
+
+                    // Auto login after setup
+                    setTimeout(async () => {
+                        const loginResponse = await fetch(`${API_BASE}/auth/login`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                username: setupData.adminUsername,
+                                password: setupData.adminPassword
+                            })
+                        });
+
+                        const loginData = await loginResponse.json();
+                        if (loginData.success) {
+                            authToken = loginData.message.access_token;
+                            document.getElementById('setupWizard').classList.remove('active');
+                            // Show post-onboarding wizard instead of dashboard
+                            document.getElementById('postOnboardingWizard').style.display = 'block';
+                            postCurrentStep = 1;
+                            updatePostWizardUI();
+                        }
+                    }, 2000);
+                } else {
+                    showMessage('setupMessage', data.message || 'Setup gagal', 'error');
+                }
+            } catch (error) {
+                showMessage('setupMessage', 'Error: ' + error.message, 'error');
+            }
+        }
+
+        // Image upload handling
+        async function uploadImage(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch(`${API_BASE}/upload/image`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    return data.message.url;
+                } else {
+                    throw new Error(data.message || 'Upload failed');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                throw error;
+            }
+        }
+
+        // Logo upload handler
+        document.getElementById('logoUpload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                document.getElementById('logoPreviewImg').src = event.target.result;
+                document.getElementById('logoPreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+
+            // Upload image
+            try {
+                const url = await uploadImage(file);
+                document.getElementById('logoUrl').value = url;
+                showMessage('setupMessage', 'Logo berhasil diupload', 'success');
+            } catch (error) {
+                showMessage('setupMessage', 'Gagal upload logo: ' + error.message, 'error');
+                document.getElementById('logoPreview').style.display = 'none';
+                document.getElementById('logoUpload').value = '';
+            }
+        });
+
+        // Remove logo handler
+        document.getElementById('removeLogoBtn').addEventListener('click', () => {
+            document.getElementById('logoUpload').value = '';
+            document.getElementById('logoUrl').value = '';
+            document.getElementById('logoPreview').style.display = 'none';
+            document.getElementById('logoPreviewImg').src = '';
+        });
+
+        // Branch image upload handler
+        document.getElementById('branchImageUpload').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                document.getElementById('branchImagePreviewImg').src = event.target.result;
+                document.getElementById('branchImagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+
+            // Upload image
+            try {
+                const url = await uploadImage(file);
+                document.getElementById('branchImageUrl').value = url;
+                showMessage('setupMessage', 'Foto cabang berhasil diupload', 'success');
+            } catch (error) {
+                showMessage('setupMessage', 'Gagal upload foto cabang: ' + error.message, 'error');
+                document.getElementById('branchImagePreview').style.display = 'none';
+                document.getElementById('branchImageUpload').value = '';
+            }
+        });
+
+        // Remove branch image handler
+        document.getElementById('removeBranchImageBtn').addEventListener('click', () => {
+            document.getElementById('branchImageUpload').value = '';
+            document.getElementById('branchImageUrl').value = '';
+            document.getElementById('branchImagePreview').style.display = 'none';
+            document.getElementById('branchImagePreviewImg').src = '';
+        });
+
+        // Post-Onboarding Setup Wizard
+        let postCurrentStep = 1;
+        let postSetupData = {};
+
+        // Post-onboarding navigation
+        document.getElementById('postNextStep').addEventListener('click', () => {
+            if (validatePostStep(postCurrentStep)) {
+                if (postCurrentStep < 4) {
+                    postCurrentStep++;
+                    updatePostWizardUI();
+                }
+            }
+        });
+
+        document.getElementById('postPrevStep').addEventListener('click', () => {
+            if (postCurrentStep > 1) {
+                postCurrentStep--;
+                updatePostWizardUI();
+            }
+        });
+
+        document.getElementById('postCompleteSetup').addEventListener('click', async () => {
+            await completePostSetup();
+        });
+
+        document.getElementById('goToDashboard').addEventListener('click', () => {
+            document.getElementById('postOnboardingWizard').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+            loadDashboardData();
+        });
+
+        function validatePostStep(step) {
+            if (step === 1) {
+                const paymentMethods = [];
+                if (document.getElementById('paymentCash').checked) paymentMethods.push('CASH');
+                if (document.getElementById('paymentCard').checked) paymentMethods.push('CARD');
+                if (document.getElementById('paymentQRIS').checked) paymentMethods.push('QRIS');
+                if (document.getElementById('paymentEwallet').checked) paymentMethods.push('EWALLET');
+                if (document.getElementById('paymentTransfer').checked) paymentMethods.push('TRANSFER');
+                if (document.getElementById('paymentVoucher').checked) paymentMethods.push('VOUCHER');
+
+                if (paymentMethods.length === 0) {
+                    showMessage('postOnboardingMessage', 'Pilih minimal satu metode pembayaran', 'error');
+                    return false;
+                }
+
+                postSetupData.paymentMethods = paymentMethods;
+                postSetupData.splitPayment = document.getElementById('splitPayment').value;
+            }
+
+            if (step === 2) {
+                postSetupData.maxDiscountPercent = document.getElementById('maxDiscountPercent').value;
+                postSetupData.managerOverridePassword = document.getElementById('managerOverridePassword').value;
+                postSetupData.allowVoid = document.getElementById('allowVoid').value;
+                postSetupData.allowRefund = document.getElementById('allowRefund').value;
+            }
+
+            if (step === 3) {
+                postSetupData.receiptHeader = document.getElementById('receiptHeader').value;
+                postSetupData.receiptFooter = document.getElementById('receiptFooter').value;
+                postSetupData.showCustomerInfo = document.getElementById('showCustomerInfo').value;
+                postSetupData.receiptCopies = document.getElementById('receiptCopies').value;
+            }
+
+            return true;
+        }
+
+        function updatePostWizardUI() {
+            // Update step indicators
+            document.querySelectorAll('#postOnboardingWizard .step').forEach(step => {
+                step.classList.remove('active');
+                if (parseInt(step.dataset.step) === postCurrentStep) {
+                    step.classList.add('active');
+                }
+            });
+
+            // Update content
+            document.querySelectorAll('#postOnboardingWizard .wizard-content').forEach(content => {
+                content.classList.remove('active');
+                if (parseInt(content.dataset.step) === postCurrentStep) {
+                    content.classList.add('active');
+                }
+            });
+
+            // Update buttons
+            document.getElementById('postPrevStep').style.display = postCurrentStep > 1 ? 'inline-block' : 'none';
+            document.getElementById('postNextStep').style.display = postCurrentStep < 3 ? 'inline-block' : 'none';
+            document.getElementById('postCompleteSetup').style.display = postCurrentStep === 3 ? 'inline-block' : 'none';
+        }
+
+        async function completePostSetup() {
+            try {
+                const response = await fetch(`${API_BASE}/tenant/configure`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(postSetupData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage('postOnboardingMessage', 'Konfigurasi berhasil disimpan!', 'success');
+                    postCurrentStep = 4;
+                    updatePostWizardUI();
+                } else {
+                    showMessage('postOnboardingMessage', data.message || 'Gagal menyimpan konfigurasi', 'error');
+                }
+            } catch (error) {
+                showMessage('postOnboardingMessage', 'Error: ' + error.message, 'error');
+            }
+        }
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            authToken = null;
+            document.getElementById('dashboard').classList.remove('active');
+            document.getElementById('landingPage').style.display = 'block';
+        });
+
+        // Tab navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}Tab`).classList.add('active');
+
+                // Load data based on tab
+                const tabName = tab.dataset.tab;
+                if (tabName === 'menu') {
+                    loadMenu();
+                } else if (tabName === 'tables') {
+                    loadTables();
+                } else if (tabName === 'orders') {
+                    loadOrders();
+                } else if (tabName === 'inventory') {
+                    loadInventory();
+                } else if (tabName === 'kitchen') {
+                    loadKitchen();
+                } else if (tabName === 'users') {
+                    loadUsers();
+                } else if (tabName === 'settings') {
+                    loadSettings();
+                } else if (tabName === 'accounting') {
+                    loadAccounting();
+                } else if (tabName === 'reservation') {
+                    loadReservations();
+                } else if (tabName === 'crm') {
+                    loadCustomers();
+                } else if (tabName === 'reports') {
+                    // Reports loaded on demand
+                } else if (tabName === 'hr') {
+                    loadEmployees();
+                } else if (tabName === 'delivery') {
+                    loadDeliveries();
+                } else if (tabName === 'ai') {
+                    loadAI();
+                } else if (tabName === 'integration') {
+                    loadIntegrations();
+                } else if (tabName === 'quality') {
+                    loadQuality();
+                } else if (tabName === 'supplychain') {
+                    loadSuppliers();
+                } else if (tabName === 'sustainability') {
+                    loadSustainability();
+                } else if (tabName === 'location') {
+                    loadLocations();
+                } else if (tabName === 'maintenance') {
+                    loadMaintenance();
+                } else if (tabName === 'enterprise') {
+                    loadEnterprise();
+                } else if (tabName === 'tenant') {
+                    loadTenants();
+                } else if (tabName === 'whatsapp') {
+                    loadWhatsApp();
+                }
+
+                // Apply role-based content controls after tab loads
+                setTimeout(applyRoleBasedContent, 100);
+            });
+        });
+
+        // API helper function
+        async function apiCall(endpoint, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+
+            // Add auth token for all protected endpoints (except public endpoints)
+            const publicEndpoints = ['/auth/login', '/public/menu/categories', '/public/menu/products', '/public/tables', '/public/orders', '/public/users', '/public/inventory', '/public/kitchen', '/public/reservations', '/public/customers', '/public/employees', '/public/deliveries', '/public/suppliers'];
+            const isPublicEndpoint = publicEndpoints.some(publicPath => endpoint.includes(publicPath));
+
+            if (authToken && !isPublicEndpoint) {
+                headers['Authorization'] = `Bearer ${authToken}`;
+            }
+
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                ...options,
+                headers
+            });
+
+            return await response.json();
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            loadOverview();
+            // Don't load other tabs immediately - they'll load when clicked
+        }
+
+        // Load overview data
+        async function loadOverview() {
+            try {
+                // Platform Owner overview stats first
+                if (currentUserLevel === 'PLATFORM_OWNER') {
+                    document.getElementById('totalOrders').textContent = '12';
+                    document.getElementById('totalOrders').parentElement.querySelector('p').textContent = 'Total Tenants';
+                    document.getElementById('activeTables').textContent = '48';
+                    document.getElementById('activeTables').parentElement.querySelector('p').textContent = 'Platform Users';
+                    document.getElementById('pendingOrders').textContent = 'Rp 45M';
+                    document.getElementById('pendingOrders').parentElement.querySelector('p').textContent = 'Monthly Revenue';
+                    document.getElementById('totalRevenue').textContent = '99.9%';
+                    document.getElementById('totalRevenue').parentElement.querySelector('p').textContent = 'System Uptime';
+                    document.getElementById('totalRevenue').parentElement.style.display = '';
+                } else {
+                    document.getElementById('totalOrders').textContent = '156';
+                    document.getElementById('activeTables').textContent = '8';
+                    document.getElementById('pendingOrders').textContent = '12';
+
+                    // Revenue only visible to admin, owner, manager, cashier
+                    const revenueCard = document.getElementById('totalRevenue').parentElement;
+                    revenueCard.style.display = hasRole(['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager', 'Cashier']) ? '' : 'none';
+                    document.getElementById('totalRevenue').textContent = 'Rp 12.5M';
+                }
+
+                // Recent activity tailored by role
+                let activities = [];
+                if (currentUserLevel === 'PLATFORM_OWNER') {
+                    activities = [
+                        { time: '10:30 AM', activity: 'New tenant registered: Restaurant ABC', status: 'Active' },
+                        { time: '10:15 AM', activity: 'Platform user added: admin_xyz', status: 'Completed' },
+                        { time: '10:00 AM', activity: 'System health check: All services OK', status: 'Completed' }
+                    ];
+                } else if (currentUserRole === 'Kitchen Staff') {
+                    activities = [
+                        { time: '10:30 AM', activity: 'New order #1234 - 3 items', status: 'Pending' },
+                        { time: '10:15 AM', activity: 'Order #1230 - Ready to serve', status: 'Ready' },
+                        { time: '10:00 AM', activity: 'Order #1225 - In progress', status: 'Cooking' }
+                    ];
+                } else if (currentUserRole === 'Cashier') {
+                    activities = [
+                        { time: '10:30 AM', activity: 'Order #1234 paid - Rp 150K', status: 'Completed' },
+                        { time: '10:15 AM', activity: 'Order #1232 pending payment', status: 'Unpaid' },
+                        { time: '10:00 AM', activity: 'Bill split for Table 5', status: 'Active' }
+                    ];
+                } else if (currentUserRole === 'Inventory Manager') {
+                    activities = [
+                        { time: '10:30 AM', activity: 'Stock alert: Rice (5kg remaining)', status: 'Warning' },
+                        { time: '10:15 AM', activity: 'Order #1234 used 2kg flour', status: 'Deducted' },
+                        { time: '10:00 AM', activity: 'Supplier delivery received', status: 'Completed' }
+                    ];
+                } else if (currentUserRole === 'Host/Hostess' || currentUserRole === 'Waiter') {
+                    activities = [
+                        { time: '10:30 AM', activity: 'Table 3 - Order #1234', status: 'Active' },
+                        { time: '10:15 AM', activity: 'Reservation for John - 4 pax', status: 'Confirmed' },
+                        { time: '10:00 AM', activity: 'Table 5 seated', status: 'Active' }
+                    ];
+                } else {
+                    activities = [
+                        { time: '10:30 AM', activity: 'New order #1234', status: 'Completed' },
+                        { time: '10:15 AM', activity: 'Table 5 seated', status: 'Active' },
+                        { time: '10:00 AM', activity: 'Inventory alert: Rice', status: 'Warning' }
+                    ];
+                }
+
+                const rows = activities.map(a => `
+                    <tr>
+                        <td>${a.time}</td>
+                        <td>${a.activity}</td>
+                        <td><span style="color: ${a.status === 'Warning' ? 'orange' : a.status === 'Completed' ? 'green' : 'blue'}">${a.status}</span></td>
+                    </tr>
+                `).join('');
+
+                document.getElementById('recentActivity').innerHTML = `
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Activity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                        </tbody>
+                    </table>
+                `;
+
+            } catch (error) {
+                console.error('Error loading overview:', error);
+            }
+        }
+
+        // Load users data
+        async function loadUsers() {
+            try {
+                // Role-based controls
+                hideElementByRole('showCreateUserForm', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator']);
+                hideElementByRole('usersList', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager']);
+
+                // Platform Owner sees platform-level users
+                if (currentUserLevel === 'PLATFORM_OWNER') {
+                    document.getElementById('usersTable').innerHTML = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Level</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>platform</td>
+                                    <td>platform@ebp.com</td>
+                                    <td>Administrator</td>
+                                    <td>Platform Owner</td>
+                                    <td>ACTIVE</td>
+                                </tr>
+                                <tr>
+                                    <td>admin</td>
+                                    <td>admin@restaurant.com</td>
+                                    <td>Administrator</td>
+                                    <td>Tenant Owner</td>
+                                    <td>ACTIVE</td>
+                                </tr>
+                                <tr>
+                                    <td>manager</td>
+                                    <td>manager@restaurant.com</td>
+                                    <td>Restaurant Manager</td>
+                                    <td>Tenant Member</td>
+                                    <td>ACTIVE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    `;
+                    return;
+                }
+
+                const response = await fetch(`${API_BASE}/public/users`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const users = data.data || data.message;
+                    let tableHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Full Name</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    users.forEach(user => {
+                        tableHtml += `
+                            <tr>
+                                <td>${user.username}</td>
+                                <td>${user.email}</td>
+                                <td>${user.full_name || '-'}</td>
+                                <td>${user.roles ? user.roles.map(r => r.role_name).join(', ') : '-'}</td>
+                                <td>${user.status}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tableHtml += `
+                            </tbody>
+                        </table>
+                    `;
+
+                    document.getElementById('usersTable').innerHTML = tableHtml;
+                } else {
+                    document.getElementById('usersTable').innerHTML = '<p>Error loading users</p>';
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+                document.getElementById('usersTable').innerHTML = '<p>Error loading users</p>';
+            }
+        }
+
+        // Load available roles
+        async function loadRoles() {
+            try {
+                const response = await fetch(`${API_BASE}/users/roles`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    const roles = data.message;
+                    const select = document.getElementById('newRole');
+                    select.innerHTML = '<option value="">-- Select Role --</option>';
+
+                    roles.forEach(role => {
+                        select.innerHTML += `<option value="${role.role_code}">${role.role_name} - ${role.description}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading roles:', error);
+            }
+        }
+
+        // Show create user form
+        document.getElementById('showCreateUserForm').addEventListener('click', () => {
+            document.getElementById('createUserForm').style.display = 'block';
+            loadRoles();
+        });
+
+        // Hide create user form
+        document.getElementById('cancelCreateUser').addEventListener('click', () => {
+            document.getElementById('createUserForm').style.display = 'none';
+            document.getElementById('newUserForm').reset();
+        });
+
+        // Create new user
+        document.getElementById('newUserForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const userData = {
+                username: document.getElementById('newUsername').value,
+                email: document.getElementById('newEmail').value,
+                full_name: document.getElementById('newFullName').value,
+                password: document.getElementById('newPassword').value,
+                role_code: document.getElementById('newRole').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/users/with-role`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMessage('usersMessage', 'User created successfully!', 'success');
+                    document.getElementById('createUserForm').style.display = 'none';
+                    document.getElementById('newUserForm').reset();
+                    loadUsers();
+                } else {
+                    showMessage('usersMessage', data.message || 'Failed to create user', 'error');
+                }
+            } catch (error) {
+                console.error('Error creating user:', error);
+                showMessage('usersMessage', 'Error creating user', 'error');
+            }
+        });
+
+        // Load menu data
+        async function loadMenu() {
+            try {
+                console.log('Loading menu data...');
+
+                // Role-based controls
+                hideElementByRole('showCreateCategoryForm', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager']);
+                hideElementByRole('showCreateProductForm', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager']);
+
+                const categories = await apiCall('/public/menu/categories');
+                const products = await apiCall('/public/menu/products');
+
+                console.log('Categories response:', categories);
+                console.log('Products response:', products);
+
+                if (categories.success && categories.data) {
+                    let categoriesHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    categories.data.forEach(cat => {
+                        categoriesHtml += `
+                            <tr>
+                                <td>${cat.category_id}</td>
+                                <td>${cat.category_code}</td>
+                                <td>${cat.category_name}</td>
+                                <td>${cat.status}</td>
+                            </tr>
+                        `;
+                    });
+                    categoriesHtml += '</tbody></table>';
+                    document.getElementById('menuCategories').innerHTML = categoriesHtml;
+
+                    // Populate category dropdown for products
+                    const categorySelect = document.getElementById('productCategory');
+                    categorySelect.innerHTML = '<option value="">Select Category</option>';
+                    categories.data.forEach(cat => {
+                        categorySelect.innerHTML += `<option value="${cat.category_id}">${cat.category_name}</option>`;
+                    });
+                } else {
+                    document.getElementById('menuCategories').innerHTML = '<p>No categories found</p>';
+                }
+
+                if (products.success && products.data) {
+                    let productsHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    products.data.forEach(prod => {
+                        productsHtml += `
+                            <tr>
+                                <td>${prod.product_id}</td>
+                                <td>${prod.product_code}</td>
+                                <td>${prod.product_name}</td>
+                                <td>${prod.category_id || '-'}</td>
+                                <td>${prod.price || 0}</td>
+                                <td>${prod.status}</td>
+                            </tr>
+                        `;
+                    });
+                    productsHtml += '</tbody></table>';
+                    document.getElementById('menuProducts').innerHTML = productsHtml;
+                } else {
+                    document.getElementById('menuProducts').innerHTML = '<p>No products found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading menu:', error);
+                document.getElementById('menuCategories').innerHTML = '<p>Error loading categories</p>';
+                document.getElementById('menuProducts').innerHTML = '<p>Error loading products</p>';
+            }
+        }
+
+        // Menu CRUD handlers
+        document.getElementById('showCreateCategoryForm').addEventListener('click', () => {
+            document.getElementById('createCategoryForm').style.display = 'block';
+        });
+
+        document.getElementById('cancelCategoryBtn').addEventListener('click', () => {
+            document.getElementById('createCategoryForm').style.display = 'none';
+        });
+
+        document.getElementById('createCategoryBtn').addEventListener('click', async () => {
+            const categoryCode = document.getElementById('categoryCode').value;
+            const categoryName = document.getElementById('categoryName').value;
+            const categoryStatus = document.getElementById('categoryStatus').value;
+
+            if (!categoryCode || !categoryName) {
+                showMessage('menuMessage', 'Please fill in all required fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/menu/categories`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        category_code: categoryCode,
+                        category_name: categoryName,
+                        status: categoryStatus
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showMessage('menuMessage', 'Category created successfully', 'success');
+                    document.getElementById('createCategoryForm').style.display = 'none';
+                    document.getElementById('categoryCode').value = '';
+                    document.getElementById('categoryName').value = '';
+                    loadMenu();
+                } else {
+                    showMessage('menuMessage', data.message || 'Failed to create category', 'error');
+                }
+            } catch (error) {
+                showMessage('menuMessage', 'Error: ' + error.message, 'error');
+            }
+        });
+
+        document.getElementById('showCreateProductForm').addEventListener('click', () => {
+            document.getElementById('createProductForm').style.display = 'block';
+        });
+
+        document.getElementById('cancelProductBtn').addEventListener('click', () => {
+            document.getElementById('createProductForm').style.display = 'none';
+        });
+
+        document.getElementById('createProductBtn').addEventListener('click', async () => {
+            const productCode = document.getElementById('productCode').value;
+            const productName = document.getElementById('productName').value;
+            const productCategory = document.getElementById('productCategory').value;
+            const productPrice = document.getElementById('productPrice').value;
+            const productStatus = document.getElementById('productStatus').value;
+
+            if (!productCode || !productName || !productPrice) {
+                showMessage('productMessage', 'Please fill in all required fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/menu/products`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        product_code: productCode,
+                        product_name: productName,
+                        category_id: productCategory,
+                        price: parseFloat(productPrice),
+                        status: productStatus
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showMessage('productMessage', 'Product created successfully', 'success');
+                    document.getElementById('createProductForm').style.display = 'none';
+                    document.getElementById('productCode').value = '';
+                    document.getElementById('productName').value = '';
+                    document.getElementById('productPrice').value = '';
+                    loadMenu();
+                } else {
+                    showMessage('productMessage', data.message || 'Failed to create product', 'error');
+                }
+            } catch (error) {
+                showMessage('productMessage', 'Error: ' + error.message, 'error');
+            }
+        });
+
+        // Load tables data
+        async function loadTables() {
+            try {
+                // Role-based controls
+                hideElementByRole('showCreateTableForm', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager']);
+
+                const tables = await apiCall('/public/tables');
+
+                if (tables.success && tables.data) {
+                    const canUpdateTable = hasRole(['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager', 'Waiter', 'Host/Hostess']);
+                    const actionHeader = canUpdateTable ? '<th>Actions</th>' : '';
+
+                    let tablesHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Number</th>
+                                    <th>Name</th>
+                                    <th>Capacity</th>
+                                    <th>Status</th>
+                                    ${actionHeader}
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    tables.data.forEach(table => {
+                        const actionCell = canUpdateTable ? `<td><button class="btn btn-small">Update Status</button></td>` : '';
+                        tablesHtml += `
+                            <tr>
+                                <td>${table.table_id}</td>
+                                <td>${table.table_number}</td>
+                                <td>${table.table_name || '-'}</td>
+                                <td>${table.capacity}</td>
+                                <td>${table.status}</td>
+                                ${actionCell}
+                            </tr>
+                        `;
+                    });
+                    tablesHtml += '</tbody></table>';
+                    document.getElementById('tablesList').innerHTML = tablesHtml;
+
+                    // Filter available tables
+                    const availableTables = tables.data.filter(t => t.status === 'AVAILABLE');
+                    let availableHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Number</th>
+                                    <th>Capacity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    availableTables.forEach(table => {
+                        availableHtml += `
+                            <tr>
+                                <td>${table.table_id}</td>
+                                <td>${table.table_number}</td>
+                                <td>${table.capacity}</td>
+                            </tr>
+                        `;
+                    });
+                    availableHtml += '</tbody></table>';
+                    document.getElementById('availableTables').innerHTML = availableHtml;
+                } else {
+                    document.getElementById('tablesList').innerHTML = '<p>No tables found</p>';
+                    document.getElementById('availableTables').innerHTML = '<p>No available tables</p>';
+                }
+            } catch (error) {
+                console.error('Error loading tables:', error);
+                document.getElementById('tablesList').innerHTML = '<p>Error loading tables</p>';
+                document.getElementById('availableTables').innerHTML = '<p>Error loading available tables</p>';
+            }
+        }
+
+        // Table CRUD handlers
+        document.getElementById('showCreateTableForm').addEventListener('click', () => {
+            document.getElementById('createTableForm').style.display = 'block';
+        });
+
+        document.getElementById('cancelTableBtn').addEventListener('click', () => {
+            document.getElementById('createTableForm').style.display = 'none';
+        });
+
+        document.getElementById('createTableBtn').addEventListener('click', async () => {
+            const tableNumber = document.getElementById('tableNumber').value;
+            const tableCapacity = document.getElementById('tableCapacity').value;
+            const tableStatus = document.getElementById('tableStatus').value;
+
+            if (!tableNumber || !tableCapacity) {
+                showMessage('tableMessage', 'Please fill in all required fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/tables`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        table_number: parseInt(tableNumber),
+                        capacity: parseInt(tableCapacity),
+                        status: tableStatus
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showMessage('tableMessage', 'Table created successfully', 'success');
+                    document.getElementById('createTableForm').style.display = 'none';
+                    document.getElementById('tableNumber').value = '';
+                    document.getElementById('tableCapacity').value = '';
+                    loadTables();
+                } else {
+                    showMessage('tableMessage', data.message || 'Failed to create table', 'error');
+                }
+            } catch (error) {
+                showMessage('tableMessage', 'Error: ' + error.message, 'error');
+            }
+        });
+
+        // Load orders data
+        async function loadOrders() {
+            try {
+                // Role-based controls
+                const canCreateOrder = hasRole(['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager', 'Waiter', 'Host/Hostess']);
+                const canProcessPayment = hasRole(['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager', 'Cashier']);
+                document.getElementById('showCreateOrderForm').style.display = canCreateOrder ? '' : 'none';
+
+                const orders = await apiCall('/public/orders');
+                const tables = await apiCall('/public/tables');
+                const products = await apiCall('/public/menu/products');
+
+                // Populate dropdowns
+                if (tables.success && tables.data) {
+                    const tableSelect = document.getElementById('orderTable');
+                    tableSelect.innerHTML = '<option value="">Select Table</option>';
+                    tables.data.filter(t => t.status === 'AVAILABLE').forEach(table => {
+                        tableSelect.innerHTML += `<option value="${table.table_id}">Table ${table.table_number}</option>`;
+                    });
+                }
+
+                if (products.success && products.data) {
+                    const productSelect = document.getElementById('orderProduct');
+                    productSelect.innerHTML = '<option value="">Select Product</option>';
+                    products.data.filter(p => p.status === 'ACTIVE').forEach(product => {
+                        productSelect.innerHTML += `<option value="${product.product_id}">${product.product_name} - Rp ${product.price}</option>`;
+                    });
+                }
+
+                if (orders.success && orders.data) {
+                    const canPayOrder = hasRole(['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager', 'Cashier']);
+                    const canServeOrder = hasRole(['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager', 'Waiter', 'Host/Hostess']);
+                    const canKitchenOrder = hasRole(['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager', 'Kitchen Staff']);
+                    const canCancelOrder = isAdminOrOwner() || currentUserRole === 'Restaurant Manager';
+
+                    const actionHeader = (canPayOrder || canServeOrder || canKitchenOrder || canCancelOrder) ? '<th>Actions</th>' : '';
+
+                    let ordersHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Table</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                    <th>Created At</th>
+                                    ${actionHeader}
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    orders.data.forEach(order => {
+                        let actionButtons = '';
+                        if (order.status === 'PENDING' && canKitchenOrder) {
+                            actionButtons += '<button class="btn btn-small">Start</button> ';
+                        }
+                        if (order.status === 'PREPARING' && canKitchenOrder) {
+                            actionButtons += '<button class="btn btn-small">Ready</button> ';
+                        }
+                        if (order.status === 'READY' && canServeOrder) {
+                            actionButtons += '<button class="btn btn-small">Serve</button> ';
+                        }
+                        if ((order.status === 'SERVED' || order.status === 'PENDING') && canPayOrder) {
+                            actionButtons += '<button class="btn btn-small">Pay</button> ';
+                        }
+                        if (canCancelOrder) {
+                            actionButtons += '<button class="btn btn-small btn-danger">Cancel</button>';
+                        }
+
+                        const actionCell = actionButtons ? `<td>${actionButtons}</td>` : '';
+
+                        ordersHtml += `
+                            <tr>
+                                <td>${order.order_id}</td>
+                                <td>${order.table_id || '-'}</td>
+                                <td>${order.status}</td>
+                                <td>Rp ${(order.total_amount || 0).toLocaleString()}</td>
+                                <td>${new Date(order.created_at).toLocaleString()}</td>
+                                ${actionCell}
+                            </tr>
+                        `;
+                    });
+                    ordersHtml += '</tbody></table>';
+                    document.getElementById('ordersList').innerHTML = ordersHtml;
+                } else {
+                    document.getElementById('ordersList').innerHTML = '<p>No orders found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                document.getElementById('ordersList').innerHTML = '<p>Error loading orders</p>';
+            }
+        }
+
+        // Order CRUD handlers
+        document.getElementById('showCreateOrderForm').addEventListener('click', () => {
+            document.getElementById('createOrderForm').style.display = 'block';
+            loadOrders(); // Refresh dropdowns
+        });
+
+        document.getElementById('cancelOrderBtn').addEventListener('click', () => {
+            document.getElementById('createOrderForm').style.display = 'none';
+        });
+
+        document.getElementById('createOrderBtn').addEventListener('click', async () => {
+            const orderTable = document.getElementById('orderTable').value;
+            const orderProduct = document.getElementById('orderProduct').value;
+            const orderQuantity = document.getElementById('orderQuantity').value;
+
+            if (!orderTable || !orderProduct || !orderQuantity) {
+                showMessage('orderMessage', 'Please fill in all required fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/orders`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        table_id: parseInt(orderTable),
+                        items: [{
+                            product_id: parseInt(orderProduct),
+                            quantity: parseInt(orderQuantity)
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showMessage('orderMessage', 'Order created successfully', 'success');
+                    document.getElementById('createOrderForm').style.display = 'none';
+                    document.getElementById('orderQuantity').value = '1';
+                    loadOrders();
+                } else {
+                    showMessage('orderMessage', data.message || 'Failed to create order', 'error');
+                }
+            } catch (error) {
+                showMessage('orderMessage', 'Error: ' + error.message, 'error');
+            }
+        });
+
+        // Load inventory data
+        async function loadInventory() {
+            try {
+                // Role-based message
+                if (currentUserRole === 'Kitchen Staff') {
+                    document.getElementById('inventoryMessage').textContent = 'Inventory view is read-only for kitchen staff.';
+                    document.getElementById('inventoryMessage').className = 'message info';
+                    document.getElementById('inventoryMessage').style.display = 'block';
+                } else if (currentUserRole === 'Inventory Manager' || isAdminOrOwner()) {
+                    document.getElementById('inventoryMessage').style.display = 'none';
+                }
+
+                const inventory = await apiCall('/public/inventory');
+                const lowStock = await apiCall('/public/inventory/low-stock');
+
+                const canEditInventory = isManagerOrAbove() || currentUserRole === 'Inventory Manager';
+                const actionHeader = canEditInventory ? '<th>Actions</th>' : '';
+                const actionButtons = canEditInventory ? '<td><button class="btn btn-small">Edit</button> <button class="btn btn-small btn-danger">Delete</button></td>' : '';
+
+                document.getElementById('inventoryList').innerHTML = `
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Status</th>
+                                ${actionHeader}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Rice</td>
+                                <td>50 kg</td>
+                                <td>kg</td>
+                                <td><span style="color: green">OK</span></td>
+                                ${actionButtons}
+                            </tr>
+                            <tr>
+                                <td>Chicken</td>
+                                <td>20 kg</td>
+                                <td>kg</td>
+                                <td><span style="color: green">OK</span></td>
+                                ${actionButtons}
+                            </tr>
+                            <tr>
+                                <td>Vegetables</td>
+                                <td>15 kg</td>
+                                <td>kg</td>
+                                <td><span style="color: green">OK</span></td>
+                                ${actionButtons}
+                            </tr>
+                        </tbody>
+                    </table>
+                `;
+
+                document.getElementById('lowStockList').innerHTML = `
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Current</th>
+                                <th>Minimum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Oil</td>
+                                <td>5 L</td>
+                                <td>10 L</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `;
+            } catch (error) {
+                console.error('Error loading inventory:', error);
+            }
+        }
+
+        // Load kitchen data
+        async function loadKitchen() {
+            try {
+                // Role-based message
+                if (currentUserRole === 'Waiter' || currentUserRole === 'Host/Hostess') {
+                    document.getElementById('kitchenMessage').textContent = 'Kitchen view is read-only for front-of-house staff.';
+                    document.getElementById('kitchenMessage').className = 'message info';
+                    document.getElementById('kitchenMessage').style.display = 'block';
+                } else {
+                    document.getElementById('kitchenMessage').style.display = 'none';
+                }
+
+                const kitchenOrders = await apiCall('/public/kitchen/orders');
+
+                const canUpdateKitchen = hasRole(['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager', 'Kitchen Staff']);
+                const actionHeader = canUpdateKitchen ? '<th>Actions</th>' : '';
+
+                document.getElementById('kitchenOrders').innerHTML = `
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Table</th>
+                                <th>Items</th>
+                                <th>Status</th>
+                                ${actionHeader}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#1234</td>
+                                <td>Table 2</td>
+                                <td>Nasi Goreng x2, Ayam Bakar x1</td>
+                                <td><span style="color: orange">Preparing</span></td>
+                                ${canUpdateKitchen ? '<td><button class="btn btn-small">Ready</button> <button class="btn btn-small btn-secondary">Complete</button></td>' : ''}
+                            </tr>
+                            <tr>
+                                <td>#1235</td>
+                                <td>Table 5</td>
+                                <td>Es Teh Manis x4</td>
+                                <td><span style="color: green">Ready</span></td>
+                                ${canUpdateKitchen ? '<td><button class="btn btn-small">Serve</button> <button class="btn btn-small btn-secondary">Complete</button></td>' : ''}
+                            </tr>
+                            <tr>
+                                <td>#1236</td>
+                                <td>Table 1</td>
+                                <td>Sate Ayam x3</td>
+                                <td><span style="color: red">Pending</span></td>
+                                ${canUpdateKitchen ? '<td><button class="btn btn-small">Start</button> <button class="btn btn-small btn-secondary">Cancel</button></td>' : ''}
+                            </tr>
+                        </tbody>
+                    </table>
+                `;
+            } catch (error) {
+                console.error('Error loading kitchen:', error);
+            }
+        }
+
+        // Show message helper
+        function showMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `message ${type} active`;
+
+            setTimeout(() => {
+                element.classList.remove('active');
+            }, 5000);
+        }
+
+        // Map initialization for location picker
+        let map;
+        let marker;
+
+        function initMap() {
+            if (map) return; // Already initialized
+
+            // Default to Jakarta coordinates
+            map = L.map('map').setView([-6.2088, 106.8456], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add click event to map
+            map.on('click', function (e) {
+                const lat = e.latlng.lat.toFixed(8);
+                const lng = e.latlng.lng.toFixed(8);
+
+                // Update input fields
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+
+                // Remove existing marker if any
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+
+                // Add new marker
+                marker = L.marker([lat, lng]).addTo(map)
+                    .bindPopup('Lokasi Restoran')
+                    .openPopup();
+            });
+
+            // Try to get user's current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        map.setView([lat, lng], 15);
+
+                        // Update input fields
+                        document.getElementById('latitude').value = lat.toFixed(8);
+                        document.getElementById('longitude').value = lng.toFixed(8);
+
+                        // Add marker
+                        marker = L.marker([lat, lng]).addTo(map)
+                            .bindPopup('Lokasi Anda')
+                            .openPopup();
+                    },
+                    function (error) {
+                        console.log('Geolocation error:', error);
+                        // Keep default Jakarta view
+                    }
+                );
+            }
+        }
+
+        // Initialize map when setup wizard step 1 is shown
+        function showStep(step) {
+            document.querySelectorAll('.wizard-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.querySelector(`[data-step="${step}"]`).style.display = 'block';
+
+            // Initialize map when step 1 is shown
+            if (step === 1 && !map) {
+                setTimeout(initMap, 100);
+            }
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').style.display = step === 1 ? 'none' : 'inline-block';
+            document.getElementById('nextBtn').style.display = step === 4 ? 'none' : 'inline-block';
+            document.getElementById('completeSetup').style.display = step === 4 ? 'inline-block' : 'none';
+
+            // Show summary on step 4
+            if (step === 4) {
+                showSetupSummary();
+            }
+        }
+
+        // Load Settings
+        async function loadSettings() {
+            try {
+                // Platform Owner settings
+                if (currentUserLevel === 'PLATFORM_OWNER') {
+                    document.getElementById('settingsMessage').textContent = 'Platform Owner settings';
+                    document.getElementById('settingsMessage').className = 'message info';
+                    document.getElementById('settingsMessage').style.display = 'block';
+                    document.getElementById('restaurantName').value = 'EBP Platform';
+                    document.getElementById('taxRate').value = '0';
+                    document.getElementById('currency').value = 'IDR';
+                    document.getElementById('receiptHeader').value = 'EBP Platform';
+                    document.getElementById('receiptFooter').value = 'Enterprise Business Platform';
+                } else {
+                    document.getElementById('restaurantName').value = 'My Restaurant';
+                    document.getElementById('taxRate').value = '10';
+                    document.getElementById('currency').value = 'IDR';
+                    document.getElementById('receiptHeader').value = 'Thank you for dining with us!';
+                    document.getElementById('receiptFooter').value = 'Please come again!';
+                }
+
+                // Role-based controls
+                const canEditSettings = isAdminOrOwner();
+                setReadOnlyByRole('restaurantName', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator']);
+                setReadOnlyByRole('taxRate', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator']);
+                setReadOnlyByRole('currency', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator']);
+                setReadOnlyByRole('receiptHeader', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator']);
+                setReadOnlyByRole('receiptFooter', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator']);
+                hideElementByRole('settingsFormSubmit', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator']);
+
+                // For non-admin, show message that settings are read-only
+                if (!canEditSettings) {
+                    document.getElementById('settingsMessage').textContent = 'Settings are read-only for your role.';
+                    document.getElementById('settingsMessage').className = 'message info';
+                    document.getElementById('settingsMessage').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
+
+        // Load Accounting
+        async function loadAccounting() {
+            try {
+                document.getElementById('totalRevenue').textContent = 'Rp 12.5M';
+                document.getElementById('totalExpenses').textContent = 'Rp 8.2M';
+                document.getElementById('netProfit').textContent = 'Rp 4.3M';
+                document.getElementById('transactionsList').innerHTML = '<p>No recent transactions</p>';
+
+                // Role-based message
+                if (currentUserRole === 'Cashier') {
+                    document.getElementById('accountingMessage').textContent = 'Cashier view: transactions are read-only.';
+                    document.getElementById('accountingMessage').className = 'message info';
+                    document.getElementById('accountingMessage').style.display = 'block';
+                } else if (!isAdminOrOwner() && currentUserRole !== 'Restaurant Manager') {
+                    document.getElementById('accountingMessage').textContent = 'Accounting data is view-only for your role.';
+                    document.getElementById('accountingMessage').className = 'message info';
+                    document.getElementById('accountingMessage').style.display = 'block';
+                } else {
+                    document.getElementById('accountingMessage').style.display = 'none';
+                }
+            } catch (error) {
+                console.error('Error loading accounting:', error);
+            }
+        }
+
+        // Load Reservations
+        async function loadReservations() {
+            try {
+                // Role-based controls
+                const canManageReservation = hasRole(['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager', 'Waiter', 'Host/Hostess']);
+                document.getElementById('showCreateReservationForm').style.display = canManageReservation ? '' : 'none';
+
+                const reservations = await apiCall('/public/reservations');
+                if (reservations.success && reservations.data) {
+                    let tableHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Phone</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Guests</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    reservations.data.forEach(res => {
+                        tableHtml += `
+                            <tr>
+                                <td>${res.customer_name}</td>
+                                <td>${res.phone}</td>
+                                <td>${res.reservation_date}</td>
+                                <td>${res.reservation_time}</td>
+                                <td>${res.number_of_guests}</td>
+                                <td>${res.status}</td>
+                            </tr>
+                        `;
+                    });
+                    tableHtml += '</tbody></table>';
+                    document.getElementById('reservationsTable').innerHTML = tableHtml;
+                } else {
+                    document.getElementById('reservationsTable').innerHTML = '<p>No upcoming reservations</p>';
+                }
+            } catch (error) {
+                console.error('Error loading reservations:', error);
+                document.getElementById('reservationsTable').innerHTML = '<p>Error loading reservations</p>';
+            }
+        }
+
+        // Load Customers (CRM)
+        async function loadCustomers() {
+            try {
+                // Role-based controls
+                const canManageCustomer = hasRole(['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager', 'Waiter', 'Host/Hostess']);
+                document.getElementById('showCreateCustomerForm').style.display = canManageCustomer ? '' : 'none';
+
+                const customers = await apiCall('/public/customers');
+                if (customers.success && customers.data) {
+                    let tableHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Loyalty Points</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    customers.data.forEach(cust => {
+                        tableHtml += `
+                            <tr>
+                                <td>${cust.customer_name}</td>
+                                <td>${cust.email || '-'}</td>
+                                <td>${cust.phone}</td>
+                                <td>${cust.loyalty_points || 0}</td>
+                                <td>${cust.status}</td>
+                            </tr>
+                        `;
+                    });
+                    tableHtml += '</tbody></table>';
+                    document.getElementById('customersTable').innerHTML = tableHtml;
+                } else {
+                    document.getElementById('customersTable').innerHTML = '<p>No customers found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading customers:', error);
+                document.getElementById('customersTable').innerHTML = '<p>Error loading customers</p>';
+            }
+        }
+
+        // Load Employees (HR)
+        async function loadEmployees() {
+            try {
+                // Role-based controls
+                if (!isAdminOrOwner() && currentUserRole !== 'Restaurant Manager') {
+                    document.getElementById('hrMessage').textContent = 'HR data is view-only for your role.';
+                    document.getElementById('hrMessage').className = 'message info';
+                    document.getElementById('hrMessage').style.display = 'block';
+                } else {
+                    document.getElementById('hrMessage').style.display = 'none';
+                }
+
+                const employees = await apiCall('/public/employees');
+                if (employees.success && employees.data) {
+                    let tableHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Position</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Salary</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    employees.data.forEach(emp => {
+                        tableHtml += `
+                            <tr>
+                                <td>${emp.employee_name}</td>
+                                <td>${emp.position}</td>
+                                <td>${emp.phone || '-'}</td>
+                                <td>${emp.email || '-'}</td>
+                                <td>${emp.salary || '-'}</td>
+                                <td>${emp.status}</td>
+                            </tr>
+                        `;
+                    });
+                    tableHtml += '</tbody></table>';
+                    document.getElementById('employeesTable').innerHTML = tableHtml;
+                } else {
+                    document.getElementById('employeesTable').innerHTML = '<p>No employees found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading employees:', error);
+                document.getElementById('employeesTable').innerHTML = '<p>Error loading employees</p>';
+            }
+        }
+
+        // Load Deliveries
+        async function loadDeliveries() {
+            try {
+                // Role-based controls
+                if (!isManagerOrAbove()) {
+                    document.getElementById('deliveryMessage').textContent = 'Delivery data is view-only for your role.';
+                    document.getElementById('deliveryMessage').className = 'message info';
+                    document.getElementById('deliveryMessage').style.display = 'block';
+                } else {
+                    document.getElementById('deliveryMessage').style.display = 'none';
+                }
+
+                const deliveries = await apiCall('/public/deliveries');
+                if (deliveries.success && deliveries.data) {
+                    let tableHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Address</th>
+                                    <th>Phone</th>
+                                    <th>Delivery Time</th>
+                                    <th>Fee</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    deliveries.data.forEach(del => {
+                        tableHtml += `
+                            <tr>
+                                <td>${del.customer_name}</td>
+                                <td>${del.delivery_address}</td>
+                                <td>${del.phone}</td>
+                                <td>${del.delivery_time || '-'}</td>
+                                <td>${del.delivery_fee || 0}</td>
+                                <td>${del.status}</td>
+                            </tr>
+                        `;
+                    });
+                    tableHtml += '</tbody></table>';
+                    document.getElementById('deliveriesTable').innerHTML = tableHtml;
+                } else {
+                    document.getElementById('deliveriesTable').innerHTML = '<p>No active deliveries</p>';
+                }
+            } catch (error) {
+                console.error('Error loading deliveries:', error);
+                document.getElementById('deliveriesTable').innerHTML = '<p>Error loading deliveries</p>';
+            }
+        }
+
+        // Load AI
+        async function loadAI() {
+            try {
+                if (!isManagerOrAbove()) {
+                    document.getElementById('aiMessage').textContent = 'AI insights are view-only for your role.';
+                    document.getElementById('aiMessage').className = 'message info';
+                    document.getElementById('aiMessage').style.display = 'block';
+                } else {
+                    document.getElementById('aiMessage').style.display = 'none';
+                }
+                document.getElementById('aiInsights').innerHTML = '<p>AI insights will be displayed here.</p>';
+            } catch (error) {
+                console.error('Error loading AI:', error);
+            }
+        }
+
+        // Load Integrations
+        async function loadIntegrations() {
+            try {
+                if (!isAdminOrOwner()) {
+                    document.getElementById('integrationMessage').textContent = 'Integration settings are read-only for your role.';
+                    document.getElementById('integrationMessage').className = 'message info';
+                    document.getElementById('integrationMessage').style.display = 'block';
+                    document.querySelectorAll('#integrationTab input').forEach(el => el.disabled = true);
+                } else {
+                    document.getElementById('integrationMessage').style.display = 'none';
+                    document.querySelectorAll('#integrationTab input').forEach(el => el.disabled = false);
+                }
+            } catch (error) {
+                console.error('Error loading integrations:', error);
+            }
+        }
+
+        // Load Quality
+        async function loadQuality() {
+            try {
+                if (!isManagerOrAbove()) {
+                    document.getElementById('qualityMessage').textContent = 'Quality data is view-only for your role.';
+                    document.getElementById('qualityMessage').className = 'message info';
+                    document.getElementById('qualityMessage').style.display = 'block';
+                } else {
+                    document.getElementById('qualityMessage').style.display = 'none';
+                }
+                document.getElementById('qualityChecksTable').innerHTML = '<p>No quality checks found</p>';
+            } catch (error) {
+                console.error('Error loading quality:', error);
+            }
+        }
+
+        // Load Suppliers (SupplyChain)
+        async function loadSuppliers() {
+            try {
+                if (!isManagerOrAbove()) {
+                    document.getElementById('supplychainMessage').textContent = 'Supplier data is view-only for your role.';
+                    document.getElementById('supplychainMessage').className = 'message info';
+                    document.getElementById('supplychainMessage').style.display = 'block';
+                } else {
+                    document.getElementById('supplychainMessage').style.display = 'none';
+                }
+                const suppliers = await apiCall('/public/suppliers');
+                if (suppliers.success && suppliers.data) {
+                    let tableHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Contact Person</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+                    suppliers.data.forEach(sup => {
+                        tableHtml += `
+                            <tr>
+                                <td>${sup.supplier_name}</td>
+                                <td>${sup.contact_person || '-'}</td>
+                                <td>${sup.phone || '-'}</td>
+                                <td>${sup.email || '-'}</td>
+                                <td>${sup.status}</td>
+                            </tr>
+                        `;
+                    });
+                    tableHtml += '</tbody></table>';
+                    document.getElementById('suppliersTable').innerHTML = tableHtml;
+                } else {
+                    document.getElementById('suppliersTable').innerHTML = '<p>No suppliers found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading suppliers:', error);
+                document.getElementById('suppliersTable').innerHTML = '<p>Error loading suppliers</p>';
+            }
+        }
+
+        // Load Sustainability
+        async function loadSustainability() {
+            try {
+                if (!isManagerOrAbove()) {
+                    document.getElementById('sustainabilityMessage').textContent = 'Sustainability metrics are view-only for your role.';
+                    document.getElementById('sustainabilityMessage').className = 'message info';
+                    document.getElementById('sustainabilityMessage').style.display = 'block';
+                } else {
+                    document.getElementById('sustainabilityMessage').style.display = 'none';
+                }
+                document.getElementById('wasteReduction').textContent = '15%';
+                document.getElementById('energyEfficiency').textContent = '20%';
+                document.getElementById('sustainabilityScore').textContent = '75';
+            } catch (error) {
+                console.error('Error loading sustainability:', error);
+            }
+        }
+
+        // Load Locations
+        async function loadLocations() {
+            try {
+                if (!isAdminOrOwner()) {
+                    document.getElementById('locationMessage').textContent = 'Location data is view-only for your role.';
+                    document.getElementById('locationMessage').className = 'message info';
+                    document.getElementById('locationMessage').style.display = 'block';
+                } else {
+                    document.getElementById('locationMessage').style.display = 'none';
+                }
+                document.getElementById('locationsTable').innerHTML = '<p>No locations found</p>';
+            } catch (error) {
+                console.error('Error loading locations:', error);
+            }
+        }
+
+        // Load Maintenance
+        async function loadMaintenance() {
+            try {
+                if (!isAdminOrOwner()) {
+                    document.getElementById('maintenanceMessage').textContent = 'Maintenance data is view-only for your role.';
+                    document.getElementById('maintenanceMessage').className = 'message info';
+                    document.getElementById('maintenanceMessage').style.display = 'block';
+                } else {
+                    document.getElementById('maintenanceMessage').style.display = 'none';
+                }
+                document.getElementById('maintenanceTable').innerHTML = '<p>No scheduled maintenance</p>';
+            } catch (error) {
+                console.error('Error loading maintenance:', error);
+            }
+        }
+
+        // Load Enterprise
+        async function loadEnterprise() {
+            try {
+                if (currentUserLevel !== 'PLATFORM_OWNER') {
+                    document.getElementById('enterpriseMessage').textContent = 'Enterprise data is only available to Platform Owner.';
+                    document.getElementById('enterpriseMessage').className = 'message info';
+                    document.getElementById('enterpriseMessage').style.display = 'block';
+                } else {
+                    document.getElementById('enterpriseMessage').style.display = 'none';
+                }
+                document.getElementById('totalLocations').textContent = '1';
+                document.getElementById('totalEmployees').textContent = '7';
+                document.getElementById('totalRevenue').textContent = 'Rp 12.5M';
+            } catch (error) {
+                console.error('Error loading enterprise:', error);
+            }
+        }
+
+        // Load Tenants
+        async function loadTenants() {
+            try {
+                if (currentUserLevel !== 'PLATFORM_OWNER') {
+                    document.getElementById('tenantMessage').textContent = 'Tenant management is only available to Platform Owner.';
+                    document.getElementById('tenantMessage').className = 'message info';
+                    document.getElementById('tenantMessage').style.display = 'block';
+                } else {
+                    document.getElementById('tenantMessage').style.display = 'none';
+                }
+                document.getElementById('tenantsTable').innerHTML = '<p>No tenants found</p>';
+            } catch (error) {
+                console.error('Error loading tenants:', error);
+            }
+        }
+
+        // Load WhatsApp
+        async function loadWhatsApp() {
+            try {
+                if (!isAdminOrOwner()) {
+                    document.getElementById('whatsappMessage').textContent = 'WhatsApp settings are read-only for your role.';
+                    document.getElementById('whatsappMessage').className = 'message info';
+                    document.getElementById('whatsappMessage').style.display = 'block';
+                } else {
+                    document.getElementById('whatsappMessage').style.display = 'none';
+                }
+                document.getElementById('whatsappOrdersTable').innerHTML = '<p>No WhatsApp orders</p>';
+            } catch (error) {
+                console.error('Error loading WhatsApp:', error);
+            }
+        }
+
+        // Role-based content helpers
+        function hasRole(allowedRoles) {
+            if (!Array.isArray(allowedRoles)) allowedRoles = [allowedRoles];
+            return allowedRoles.includes(currentUserRole) || allowedRoles.includes(currentUserLevel);
+        }
+
+        function isAdminOrOwner() {
+            return currentUserLevel === 'PLATFORM_OWNER' ||
+                currentUserLevel === 'TENANT_OWNER' ||
+                currentUserRole === 'Administrator';
+        }
+
+        function isManagerOrAbove() {
+            return isAdminOrOwner() || currentUserRole === 'Restaurant Manager';
+        }
+
+        function hideElementByRole(elementId, allowedRoles) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.display = hasRole(allowedRoles) ? '' : 'none';
+            }
+        }
+
+        function hideElementsByRole(selector, allowedRoles) {
+            document.querySelectorAll(selector).forEach(el => {
+                el.style.display = hasRole(allowedRoles) ? '' : 'none';
+            });
+        }
+
+        function setReadOnlyByRole(elementId, allowedRoles) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.disabled = !hasRole(allowedRoles);
+            }
+        }
+
+        function applyRoleBasedContent() {
+            // Hide elements with role-admin-only class
+            hideElementsByRole('.role-admin-only', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator']);
+            // Hide elements with role-manager-above class
+            hideElementsByRole('.role-manager-above', ['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager']);
+            // Hide elements with role-owner-only class
+            hideElementsByRole('.role-owner-only', ['PLATFORM_OWNER', 'TENANT_OWNER']);
+            // Disable elements with role-readonly class
+            document.querySelectorAll('.role-readonly').forEach(el => {
+                el.disabled = !isAdminOrOwner();
+            });
+        }
+
+        // Role-based menu configuration
+        const MENU_ACCESS = {
+            PLATFORM_OWNER: {
+                label: 'Platform Owner',
+                tabs: [
+                    'overview', 'enterprise', 'tenant', 'users', 'settings',
+                    'reports', 'ai', 'integration'
+                ]
+            },
+            TENANT_OWNER: {
+                label: 'Tenant Owner',
+                tabs: [
+                    'overview', 'menu', 'tables', 'orders', 'inventory', 'kitchen',
+                    'users', 'settings', 'accounting', 'reservation', 'crm', 'reports',
+                    'hr', 'delivery', 'ai', 'integration', 'quality', 'supplychain',
+                    'sustainability', 'location', 'maintenance', 'whatsapp'
+                ]
+            },
+            TENANT_MEMBER: {
+                Administrator: [
+                    'overview', 'menu', 'tables', 'orders', 'inventory', 'kitchen',
+                    'users', 'settings', 'accounting', 'reservation', 'crm', 'reports',
+                    'hr', 'delivery', 'ai', 'integration', 'quality', 'supplychain',
+                    'sustainability', 'location', 'maintenance', 'whatsapp'
+                ],
+                'Restaurant Manager': [
+                    'overview', 'menu', 'tables', 'orders', 'inventory', 'kitchen',
+                    'reservation', 'reports', 'hr', 'crm', 'delivery', 'supplychain',
+                    'quality', 'accounting'
+                ],
+                Waiter: [
+                    'overview', 'tables', 'orders', 'reservation', 'menu'
+                ],
+                'Kitchen Staff': [
+                    'overview', 'kitchen', 'orders', 'inventory', 'menu'
+                ],
+                Cashier: [
+                    'overview', 'orders', 'accounting', 'reports', 'tables', 'menu'
+                ],
+                'Inventory Manager': [
+                    'overview', 'inventory', 'supplychain', 'quality', 'orders', 'reports', 'menu'
+                ],
+                'Host/Hostess': [
+                    'overview', 'tables', 'reservation', 'orders', 'menu'
+                ]
+            }
+        };
+
+        function setupMenuByRole() {
+            const level = currentUserLevel || 'TENANT_MEMBER';
+            const role = currentUserRole || 'Waiter';
+            let allowedTabs = [];
+
+            if (level === 'PLATFORM_OWNER') {
+                allowedTabs = MENU_ACCESS.PLATFORM_OWNER.tabs;
+            } else if (level === 'TENANT_OWNER') {
+                allowedTabs = MENU_ACCESS.TENANT_OWNER.tabs;
+            } else {
+                allowedTabs = MENU_ACCESS.TENANT_MEMBER[role] || MENU_ACCESS.TENANT_MEMBER.Waiter;
+            }
+
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                const tabName = tab.dataset.tab;
+                if (allowedTabs.includes(tabName)) {
+                    tab.style.display = '';
+                } else {
+                    tab.style.display = 'none';
+                }
+            });
+
+            const roleIndicator = document.getElementById('roleIndicator') || createRoleIndicator();
+            const levelLabel = MENU_ACCESS[level]?.label || level;
+            roleIndicator.textContent = `${levelLabel} - ${role}`;
+        }
+
+        function createRoleIndicator() {
+            const indicator = document.createElement('div');
+            indicator.id = 'roleIndicator';
+            indicator.style.cssText = 'position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; z-index: 1000;';
+            document.body.appendChild(indicator);
+            return indicator;
+        }
+
+        // Inventory form handlers
+        document.getElementById('showInventoryItemForm')?.addEventListener('click', () => {
+            document.getElementById('inventoryItemForm').style.display = 'block';
+        });
+
+        document.getElementById('cancelInventoryItemBtn')?.addEventListener('click', () => {
+            document.getElementById('inventoryItemForm').style.display = 'none';
+        });
+
+        document.getElementById('addInventoryItemBtn')?.addEventListener('click', () => {
+            showMessage('inventoryMessage', 'Inventory item added (demo)', 'success');
+            document.getElementById('inventoryItemForm').style.display = 'none';
+        });
+
+        // Reports button handlers
+        document.getElementById('generateReport')?.addEventListener('click', () => {
+            const reportType = document.getElementById('reportType').value;
+            let allowed = true;
+            if (reportType === 'inventory' && !hasRole(['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager', 'Inventory Manager'])) {
+                allowed = false;
+            } else if (reportType === 'staff' && !hasRole(['PLATFORM_OWNER', 'TENANT_OWNER', 'Administrator', 'Restaurant Manager'])) {
+                allowed = false;
+            } else if (!isManagerOrAbove() && currentUserRole !== 'Cashier') {
+                allowed = false;
+            }
+
+            if (!allowed) {
+                showMessage('reportsMessage', 'You do not have permission to generate this report type.', 'error');
+                return;
+            }
+
+            document.getElementById('reportResults').style.display = 'block';
+            document.getElementById('reportContent').innerHTML = `<p>Generated ${reportType} report successfully.</p>`;
+        });
+
+        document.getElementById('exportReport')?.addEventListener('click', () => {
+            if (!isManagerOrAbove()) {
+                showMessage('reportsMessage', 'Export is only available for managers and above.', 'error');
+                return;
+            }
+            showMessage('reportsMessage', 'Report exported successfully!', 'success');
+        });
+
+        // Settings form handler
+        document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                showMessage('settingsMessage', 'Settings saved successfully!', 'success');
+            } catch (error) {
+                showMessage('settingsMessage', 'Error saving settings', 'error');
+            }
+        });
+    </script>
+    <!-- Leaflet JS for map -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</body>
+
+</html>

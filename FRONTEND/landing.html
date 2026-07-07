@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBP Restaurant ERP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .main-wrapper {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .landing-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .dev-login-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 300px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 3px solid #ff6b6b;
+        }
+        .dev-login-panel h3 {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .dev-login-panel p {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+        .dev-login-select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .dev-login-btn {
+            width: 100%;
+            padding: 10px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .dev-login-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+        .dev-login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #e9ecef;
+        }
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+        .loading {
+            display: none;
+            margin-top: 20px;
+        }
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .role-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .role-guest {
+            background: #e9ecef;
+            color: #666;
+        }
+        .role-tenant {
+            background: #d4edda;
+            color: #155724;
+        }
+        .role-consumer {
+            background: #cce5ff;
+            color: #004085;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="landing-container">
+            <div class="logo">🍽️</div>
+            <h1>EBP Restaurant ERP</h1>
+            <p>Welcome to the Enterprise Business Platform Restaurant Management System</p>
+            
+            <div id="roleInfo">
+                <span class="role-badge role-guest" id="roleBadge">Guest</span>
+            </div>
+            
+            <div class="btn-group" id="btnGroup">
+                <a href="/EBP/PLATFORM_BISNIS_ENTERPRISE/PRODUCTS/RESTAURANT_ERP/FRONTEND/consumer/index.html" class="btn btn-primary">
+                    🍔 Browse as Consumer
+                </a>
+                <a href="/EBP/PLATFORM_BISNIS_ENTERPRISE/PRODUCTS/RESTAURANT_ERP/FRONTEND/login.html" class="btn btn-secondary">
+                    👨‍💼 Admin Login
+                </a>
+                <a href="/EBP/PLATFORM_BISNIS_ENTERPRISE/PRODUCTS/RESTAURANT_ERP/FRONTEND/kiosk/index.html" class="btn btn-secondary">
+                    🖥️ Kiosk Mode
+                </a>
+                <a href="/EBP/PLATFORM_BISNIS_ENTERPRISE/PRODUCTS/RESTAURANT_ERP/FRONTEND/mobile/index.html" class="btn btn-secondary">
+                    📱 Mobile Waiter
+                </a>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 10px; font-size: 14px;">Checking authentication...</p>
+            </div>
+        </div>
+
+        <!-- Development Quick Login Panel -->
+        <div class="dev-login-panel">
+            <h3>⚠️ Development Only</h3>
+            <p>Quick login for testing purposes. Remove in production.</p>
+            
+            <select class="dev-login-select" id="devUserSelect">
+                <option value="">-- Select User --</option>
+                <optgroup label="Level 100 - Administrator">
+                    <option value="admin_restaurant">EBP Restaurant Demo</option>
+                    <option value="admin_cafe">EBP Coffee House</option>
+                    <option value="admin_bakery">EBP Artisan Bakery</option>
+                    <option value="admin_fastfood">EBP Burger Joint</option>
+                    <option value="admin_japanese">EBP Sushi Bar</option>
+                    <option value="admin_thai">EBP Thai Kitchen</option>
+                    <option value="admin_bar">EBP Sports Bar</option>
+                    <option value="admin_catering">EBP Catering Service</option>
+                    <option value="admin_babipangang">Babi Pangang Karo</option>
+                    <option value="admin_halal">Warung Makan Halal</option>
+                </optgroup>
+                <optgroup label="Level 80 - Manager">
+                    <option value="manager_restaurant">EBP Restaurant Demo</option>
+                    <option value="manager_cafe">EBP Coffee House</option>
+                    <option value="manager_bakery">EBP Artisan Bakery</option>
+                    <option value="manager_fastfood">EBP Burger Joint</option>
+                    <option value="manager_japanese">EBP Sushi Bar</option>
+                    <option value="manager_thai">EBP Thai Kitchen</option>
+                    <option value="manager_bar">EBP Sports Bar</option>
+                    <option value="manager_catering">EBP Catering Service</option>
+                    <option value="manager_babipangang">Babi Pangang Karo</option>
+                    <option value="manager_halal">Warung Makan Halal</option>
+                </optgroup>
+                <optgroup label="Level 50 - Kasir">
+                    <option value="kasir_restaurant">EBP Restaurant Demo</option>
+                    <option value="kasir_cafe">EBP Coffee House</option>
+                    <option value="kasir_bakery">EBP Artisan Bakery</option>
+                    <option value="kasir_fastfood">EBP Burger Joint</option>
+                    <option value="kasir_japanese">EBP Sushi Bar</option>
+                    <option value="kasir_thai">EBP Thai Kitchen</option>
+                    <option value="kasir_bar">EBP Sports Bar</option>
+                    <option value="kasir_catering">EBP Catering Service</option>
+                    <option value="kasir_babipangang">Babi Pangang Karo</option>
+                    <option value="kasir_halal">Warung Makan Halal</option>
+                </optgroup>
+                <optgroup label="Level 40 - Koki">
+                    <option value="koki_restaurant">EBP Restaurant Demo</option>
+                    <option value="koki_cafe">EBP Coffee House</option>
+                    <option value="koki_bakery">EBP Artisan Bakery</option>
+                    <option value="koki_fastfood">EBP Burger Joint</option>
+                    <option value="koki_japanese">EBP Sushi Bar</option>
+                    <option value="koki_thai">EBP Thai Kitchen</option>
+                    <option value="koki_bar">EBP Sports Bar</option>
+                    <option value="koki_catering">EBP Catering Service</option>
+                    <option value="koki_babipangang">Babi Pangang Karo</option>
+                    <option value="koki_halal">Warung Makan Halal</option>
+                </optgroup>
+                <optgroup label="Level 30 - Waiter">
+                    <option value="waiter_restaurant">EBP Restaurant Demo</option>
+                    <option value="waiter_cafe">EBP Coffee House</option>
+                    <option value="waiter_bakery">EBP Artisan Bakery</option>
+                    <option value="waiter_fastfood">EBP Burger Joint</option>
+                    <option value="waiter_japanese">EBP Sushi Bar</option>
+                    <option value="waiter_thai">EBP Thai Kitchen</option>
+                    <option value="waiter_bar">EBP Sports Bar</option>
+                    <option value="waiter_catering">EBP Catering Service</option>
+                    <option value="waiter_babipangang">Babi Pangang Karo</option>
+                    <option value="waiter_halal">Warung Makan Halal</option>
+                </optgroup>
+                <optgroup label="Level 20 - Stok">
+                    <option value="stok_restaurant">EBP Restaurant Demo</option>
+                    <option value="stok_cafe">EBP Coffee House</option>
+                    <option value="stok_bakery">EBP Artisan Bakery</option>
+                    <option value="stok_fastfood">EBP Burger Joint</option>
+                    <option value="stok_japanese">EBP Sushi Bar</option>
+                    <option value="stok_thai">EBP Thai Kitchen</option>
+                    <option value="stok_bar">EBP Sports Bar</option>
+                    <option value="stok_catering">EBP Catering Service</option>
+                    <option value="stok_babipangang">Babi Pangang Karo</option>
+                    <option value="stok_halal">Warung Makan Halal</option>
+                </optgroup>
+                <optgroup label="Consumer Roles">
+                    <option value="consumer_guest">Consumer Guest</option>
+                    <option value="consumer_premium">Consumer Premium</option>
+                </optgroup>
+            </select>
+            
+            <button class="dev-login-btn" id="devLoginBtn" disabled>
+                Quick Login
+            </button>
+            
+            <button class="dev-login-btn" id="devLogoutBtn" style="background: #6c757d; margin-top: 10px;">
+                Logout
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Development user credentials
+        const devUsers = {
+            // Level 100 - Administrator
+            admin_restaurant: { username: 'admin_restaurant', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_RESTAURANT', tenant_name: 'EBP Restaurant Demo' },
+            admin_cafe: { username: 'admin_cafe', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'EBP Coffee House' },
+            admin_bakery: { username: 'admin_bakery', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'EBP Artisan Bakery' },
+            admin_fastfood: { username: 'admin_fastfood', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'EBP Burger Joint' },
+            admin_japanese: { username: 'admin_japanese', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'EBP Sushi Bar' },
+            admin_thai: { username: 'admin_thai', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'EBP Thai Kitchen' },
+            admin_bar: { username: 'admin_bar', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'EBP Sports Bar' },
+            admin_catering: { username: 'admin_catering', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'EBP Catering Service' },
+            admin_babipangang: { username: 'admin_babipangang', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_BABI_PANGANG', tenant_name: 'Babi Pangang Karo' },
+            admin_halal: { username: 'admin_halal', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_HALAL_FOOD', tenant_name: 'Warung Makan Halal' },
+            // Level 80 - Manager
+            manager_restaurant: { username: 'manager_restaurant', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_RESTAURANT', tenant_name: 'EBP Restaurant Demo' },
+            manager_cafe: { username: 'manager_cafe', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'EBP Coffee House' },
+            manager_bakery: { username: 'manager_bakery', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'EBP Artisan Bakery' },
+            manager_fastfood: { username: 'manager_fastfood', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'EBP Burger Joint' },
+            manager_japanese: { username: 'manager_japanese', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'EBP Sushi Bar' },
+            manager_thai: { username: 'manager_thai', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'EBP Thai Kitchen' },
+            manager_bar: { username: 'manager_bar', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'EBP Sports Bar' },
+            manager_catering: { username: 'manager_catering', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'EBP Catering Service' },
+            manager_babipangang: { username: 'manager_babipangang', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_BABI_PANGANG', tenant_name: 'Babi Pangang Karo' },
+            manager_halal: { username: 'manager_halal', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_HALAL_FOOD', tenant_name: 'Warung Makan Halal' },
+            // Level 50 - Kasir
+            kasir_restaurant: { username: 'kasir_restaurant', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_RESTAURANT', tenant_name: 'EBP Restaurant Demo' },
+            kasir_cafe: { username: 'kasir_cafe', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'EBP Coffee House' },
+            kasir_bakery: { username: 'kasir_bakery', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'EBP Artisan Bakery' },
+            kasir_fastfood: { username: 'kasir_fastfood', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'EBP Burger Joint' },
+            kasir_japanese: { username: 'kasir_japanese', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'EBP Sushi Bar' },
+            kasir_thai: { username: 'kasir_thai', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'EBP Thai Kitchen' },
+            kasir_bar: { username: 'kasir_bar', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'EBP Sports Bar' },
+            kasir_catering: { username: 'kasir_catering', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'EBP Catering Service' },
+            kasir_babipangang: { username: 'kasir_babipangang', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_BABI_PANGANG', tenant_name: 'Babi Pangang Karo' },
+            kasir_halal: { username: 'kasir_halal', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_HALAL_FOOD', tenant_name: 'Warung Makan Halal' },
+            // Level 40 - Koki
+            koki_restaurant: { username: 'koki_restaurant', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_RESTAURANT', tenant_name: 'EBP Restaurant Demo' },
+            koki_cafe: { username: 'koki_cafe', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'EBP Coffee House' },
+            koki_bakery: { username: 'koki_bakery', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'EBP Artisan Bakery' },
+            koki_fastfood: { username: 'koki_fastfood', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'EBP Burger Joint' },
+            koki_japanese: { username: 'koki_japanese', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'EBP Sushi Bar' },
+            koki_thai: { username: 'koki_thai', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'EBP Thai Kitchen' },
+            koki_bar: { username: 'koki_bar', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'EBP Sports Bar' },
+            koki_catering: { username: 'koki_catering', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'EBP Catering Service' },
+            koki_babipangang: { username: 'koki_babipangang', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_BABI_PANGANG', tenant_name: 'Babi Pangang Karo' },
+            koki_halal: { username: 'koki_halal', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_HALAL_FOOD', tenant_name: 'Warung Makan Halal' },
+            // Level 30 - Waiter
+            waiter_restaurant: { username: 'waiter_restaurant', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_RESTAURANT', tenant_name: 'EBP Restaurant Demo' },
+            waiter_cafe: { username: 'waiter_cafe', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'EBP Coffee House' },
+            waiter_bakery: { username: 'waiter_bakery', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'EBP Artisan Bakery' },
+            waiter_fastfood: { username: 'waiter_fastfood', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'EBP Burger Joint' },
+            waiter_japanese: { username: 'waiter_japanese', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'EBP Sushi Bar' },
+            waiter_thai: { username: 'waiter_thai', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'EBP Thai Kitchen' },
+            waiter_bar: { username: 'waiter_bar', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'EBP Sports Bar' },
+            waiter_catering: { username: 'waiter_catering', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'EBP Catering Service' },
+            waiter_babipangang: { username: 'waiter_babipangang', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_BABI_PANGANG', tenant_name: 'Babi Pangang Karo' },
+            waiter_halal: { username: 'waiter_halal', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_HALAL_FOOD', tenant_name: 'Warung Makan Halal' },
+            // Level 20 - Stok
+            stok_restaurant: { username: 'stok_restaurant', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_RESTAURANT', tenant_name: 'EBP Restaurant Demo' },
+            stok_cafe: { username: 'stok_cafe', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'EBP Coffee House' },
+            stok_bakery: { username: 'stok_bakery', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'EBP Artisan Bakery' },
+            stok_fastfood: { username: 'stok_fastfood', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'EBP Burger Joint' },
+            stok_japanese: { username: 'stok_japanese', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'EBP Sushi Bar' },
+            stok_thai: { username: 'stok_thai', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'EBP Thai Kitchen' },
+            stok_bar: { username: 'stok_bar', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'EBP Sports Bar' },
+            stok_catering: { username: 'stok_catering', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'EBP Catering Service' },
+            stok_babipangang: { username: 'stok_babipangang', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_BABI_PANGANG', tenant_name: 'Babi Pangang Karo' },
+            stok_halal: { username: 'stok_halal', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_HALAL_FOOD', tenant_name: 'Warung Makan Halal' },
+            // Consumer Roles
+            consumer_guest: { username: 'consumer_guest', password: 'Guest123', role: 'Consumer', level: 1, type: 'consumer' },
+            consumer_premium: { username: 'consumer_premium', password: 'Premium123', role: 'Premium Consumer', level: 5, type: 'consumer' }
+        };
+
+        // Development quick login
+        async function devQuickLogin(userKey) {
+            const user = devUsers[userKey];
+            if (!user) return;
+
+            const devLoginBtn = document.getElementById('devLoginBtn');
+            devLoginBtn.disabled = true;
+            devLoginBtn.textContent = 'Logging in...';
+
+            try {
+                // Call backend API for authentication
+                const response = await fetch('http://localhost:8000/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: user.username,
+                        password: user.password
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.access_token) {
+                    // Store user data in localStorage
+                    localStorage.setItem('access_token', data.access_token);
+                    localStorage.setItem('user_role', user.role);
+                    localStorage.setItem('user_type', user.type);
+                    localStorage.setItem('user_level', user.level);
+                    localStorage.setItem('user_id', data.user?.id || user.username);
+                    localStorage.setItem('tenant_code', user.tenant || '');
+                    localStorage.setItem('tenant_name', user.tenant_name || '');
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        name: user.role,
+                        username: user.username,
+                        role: user.role,
+                        type: user.type,
+                        level: user.level,
+                        tenant: user.tenant,
+                        tenant_name: user.tenant_name
+                    }));
+
+                    // Refresh the page to trigger role-based redirect
+                    window.location.reload();
+                } else {
+                    // If API fails, simulate login for development
+                    console.warn('API login failed, using simulated login for development');
+                    localStorage.setItem('access_token', 'dev_token_' + Date.now());
+                    localStorage.setItem('user_role', user.role);
+                    localStorage.setItem('user_type', user.type);
+                    localStorage.setItem('user_level', user.level);
+                    localStorage.setItem('user_id', user.username);
+                    localStorage.setItem('tenant_code', user.tenant || '');
+                    localStorage.setItem('tenant_name', user.tenant_name || '');
+                    localStorage.setItem('currentUser', JSON.stringify({
+                        name: user.role,
+                        username: user.username,
+                        role: user.role,
+                        type: user.type,
+                        level: user.level,
+                        tenant: user.tenant,
+                        tenant_name: user.tenant_name
+                    }));
+
+                    window.location.reload();
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                // Simulate login for development if API is not available
+                localStorage.setItem('access_token', 'dev_token_' + Date.now());
+                localStorage.setItem('user_role', user.role);
+                localStorage.setItem('user_type', user.type);
+                localStorage.setItem('user_level', user.level);
+                localStorage.setItem('user_id', user.username);
+                localStorage.setItem('tenant_code', user.tenant || '');
+                localStorage.setItem('tenant_name', user.tenant_name || '');
+                localStorage.setItem('currentUser', JSON.stringify({
+                    name: user.role,
+                    username: user.username,
+                    role: user.role,
+                    type: user.type,
+                    level: user.level,
+                    tenant: user.tenant,
+                    tenant_name: user.tenant_name
+                }));
+
+                window.location.reload();
+            }
+        }
+
+        // Development logout
+        function devLogout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user_role');
+            localStorage.removeItem('user_type');
+            localStorage.removeItem('user_level');
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('currentUser');
+            localStorage.removeItem('token');
+            localStorage.removeItem('tenant_code');
+            localStorage.removeItem('tenant_name');
+
+            document.getElementById('devUserSelect').value = '';
+            document.getElementById('devLoginBtn').disabled = true;
+
+            window.location.reload();
+        }
+
+        // Setup development login panel
+        function setupDevLogin() {
+            const devUserSelect = document.getElementById('devUserSelect');
+            const devLoginBtn = document.getElementById('devLoginBtn');
+            const devLogoutBtn = document.getElementById('devLogoutBtn');
+
+            devUserSelect.addEventListener('change', () => {
+                devLoginBtn.disabled = !devUserSelect.value;
+            });
+
+            devLoginBtn.addEventListener('click', () => {
+                if (devUserSelect.value) {
+                    devQuickLogin(devUserSelect.value);
+                }
+            });
+
+            devLogoutBtn.addEventListener('click', devLogout);
+        }
+
+        // Check for authentication token in localStorage
+        function checkAuth() {
+            const token = localStorage.getItem('access_token');
+            const userRole = localStorage.getItem('user_role');
+            const userType = localStorage.getItem('user_type');
+            const tenantName = localStorage.getItem('tenant_name');
+
+            const roleBadge = document.getElementById('roleBadge');
+            const btnGroup = document.getElementById('btnGroup');
+            const loading = document.getElementById('loading');
+
+            // Show loading
+            loading.style.display = 'block';
+            btnGroup.style.display = 'none';
+
+            setTimeout(() => {
+                loading.style.display = 'none';
+                btnGroup.style.display = 'flex';
+
+                if (token && userRole) {
+                    // User is logged in
+                    if (userType === 'tenant' || ['Administrator', 'Manager', 'Kasir', 'Koki', 'Waiter', 'Stok'].includes(userRole)) {
+                        // Tenant/Staff role - redirect to dashboard
+                        const tenantDisplay = tenantName ? ` (${tenantName})` : '';
+                        roleBadge.textContent = 'Tenant/Staff: ' + userRole + tenantDisplay;
+                        roleBadge.className = 'role-badge role-tenant';
+
+                        // Auto-redirect to dashboard after 2 seconds
+                        setTimeout(() => {
+                            window.location.href = '/dashboard/index.html';
+                        }, 2000);
+
+                        // Update button to show auto-redirect
+                        btnGroup.innerHTML = `
+                            <p style="color: #155724; font-weight: 600;">
+                                ✓ Logged in as ${userRole}${tenantDisplay}<br>
+                                <small>Redirecting to Dashboard...</small>
+                            </p>
+                            <a href="/dashboard/index.html" class="btn btn-primary">
+                                Go to Dashboard Now
+                            </a>
+                            <a href="/consumer/index.html" class="btn btn-secondary">
+                                Browse as Consumer Instead
+                            </a>
+                        `;
+                    } else {
+                        // Consumer role - show consumer app
+                        roleBadge.textContent = 'Consumer: ' + userRole;
+                        roleBadge.className = 'role-badge role-consumer';
+
+                        // Auto-redirect to consumer app after 2 seconds
+                        setTimeout(() => {
+                            window.location.href = '/consumer/index.html';
+                        }, 2000);
+
+                        // Update button to show auto-redirect
+                        btnGroup.innerHTML = `
+                            <p style="color: #004085; font-weight: 600;">
+                                ✓ Logged in as ${userRole}<br>
+                                <small>Redirecting to Consumer App...</small>
+                            </p>
+                            <a href="/consumer/index.html" class="btn btn-primary">
+                                Go to Consumer App Now
+                            </a>
+                            <a href="/dashboard/index.html" class="btn btn-secondary">
+                                Go to Dashboard (if applicable)
+                            </a>
+                        `;
+                    }
+                } else {
+                    // Guest mode
+                    roleBadge.textContent = 'Guest';
+                    roleBadge.className = 'role-badge role-guest';
+
+                    // Show default buttons
+                    btnGroup.innerHTML = `
+                        <a href="/consumer/index.html" class="btn btn-primary">
+                            🍔 Browse as Consumer
+                        </a>
+                        <a href="/dashboard/index.html" class="btn btn-secondary">
+                            👨‍💼 Admin Dashboard
+                        </a>
+                        <a href="/kiosk/index.html" class="btn btn-secondary">
+                            🖥️ Kiosk Mode
+                        </a>
+                        <a href="/mobile/index.html" class="btn btn-secondary">
+                            📱 Mobile Waiter
+                        </a>
+                    `;
+                }
+            }, 500);
+        }
+        
+        // Run on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            setupDevLogin();
+        });
+    </script>
+</body>
+</html>

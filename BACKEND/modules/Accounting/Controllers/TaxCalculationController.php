@@ -1,0 +1,113 @@
+<?php
+
+if (!class_exists('TaxCalculationService')) {
+    require_once __DIR__ . '/../Services/TaxCalculationService.php';
+}
+// Load EBP Core and Backend Components
+require_once __DIR__ . '/../../../bootstrap.php';
+
+
+
+
+class TaxCalculationController
+{
+    private $service;
+
+    public function __construct()
+    {
+        $this->service = new TaxCalculationService();
+    }
+
+    public function calculateOrderTax($request)
+    {
+        $authMiddleware = new AuthMiddleware();
+        $user = $authMiddleware->authenticate();
+
+        // $permissionMiddleware = new PermissionMiddleware();
+
+        $orderId = $request['params']['id'] ?? null;
+
+        if (!$orderId) {
+            Response::error(Messages::ACCOUNTING_ORDER_ID_REQUIRED);
+            return;
+        }
+
+        $result = $this->service->calculateOrderTax($orderId, $user['tenant_id']);
+
+        if ($result['success']) {
+            Response::success($result['data'], $result['message']);
+        } else {
+            Response::error($result['message']);
+        }
+    }
+
+    public function calculateMonthlyTax($request)
+    {
+        $authMiddleware = new AuthMiddleware();
+        $user = $authMiddleware->authenticate();
+
+        // $permissionMiddleware = new PermissionMiddleware();
+
+        $year = $request['params']['year'] ?? date('Y');
+        $month = $request['params']['month'] ?? date('m');
+
+        $result = $this->service->calculateMonthlyTax($user['tenant_id'], $user['branch_id'], $year, $month);
+
+        if ($result['success']) {
+            Response::success($result['data'], $result['message']);
+        } else {
+            Response::error($result['message']);
+        }
+    }
+
+    public function saveTaxRate($request)
+    {
+        $authMiddleware = new AuthMiddleware();
+        $user = $authMiddleware->authenticate();
+
+        // $permissionMiddleware = new PermissionMiddleware();
+
+        $data = $request['body'] ?? [];
+
+        $result = $this->service->saveTaxRate($data, $user['tenant_id'], $user['branch_id']);
+
+        if ($result['success']) {
+            Response::success(['tax_rate_id' => $result['tax_rate_id']], $result['message']);
+        } else {
+            Response::error($result['message']);
+        }
+    }
+
+    public function getTaxRate($request)
+    {
+        $authMiddleware = new AuthMiddleware();
+        $user = $authMiddleware->authenticate();
+
+        $result = $this->service->getTaxRate($user['tenant_id'], $user['branch_id']);
+
+        if ($result['success']) {
+            Response::success($result['data'], $result['message']);
+        } else {
+            Response::error($result['message']);
+        }
+    }
+
+    public function generateTaxReport($request)
+    {
+        $authMiddleware = new AuthMiddleware();
+        $user = $authMiddleware->authenticate();
+
+        // $permissionMiddleware = new PermissionMiddleware();
+
+        $year = $request['params']['year'] ?? date('Y');
+        $month = $request['params']['month'] ?? date('m');
+
+        $result = $this->service->generateTaxReport($user['tenant_id'], $user['branch_id'], $year, $month);
+
+        if ($result['success']) {
+            Response::success($result['data'], $result['message']);
+        } else {
+            Response::error($result['message']);
+        }
+    }
+}

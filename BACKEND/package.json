@@ -1,0 +1,31 @@
+{
+  "name": "ebp-restaurant-backend",
+  "version": "1.0.0",
+  "description": "EBP Restaurant Backend - Enterprise Business Platform Restaurant Management System",
+  "main": "public/index.php",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:ui": "npx playwright test --ui",
+    "test:report": "npx playwright show-report"
+  },
+  "keywords": [
+    "restaurant",
+    "management",
+    "pos",
+    "enterprise",
+    "multi-tenant"
+  ],
+  "author": "EBP Team",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.1.0"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "undici-types": "^8.3.0"
+  }
+}
