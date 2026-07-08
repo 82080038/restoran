@@ -7,6 +7,14 @@ if (!class_exists('OrderRepository')) {
     require_once __DIR__ . '/../Repositories/OrderRepository.php';
 }
 
+if (!class_exists('WeightBasedPricingService')) {
+    require_once __DIR__ . '/WeightBasedPricingService.php';
+}
+
+if (!class_exists('ComboService')) {
+    require_once __DIR__ . '/ComboService.php';
+}
+
 use PDO;
 
 class OrderService
@@ -16,6 +24,10 @@ class OrderService
 private $repository;
 
 private $db;
+
+private $weightBasedPricingService;
+
+private $comboService;
 
 
 
@@ -34,6 +46,9 @@ public function __construct()
         $dsn = "mysql:host=$host;dbname=$dbname;unix_socket=$socket;charset=utf8mb4";
         $this->db = new PDO($dsn, $username, $password);
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $this->weightBasedPricingService = new WeightBasedPricingService();
+        $this->comboService = new ComboService();
 
 }
 
@@ -169,6 +184,36 @@ public function createOrder($data, $userId, $tenantId, $branchId)
         $data['items']
         as $item
     ){
+
+        // Handle combo pricing
+        if (isset($item['combo_id'])) {
+            $comboResult = $this->comboService->calculateComboPrice(
+                $item['combo_id'], 
+                $item['quantities'] ?? [], 
+                $tenantId
+            );
+            
+            if ($comboResult['success']) {
+                $item['price'] = $comboResult['data']['combo_price'];
+            } else {
+                // Fallback to regular pricing if combo fails
+                $item['price'] = $item['price'] ?? 0;
+            }
+        }
+        
+        // Handle weight-based pricing
+        if (isset($item['actual_weight']) && isset($item['product_id'])) {
+            $weightResult = $this->weightBasedPricingService->calculateWeightBasedPrice(
+                $item['product_id'], 
+                $item['actual_weight'], 
+                $tenantId
+            );
+            
+            if ($weightResult['success']) {
+                $item['price'] = $weightResult['data']['calculated_price'];
+                $item['calculated_price'] = $weightResult['data']['calculated_price'];
+            }
+        }
 
         $total +=
         $item['price']

@@ -75,6 +75,12 @@ if (!class_exists('OrderController')) {
 if (!class_exists('PaymentManagementController')) {
     require_once __DIR__ . '/../modules/Sales/Controllers/PaymentManagementController.php';
 }
+if (!class_exists('ComboController')) {
+    require_once __DIR__ . '/../modules/Sales/Controllers/ComboController.php';
+}
+if (!class_exists('WeightBasedPricingController')) {
+    require_once __DIR__ . '/../modules/Sales/Controllers/WeightBasedPricingController.php';
+}
 
 // Menu Module
 if (!class_exists('MenuController')) {
@@ -467,10 +473,11 @@ $simpleSupplierController = new SimpleSupplierController();
 $authController = new AuthController();
 $orderController = new OrderController();
 $paymentManagementController = new PaymentManagementController();
+$comboController = new ComboController();
+$weightBasedPricingController = new WeightBasedPricingController();
 $menuController = new MenuController();
 $productVariantController = new ProductVariantController();
 $productModifierController = new ProductModifierController();
-$comboController = new ComboController();
 $recipeController = new RecipeController();
 $menuEngineeringController = new MenuEngineeringController();
 $foodWasteController = new FoodWasteController();
@@ -565,6 +572,21 @@ $router->addRoute('GET', '/api/v1/public/orders', function($request) use ($simpl
 // Simple Users Route (without middleware for testing)
 $router->addRoute('GET', '/api/v1/public/users', function($request) use ($simpleUserController) {
     return $simpleUserController->getUsers($request);
+});
+
+// Get User Roles (without middleware for testing)
+$router->addRoute('GET', '/api/v1/public/users/{id}/roles', function($request) use ($simpleUserController) {
+    return $simpleUserController->getUserRoles($request);
+});
+
+// Switch Role (without middleware for testing)
+$router->addRoute('POST', '/api/v1/public/auth/switch-role', function($request) use ($simpleUserController) {
+    return $simpleUserController->switchRole($request);
+});
+
+// Get Solo Mode Data (without middleware for testing)
+$router->addRoute('GET', '/api/v1/public/solo-mode/dashboard', function($request) use ($simpleUserController) {
+    return $simpleUserController->getSoloModeData($request);
 });
 
 // Simple Tables Route (without middleware for testing)
@@ -750,6 +772,46 @@ $router->addRoute('POST', '/api/v1/sales/cash-drawers/{id}/open', function($requ
 });
 $router->addRoute('POST', '/api/v1/sales/cash-drawers/{id}/close', function($request) use ($paymentManagementController) {
     return $paymentManagementController->closeCashDrawer($request);
+});
+
+// Combo Pricing Routes
+$router->addRoute('POST', '/api/v1/sales/combos', function($request) use ($comboController) {
+    return $comboController->create($request);
+});
+$router->addRoute('GET', '/api/v1/sales/combos', function($request) use ($comboController) {
+    return $comboController->getAll($request);
+});
+$router->addRoute('GET', '/api/v1/sales/combos/{id}', function($request) use ($comboController) {
+    return $comboController->get($request);
+});
+$router->addRoute('PUT', '/api/v1/sales/combos/{id}', function($request) use ($comboController) {
+    return $comboController->update($request);
+});
+$router->addRoute('DELETE', '/api/v1/sales/combos/{id}', function($request) use ($comboController) {
+    return $comboController->delete($request);
+});
+$router->addRoute('POST', '/api/v1/sales/combos/calculate-price', function($request) use ($comboController) {
+    return $comboController->calculatePrice($request);
+});
+
+// Weight-Based Pricing Routes
+$router->addRoute('POST', '/api/v1/sales/weight-based/calculate-price', function($request) use ($weightBasedPricingController) {
+    return $weightBasedPricingController->calculatePrice($request);
+});
+$router->addRoute('GET', '/api/v1/sales/weight-based/inventory-items', function($request) use ($weightBasedPricingController) {
+    return $weightBasedPricingController->getInventoryItems($request);
+});
+$router->addRoute('GET', '/api/v1/sales/weight-based/pricing-config', function($request) use ($weightBasedPricingController) {
+    return $weightBasedPricingController->getPricingConfig($request);
+});
+$router->addRoute('PUT', '/api/v1/sales/weight-based/pricing-config', function($request) use ($weightBasedPricingController) {
+    return $weightBasedPricingController->updatePricingConfig($request);
+});
+$router->addRoute('POST', '/api/v1/sales/weight-based/reserve-item', function($request) use ($weightBasedPricingController) {
+    return $weightBasedPricingController->reserveItem($request);
+});
+$router->addRoute('POST', '/api/v1/sales/weight-based/mark-as-sold', function($request) use ($weightBasedPricingController) {
+    return $weightBasedPricingController->markAsSold($request);
 });
 
 // Menu Routes - Categories (with permission check)

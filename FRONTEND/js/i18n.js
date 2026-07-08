@@ -240,19 +240,58 @@ class I18n {
     constructor() {
         this.currentLang = localStorage.getItem('language') || 'id';
         this.translations = translations;
+        this.availableLanguages = ['id', 'en'];
+        this.fallbackLang = 'id';
+        this.init();
+    }
+
+    init() {
+        // Detect browser language
+        const browserLang = navigator.language.split('-')[0];
+        if (this.availableLanguages.includes(browserLang) && !localStorage.getItem('language')) {
+            this.setLanguage(browserLang);
+        }
+
+        // Listen for language changes
+        window.addEventListener('languagechange', () => {
+            const newLang = navigator.language.split('-')[0];
+            if (this.availableLanguages.includes(newLang)) {
+                this.setLanguage(newLang);
+            }
+        });
     }
 
     setLanguage(lang) {
+        if (!this.availableLanguages.includes(lang)) {
+            console.warn(`Language ${lang} not available, falling back to ${this.fallbackLang}`);
+            lang = this.fallbackLang;
+        }
+
         this.currentLang = lang;
         localStorage.setItem('language', lang);
+        
+        // Update document language attribute
+        document.documentElement.lang = lang;
+        
+        // Update RTL support if needed
+        this.updateRTL();
+        
+        // Update page content
         this.updatePage();
+        
+        // Dispatch custom event for other components
+        window.dispatchEvent(new CustomEvent('languageChanged', { detail: { language: lang } }));
     }
 
     getLanguage() {
         return this.currentLang;
     }
 
-    t(key) {
+    getAvailableLanguages() {
+        return this.availableLanguages;
+    }
+
+    t(key, params = {}) {
         const keys = key.split('.');
         let value = this.translations[this.currentLang];
         
@@ -260,24 +299,71 @@ class I18n {
             if (value && value[k]) {
                 value = value[k];
             } else {
-                return key;
+                // Fallback to default language
+                value = this.translations[this.fallbackLang];
+                for (const k2 of keys) {
+                    if (value && value[k2]) {
+                        value = value[k2];
+                    } else {
+                        return key;
+                    }
+                }
+                return value;
             }
         }
         
+        // Replace parameters in translation
+        if (typeof value === 'string' && Object.keys(params).length > 0) {
+            value = this.replaceParams(value, params);
+        }
+        
         return value;
+    }
+
+    replaceParams(text, params) {
+        return text.replace(/\{(\w+)\}/g, (match, key) => {
+            return params[key] !== undefined ? params[key] : match;
+        });
+    }
+
+    updateRTL() {
+        const rtlLanguages = ['ar', 'he', 'fa'];
+        const isRTL = rtlLanguages.includes(this.currentLang);
+        
+        if (isRTL) {
+            document.documentElement.dir = 'rtl';
+            document.body.classList.add('rtl');
+        } else {
+            document.documentElement.dir = 'ltr';
+            document.body.classList.remove('rtl');
+        }
     }
 
     updatePage() {
         // Update elements with data-i18n attribute
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
-            el.textContent = this.t(key);
+            const params = el.getAttribute('data-i18n-params');
+            const parsedParams = params ? JSON.parse(params) : {};
+            el.textContent = this.t(key, parsedParams);
         });
 
         // Update elements with data-i18n-placeholder attribute
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');
             el.placeholder = this.t(key);
+        });
+
+        // Update elements with data-i18n-title attribute
+        document.querySelectorAll('[data-i18n-title]').forEach(el => {
+            const key = el.getAttribute('data-i18n-title');
+            el.title = this.t(key);
+        });
+
+        // Update elements with data-i18n-alt attribute
+        document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+            const key = el.getAttribute('data-i18n-alt');
+            el.alt = this.t(key);
         });
 
         // Update language button
@@ -291,6 +377,60 @@ class I18n {
         if (langSelect) {
             langSelect.value = this.currentLang;
         }
+
+        // Update content based on language
+        this.updateLanguageSpecificContent();
+    }
+
+    updateLanguageSpecificContent() {
+        // Show/hide elements based on language
+        document.querySelectorAll('[data-lang]').forEach(el => {
+            const lang = el.getAttribute('data-lang');
+            if (lang === this.currentLang) {
+                el.style.display = '';
+            } else {
+                el.style.display = 'none';
+            }
+        });
+
+        // Update images with language-specific sources
+        document.querySelectorAll('[data-i18n-src]').forEach(el => {
+            const key = el.getAttribute('data-i18n-src');
+            const src = this.t(key);
+            if (src && src !== key) {
+                el.src = src;
+            }
+        });
+    }
+
+    addLanguage(langCode, translations) {
+        if (!this.availableLanguages.includes(langCode)) {
+            this.availableLanguages.push(langCode);
+            this.translations[langCode] = translations;
+        }
+    }
+
+    formatNumber(number, options = {}) {
+        return new Intl.NumberFormat(this.currentLang, options).format(number);
+    }
+
+    formatCurrency(amount, currency = 'IDR') {
+        return new Intl.NumberFormat(this.currentLang, {
+            style: 'currency',
+            currency: currency
+        }).format(amount);
+    }
+
+    formatDate(date, options = {}) {
+        return new Intl.DateTimeFormat(this.currentLang, options).format(new Date(date));
+    }
+
+    formatTime(date, options = {}) {
+        return new Intl.DateTimeFormat(this.currentLang, {
+            ...options,
+            hour: '2-digit',
+            minute: '2-digit'
+        }).format(new Date(date));
     }
 }
 

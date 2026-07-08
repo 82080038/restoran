@@ -60,16 +60,40 @@ class OrderRepository
 
     public function saveDetail($orderId, $item)
     {
-        $sql = "INSERT INTO order_items (order_id, product_id, quantity, unit_price, subtotal) VALUES (?, ?, ?, ?, ?)";
+        $fields = ['order_id', 'product_id', 'quantity', 'unit_price', 'subtotal'];
+        $values = [$orderId, $item['product_id'], $item['qty'], $item['price'], $item['price'] * $item['qty']];
+        $placeholders = ['?', '?', '?', '?', '?'];
+        
+        // Add combo_id if present
+        if (isset($item['combo_id'])) {
+            $fields[] = 'combo_id';
+            $values[] = $item['combo_id'];
+            $placeholders[] = '?';
+        }
+        
+        // Add weight-based pricing fields if present
+        if (isset($item['actual_weight'])) {
+            $fields[] = 'actual_weight';
+            $values[] = $item['actual_weight'];
+            $placeholders[] = '?';
+        }
+        
+        if (isset($item['actual_unit_id'])) {
+            $fields[] = 'actual_unit_id';
+            $values[] = $item['actual_unit_id'];
+            $placeholders[] = '?';
+        }
+        
+        if (isset($item['calculated_price'])) {
+            $fields[] = 'calculated_price';
+            $values[] = $item['calculated_price'];
+            $placeholders[] = '?';
+        }
+        
+        $sql = "INSERT INTO order_items (" . implode(', ', $fields) . ") VALUES (" . implode(', ', $placeholders) . ")";
         
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([
-            $orderId,
-            $item['product_id'],
-            $item['qty'],
-            $item['price'],
-            $item['price'] * $item['qty']
-        ]);
+        $stmt->execute($values);
     }
 
     public function updateOrder($orderId, $data)

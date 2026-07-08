@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>EBP Restaurant - Admin Dashboard</title>
     <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/multi-role-support.css">
+    <link rel="stylesheet" href="../css/solo-operator-mode.css">
 </head>
 
 <body>
@@ -58,8 +60,19 @@
                     <div class="user-avatar">A</div>
                     <div class="user-details">
                         <p class="user-name" id="userName">Admin</p>
-                        <p class="user-role">Administrator</p>
+                        <div class="user-roles" id="userRoles">
+                            <span class="role-badge">Administrator</span>
+                        </div>
+                        <div class="role-switcher-container" id="roleSwitcherContainer" style="display: none;">
+                            <label for="roleSwitcher">Current Role:</label>
+                            <select class="role-switcher" id="roleSwitcher">
+                                <option value="Administrator">Administrator</option>
+                            </select>
+                        </div>
                     </div>
+                </div>
+                <div class="solo-mode-container" id="soloModeContainer" style="display: none;">
+                    <button class="solo-mode-toggle" id="soloModeToggle">🔄 Solo Mode</button>
                 </div>
                 <button class="logout-btn" id="logoutBtn">Logout</button>
             </div>
@@ -510,6 +523,8 @@
     <script src="../js/menu-access.js"></script>
     <script src="../js/permission-helpers.js"></script>
     <script src="../js/ui-helpers.js"></script>
+    <script src="../js/multi-role-support.js"></script>
+    <script src="../js/solo-operator-mode.js"></script>
     <script src="../js/dashboard.js"></script>
     <script src="../js/ai-dashboard.js"></script>
 </body>

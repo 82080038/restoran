@@ -1,0 +1,273 @@
+/**
+ * Modifier Selector Styles
+ * 
+ * Styles for product modifier selection modal
+ * 
+ * @version 1.0.0
+ * @date 2026-07-08
+ */
+
+/* Modifier Selector Modal */
+.modifier-selector-modal .modal-content {
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.modifier-selector-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.selector-header h2 {
+    margin: 0 0 5px 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.selector-header .header-description {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Modifier Groups */
+.modifier-groups {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+.modifier-group {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.group-header {
+    padding: 15px;
+    background: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+}
+
+.group-header h3 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.group-description {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.group-modifiers {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Modifier Items */
+.modifier-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.modifier-item:hover {
+    border-color: #999;
+    background: #f9f9f9;
+}
+
+.modifier-item:has(.modifier-checkbox:checked) {
+    border-color: #4CAF50;
+    background: #e8f5e9;
+}
+
+.modifier-info {
+    flex: 1;
+}
+
+.modifier-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.modifier-price {
+    font-size: 14px;
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+.modifier-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modifier-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #4CAF50;
+}
+
+.modifier-checkbox:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.modifier-checkbox:disabled + label {
+    cursor: not-allowed;
+}
+
+.no-modifiers-message {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+.no-modifiers-message p {
+    margin: 0;
+}
+
+/* Selected Modifiers Summary */
+.selected-modifiers-summary {
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border-left: 4px solid #4CAF50;
+}
+
+.selected-modifiers-summary h3 {
+    margin: 0 0 15px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.selected-modifiers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.selected-modifier-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+.selected-modifier-row .modifier-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.selected-modifier-row .modifier-price {
+    color: #4CAF50;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.total-modifier-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 2px solid #ddd;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.total-modifier-price span:first-child {
+    color: #666;
+}
+
+.total-modifier-price span:last-child {
+    color: #4CAF50;
+}
+
+/* Selector Actions */
+.selector-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 15px;
+    border-top: 2px solid #ddd;
+}
+
+.selector-actions .btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: #4CAF50;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #45a049;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modifier-selector-modal .modal-content {
+        max-width: 95%;
+        padding: 20px;
+    }
+    
+    .modifier-item {
+        flex-direction: column;
+        text-align: left;
+        gap: 10px;
+    }
+    
+    .modifier-control {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    
+    .selector-actions {
+        flex-direction: column;
+    }
+    
+    .selector-actions .btn {
+        width: 100%;
+    }
+}

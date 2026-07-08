@@ -47,6 +47,21 @@ require_once __DIR__ . '/core/Middleware/TenantMiddleware.php';
 require_once __DIR__ . '/core/Middleware/ErrorHandler.php';
 require_once __DIR__ . '/core/Middleware/ValidationMiddleware.php';
 require_once __DIR__ . '/core/Middleware/RateLimitMiddleware.php';
+
+// Load all Engines
 require_once __DIR__ . '/core/Engines/StockEngine.php';
 require_once __DIR__ . '/core/Engines/KitchenEngine.php';
 require_once __DIR__ . '/core/Engines/AccountingEngine.php';
+require_once __DIR__ . '/core/Engines/ReconciliationEngine.php';
+require_once __DIR__ . '/core/Engines/ComplianceEngine.php';
+require_once __DIR__ . '/core/Engines/PricingEngine.php';
+require_once __DIR__ . '/core/Engines/SchedulingEngine.php';
+require_once __DIR__ . '/core/Engines/RecipeEngine.php';
+require_once __DIR__ . '/core/Engines/LoyaltyEngine.php';
+require_once __DIR__ . '/core/Engines/AIEngine.php';
+require_once __DIR__ . '/core/Engines/SustainabilityEngine.php';
+require_once __DIR__ . '/core/Engines/RiskEngine.php';
+require_once __DIR__ . '/core/Engines/AnalyticsEngine.php';
+
+// Load Integration Components
+require_once __DIR__ . '/core/Integration/IntegrationConnector.php';
