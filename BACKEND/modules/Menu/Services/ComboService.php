@@ -87,7 +87,7 @@ class ComboService
         }
     }
 
-    public function calculateComboPrice($comboId, $selections)
+    public function calculateComboPrice($comboId, $selections, $productCondition = 'REGULAR')
     {
         try {
             $combo = $this->repository->getComboById($comboId);
@@ -109,9 +109,13 @@ class ComboService
                 foreach ($items as $item) {
                     if (isset($selections[$group['combo_group_id']]) && 
                         in_array($item['combo_item_id'], $selections[$group['combo_group_id']])) {
-                        $product = $this->getProductPrice($item['product_id']);
+                        $product = $this->getProductPrice($item['product_id'], $productCondition);
                         $totalIndividualPrice += $product['price'];
-                        $selectedItems[] = $item;
+                        $selectedItems[] = array_merge($item, [
+                            'price' => $product['price'],
+                            'price_type' => $product['price_type'],
+                            'condition' => $productCondition
+                        ]);
                         $selectedCount++;
                     }
                 }
@@ -146,7 +150,9 @@ class ComboService
                     'combo_price' => $comboPrice,
                     'individual_price' => $totalIndividualPrice,
                     'savings' => $savings,
-                    'savings_percentage' => $totalIndividualPrice > 0 ? ($savings / $totalIndividualPrice) * 100 : 0
+                    'savings_percentage' => $totalIndividualPrice > 0 ? ($savings / $totalIndividualPrice) * 100 : 0,
+                    'product_condition' => $productCondition,
+                    'selected_items' => $selectedItems
                 ]
             ];
 
@@ -158,11 +164,73 @@ class ComboService
         }
     }
 
-    private function getProductPrice($productId)
+    private function getProductPrice($productId, $condition = 'REGULAR')
     {
-        $sql = "SELECT price FROM products WHERE product_id = ?";
+        // Try to get condition-specific price first
+        $sql = "SELECT price, price_type FROM product_prices 
+                WHERE product_id = ? AND price_type = ? AND is_active = 1 
+                AND (valid_from IS NULL OR valid_from <= CURDATE()) 
+                AND (valid_until IS NULL OR valid_until >= CURDATE())
+                LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$productId, $condition]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result) {
+            return $result;
+        }
+
+        // Fallback to regular price
+        $sql = "SELECT price, 'REGULAR' as price_type FROM products WHERE product_id = ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$productId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result) {
+            return $result;
+        }
+
+        // Final fallback to product_prices regular type
+        $sql = "SELECT price, price_type FROM product_prices 
+                WHERE product_id = ? AND price_type = 'REGULAR' AND is_active = 1 
+                LIMIT 1";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$productId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get available product conditions for a product
+     */
+    public function getProductConditions($productId)
+    {
+        try {
+            $sql = "SELECT DISTINCT price_type FROM product_prices 
+                    WHERE product_id = ? AND is_active = 1 
+                    AND (valid_from IS NULL OR valid_from <= CURDATE()) 
+                    AND (valid_until IS NULL OR valid_until >= CURDATE())";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$productId]);
+            $conditions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $conditionTypes = array_column($conditions, 'price_type');
+
+            // Always include REGULAR as default
+            if (!in_array('REGULAR', $conditionTypes)) {
+                $conditionTypes[] = 'REGULAR';
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Product conditions retrieved successfully',
+                'data' => $conditionTypes
+            ];
+
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Failed to get product conditions: ' . $e->getMessage()
+            ];
+        }
     }
 }

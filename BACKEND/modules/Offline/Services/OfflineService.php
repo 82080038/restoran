@@ -462,4 +462,216 @@ class OfflineService
             'last_sync_at' => $device ? $device['last_seen_at'] : null
         ];
     }
+
+    /**
+     * Get mobile-optimized data for offline use
+     * Enhanced for mobile endpoints with lightweight data structures
+     */
+    public function getMobileData($restaurantId, $deviceId, $dataType, $lastSyncVersion = null)
+    {
+        $snapshotModel = new OfflineDataSnapshot();
+        
+        // Check if newer version exists
+        $latestSnapshot = $snapshotModel->getLatest($restaurantId, $deviceId, $dataType);
+        
+        if (!$latestSnapshot) {
+            return $this->downloadSnapshot($restaurantId, null, $deviceId, $dataType);
+        }
+        
+        // If client has latest version, return empty response
+        if ($lastSyncVersion && $latestSnapshot['snapshot_version'] <= $lastSyncVersion) {
+            return [
+                'success' => true,
+                'message' => 'Data already up to date',
+                'has_updates' => false,
+                'current_version' => $latestSnapshot['snapshot_version']
+            ];
+        }
+        
+        // Return incremental updates if possible
+        return [
+            'success' => true,
+            'message' => 'Mobile data retrieved',
+            'has_updates' => true,
+            'data' => json_decode($latestSnapshot['snapshot_data'], true),
+            'version' => $latestSnapshot['snapshot_version'],
+            'last_synced_at' => $latestSnapshot['last_synced_at'],
+            'data_size_bytes' => strlen($latestSnapshot['snapshot_data'])
+        ];
+    }
+
+    /**
+     * Batch sync for mobile - process multiple transactions efficiently
+     */
+    public function batchSync($restaurantId, $userId, $deviceId, $transactions)
+    {
+        $results = [];
+        $totalSuccess = 0;
+        $totalFailed = 0;
+        
+        foreach ($transactions as $transaction) {
+            $result = $this->uploadTransaction($restaurantId, $userId, (object)$transaction);
+            $results[] = $result;
+            
+            if ($result['success']) {
+                $totalSuccess++;
+            } else {
+                $totalFailed++;
+            }
+        }
+        
+        // Trigger immediate sync if online
+        $syncResult = $this->syncTransactions($restaurantId, $userId, $deviceId);
+        
+        return [
+            'success' => true,
+            'message' => 'Batch sync completed',
+            'summary' => [
+                'total_uploaded' => count($transactions),
+                'upload_success' => $totalSuccess,
+                'upload_failed' => $totalFailed,
+                'sync_summary' => $syncResult['summary'] ?? []
+            ],
+            'results' => $results
+        ];
+    }
+
+    /**
+     * Get delta updates - only changed data since last sync
+     */
+    public function getDeltaUpdates($restaurantId, $deviceId, $sinceTimestamp)
+    {
+        // Get data changes since timestamp
+        $changes = $this->getDataChanges($restaurantId, $sinceTimestamp);
+        
+        return [
+            'success' => true,
+            'message' => 'Delta updates retrieved',
+            'since' => $sinceTimestamp,
+            'changes' => $changes,
+            'has_changes' => !empty($changes)
+        ];
+    }
+
+    /**
+     * Get data changes since timestamp
+     */
+    private function getDataChanges($restaurantId, $sinceTimestamp)
+    {
+        $changes = [];
+        
+        // Check for menu changes
+        $sql = "SELECT 'menu' as entity_type, menu_id as entity_id, updated_at 
+                FROM menus 
+                WHERE tenant_id = ? AND updated_at > ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$restaurantId, $sinceTimestamp]);
+        $menuChanges = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $changes = array_merge($changes, $menuChanges);
+        
+        // Check for inventory changes
+        $sql = "SELECT 'inventory' as entity_type, inventory_id as entity_id, updated_at 
+                FROM inventory 
+                WHERE tenant_id = ? AND updated_at > ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$restaurantId, $sinceTimestamp]);
+        $inventoryChanges = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $changes = array_merge($changes, $inventoryChanges);
+        
+        // Check for price changes
+        $sql = "SELECT 'price' as entity_type, price_id as entity_id, updated_at 
+                FROM product_prices 
+                WHERE tenant_id = ? AND updated_at > ?";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$restaurantId, $sinceTimestamp]);
+        $priceChanges = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $changes = array_merge($changes, $priceChanges);
+        
+        return $changes;
+    }
+
+    /**
+     * Compress data for mobile transfer
+     */
+    public function getCompressedData($restaurantId, $deviceId, $dataType)
+    {
+        $result = $this->downloadSnapshot($restaurantId, null, $deviceId, $dataType);
+        
+        if (!$result['success']) {
+            return $result;
+        }
+        
+        // In real implementation, apply compression here
+        // For now, just return the data with compression flag
+        return [
+            'success' => true,
+            'message' => 'Compressed data retrieved',
+            'data' => $result['data'],
+            'compressed' => false, // Would be true with actual compression
+            'original_size' => strlen(json_encode($result['data'])),
+            'compressed_size' => strlen(json_encode($result['data'])) // Would be smaller with compression
+        ];
+    }
+
+    /**
+     * Health check for mobile sync
+     */
+    public function syncHealthCheck($restaurantId, $deviceId)
+    {
+        $transactionModel = new OfflineTransaction();
+        $deviceModel = new DeviceRegistration();
+        
+        $pendingCount = $transactionModel->countByStatus($restaurantId, $deviceId, 'pending');
+        $conflictCount = $transactionModel->countByStatus($restaurantId, $deviceId, 'conflict');
+        $failedCount = $transactionModel->countByStatus($restaurantId, $deviceId, 'failed');
+        
+        $device = $deviceModel->findById($deviceId, $restaurantId);
+        
+        $healthStatus = 'healthy';
+        if ($conflictCount > 5) {
+            $healthStatus = 'warning';
+        }
+        if ($failedCount > 10 || $conflictCount > 10) {
+            $healthStatus = 'critical';
+        }
+        
+        return [
+            'success' => true,
+            'health_status' => $healthStatus,
+            'metrics' => [
+                'pending_transactions' => $pendingCount,
+                'conflicts' => $conflictCount,
+                'failed_transactions' => $failedCount,
+                'last_sync' => $device ? $device['last_seen_at'] : null,
+                'storage_available_mb' => $device ? $device['available_storage_mb'] : null
+            ],
+            'recommendations' => $this->getHealthRecommendations($healthStatus, $pendingCount, $conflictCount, $failedCount)
+        ];
+    }
+
+    /**
+     * Get health recommendations
+     */
+    private function getHealthRecommendations($status, $pending, $conflicts, $failed)
+    {
+        $recommendations = [];
+        
+        if ($pending > 20) {
+            $recommendations[] = 'High number of pending transactions - consider syncing more frequently';
+        }
+        
+        if ($conflicts > 0) {
+            $recommendations[] = 'Resolve conflicts to ensure data consistency';
+        }
+        
+        if ($failed > 5) {
+            $recommendations[] = 'Review failed transactions and retry sync';
+        }
+        
+        if ($status === 'critical') {
+            $recommendations[] = 'Critical sync issues detected - immediate attention required';
+        }
+        
+        return $recommendations;
+    }
 }

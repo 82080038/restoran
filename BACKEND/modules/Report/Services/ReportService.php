@@ -695,4 +695,313 @@ class ReportService
         
         return $csv;
     }
+
+    // AI-Powered Insights
+    public function getAIInsights(int $tenantId, ?int $branchId = null, string $dateFrom, string $dateTo): array
+    {
+        $insights = [];
+        
+        // Sales Trend Analysis
+        $salesTrend = $this->analyzeSalesTrend($tenantId, $branchId, $dateFrom, $dateTo);
+        if ($salesTrend) {
+            $insights['sales_trend'] = $salesTrend;
+        }
+        
+        // Product Performance Insights
+        $productInsights = $this->analyzeProductPerformance($tenantId, $branchId, $dateFrom, $dateTo);
+        if ($productInsights) {
+            $insights['product_performance'] = $productInsights;
+        }
+        
+        // Customer Behavior Insights
+        $customerInsights = $this->analyzeCustomerBehavior($tenantId, $branchId, $dateFrom, $dateTo);
+        if ($customerInsights) {
+            $insights['customer_behavior'] = $customerInsights;
+        }
+        
+        // Inventory Optimization
+        $inventoryInsights = $this->analyzeInventoryOptimization($tenantId, $branchId);
+        if ($inventoryInsights) {
+            $insights['inventory_optimization'] = $inventoryInsights;
+        }
+        
+        // Peak Hours Analysis
+        $peakHours = $this->analyzePeakHours($tenantId, $branchId, $dateFrom, $dateTo);
+        if ($peakHours) {
+            $insights['peak_hours'] = $peakHours;
+        }
+        
+        // Revenue Recommendations
+        $recommendations = $this->generateRevenueRecommendations($tenantId, $branchId, $dateFrom, $dateTo);
+        if ($recommendations) {
+            $insights['recommendations'] = $recommendations;
+        }
+        
+        return [
+            'success' => true,
+            'message' => 'AI insights generated successfully',
+            'data' => $insights,
+            'generated_at' => date('Y-m-d H:i:s')
+        ];
+    }
+
+    private function analyzeSalesTrend($tenantId, $branchId, $dateFrom, $dateTo)
+    {
+        $sql = "
+            SELECT 
+                DATE(created_at) as date,
+                SUM(total_amount) as daily_revenue,
+                COUNT(order_id) as daily_orders
+            FROM orders
+            WHERE tenant_id = ?
+            AND created_at BETWEEN ? AND ?
+            AND deleted_at IS NULL
+        ";
+        
+        $params = [$tenantId, $dateFrom . ' 00:00:00', $dateTo . ' 23:59:59'];
+        
+        if ($branchId) {
+            $sql .= " AND branch_id = ?";
+            $params[] = $branchId;
+        }
+        
+        $sql .= " GROUP BY DATE(created_at) ORDER BY date ASC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if (count($data) < 2) {
+            return null;
+        }
+        
+        // Calculate trend
+        $firstHalf = array_slice($data, 0, floor(count($data) / 2));
+        $secondHalf = array_slice($data, floor(count($data) / 2));
+        
+        $firstAvg = array_sum(array_column($firstHalf, 'daily_revenue')) / count($firstHalf);
+        $secondAvg = array_sum(array_column($secondHalf, 'daily_revenue')) / count($secondHalf);
+        
+        $trend = ($secondAvg - $firstAvg) / $firstAvg * 100;
+        
+        return [
+            'trend' => $trend > 0 ? 'increasing' : 'decreasing',
+            'percentage_change' => abs($trend),
+            'first_period_avg' => $firstAvg,
+            'second_period_avg' => $secondAvg,
+            'insight' => $trend > 10 ? 'Strong positive growth trend' : ($trend < -10 ? 'Declining trend - attention needed' : 'Stable performance')
+        ];
+    }
+
+    private function analyzeProductPerformance($tenantId, $branchId, $dateFrom, $dateTo)
+    {
+        $sql = "
+            SELECT 
+                p.product_name,
+                SUM(oi.quantity) as total_sold,
+                SUM(oi.subtotal) as total_revenue,
+                COUNT(DISTINCT oi.order_id) as order_count
+            FROM order_items oi
+            JOIN products p ON oi.product_id = p.product_id
+            JOIN orders o ON oi.order_id = o.order_id
+            WHERE o.tenant_id = ?
+            AND o.created_at BETWEEN ? AND ?
+            AND o.deleted_at IS NULL
+        ";
+        
+        $params = [$tenantId, $dateFrom . ' 00:00:00', $dateTo . ' 23:59:59'];
+        
+        if ($branchId) {
+            $sql .= " AND o.branch_id = ?";
+            $params[] = $branchId;
+        }
+        
+        $sql .= " GROUP BY p.product_id, p.product_name ORDER BY total_sold DESC LIMIT 10";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if (empty($products)) {
+            return null;
+        }
+        
+        $topProduct = $products[0];
+        $totalRevenue = array_sum(array_column($products, 'total_revenue'));
+        $topProductContribution = ($topProduct['total_revenue'] / $totalRevenue) * 100;
+        
+        return [
+            'top_performer' => $topProduct['product_name'],
+            'top_product_revenue' => $topProduct['total_revenue'],
+            'contribution_percentage' => $topProductContribution,
+            'insight' => $topProductContribution > 30 ? 'High concentration on top product - consider diversification' : 'Good product mix distribution'
+        ];
+    }
+
+    private function analyzeCustomerBehavior($tenantId, $branchId, $dateFrom, $dateTo)
+    {
+        $sql = "
+            SELECT 
+                AVG(total_amount) as avg_order_value,
+                COUNT(DISTINCT customer_id) as unique_customers,
+                COUNT(order_id) as total_orders
+            FROM orders
+            WHERE tenant_id = ?
+            AND created_at BETWEEN ? AND ?
+            AND deleted_at IS NULL
+        ";
+        
+        $params = [$tenantId, $dateFrom . ' 00:00:00', $dateTo . ' 23:59:59'];
+        
+        if ($branchId) {
+            $sql .= " AND branch_id = ?";
+            $params[] = $branchId;
+        }
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$data || $data['total_orders'] == 0) {
+            return null;
+        }
+        
+        $repeatRate = $data['total_orders'] / max($data['unique_customers'], 1);
+        
+        return [
+            'average_order_value' => $data['avg_order_value'],
+            'unique_customers' => $data['unique_customers'],
+            'repeat_customer_rate' => $repeatRate,
+            'insight' => $repeatRate > 1.5 ? 'High customer loyalty - good retention' : 'Low repeat rate - consider loyalty program'
+        ];
+    }
+
+    private function analyzeInventoryOptimization($tenantId, $branchId)
+    {
+        $sql = "
+            SELECT 
+                COUNT(*) as low_stock_count,
+                SUM(CASE WHEN quantity <= 0 THEN 1 ELSE 0 END) as out_of_stock_count
+            FROM inventory
+            WHERE tenant_id = ?
+            AND quantity <= minimum_stock
+            AND deleted_at IS NULL
+        ";
+        
+        $params = [$tenantId];
+        
+        if ($branchId) {
+            $sql .= " AND branch_id = ?";
+            $params[] = $branchId;
+        }
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$data) {
+            return null;
+        }
+        
+        return [
+            'low_stock_items' => $data['low_stock_count'],
+            'out_of_stock_items' => $data['out_of_stock_count'],
+            'insight' => $data['out_of_stock_count'] > 5 ? 'Critical: Many items out of stock - review ordering' : ($data['low_stock_count'] > 10 ? 'Many items low on stock - consider bulk ordering' : 'Inventory levels healthy')
+        ];
+    }
+
+    private function analyzePeakHours($tenantId, $branchId, $dateFrom, $dateTo)
+    {
+        $sql = "
+            SELECT 
+                HOUR(created_at) as hour,
+                COUNT(order_id) as order_count,
+                SUM(total_amount) as hourly_revenue
+            FROM orders
+            WHERE tenant_id = ?
+            AND created_at BETWEEN ? AND ?
+            AND deleted_at IS NULL
+        ";
+        
+        $params = [$tenantId, $dateFrom . ' 00:00:00', $dateTo . ' 23:59:59'];
+        
+        if ($branchId) {
+            $sql .= " AND branch_id = ?";
+            $params[] = $branchId;
+        }
+        
+        $sql .= " GROUP BY HOUR(created_at) ORDER BY hourly_revenue DESC LIMIT 3";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $peakHours = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if (empty($peakHours)) {
+            return null;
+        }
+        
+        return [
+            'peak_hours' => array_column($peakHours, 'hour'),
+            'peak_revenue' => array_column($peakHours, 'hourly_revenue'),
+            'insight' => 'Peak hours identified - optimize staffing during these times'
+        ];
+    }
+
+    private function generateRevenueRecommendations($tenantId, $branchId, $dateFrom, $dateTo)
+    {
+        $recommendations = [];
+        
+        // Check for slow-moving items
+        $sql = "
+            SELECT 
+                p.product_name,
+                SUM(oi.quantity) as total_sold
+            FROM order_items oi
+            JOIN products p ON oi.product_id = p.product_id
+            JOIN orders o ON oi.order_id = o.order_id
+            WHERE o.tenant_id = ?
+            AND o.created_at BETWEEN ? AND ?
+            AND o.deleted_at IS NULL
+        ";
+        
+        $params = [$tenantId, $dateFrom . ' 00:00:00', $dateTo . ' 23:59:59'];
+        
+        if ($branchId) {
+            $sql .= " AND o.branch_id = ?";
+            $params[] = $branchId;
+        }
+        
+        $sql .= " GROUP BY p.product_id, p.product_name HAVING total_sold < 5 ORDER BY total_sold ASC LIMIT 5";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $slowItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if (!empty($slowItems)) {
+            $recommendations[] = [
+                'type' => 'product_optimization',
+                'priority' => 'medium',
+                'message' => 'Consider promoting or removing slow-moving items: ' . implode(', ', array_column($slowItems, 'product_name'))
+            ];
+        }
+        
+        // Check for high-complimentary usage
+        $sql = "
+            SELECT COUNT(*) as complimentary_count
+            FROM customer_pricing
+            WHERE tenant_id = ?
+            AND is_complimentary = 1
+            AND created_at BETWEEN ? AND ?
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId, $dateFrom . ' 00:00:00', $dateTo . ' 23:59:59']);
+        $complimentaryData = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($complimentaryData && $complimentaryData['complimentary_count'] > 10) {
+            $recommendations[] = [
+                'type' => 'cost_control',
+                'priority' => 'high',
+                'message' => 'High complimentary item usage - review complimentary policy'
+            ];
+        }
+        
+        return $recommendations;
+    }
 }
