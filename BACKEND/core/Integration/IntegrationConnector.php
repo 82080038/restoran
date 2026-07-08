@@ -323,4 +323,590 @@ class IntegrationConnector
             'logs' => []
         ];
     }
+
+    /**
+     * Connect to Square POS
+     * 
+     * @param array $config Square configuration
+     * @return array Connection result
+     */
+    public function connectSquare($config)
+    {
+        $this->config = array_merge($this->config, $config);
+        
+        try {
+            // Test connection to Square API
+            $response = $this->requestWithRetry('GET', 'https://connect.squareup.com/v2/locations', [
+                'headers' => [
+                    'Authorization: Bearer ' . $config['access_token'],
+                    'Content-Type: application/json'
+                ]
+            ]);
+            
+            $this->logEvent('square', 'CONNECTION_SUCCESS', [
+                'locations' => json_decode($response['body'], true)
+            ]);
+            
+            return [
+                'success' => true,
+                'provider' => 'Square',
+                'connected' => true,
+                'locations' => json_decode($response['body'], true)
+            ];
+        } catch (Exception $e) {
+            $this->logEvent('square', 'CONNECTION_FAILED', [
+                'error' => $e->getMessage()
+            ]);
+            
+            return [
+                'success' => false,
+                'provider' => 'Square',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Connect to Toast POS
+     * 
+     * @param array $config Toast configuration
+     * @return array Connection result
+     */
+    public function connectToast($config)
+    {
+        $this->config = array_merge($this->config, $config);
+        
+        try {
+            // Test connection to Toast API
+            $response = $this->requestWithRetry('GET', $config['api_url'] . '/restaurants', [
+                'headers' => [
+                    'Authorization: Bearer ' . $config['api_key'],
+                    'Content-Type: application/json'
+                ]
+            ]);
+            
+            $this->logEvent('toast', 'CONNECTION_SUCCESS', [
+                'restaurants' => json_decode($response['body'], true)
+            ]);
+            
+            return [
+                'success' => true,
+                'provider' => 'Toast',
+                'connected' => true,
+                'restaurants' => json_decode($response['body'], true)
+            ];
+        } catch (Exception $e) {
+            $this->logEvent('toast', 'CONNECTION_FAILED', [
+                'error' => $e->getMessage()
+            ]);
+            
+            return [
+                'success' => false,
+                'provider' => 'Toast',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Connect to Clover POS
+     * 
+     * @param array $config Clover configuration
+     * @return array Connection result
+     */
+    public function connectClover($config)
+    {
+        $this->config = array_merge($this->config, $config);
+        
+        try {
+            // Test connection to Clover API
+            $response = $this->requestWithRetry('GET', $config['api_url'] . '/v3/merchants/' . $config['merchant_id'], [
+                'headers' => [
+                    'Authorization: Bearer ' . $config['api_token'],
+                    'Content-Type: application/json'
+                ]
+            ]);
+            
+            $this->logEvent('clover', 'CONNECTION_SUCCESS', [
+                'merchant' => json_decode($response['body'], true)
+            ]);
+            
+            return [
+                'success' => true,
+                'provider' => 'Clover',
+                'connected' => true,
+                'merchant' => json_decode($response['body'], true)
+            ];
+        } catch (Exception $e) {
+            $this->logEvent('clover', 'CONNECTION_FAILED', [
+                'error' => $e->getMessage()
+            ]);
+            
+            return [
+                'success' => false,
+                'provider' => 'Clover',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Connect to Micros 3700
+     * 
+     * @param array $config Micros configuration
+     * @return array Connection result
+     */
+    public function connectMicros($config)
+    {
+        $this->config = array_merge($this->config, $config);
+        
+        try {
+            // Test connection to Micros API (typically SOAP-based)
+            $response = $this->requestWithRetry('POST', $config['api_url'], [
+                'headers' => [
+                    'Content-Type: application/soap+xml',
+                    'SOAPAction: ' . $config['soap_action']
+                ],
+                'body' => $this->buildMicrosAuthEnvelope($config)
+            ]);
+            
+            $this->logEvent('micros', 'CONNECTION_SUCCESS', [
+                'response' => substr($response['body'], 0, 500)
+            ]);
+            
+            return [
+                'success' => true,
+                'provider' => 'Micros 3700',
+                'connected' => true
+            ];
+        } catch (Exception $e) {
+            $this->logEvent('micros', 'CONNECTION_FAILED', [
+                'error' => $e->getMessage()
+            ]);
+            
+            return [
+                'success' => false,
+                'provider' => 'Micros 3700',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Connect to Oracle Simphony
+     * 
+     * @param array $config Simphony configuration
+     * @return array Connection result
+     */
+    public function connectSimphony($config)
+    {
+        $this->config = array_merge($this->config, $config);
+        
+        try {
+            // Test connection to Simphony API
+            $response = $this->requestWithRetry('GET', $config['api_url'] . '/api/v1/properties', [
+                'headers' => [
+                    'Authorization: Basic ' . base64_encode($config['username'] . ':' . $config['password']),
+                    'Content-Type: application/json'
+                ]
+            ]);
+            
+            $this->logEvent('simphony', 'CONNECTION_SUCCESS', [
+                'properties' => json_decode($response['body'], true)
+            ]);
+            
+            return [
+                'success' => true,
+                'provider' => 'Oracle Simphony',
+                'connected' => true,
+                'properties' => json_decode($response['body'], true)
+            ];
+        } catch (Exception $e) {
+            $this->logEvent('simphony', 'CONNECTION_FAILED', [
+                'error' => $e->getMessage()
+            ]);
+            
+            return [
+                'success' => false,
+                'provider' => 'Oracle Simphony',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Connect to Lightspeed POS
+     * 
+     * @param array $config Lightspeed configuration
+     * @return array Connection result
+     */
+    public function connectLightspeed($config)
+    {
+        $this->config = array_merge($this->config, $config);
+        
+        try {
+            // Test connection to Lightspeed API
+            $response = $this->requestWithRetry('GET', $config['api_url'] . '/Account.json', [
+                'headers' => [
+                    'Authorization: Bearer ' . $config['access_token'],
+                    'Content-Type: application/json'
+                ]
+            ]);
+            
+            $this->logEvent('lightspeed', 'CONNECTION_SUCCESS', [
+                'account' => json_decode($response['body'], true)
+            ]);
+            
+            return [
+                'success' => true,
+                'provider' => 'Lightspeed',
+                'connected' => true,
+                'account' => json_decode($response['body'], true)
+            ];
+        } catch (Exception $e) {
+            $this->logEvent('lightspeed', 'CONNECTION_FAILED', [
+                'error' => $e->getMessage()
+            ]);
+            
+            return [
+                'success' => false,
+                'provider' => 'Lightspeed',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Pull orders from POS system
+     * 
+     * @param string $provider POS provider
+     * @param array $filters Order filters
+     * @return array Orders data
+     */
+    public function pullOrders($provider, $filters = [])
+    {
+        switch ($provider) {
+            case 'square':
+                return $this->pullSquareOrders($filters);
+            case 'toast':
+                return $this->pullToastOrders($filters);
+            case 'clover':
+                return $this->pullCloverOrders($filters);
+            case 'micros':
+                return $this->pullMicrosOrders($filters);
+            case 'simphony':
+                return $this->pullSimphonyOrders($filters);
+            case 'lightspeed':
+                return $this->pullLightspeedOrders($filters);
+            default:
+                return [
+                    'success' => false,
+                    'message' => 'Unsupported provider'
+                ];
+        }
+    }
+
+    /**
+     * Pull orders from Square
+     */
+    private function pullSquareOrders($filters)
+    {
+        $locationId = $filters['location_id'] ?? $this->config['location_id'];
+        $startDate = $filters['start_date'] ?? date('Y-m-d', strtotime('-7 days'));
+        $endDate = $filters['end_date'] ?? date('Y-m-d');
+        
+        try {
+            $response = $this->requestWithRetry('GET', 
+                "https://connect.squareup.com/v2/locations/{$locationId}/orders?begin_time={$startDate}T00:00:00Z&end_time={$endDate}T23:59:59Z", 
+                [
+                    'headers' => [
+                        'Authorization: Bearer ' . $this->config['access_token'],
+                        'Content-Type: application/json'
+                    ]
+                ]
+            );
+            
+            $orders = json_decode($response['body'], true);
+            
+            $this->logEvent('square', 'ORDERS_PULLED', [
+                'count' => count($orders['orders'] ?? []),
+                'date_range' => "{$startDate} to {$endDate}"
+            ]);
+            
+            return [
+                'success' => true,
+                'provider' => 'Square',
+                'orders' => $orders['orders'] ?? [],
+                'pulled_at' => date('Y-m-d H:i:s')
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'provider' => 'Square',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Pull orders from Toast
+     */
+    private function pullToastOrders($filters)
+    {
+        $restaurantId = $filters['restaurant_id'] ?? $this->config['restaurant_id'];
+        $startDate = $filters['start_date'] ?? date('Y-m-d', strtotime('-7 days'));
+        $endDate = $filters['end_date'] ?? date('Y-m-d');
+        
+        try {
+            $response = $this->requestWithRetry('GET', 
+                $this->config['api_url'] . "/orders?restaurantId={$restaurantId}&startDate={$startDate}&endDate={$endDate}", 
+                [
+                    'headers' => [
+                        'Authorization: Bearer ' . $this->config['api_key'],
+                        'Content-Type: application/json'
+                    ]
+                ]
+            );
+            
+            $orders = json_decode($response['body'], true);
+            
+            $this->logEvent('toast', 'ORDERS_PULLED', [
+                'count' => count($orders['orders'] ?? []),
+                'date_range' => "{$startDate} to {$endDate}"
+            ]);
+            
+            return [
+                'success' => true,
+                'provider' => 'Toast',
+                'orders' => $orders['orders'] ?? [],
+                'pulled_at' => date('Y-m-d H:i:s')
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'provider' => 'Toast',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Pull orders from Clover
+     */
+    private function pullCloverOrders($filters)
+    {
+        $merchantId = $filters['merchant_id'] ?? $this->config['merchant_id'];
+        $startDate = $filters['start_date'] ?? date('Y-m-d', strtotime('-7 days'));
+        $endDate = $filters['end_date'] ?? date('Y-m-d');
+        
+        try {
+            $response = $this->requestWithRetry('GET', 
+                $this->config['api_url'] . "/v3/merchants/{$merchantId}/orders?filter=createdTime>={$startDate}T00:00:00Z&createdTime<={$endDate}T23:59:59Z", 
+                [
+                    'headers' => [
+                        'Authorization: Bearer ' . $this->config['api_token'],
+                        'Content-Type: application/json'
+                    ]
+                ]
+            );
+            
+            $orders = json_decode($response['body'], true);
+            
+            $this->logEvent('clover', 'ORDERS_PULLED', [
+                'count' => count($orders['elements'] ?? []),
+                'date_range' => "{$startDate} to {$endDate}"
+            ]);
+            
+            return [
+                'success' => true,
+                'provider' => 'Clover',
+                'orders' => $orders['elements'] ?? [],
+                'pulled_at' => date('Y-m-d H:i:s')
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'provider' => 'Clover',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Pull orders from Micros
+     */
+    private function pullMicrosOrders($filters)
+    {
+        // Micros 3700 uses SOAP/REST APIs - simplified implementation
+        try {
+            $startDate = $filters['start_date'] ?? date('Y-m-d', strtotime('-7 days'));
+            $endDate = $filters['end_date'] ?? date('Y-m-d');
+            
+            $response = $this->requestWithRetry('POST', $this->config['api_url'], [
+                'headers' => [
+                    'Content-Type: application/soap+xml',
+                    'SOAPAction: GetOrders'
+                ],
+                'body' => $this->buildMicrosOrderEnvelope($startDate, $endDate)
+            ]);
+            
+            $this->logEvent('micros', 'ORDERS_PULLED', [
+                'date_range' => "{$startDate} to {$endDate}"
+            ]);
+            
+            return [
+                'success' => true,
+                'provider' => 'Micros 3700',
+                'orders' => $this->parseMicrosResponse($response['body']),
+                'pulled_at' => date('Y-m-d H:i:s')
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'provider' => 'Micros 3700',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Pull orders from Simphony
+     */
+    private function pullSimphonyOrders($filters)
+    {
+        try {
+            $startDate = $filters['start_date'] ?? date('Y-m-d', strtotime('-7 days'));
+            $endDate = $filters['end_date'] ?? date('Y-m-d');
+            
+            $response = $this->requestWithRetry('GET', 
+                $this->config['api_url'] . "/api/v1/orders?startDate={$startDate}&endDate={$endDate}", 
+                [
+                    'headers' => [
+                        'Authorization: Basic ' . base64_encode($this->config['username'] . ':' . $this->config['password']),
+                        'Content-Type: application/json'
+                    ]
+                ]
+            );
+            
+            $orders = json_decode($response['body'], true);
+            
+            $this->logEvent('simphony', 'ORDERS_PULLED', [
+                'count' => count($orders['orders'] ?? []),
+                'date_range' => "{$startDate} to {$endDate}"
+            ]);
+            
+            return [
+                'success' => true,
+                'provider' => 'Oracle Simphony',
+                'orders' => $orders['orders'] ?? [],
+                'pulled_at' => date('Y-m-d H:i:s')
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'provider' => 'Oracle Simphony',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Pull orders from Lightspeed
+     */
+    private function pullLightspeedOrders($filters)
+    {
+        try {
+            $startDate = $filters['start_date'] ?? date('Y-m-d', strtotime('-7 days'));
+            $endDate = $filters['end_date'] ?? date('Y-m-d');
+            
+            $response = $this->requestWithRetry('GET', 
+                $this->config['api_url'] . "/Order.json?timeStamp=>{$startDate}&timeStamp=<={$endDate}", 
+                [
+                    'headers' => [
+                        'Authorization: Bearer ' . $this->config['access_token'],
+                        'Content-Type: application/json'
+                    ]
+                ]
+            );
+            
+            $orders = json_decode($response['body'], true);
+            
+            $this->logEvent('lightspeed', 'ORDERS_PULLED', [
+                'count' => count($orders['Order'] ?? []),
+                'date_range' => "{$startDate} to {$endDate}"
+            ]);
+            
+            return [
+                'success' => true,
+                'provider' => 'Lightspeed',
+                'orders' => $orders['Order'] ?? [],
+                'pulled_at' => date('Y-m-d H:i:s')
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'provider' => 'Lightspeed',
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Build Micros authentication envelope
+     */
+    private function buildMicrosAuthEnvelope($config)
+    {
+        return '<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Header>
+        <wsse:Security xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+            <wsse:UsernameToken>
+                <wsse:Username>' . $config['username'] . '</wsse:Username>
+                <wsse:Password>' . $config['password'] . '</wsse:Password>
+            </wsse:UsernameToken>
+        </wsse:Security>
+    </soapenv:Header>
+    <soapenv:Body>
+        <Authenticate/>
+    </soapenv:Body>
+</soapenv:Envelope>';
+    }
+
+    /**
+     * Build Micros order request envelope
+     */
+    private function buildMicrosOrderEnvelope($startDate, $endDate)
+    {
+        return '<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Body>
+        <GetOrders>
+            <StartDate>' . $startDate . '</StartDate>
+            <EndDate>' . $endDate . '</EndDate>
+        </GetOrders>
+    </soapenv:Body>
+</soapenv:Envelope>';
+    }
+
+    /**
+     * Parse Micros SOAP response
+     */
+    private function parseMicrosResponse($response)
+    {
+        // Simplified SOAP parsing - in production use proper XML parser
+        $orders = [];
+        
+        // Extract order data from SOAP response
+        if (strpos($response, '<Order>') !== false) {
+            preg_match_all('/<Order>(.*?)<\/Order>/s', $response, $matches);
+            foreach ($matches[1] as $orderXml) {
+                $orders[] = [
+                    'raw_xml' => $orderXml,
+                    'parsed' => false
+                ];
+            }
+        }
+        
+        return $orders;
+    }
 }

@@ -1,0 +1,24 @@
+{
+  "name": "restoran",
+  "version": "1.0.0",
+  "description": "**The Restaurant ERP You Can Trust**",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/82080038/restoran.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/82080038/restoran/issues"
+  },
+  "homepage": "https://github.com/82080038/restoran#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.1.1"
+  }
+}

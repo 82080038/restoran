@@ -1019,10 +1019,11 @@ class LoyaltyEngine implements EngineInterface
             throw new Exception('Achievement already earned');
         }
 
-        // Get points for this achievement
+        // Award bonus points for achievement
         $achievementPoints = $this->getAchievementPoints($achievementType);
+        $this->awardPoints($customerId, null, $achievementPoints, 'ACHIEVEMENT', $achievementType);
 
-        // Create achievement
+        // Create achievement record
         $sql = "
             INSERT INTO customer_achievements
             (customer_id, achievement_type, achievement_data, points_awarded, earned_at)
@@ -1032,9 +1033,6 @@ class LoyaltyEngine implements EngineInterface
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$customerId, $achievementType, json_encode($achievementData), $achievementPoints]);
 
-        // Award points
-        $this->awardPoints($customerId, null, $achievementPoints, 'ACHIEVEMENT', null);
-
         return [
             'achievement_type' => $achievementType,
             'points_awarded' => $achievementPoints,
@@ -1043,106 +1041,705 @@ class LoyaltyEngine implements EngineInterface
     }
 
     /**
-     * Check customer achievements
+     * Check achievements for customer
      * 
      * @param int $customerId Customer ID
      * @param int $tenantId Tenant ID
-     * @return array Customer achievements
+     * @return array Achievements
      */
     public function checkAchievements($customerId, $tenantId)
     {
-        // Get earned achievements
-        $sql = "
-            SELECT 
-                achievement_id,
-                achievement_type,
-                achievement_data,
-                points_awarded,
-                earned_at
-            FROM customer_achievements
-            WHERE customer_id = ?
-            ORDER BY earned_at DESC
-        ";
+        $achievements = [];
         
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$customerId]);
-        $earnedAchievements = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // Get available achievements
-        $availableAchievements = $this->getAvailableAchievements($tenantId);
-
-        // Check for new achievements based on customer behavior
-        $newAchievements = $this->checkForNewAchievements($customerId, $tenantId);
-
-        return [
-            'earned' => $earnedAchievements,
-            'available' => $availableAchievements,
-            'new' => $newAchievements
-        ];
+        // Check first order achievement
+        $firstOrder = $this->checkFirstOrderAchievement($customerId, $tenantId);
+        if ($firstOrder) {
+            $achievements[] = $firstOrder;
+        }
+        
+        // Check order count achievements
+        $orderCount = $this->checkOrderCountAchievement($customerId, $tenantId);
+        if ($orderCount) {
+            $achievements[] = $orderCount;
+        }
+        
+        // Check spending achievements
+        $spending = $this->checkSpendingAchievement($customerId, $tenantId);
+        if ($spending) {
+            $achievements[] = $spending;
+        }
+        
+        return $achievements;
     }
-
 
     /**
      * Get achievement points
      */
     private function getAchievementPoints($achievementType)
     {
-        $pointsMap = [
+        $points = [
             'FIRST_ORDER' => 100,
-            '10_ORDERS' => 500,
-            '50_ORDERS' => 2000,
-            '100_ORDERS' => 5000,
-            'SOCIAL_SHARE' => 50,
-            'REVIEW_SUBMITTED' => 100,
-            'BIRTHDAY_VISIT' => 200,
-            'WEEKLY_VISITOR' => 300,
-            'MONTHLY_VISITOR' => 1000
+            '10_ORDERS' => 200,
+            '50_ORDERS' => 500,
+            '100_ORDERS' => 1000,
+            'SPENT_100K' => 150,
+            'SPENT_500K' => 500,
+            'SPENT_1M' => 1000,
+            'REFERRED_FRIEND' => 300
         ];
-
-        return $pointsMap[$achievementType] ?? 0;
+        
+        return $points[$achievementType] ?? 50;
     }
 
     /**
-     * Get available achievements
+     * Check first order achievement
      */
-    private function getAvailableAchievements($tenantId)
+    private function checkFirstOrderAchievement($customerId, $tenantId)
     {
-        return [
-            ['type' => 'FIRST_ORDER', 'name' => 'First Order', 'points' => 100],
-            ['type' => '10_ORDERS', 'name' => '10 Orders', 'points' => 500],
-            ['type' => '50_ORDERS', 'name' => '50 Orders', 'points' => 2000],
-            ['type' => '100_ORDERS', 'name' => '100 Orders', 'points' => 5000],
-            ['type' => 'SOCIAL_SHARE', 'name' => 'Social Share', 'points' => 50],
-            ['type' => 'REVIEW_SUBMITTED', 'name' => 'Review Submitted', 'points' => 100],
-            ['type' => 'BIRTHDAY_VISIT', 'name' => 'Birthday Visit', 'points' => 200],
-            ['type' => 'WEEKLY_VISITOR', 'name' => 'Weekly Visitor', 'points' => 300],
-            ['type' => 'MONTHLY_VISITOR', 'name' => 'Monthly Visitor', 'points' => 1000]
-        ];
-    }
-
-    /**
-     * Check for new achievements based on customer behavior
-     */
-    private function checkForNewAchievements($customerId, $tenantId)
-    {
-        $newAchievements = [];
-
-        // Check order count achievements
-        $sql = "SELECT COUNT(*) as order_count FROM orders WHERE customer_id = ?";
+        $sql = "
+            SELECT COUNT(*) as order_count
+            FROM orders
+            WHERE customer_id = ? AND tenant_id = ? AND status = 'COMPLETED'
+        ";
+        
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([$customerId]);
-        $orderCount = $stmt->fetchColumn();
-
-        if ($orderCount == 1) {
-            $newAchievements[] = ['type' => 'FIRST_ORDER', 'points' => 100];
-        } elseif ($orderCount == 10) {
-            $newAchievements[] = ['type' => '10_ORDERS', 'points' => 500];
-        } elseif ($orderCount == 50) {
-            $newAchievements[] = ['type' => '50_ORDERS', 'points' => 2000];
-        } elseif ($orderCount == 100) {
-            $newAchievements[] = ['type' => '100_ORDERS', 'points' => 5000];
+        $stmt->execute([$customerId, $tenantId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($result['order_count'] == 1) {
+            return $this->addAchievement($customerId, 'FIRST_ORDER', ['order_count' => 1]);
         }
+        
+        return null;
+    }
 
-        return $newAchievements;
+    /**
+     * Check order count achievement
+     */
+    private function checkOrderCountAchievement($customerId, $tenantId)
+    {
+        $sql = "
+            SELECT COUNT(*) as order_count
+            FROM orders
+            WHERE customer_id = ? AND tenant_id = ? AND status = 'COMPLETED'
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$customerId, $tenantId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        $orderCount = $result['order_count'];
+        
+        $achievements = [
+            ['count' => 10, 'type' => '10_ORDERS'],
+            ['count' => 50, 'type' => '50_ORDERS'],
+            ['count' => 100, 'type' => '100_ORDERS']
+        ];
+        
+        foreach ($achievements as $achievement) {
+            if ($orderCount == $achievement['count']) {
+                return $this->addAchievement($customerId, $achievement['type'], ['order_count' => $orderCount]);
+            }
+        }
+        
+        return null;
+    }
+
+    /**
+     * Check spending achievement
+     */
+    private function checkSpendingAchievement($customerId, $tenantId)
+    {
+        $sql = "
+            SELECT SUM(total_amount) as total_spent
+            FROM orders
+            WHERE customer_id = ? AND tenant_id = ? AND status = 'COMPLETED'
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$customerId, $tenantId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        $totalSpent = $result['total_spent'] ?? 0;
+        
+        $achievements = [
+            ['threshold' => 100000, 'type' => 'SPENT_100K'],
+            ['threshold' => 500000, 'type' => 'SPENT_500K'],
+            ['threshold' => 1000000, 'type' => 'SPENT_1M']
+        ];
+        
+        foreach ($achievements as $achievement) {
+            if ($totalSpent >= $achievement['threshold']) {
+                return $this->addAchievement($customerId, $achievement['type'], ['total_spent' => $totalSpent]);
+            }
+        }
+        
+        return null;
+    }
+
+    /**
+     * Automated loyalty program processing
+     * Runs scheduled maintenance tasks for loyalty program
+     * 
+     * @param int $tenantId Tenant ID
+     * @return array Processing results
+     */
+    public function runAutomatedProcessing($tenantId)
+    {
+        $results = [];
+        
+        // Process expiring points
+        $expiringPoints = $this->processExpiringPoints($tenantId);
+        $results['expiring_points'] = $expiringPoints;
+        
+        // Process birthday bonuses
+        $birthdayBonuses = $this->processBirthdayBonuses($tenantId);
+        $results['birthday_bonuses'] = $birthdayBonuses;
+        
+        // Process tier reviews
+        $tierReviews = $this->processTierReviews($tenantId);
+        $results['tier_reviews'] = $tierReviews;
+        
+        // Process inactive members
+        $inactiveMembers = $this->processInactiveMembers($tenantId);
+        $results['inactive_members'] = $inactiveMembers;
+        
+        return [
+            'success' => true,
+            'tenant_id' => $tenantId,
+            'results' => $results,
+            'processed_at' => date('Y-m-d H:i:s')
+        ];
+    }
+
+    /**
+     * Process expiring points
+     * 
+     * @param int $tenantId Tenant ID
+     * @return array Processing result
+     */
+    private function processExpiringPoints($tenantId)
+    {
+        // Get points older than 12 months
+        $sql = "
+            SELECT customer_id, SUM(points_earned) as expiring_points
+            FROM loyalty_transactions
+            WHERE tenant_id = ? 
+              AND transaction_type = 'EARNED'
+              AND created_at <= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+              AND created_at > DATE_SUB(NOW(), INTERVAL 13 MONTH)
+            GROUP BY customer_id
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId]);
+        $expiringPoints = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $processed = 0;
+        foreach ($expiringPoints as $customerPoints) {
+            // Deduct expiring points
+            $this->deductPoints($customerPoints['customer_id'], $tenantId, $customerPoints['expiring_points']);
+            
+            // Log expiration
+            $sql = "
+                INSERT INTO loyalty_points_expiry
+                (customer_id, tenant_id, points_expired, expiry_date, created_at)
+                VALUES (?, ?, ?, DATE_SUB(NOW(), INTERVAL 12 MONTH), NOW())
+            ";
+            
+            $stmt2 = $this->db->prepare($sql);
+            $stmt2->execute([$customerPoints['customer_id'], $tenantId, $customerPoints['expiring_points']]);
+            
+            // Send notification (would trigger notification service)
+            $this->sendPointsExpiryNotification($customerPoints['customer_id'], $tenantId, $customerPoints['expiring_points']);
+            
+            $processed++;
+        }
+        
+        return [
+            'processed_customers' => $processed,
+            'total_points_expired' => array_sum(array_column($expiringPoints, 'expiring_points'))
+        ];
+    }
+
+    /**
+     * Process birthday bonuses
+     * 
+     * @param int $tenantId Tenant ID
+     * @return array Processing result
+     */
+    private function processBirthdayBonuses($tenantId)
+    {
+        // Get customers with birthdays today
+        $sql = "
+            SELECT lm.customer_id, lm.tier_level, c.date_of_birth
+            FROM loyalty_members lm
+            LEFT JOIN customers c ON lm.customer_id = c.customer_id
+            WHERE lm.tenant_id = ?
+              AND DAY(c.date_of_birth) = DAY(CURDATE())
+              AND MONTH(c.date_of_birth) = MONTH(CURDATE())
+              AND lm.last_activity_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId]);
+        $birthdayCustomers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $processed = 0;
+        foreach ($birthdayCustomers as $customer) {
+            // Get tier benefits for birthday bonus
+            $benefits = $this->getTierBenefits($customer['tier_level']);
+            $bonusPoints = $benefits['birthday_bonus'];
+            
+            // Award birthday bonus
+            $this->awardPoints($customer['customer_id'], $tenantId, $bonusPoints, 'BIRTHDAY_BONUS', null);
+            
+            // Log birthday bonus
+            $sql = "
+                INSERT INTO loyalty_birthday_bonuses
+                (customer_id, tenant_id, points_awarded, bonus_date, created_at)
+                VALUES (?, ?, ?, CURDATE(), NOW())
+            ";
+            
+            $stmt2 = $this->db->prepare($sql);
+            $stmt2->execute([$customer['customer_id'], $tenantId, $bonusPoints]);
+            
+            // Send birthday notification
+            $this->sendBirthdayNotification($customer['customer_id'], $tenantId, $bonusPoints);
+            
+            $processed++;
+        }
+        
+        return [
+            'processed_customers' => $processed,
+            'total_points_awarded' => $processed * 500 // Average
+        ];
+    }
+
+    /**
+     * Process tier reviews
+     * 
+     * @param int $tenantId Tenant ID
+     * @return array Processing result
+     */
+    private function processTierReviews($tenantId)
+    {
+        // Get all loyalty members
+        $sql = "
+            SELECT customer_id, tier_level
+            FROM loyalty_members
+            WHERE tenant_id = ?
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId]);
+        $members = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $upgraded = 0;
+        $downgraded = 0;
+        
+        foreach ($members as $member) {
+            $oldTier = $member['tier_level'];
+            
+            // Check for tier upgrade/downgrade
+            $this->checkTierUpgrade($member['customer_id'], $tenantId);
+            $this->checkTierDowngrade($member['customer_id'], $tenantId);
+            
+            // Get new tier
+            $newTier = $this->getCustomerTier($member['customer_id'], $tenantId);
+            
+            if ($newTier !== $oldTier) {
+                if ($this->compareTiers($newTier, $oldTier) > 0) {
+                    $upgraded++;
+                    $this->sendTierUpgradeNotification($member['customer_id'], $tenantId, $oldTier, $newTier);
+                } else {
+                    $downgraded++;
+                    $this->sendTierDowngradeNotification($member['customer_id'], $tenantId, $oldTier, $newTier);
+                }
+            }
+        }
+        
+        return [
+            'upgraded' => $upgraded,
+            'downgraded' => $downgraded,
+            'total_reviewed' => count($members)
+        ];
+    }
+
+    /**
+     * Check for tier downgrade
+     * 
+     * @param int $customerId Customer ID
+     * @param int $tenantId Tenant ID
+     */
+    private function checkTierDowngrade($customerId, $tenantId)
+    {
+        // Get customer's total points earned in last 12 months
+        $sql = "
+            SELECT SUM(points_earned) as recent_points
+            FROM loyalty_transactions
+            WHERE customer_id = ? 
+              AND tenant_id = ? 
+              AND transaction_type = 'EARNED'
+              AND created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$customerId, $tenantId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        $recentPoints = $result['recent_points'] ?? 0;
+        
+        // Determine tier based on recent activity
+        $newTier = $this->determineTier($recentPoints);
+        
+        // Get current tier
+        $currentTier = $this->getCustomerTier($customerId, $tenantId);
+        
+        // Only downgrade if new tier is lower
+        if ($this->compareTiers($newTier, $currentTier) < 0) {
+            $sql = "
+                UPDATE loyalty_members
+                SET tier_level = ?, tier_downgraded_at = NOW()
+                WHERE customer_id = ? AND tenant_id = ?
+            ";
+            
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$newTier, $customerId, $tenantId]);
+        }
+    }
+
+    /**
+     * Compare tiers (returns 1 if tier1 > tier2, -1 if tier1 < tier2, 0 if equal)
+     */
+    private function compareTiers($tier1, $tier2)
+    {
+        $tierOrder = ['BRONZE' => 0, 'SILVER' => 1, 'GOLD' => 2, 'PLATINUM' => 3];
+        
+        $order1 = $tierOrder[$tier1] ?? 0;
+        $order2 = $tierOrder[$tier2] ?? 0;
+        
+        if ($order1 > $order2) return 1;
+        if ($order1 < $order2) return -1;
+        return 0;
+    }
+
+    /**
+     * Process inactive members
+     * 
+     * @param int $tenantId Tenant ID
+     * @return array Processing result
+     */
+    private function processInactiveMembers($tenantId)
+    {
+        // Get members inactive for 6+ months
+        $sql = "
+            SELECT customer_id, points_balance, tier_level
+            FROM loyalty_members
+            WHERE tenant_id = ? 
+              AND last_activity_at <= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId]);
+        $inactiveMembers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $processed = 0;
+        foreach ($inactiveMembers as $member) {
+            // Mark as inactive
+            $sql = "
+                UPDATE loyalty_members
+                SET status = 'INACTIVE', inactivated_at = NOW()
+                WHERE customer_id = ? AND tenant_id = ?
+            ";
+            
+            $stmt2 = $this->db->prepare($sql);
+            $stmt2->execute([$member['customer_id'], $tenantId]);
+            
+            // Send re-engagement campaign notification
+            $this->sendReEngagementNotification($member['customer_id'], $tenantId, $member['points_balance']);
+            
+            $processed++;
+        }
+        
+        return [
+            'marked_inactive' => $processed,
+            'total_points_at_risk' => array_sum(array_column($inactiveMembers, 'points_balance'))
+        ];
+    }
+
+    /**
+     * Send points expiry notification
+     */
+    private function sendPointsExpiryNotification($customerId, $tenantId, $pointsExpiring)
+    {
+        // This would integrate with notification service
+        $sql = "
+            INSERT INTO loyalty_notifications
+            (customer_id, tenant_id, notification_type, message, created_at, status)
+            VALUES (?, ?, 'POINTS_EXPIRY', ?, NOW(), 'PENDING')
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            $customerId,
+            $tenantId,
+            "You have {$pointsExpiring} points expiring soon. Use them before they expire!"
+        ]);
+    }
+
+    /**
+     * Send birthday notification
+     */
+    private function sendBirthdayNotification($customerId, $tenantId, $bonusPoints)
+    {
+        $sql = "
+            INSERT INTO loyalty_notifications
+            (customer_id, tenant_id, notification_type, message, created_at, status)
+            VALUES (?, ?, 'BIRTHDAY_BONUS', ?, NOW(), 'PENDING')
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            $customerId,
+            $tenantId,
+            "Happy Birthday! We've awarded you {$bonusPoints} bonus points as a gift!"
+        ]);
+    }
+
+    /**
+     * Send tier upgrade notification
+     */
+    private function sendTierUpgradeNotification($customerId, $tenantId, $oldTier, $newTier)
+    {
+        $sql = "
+            INSERT INTO loyalty_notifications
+            (customer_id, tenant_id, notification_type, message, created_at, status)
+            VALUES (?, ?, 'TIER_UPGRADE', ?, NOW(), 'PENDING')
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            $customerId,
+            $tenantId,
+            "Congratulations! You've been upgraded from {$oldTier} to {$newTier} tier!"
+        ]);
+    }
+
+    /**
+     * Send tier downgrade notification
+     */
+    private function sendTierDowngradeNotification($customerId, $tenantId, $oldTier, $newTier)
+    {
+        $sql = "
+            INSERT INTO loyalty_notifications
+            (customer_id, tenant_id, notification_type, message, created_at, status)
+            VALUES (?, ?, 'TIER_DOWNGRADE', ?, NOW(), 'PENDING')
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            $customerId,
+            $tenantId,
+            "Your tier has been changed from {$oldTier} to {$newTier} based on recent activity."
+        ]);
+    }
+
+    /**
+     * Send re-engagement notification
+     */
+    private function sendReEngagementNotification($customerId, $tenantId, $pointsBalance)
+    {
+        $sql = "
+            INSERT INTO loyalty_notifications
+            (customer_id, tenant_id, notification_type, message, created_at, status)
+            VALUES (?, ?, 'RE_ENGAGEMENT', ?, NOW(), 'PENDING')
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            $customerId,
+            $tenantId,
+            "We miss you! You have {$pointsBalance} points waiting for you. Come back and earn more!"
+        ]);
+    }
+
+    /**
+     * Schedule automated loyalty processing
+     * 
+     * @param int $tenantId Tenant ID
+     * @param string $frequency Frequency (DAILY, WEEKLY, MONTHLY)
+     * @return array Schedule result
+     */
+    public function scheduleAutomatedProcessing($tenantId, $frequency = 'DAILY')
+    {
+        $sql = "
+            INSERT INTO loyalty_processing_schedule
+            (tenant_id, frequency, last_run, next_run, status, created_at)
+            VALUES (?, ?, NULL, NOW(), 'ACTIVE', NOW())
+            ON DUPLICATE KEY UPDATE
+                frequency = VALUES(frequency),
+                next_run = NOW(),
+                updated_at = NOW()
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId, $frequency]);
+        
+        return [
+            'success' => true,
+            'tenant_id' => $tenantId,
+            'frequency' => $frequency,
+            'scheduled_at' => date('Y-m-d H:i:s')
+        ];
+    }
+
+    /**
+     * Get loyalty program analytics
+     * 
+     * @param int $tenantId Tenant ID
+     * @param string $startDate Start date
+     * @param string $endDate End date
+     * @return array Analytics data
+     */
+    public function getAnalytics($tenantId, $startDate, $endDate)
+    {
+        // Points earned vs redeemed
+        $pointsEarned = $this->getPointsEarned($tenantId, $startDate, $endDate);
+        $pointsRedeemed = $this->getPointsRedeemed($tenantId, $startDate, $endDate);
+        
+        // Redemption rate
+        $redemptionRate = $pointsEarned > 0 ? ($pointsRedeemed / $pointsEarned) * 100 : 0;
+        
+        // Active members
+        $activeMembers = $this->getActiveMembers($tenantId);
+        
+        // Tier changes
+        $tierChanges = $this->getTierChanges($tenantId, $startDate, $endDate);
+        
+        // Top performers
+        $topPerformers = $this->getTopPerformers($tenantId, $startDate, $endDate);
+        
+        return [
+            'period' => [
+                'start_date' => $startDate,
+                'end_date' => $endDate
+            ],
+            'points' => [
+                'earned' => $pointsEarned,
+                'redeemed' => $pointsRedeemed,
+                'redemption_rate' => round($redemptionRate, 2)
+            ],
+            'members' => [
+                'active' => $activeMembers
+            ],
+            'tier_changes' => $tierChanges,
+            'top_performers' => $topPerformers,
+            'generated_at' => date('Y-m-d H:i:s')
+        ];
+    }
+
+    /**
+     * Get points earned in period
+     */
+    private function getPointsEarned($tenantId, $startDate, $endDate)
+    {
+        $sql = "
+            SELECT COALESCE(SUM(points_earned), 0) as total
+            FROM loyalty_transactions
+            WHERE tenant_id = ? 
+              AND transaction_type = 'EARNED'
+              AND created_at BETWEEN ? AND ?
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId, $startDate, $endDate]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['total'] ?? 0;
+    }
+
+    /**
+     * Get points redeemed in period
+     */
+    private function getPointsRedeemed($tenantId, $startDate, $endDate)
+    {
+        $sql = "
+            SELECT COALESCE(SUM(points_used), 0) as total
+            FROM loyalty_transactions
+            WHERE tenant_id = ? 
+              AND transaction_type = 'REDEEMED'
+              AND created_at BETWEEN ? AND ?
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId, $startDate, $endDate]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['total'] ?? 0;
+    }
+
+    /**
+     * Get active members
+     */
+    private function getActiveMembers($tenantId)
+    {
+        $sql = "
+            SELECT COUNT(*) as total
+            FROM loyalty_members
+            WHERE tenant_id = ? 
+              AND status = 'ACTIVE'
+              AND last_activity_at >= DATE_SUB(NOW(), INTERVAL 3 MONTH)
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $result['total'] ?? 0;
+    }
+
+    /**
+     * Get tier changes in period
+     */
+    private function getTierChanges($tenantId, $startDate, $endDate)
+    {
+        $sql = "
+            SELECT 
+                COUNT(*) as total_changes,
+                SUM(CASE WHEN tier_upgraded_at BETWEEN ? AND ? THEN 1 ELSE 0 END) as upgrades,
+                SUM(CASE WHEN tier_downgraded_at BETWEEN ? AND ? THEN 1 ELSE 0 END) as downgrades
+            FROM loyalty_members
+            WHERE tenant_id = ?
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$startDate, $endDate, $startDate, $endDate, $tenantId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get top performers in period
+     */
+    private function getTopPerformers($tenantId, $startDate, $endDate)
+    {
+        $sql = "
+            SELECT 
+                lt.customer_id,
+                c.name as customer_name,
+                SUM(lt.points_earned) as points_earned
+            FROM loyalty_transactions lt
+            LEFT JOIN customers c ON lt.customer_id = c.customer_id
+            WHERE lt.tenant_id = ? 
+              AND lt.transaction_type = 'EARNED'
+              AND lt.created_at BETWEEN ? AND ?
+            GROUP BY lt.customer_id, c.name
+            ORDER BY points_earned DESC
+            LIMIT 10
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId, $startDate, $endDate]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

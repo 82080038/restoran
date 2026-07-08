@@ -49,10 +49,16 @@ class OrderService
     }
 
     /**
-     * Create order
+     * Create order with complete workflow
      */
     public function createOrder($restaurantId, $userId, $data)
     {
+        // Validate order before creation
+        $validation = $this->validateOrderBeforeCreation($data);
+        if (!$validation['valid']) {
+            return ['success' => false, 'message' => 'Validation failed', 'errors' => $validation['errors']];
+        }
+
         $orderModel = new Order();
         
         $orderData = [
@@ -88,7 +94,7 @@ class OrderService
             return ['success' => false, 'message' => 'Failed to create order'];
         }
         
-        // Add order items
+        // Add order items with inventory check
         if (isset($data->items) && is_array($data->items)) {
             foreach ($data->items as $item) {
                 $this->addOrderItem($orderId, $restaurantId, $item);
@@ -108,7 +114,290 @@ class OrderService
             $this->sendToKitchen($orderId);
         }
         
+        // Trigger real-time notification
+        $this->triggerOrderNotification($orderId, 'created');
+        
+        // Log order creation
+        $this->logOrderActivity($orderId, $userId, 'order_created', 'Order created successfully');
+        
         return ['success' => true, 'message' => 'Order created successfully', 'order_id' => $orderId];
+    }
+
+    /**
+     * Validate order before creation
+     */
+    private function validateOrderBeforeCreation($data)
+    {
+        $errors = [];
+        
+        // Validate order type
+        if (!isset($data->order_type)) {
+            $errors[] = 'Order type is required';
+        } elseif (!in_array($data->order_type, ['dine_in', 'takeaway', 'delivery', 'online'])) {
+            $errors[] = 'Invalid order type';
+        }
+        
+        // Validate items
+        if (!isset($data->items) || !is_array($data->items) || empty($data->items)) {
+            $errors[] = 'Order must have at least one item';
+        }
+        
+        // Validate table for dine-in
+        if (isset($data->order_type) && $data->order_type === 'dine_in' && !isset($data->table_id)) {
+            $errors[] = 'Table ID is required for dine-in orders';
+        }
+        
+        // Validate delivery address for delivery orders
+        if (isset($data->order_type) && $data->order_type === 'delivery' && !isset($data->customer_address)) {
+            $errors[] = 'Delivery address is required for delivery orders';
+        }
+        
+        return [
+            'valid' => empty($errors),
+            'errors' => $errors
+        ];
+    }
+
+    /**
+     * Process payment for order
+     */
+    public function processPayment($orderId, $restaurantId, $paymentData)
+    {
+        $orderModel = new Order();
+        $order = $orderModel->findById($orderId, $restaurantId);
+        
+        if (!$order) {
+            return ['success' => false, 'message' => 'Order not found'];
+        }
+        
+        if ($order['payment_status'] === 'paid') {
+            return ['success' => false, 'message' => 'Order already paid'];
+        }
+        
+        $paymentAmount = $paymentData['amount'] ?? $order['total_amount'];
+        $paymentMethod = $paymentData['payment_method'] ?? 'cash';
+        
+        // Validate payment amount
+        if ($paymentAmount < $order['total_amount']) {
+            return ['success' => false, 'message' => 'Insufficient payment amount'];
+        }
+        
+        // Update order payment status
+        $updated = $orderModel->update($orderId, [
+            'payment_status' => 'paid',
+            'paid_amount' => $paymentAmount,
+            'payment_method' => $paymentMethod,
+            'payment_date' => date('Y-m-d H:i:s')
+        ]);
+        
+        if (!$updated) {
+            return ['success' => false, 'message' => 'Failed to process payment'];
+        }
+        
+        // Log payment
+        $this->logPayment($orderId, $paymentAmount, $paymentMethod);
+        
+        // Trigger notification
+        $this->triggerOrderNotification($orderId, 'payment_received');
+        
+        // If order is ready, auto-complete it
+        if ($order['order_status'] === 'ready') {
+            $this->completeOrder($orderId, $restaurantId, $paymentData['processed_by'] ?? null);
+        }
+        
+        return [
+            'success' => true,
+            'message' => 'Payment processed successfully',
+            'payment_amount' => $paymentAmount,
+            'change_amount' => $paymentAmount - $order['total_amount']
+        ];
+    }
+
+    /**
+     * Log payment
+     */
+    private function logPayment($orderId, $amount, $method)
+    {
+        $sql = "INSERT INTO order_payments (order_id, payment_amount, payment_method, payment_date, status)
+                VALUES (?, ?, ?, NOW(), 'completed')";
+        
+        $this->db->query($sql, [$orderId, $amount, $method]);
+    }
+
+    /**
+     * Complete order with full workflow
+     */
+    public function completeOrder($orderId, $restaurantId, $userId)
+    {
+        $orderModel = new Order();
+        $order = $orderModel->findById($orderId, $restaurantId);
+        
+        if (!$order) {
+            return ['success' => false, 'message' => 'Order not found'];
+        }
+        
+        if ($order['order_status'] === 'completed') {
+            return ['success' => false, 'message' => 'Order already completed'];
+        }
+        
+        if ($order['payment_status'] !== 'paid') {
+            return ['success' => false, 'message' => 'Order must be paid before completion'];
+        }
+        
+        // Update order status
+        $updated = $orderModel->update($orderId, [
+            'order_status' => 'completed',
+            'completed_at' => date('Y-m-d H:i:s')
+        ]);
+        
+        if (!$updated) {
+            return ['success' => false, 'message' => 'Failed to complete order'];
+        }
+        
+        // Deduct inventory
+        $this->deductInventoryForOrder($orderId);
+        
+        // Award loyalty points if customer exists
+        if ($order['customer_id']) {
+            $this->awardLoyaltyPoints($orderId, $order['customer_id'], $restaurantId);
+        }
+        
+        // Close table session if dine-in
+        if ($order['order_type'] === 'dine_in' && $order['table_id']) {
+            $this->closeTableSessionForOrder($orderId, $order['table_id']);
+        }
+        
+        // Trigger notification
+        $this->triggerOrderNotification($orderId, 'completed');
+        
+        // Log activity
+        $this->logOrderActivity($orderId, $userId, 'order_completed', 'Order completed successfully');
+        
+        return ['success' => true, 'message' => 'Order completed successfully'];
+    }
+
+    /**
+     * Deduct inventory for order
+     */
+    private function deductInventoryForOrder($orderId)
+    {
+        $itemModel = new OrderItem();
+        $items = $itemModel->getByOrderId($orderId);
+        
+        foreach ($items as $item) {
+            // Get recipe for menu item
+            $recipeSql = "SELECT * FROM recipe_details WHERE menu_item_id = ?";
+            $recipeItems = $this->db->query($recipeSql, [$item['menu_item_id']])->fetchAll();
+            
+            foreach ($recipeItems as $recipeItem) {
+                $quantityNeeded = $recipeItem['quantity'] * $item['quantity'];
+                
+                // Deduct from inventory
+                $deductSql = "UPDATE inventory_items 
+                              SET current_stock = current_stock - ? 
+                              WHERE inventory_id = ?";
+                $this->db->query($deductSql, [$quantityNeeded, $recipeItem['item_id']]);
+                
+                // Log inventory movement
+                $this->logInventoryMovement(
+                    $recipeItem['item_id'],
+                    $orderId,
+                    'deducted',
+                    $quantityNeeded,
+                    'Order fulfillment'
+                );
+            }
+        }
+    }
+
+    /**
+     * Log inventory movement
+     */
+    private function logInventoryMovement($inventoryId, $orderId, $movementType, $quantity, $reason)
+    {
+        $sql = "INSERT INTO inventory_movements 
+                (inventory_id, reference_id, movement_type, quantity, reason, movement_date)
+                VALUES (?, ?, ?, ?, ?, NOW())";
+        
+        $this->db->query($sql, [$inventoryId, $orderId, $movementType, $quantity, $reason]);
+    }
+
+    /**
+     * Award loyalty points for order
+     */
+    private function awardLoyaltyPoints($orderId, $customerId, $restaurantId)
+    {
+        $orderModel = new Order();
+        $order = $orderModel->findById($orderId);
+        
+        if (!$order || $order['total_amount'] <= 0) {
+            return;
+        }
+        
+        // Calculate points (1 point per 1000 currency units)
+        $points = floor($order['total_amount'] / 1000);
+        
+        if ($points > 0) {
+            // Award points
+            $sql = "INSERT INTO loyalty_transactions 
+                    (customer_id, tenant_id, points_earned, transaction_type, reference_id, created_at)
+                    VALUES (?, ?, ?, 'EARNED', ?, NOW())";
+            
+            $this->db->query($sql, [$customerId, $restaurantId, $points, $orderId]);
+            
+            // Update customer balance
+            $sql = "UPDATE loyalty_members 
+                    SET points_balance = points_balance + ?, last_activity_at = NOW()
+                    WHERE customer_id = ? AND tenant_id = ?";
+            
+            $this->db->query($sql, [$points, $customerId, $restaurantId]);
+        }
+    }
+
+    /**
+     * Close table session for order
+     */
+    private function closeTableSessionForOrder($orderId, $tableId)
+    {
+        $sessionModel = new TableSession();
+        $activeSession = $sessionModel->getActiveByTable(null, $tableId);
+        
+        if ($activeSession) {
+            $this->closeTableSession($activeSession['id'], null);
+        }
+    }
+
+    /**
+     * Trigger order notification
+     */
+    private function triggerOrderNotification($orderId, $eventType)
+    {
+        $sql = "INSERT INTO order_notifications 
+                (order_id, notification_type, message, created_at, status)
+                VALUES (?, ?, ?, NOW(), 'pending')";
+        
+        $messages = [
+            'created' => 'New order received',
+            'payment_received' => 'Payment received for order',
+            'completed' => 'Order completed successfully',
+            'cancelled' => 'Order cancelled'
+        ];
+        
+        $message = $messages[$eventType] ?? 'Order updated';
+        
+        $this->db->query($sql, [$orderId, $eventType, $message]);
+    }
+
+    /**
+     * Log order activity
+     */
+    private function logOrderActivity($orderId, $userId, $activityType, $description)
+    {
+        $sql = "INSERT INTO order_activity_log 
+                (order_id, user_id, activity_type, description, activity_time)
+                VALUES (?, ?, ?, ?, NOW())";
+        
+        $this->db->query($sql, [$orderId, $userId, $activityType, $description]);
     }
 
     /**

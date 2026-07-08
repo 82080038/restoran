@@ -695,4 +695,315 @@ class ReconciliationEngine implements EngineInterface
         $stmt = $this->db->prepare($sql);
         return $stmt->execute([$overrideReason, $userId, $orderId, $tenantId, $branchId]);
     }
+
+    /**
+     * Real-time reconciliation trigger
+     * Automatically reconciles orders when payment status changes
+     * 
+     * @param int $orderId Order ID
+     * @param int $tenantId Tenant ID
+     * @param int $branchId Branch ID
+     * @return array Reconciliation result
+     */
+    public function triggerRealTimeReconciliation($orderId, $tenantId, $branchId)
+    {
+        try {
+            // Check if order is eligible for real-time reconciliation
+            if (!$this->isEligibleForRealTimeReconciliation($orderId, $tenantId, $branchId)) {
+                return [
+                    'success' => false,
+                    'message' => 'Order not eligible for real-time reconciliation',
+                    'order_id' => $orderId
+                ];
+            }
+
+            // Perform immediate reconciliation
+            $result = $this->reconcileOrder($orderId, $tenantId, $branchId);
+
+            // Log real-time reconciliation
+            $this->logRealTimeReconciliation($orderId, $tenantId, $branchId, $result);
+
+            return $result;
+        } catch (Exception $e) {
+            // Queue for later processing if real-time fails
+            $this->queueForLaterReconciliation($orderId, $tenantId, $branchId, $e->getMessage());
+            
+            return [
+                'success' => false,
+                'message' => 'Real-time reconciliation failed, queued for later processing',
+                'error' => $e->getMessage(),
+                'order_id' => $orderId
+            ];
+        }
+    }
+
+    /**
+     * Check if order is eligible for real-time reconciliation
+     * 
+     * @param int $orderId Order ID
+     * @param int $tenantId Tenant ID
+     * @param int $branchId Branch ID
+     * @return bool Eligible or not
+     */
+    private function isEligibleForRealTimeReconciliation($orderId, $tenantId, $branchId)
+    {
+        $sql = "
+            SELECT payment_status, status, created_at
+            FROM orders
+            WHERE order_id = ? 
+              AND tenant_id = ? 
+              AND branch_id = ?
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$orderId, $tenantId, $branchId]);
+        $order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$order) {
+            return false;
+        }
+
+        // Eligible if payment is completed and order is not too old
+        $isPaymentCompleted = in_array($order['payment_status'], ['PAID', 'PARTIALLY_PAID']);
+        $isRecentOrder = strtotime($order['created_at']) > strtotime('-1 hour');
+        
+        return $isPaymentCompleted && $isRecentOrder;
+    }
+
+    /**
+     * Log real-time reconciliation
+     * 
+     * @param int $orderId Order ID
+     * @param int $tenantId Tenant ID
+     * @param int $branchId Branch ID
+     * @param array $result Reconciliation result
+     */
+    private function logRealTimeReconciliation($orderId, $tenantId, $branchId, $result)
+    {
+        $sql = "
+            INSERT INTO real_time_reconciliation_log
+            (order_id, tenant_id, branch_id, reconciliation_status, 
+             processing_time_ms, triggered_at, triggered_by)
+            VALUES (?, ?, ?, ?, ?, NOW(), 'SYSTEM')
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            $orderId,
+            $tenantId,
+            $branchId,
+            $result['status'],
+            $result['processing_time_ms'] ?? 0
+        ]);
+    }
+
+    /**
+     * Queue order for later reconciliation
+     * 
+     * @param int $orderId Order ID
+     * @param int $tenantId Tenant ID
+     * @param int $branchId Branch ID
+     * @param string $reason Reason for queueing
+     */
+    private function queueForLaterReconciliation($orderId, $tenantId, $branchId, $reason)
+    {
+        $sql = "
+            INSERT INTO reconciliation_queue
+            (order_id, tenant_id, branch_id, queue_reason, queued_at, status)
+            VALUES (?, ?, ?, ?, NOW(), 'PENDING')
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$orderId, $tenantId, $branchId, $reason]);
+    }
+
+    /**
+     * Process queued reconciliations
+     * 
+     * @param int $tenantId Tenant ID
+     * @param int $branchId Branch ID
+     * @param int $limit Maximum number to process
+     * @return array Processing results
+     */
+    public function processQueuedReconciliations($tenantId, $branchId, $limit = 100)
+    {
+        // Get queued reconciliations
+        $sql = "
+            SELECT queue_id, order_id, tenant_id, branch_id
+            FROM reconciliation_queue
+            WHERE tenant_id = ? 
+              AND branch_id = ? 
+              AND status = 'PENDING'
+            ORDER BY queued_at ASC
+            LIMIT ?
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId, $branchId, $limit]);
+        $queuedItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $results = [];
+        $processed = 0;
+        $failed = 0;
+
+        foreach ($queuedItems as $item) {
+            try {
+                // Reconcile the order
+                $result = $this->reconcileOrder($item['order_id'], $item['tenant_id'], $item['branch_id']);
+
+                // Update queue status
+                $updateSql = "
+                    UPDATE reconciliation_queue
+                    SET status = 'PROCESSED', processed_at = NOW(), result_json = ?
+                    WHERE queue_id = ?
+                ";
+                $updateStmt = $this->db->prepare($updateSql);
+                $updateStmt->execute([json_encode($result), $item['queue_id']]);
+
+                $processed++;
+                $results[] = [
+                    'queue_id' => $item['queue_id'],
+                    'order_id' => $item['order_id'],
+                    'success' => true,
+                    'result' => $result
+                ];
+            } catch (Exception $e) {
+                // Mark as failed
+                $updateSql = "
+                    UPDATE reconciliation_queue
+                    SET status = 'FAILED', processed_at = NOW(), error_message = ?
+                    WHERE queue_id = ?
+                ";
+                $updateStmt = $this->db->prepare($updateSql);
+                $updateStmt->execute([$e->getMessage(), $item['queue_id']]);
+
+                $failed++;
+                $results[] = [
+                    'queue_id' => $item['queue_id'],
+                    'order_id' => $item['order_id'],
+                    'success' => false,
+                    'error' => $e->getMessage()
+                ];
+            }
+        }
+
+        return [
+            'success' => true,
+            'total_queued' => count($queuedItems),
+            'processed' => $processed,
+            'failed' => $failed,
+            'results' => $results
+        ];
+    }
+
+    /**
+     * Get real-time reconciliation statistics
+     * 
+     * @param int $tenantId Tenant ID
+     * @param int $branchId Branch ID
+     * @param int $hours Number of hours to analyze
+     * @return array Statistics
+     */
+    public function getRealTimeReconciliationStats($tenantId, $branchId, $hours = 24)
+    {
+        $startTime = date('Y-m-d H:i:s', strtotime("-{$hours} hours"));
+
+        $sql = "
+            SELECT 
+                COUNT(*) as total_reconciliations,
+                SUM(CASE WHEN reconciliation_status = 'RECONCILED' THEN 1 ELSE 0 END) as reconciled,
+                SUM(CASE WHEN reconciliation_status = 'DISCREPANCY_HIGH' THEN 1 ELSE 0 END) as high_discrepancies,
+                SUM(CASE WHEN reconciliation_status = 'DISCREPANCY_LOW' THEN 1 ELSE 0 END) as low_discrepancies,
+                AVG(processing_time_ms) as avg_processing_time,
+                MIN(processing_time_ms) as min_processing_time,
+                MAX(processing_time_ms) as max_processing_time
+            FROM real_time_reconciliation_log
+            WHERE tenant_id = ? 
+              AND branch_id = ? 
+              AND triggered_at >= ?
+        ";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId, $branchId, $startTime]);
+        $stats = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Get queue statistics
+        $queueSql = "
+            SELECT 
+                COUNT(*) as queue_size,
+                SUM(CASE WHEN status = 'PENDING' THEN 1 ELSE 0 END) as pending,
+                SUM(CASE WHEN status = 'PROCESSED' THEN 1 ELSE 0 END) as processed,
+                SUM(CASE WHEN status = 'FAILED' THEN 1 ELSE 0 END) as failed
+            FROM reconciliation_queue
+            WHERE tenant_id = ? 
+              AND branch_id = ?
+        ";
+
+        $queueStmt = $this->db->prepare($queueSql);
+        $queueStmt->execute([$tenantId, $branchId]);
+        $queueStats = $queueStmt->fetch(PDO::FETCH_ASSOC);
+
+        return [
+            'period_hours' => $hours,
+            'reconciliation_stats' => $stats,
+            'queue_stats' => $queueStats,
+            'generated_at' => date('Y-m-d H:i:s')
+        ];
+    }
+
+    /**
+     * Set up real-time reconciliation triggers
+     * Creates database triggers for automatic reconciliation
+     * 
+     * @return array Setup result
+     */
+    public function setupRealTimeTriggers()
+    {
+        $triggers = [
+            'after_payment_update' => "
+                CREATE TRIGGER IF NOT EXISTS tr_reconcile_after_payment
+                AFTER UPDATE ON payments
+                FOR EACH ROW
+                BEGIN
+                    IF NEW.status = 'COMPLETED' AND OLD.status != 'COMPLETED' THEN
+                        INSERT INTO reconciliation_queue (order_id, tenant_id, branch_id, queue_reason, queued_at, status)
+                        VALUES (NEW.order_id, NEW.tenant_id, NEW.branch_id, 'Payment completed', NOW(), 'PENDING');
+                    END IF;
+                END;
+            ",
+            'after_order_creation' => "
+                CREATE TRIGGER IF NOT EXISTS tr_queue_order_reconciliation
+                AFTER INSERT ON orders
+                FOR EACH ROW
+                BEGIN
+                    IF NEW.payment_status = 'PAID' THEN
+                        INSERT INTO reconciliation_queue (order_id, tenant_id, branch_id, queue_reason, queued_at, status)
+                        VALUES (NEW.order_id, NEW.tenant_id, NEW.branch_id, 'Order created with payment', NOW(), 'PENDING');
+                    END IF;
+                END;
+            "
+        ];
+
+        $results = [];
+        foreach ($triggers as $name => $sql) {
+            try {
+                $this->db->exec($sql);
+                $results[$name] = [
+                    'success' => true,
+                    'message' => 'Trigger created successfully'
+                ];
+            } catch (Exception $e) {
+                $results[$name] = [
+                    'success' => false,
+                    'message' => $e->getMessage()
+                ];
+            }
+        }
+
+        return [
+            'success' => true,
+            'triggers' => $results,
+            'setup_at' => date('Y-m-d H:i:s')
+        ];
+    }
 }

@@ -893,4 +893,684 @@ class ComplianceEngine implements EngineInterface
 
         return $documentData;
     }
+
+    /**
+     * Automated compliance alert system
+     * Sends alerts when compliance issues are detected
+     * 
+     * @param int $tenantId Tenant ID
+     * @param int $branchId Branch ID
+     * @return array Alert results
+     */
+    public function runAutomatedComplianceAlerts($tenantId, $branchId)
+    {
+        $alerts = [];
+        
+        // Check for near-expiring certifications
+        $certAlerts = $this->checkExpiringCertifications($tenantId, $branchId);
+        $alerts = array_merge($alerts, $certAlerts);
+        
+        // Check for compliance violations
+        $violationAlerts = $this->checkComplianceViolations($tenantId, $branchId);
+        $alerts = array_merge($alerts, $violationAlerts);
+        
+        // Check for upcoming regulatory deadlines
+        $deadlineAlerts = $this->checkRegulatoryDeadlines($tenantId);
+        $alerts = array_merge($alerts, $deadlineAlerts);
+        
+        // Create alerts in database
+        foreach ($alerts as $alert) {
+            $this->createComplianceAlert($tenantId, $branchId, $alert);
+        }
+        
+        return [
+            'success' => true,
+            'alerts_created' => count($alerts),
+            'alerts' => $alerts,
+            'checked_at' => date('Y-m-d H:i:s')
+        ];
+    }
+
+    /**
+     * Check for expiring certifications
+     */
+    private function checkExpiringCertifications($tenantId, $branchId)
+    {
+        $alerts = [];
+        
+        $sql = "
+            SELECT 
+                certification_id,
+                certification_number,
+                certification_type,
+                expiry_date,
+                DATEDIFF(expiry_date, CURDATE()) as days_until_expiry
+            FROM certifications
+            WHERE tenant_id = ? 
+              AND branch_id = ?
+              AND expiry_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId, $branchId]);
+        $certifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach ($certifications as $cert) {
+            $urgency = 'LOW';
+            if ($cert['days_until_expiry'] <= 7) {
+                $urgency = 'CRITICAL';
+            } elseif ($cert['days_until_expiry'] <= 14) {
+                $urgency = 'HIGH';
+            } elseif ($cert['days_until_expiry'] <= 30) {
+                $urgency = 'MEDIUM';
+            }
+            
+            $alerts[] = [
+                'alert_type' => 'CERTIFICATION_EXPIRY',
+                'urgency' => $urgency,
+                'message' => "{$cert['certification_type']} certification expires in {$cert['days_until_expiry']} days",
+                'certification_id' => $cert['certification_id'],
+                'expiry_date' => $cert['expiry_date'],
+                'days_until_expiry' => $cert['days_until_expiry']
+            ];
+        }
+        
+        return $alerts;
+    }
+
+    /**
+     * Check for compliance violations
+     */
+    private function checkComplianceViolations($tenantId, $branchId)
+    {
+        $alerts = [];
+        
+        // Run compliance checks
+        $startDate = date('Y-m-d', strtotime('-30 days'));
+        $endDate = date('Y-m-d');
+        
+        $laborCheck = $this->checkLaborCompliance($tenantId, $branchId, $startDate, $endDate);
+        if ($laborCheck['status'] === 'NON_COMPLIANT') {
+            $alerts[] = [
+                'alert_type' => 'LABOR_VIOLATION',
+                'urgency' => 'HIGH',
+                'message' => 'Labor law compliance violations detected',
+                'violations' => $laborCheck['violations']
+            ];
+        }
+        
+        $foodSafetyCheck = $this->checkFoodSafetyCompliance($tenantId, $branchId);
+        if ($foodSafetyCheck['status'] === 'NON_COMPLIANT') {
+            $alerts[] = [
+                'alert_type' => 'FOOD_SAFETY_VIOLATION',
+                'urgency' => 'CRITICAL',
+                'message' => 'Food safety compliance violations detected',
+                'violations' => $foodSafetyCheck['violations']
+            ];
+        }
+        
+        return $alerts;
+    }
+
+    /**
+     * Check for regulatory deadlines
+     */
+    private function checkRegulatoryDeadlines($tenantId)
+    {
+        $alerts = [];
+        
+        // Get regulatory updates with pending implementation
+        $updates = $this->trackRegulatoryUpdates($tenantId);
+        
+        foreach ($updates['updates'] as $update) {
+            if (in_array($update['status'], ['PENDING_REVIEW', 'PENDING_IMPLEMENTATION'])) {
+                $daysUntilEffective = (strtotime($update['effective_date']) - time()) / 86400;
+                
+                if ($daysUntilEffective <= 30) {
+                    $urgency = $daysUntilEffective <= 7 ? 'CRITICAL' : 'HIGH';
+                    
+                    $alerts[] = [
+                        'alert_type' => 'REGULATORY_DEADLINE',
+                        'urgency' => $urgency,
+                        'message' => "{$update['title']} effective in " . ceil($daysUntilEffective) . " days",
+                        'update_id' => $update['update_id'],
+                        'effective_date' => $update['effective_date'],
+                        'days_until_effective' => ceil($daysUntilEffective)
+                    ];
+                }
+            }
+        }
+        
+        return $alerts;
+    }
+
+    /**
+     * Create compliance alert in database
+     */
+    private function createComplianceAlert($tenantId, $branchId, $alert)
+    {
+        $sql = "
+            INSERT INTO compliance_alerts
+            (tenant_id, branch_id, alert_type, urgency, message, alert_data, created_at, status)
+            VALUES (?, ?, ?, ?, ?, ?, NOW(), 'ACTIVE')
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            $tenantId,
+            $branchId,
+            $alert['alert_type'],
+            $alert['urgency'],
+            $alert['message'],
+            json_encode($alert)
+        ]);
+    }
+
+    /**
+     * Schedule automated compliance checks
+     * Sets up recurring compliance checks
+     * 
+     * @param int $tenantId Tenant ID
+     * @param int $branchId Branch ID
+     * @param array $schedule Schedule configuration
+     * @return array Schedule results
+     */
+    public function scheduleAutomatedChecks($tenantId, $branchId, $schedule)
+    {
+        $defaultSchedule = [
+            'labor_compliance' => ['frequency' => 'WEEKLY', 'day_of_week' => 1], // Monday
+            'food_safety' => ['frequency' => 'DAILY'],
+            'tax_calculation' => ['frequency' => 'MONTHLY', 'day_of_month' => 1],
+            'regulatory_updates' => ['frequency' => 'WEEKLY', 'day_of_week' => 5] // Friday
+        ];
+        
+        $schedule = array_merge($defaultSchedule, $schedule);
+        
+        $results = [];
+        foreach ($schedule as $checkType => $config) {
+            $sql = "
+                INSERT INTO compliance_schedules
+                (tenant_id, branch_id, check_type, frequency, schedule_config, created_at, status)
+                VALUES (?, ?, ?, ?, ?, NOW(), 'ACTIVE')
+                ON DUPLICATE KEY UPDATE
+                    frequency = VALUES(frequency),
+                    schedule_config = VALUES(schedule_config),
+                    updated_at = NOW()
+            ";
+            
+            $stmt = $this->db->prepare($sql);
+            $result = $stmt->execute([
+                $tenantId,
+                $branchId,
+                $checkType,
+                $config['frequency'],
+                json_encode($config)
+            ]);
+            
+            $results[$checkType] = [
+                'success' => $result,
+                'frequency' => $config['frequency'],
+                'config' => $config
+            ];
+        }
+        
+        return [
+            'success' => true,
+            'scheduled_checks' => count($results),
+            'schedules' => $results,
+            'scheduled_at' => date('Y-m-d H:i:s')
+        ];
+    }
+
+    /**
+     * Execute scheduled compliance checks
+     * Runs checks that are due based on schedule
+     * 
+     * @param int $tenantId Tenant ID
+     * @param int $branchId Branch ID
+     * @return array Execution results
+     */
+    public function executeScheduledChecks($tenantId, $branchId)
+    {
+        // Get active schedules
+        $sql = "
+            SELECT check_type, frequency, schedule_config
+            FROM compliance_schedules
+            WHERE tenant_id = ? 
+              AND branch_id = ?
+              AND status = 'ACTIVE'
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId, $branchId]);
+        $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $results = [];
+        $executed = 0;
+        $skipped = 0;
+        
+        foreach ($schedules as $schedule) {
+            if ($this->isCheckDue($schedule)) {
+                $result = $this->executeScheduledCheck($tenantId, $branchId, $schedule);
+                $results[$schedule['check_type']] = $result;
+                $executed++;
+            } else {
+                $skipped++;
+            }
+        }
+        
+        return [
+            'success' => true,
+            'total_schedules' => count($schedules),
+            'executed' => $executed,
+            'skipped' => $skipped,
+            'results' => $results,
+            'executed_at' => date('Y-m-d H:i:s')
+        ];
+    }
+
+    /**
+     * Check if a scheduled check is due
+     */
+    private function isCheckDue($schedule)
+    {
+        $config = json_decode($schedule['schedule_config'], true);
+        $currentDayOfWeek = date('N'); // 1 = Monday, 7 = Sunday
+        $currentDayOfMonth = date('j');
+        
+        switch ($schedule['frequency']) {
+            case 'DAILY':
+                return true;
+            case 'WEEKLY':
+                return $currentDayOfWeek == ($config['day_of_week'] ?? 1);
+            case 'MONTHLY':
+                return $currentDayOfMonth == ($config['day_of_month'] ?? 1);
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Execute a single scheduled check
+     */
+    private function executeScheduledCheck($tenantId, $branchId, $schedule)
+    {
+        $checkType = $schedule['check_type'];
+        $startDate = date('Y-m-d', strtotime('-30 days'));
+        $endDate = date('Y-m-d');
+        
+        try {
+            switch ($checkType) {
+                case 'labor_compliance':
+                    $result = $this->checkLaborCompliance($tenantId, $branchId, $startDate, $endDate);
+                    break;
+                case 'food_safety':
+                    $result = $this->checkFoodSafetyCompliance($tenantId, $branchId);
+                    break;
+                case 'tax_calculation':
+                    $result = $this->calculateTaxes($tenantId, $branchId, $startDate, $endDate);
+                    break;
+                case 'regulatory_updates':
+                    $result = $this->trackRegulatoryUpdates($tenantId);
+                    break;
+                default:
+                    $result = ['error' => 'Unknown check type'];
+            }
+            
+            // Log execution
+            $this->logScheduledCheckExecution($tenantId, $branchId, $checkType, $result);
+            
+            return [
+                'success' => true,
+                'check_type' => $checkType,
+                'result' => $result
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'check_type' => $checkType,
+                'error' => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Log scheduled check execution
+     */
+    private function logScheduledCheckExecution($tenantId, $branchId, $checkType, $result)
+    {
+        $sql = "
+            INSERT INTO compliance_check_executions
+            (tenant_id, branch_id, check_type, result_json, executed_at, status)
+            VALUES (?, ?, ?, ?, NOW(), 'COMPLETED')
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId, $branchId, $checkType, json_encode($result)]);
+    }
+
+    /**
+     * Assess regulatory change impact
+     * Analyzes how regulatory changes affect the business
+     * 
+     * @param int $tenantId Tenant ID
+     * @param array $regulatoryChange Regulatory change details
+     * @return array Impact assessment
+     */
+    public function assessRegulatoryImpact($tenantId, $regulatoryChange)
+    {
+        $impact = [
+            'tenant_id' => $tenantId,
+            'regulatory_change' => $regulatoryChange,
+            'impact_areas' => [],
+            'required_actions' => [],
+            'estimated_cost' => 0,
+            'timeline' => [],
+            'assessed_at' => date('Y-m-d H:i:s')
+        ];
+        
+        // Analyze impact based on regulation type
+        switch ($regulatoryChange['regulation_type']) {
+            case 'LABOR_LAW':
+                $impact = $this->assessLaborLawImpact($tenantId, $regulatoryChange, $impact);
+                break;
+            case 'FOOD_SAFETY':
+                $impact = $this->assessFoodSafetyImpact($tenantId, $regulatoryChange, $impact);
+                break;
+            case 'TAX':
+                $impact = $this->assessTaxImpact($tenantId, $regulatoryChange, $impact);
+                break;
+            default:
+                $impact['impact_areas'][] = [
+                    'area' => 'GENERAL',
+                    'impact_level' => 'UNKNOWN',
+                    'description' => 'Impact assessment not available for this regulation type'
+                ];
+        }
+        
+        // Save impact assessment
+        $this->saveImpactAssessment($tenantId, $impact);
+        
+        return $impact;
+    }
+
+    /**
+     * Assess labor law impact
+     */
+    private function assessLaborLawImpact($tenantId, $regulatoryChange, $impact)
+    {
+        // Get current employee data
+        $sql = "
+            SELECT COUNT(*) as employee_count,
+                   AVG(monthly_salary) as avg_salary
+            FROM employees
+            WHERE tenant_id = ? AND status = 'ACTIVE'
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId]);
+        $employeeData = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Calculate potential wage increase impact
+        if (isset($regulatoryChange['new_minimum_wage'])) {
+            $wageIncrease = $regulatoryChange['new_minimum_wage'] - 4500000; // Current UMR
+            $affectedEmployees = 0;
+            
+            if ($employeeData['avg_salary'] < $regulatoryChange['new_minimum_wage']) {
+                $affectedEmployees = $employeeData['employee_count'];
+            }
+            
+            $monthlyCostIncrease = $affectedEmployees * $wageIncrease;
+            $annualCostIncrease = $monthlyCostIncrease * 12;
+            
+            $impact['impact_areas'][] = [
+                'area' => 'LABOR_COSTS',
+                'impact_level' => $annualCostIncrease > 100000000 ? 'HIGH' : 'MEDIUM',
+                'description' => "Minimum wage increase of {$wageIncrease} per employee",
+                'affected_employees' => $affectedEmployees,
+                'monthly_increase' => $monthlyCostIncrease,
+                'annual_increase' => $annualCostIncrease
+            ];
+            
+            $impact['estimated_cost'] += $annualCostIncrease;
+            $impact['required_actions'][] = [
+                'action' => 'UPDATE_SALARY_RATES',
+                'priority' => 'HIGH',
+                'deadline' => $regulatoryChange['effective_date'],
+                'description' => 'Update employee salaries to meet new minimum wage requirements'
+            ];
+        }
+        
+        return $impact;
+    }
+
+    /**
+     * Assess food safety impact
+     */
+    private function assessFoodSafetyImpact($tenantId, $regulatoryChange, $impact)
+    {
+        $impact['impact_areas'][] = [
+            'area' => 'FOOD_SAFETY_PROCEDURES',
+            'impact_level' => 'MEDIUM',
+            'description' => 'Updated food safety procedures required'
+        ];
+        
+        $impact['required_actions'][] = [
+            'action' => 'TRAIN_STAFF',
+            'priority' => 'HIGH',
+            'deadline' => $regulatoryChange['effective_date'],
+            'description' => 'Train staff on new food safety requirements'
+        ];
+        
+        $impact['estimated_cost'] += 5000000; // Estimated training cost
+        
+        return $impact;
+    }
+
+    /**
+     * Assess tax impact
+     */
+    private function assessTaxImpact($tenantId, $regulatoryChange, $impact)
+    {
+        if (isset($regulatoryChange['new_tax_rate'])) {
+            // Get recent sales data
+            $sql = "
+                SELECT SUM(total_amount) as total_sales
+                FROM orders
+                WHERE tenant_id = ? 
+                  AND created_at >= DATE_SUB(CURDATE(), INTERVAL 90 DAY)
+                  AND status = 'COMPLETED'
+            ";
+            
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([$tenantId]);
+            $salesData = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $quarterlySales = $salesData['total_sales'] * 4; // Extrapolate to yearly
+            $taxImpact = $quarterlySales * ($regulatoryChange['new_tax_rate'] - 0.11); // Difference from current 11%
+            
+            $impact['impact_areas'][] = [
+                'area' => 'TAX_LIABILITY',
+                'impact_level' => abs($taxImpact) > 50000000 ? 'HIGH' : 'MEDIUM',
+                'description' => 'Tax rate change affecting tax liability',
+                'quarterly_sales' => $quarterlySales,
+                'estimated_tax_impact' => $taxImpact
+            ];
+            
+            $impact['estimated_cost'] += abs($taxImpact);
+        }
+        
+        return $impact;
+    }
+
+    /**
+     * Save impact assessment
+     */
+    private function saveImpactAssessment($tenantId, $impact)
+    {
+        $sql = "
+            INSERT INTO regulatory_impact_assessments
+            (tenant_id, impact_json, assessed_at, status)
+            VALUES (?, ?, NOW(), 'PENDING_REVIEW')
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId, json_encode($impact)]);
+    }
+
+    /**
+     * Get compliance workflow recommendations
+     * Provides automated recommendations for compliance improvements
+     * 
+     * @param int $tenantId Tenant ID
+     * @param int $branchId Branch ID
+     * @return array Recommendations
+     */
+    public function getComplianceRecommendations($tenantId, $branchId)
+    {
+        $recommendations = [];
+        
+        // Analyze compliance history
+        $complianceHistory = $this->getComplianceHistory($tenantId, $branchId);
+        
+        // Identify recurring issues
+        $recurringIssues = $this->identifyRecurringIssues($complianceHistory);
+        
+        // Generate recommendations based on issues
+        foreach ($recurringIssues as $issue) {
+            $recommendations[] = $this->generateRecommendation($issue);
+        }
+        
+        // Get proactive recommendations
+        $proactiveRecommendations = $this->getProactiveRecommendations($tenantId, $branchId);
+        $recommendations = array_merge($recommendations, $proactiveRecommendations);
+        
+        return [
+            'tenant_id' => $tenantId,
+            'branch_id' => $branchId,
+            'total_recommendations' => count($recommendations),
+            'recommendations' => $recommendations,
+            'generated_at' => date('Y-m-d H:i:s')
+        ];
+    }
+
+    /**
+     * Get compliance history
+     */
+    private function getComplianceHistory($tenantId, $branchId)
+    {
+        $sql = "
+            SELECT check_type, status, checked_at, violations_json
+            FROM compliance_checks
+            WHERE tenant_id = ? AND branch_id = ?
+            ORDER BY checked_at DESC
+            LIMIT 100
+        ";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$tenantId, $branchId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Identify recurring compliance issues
+     */
+    private function identifyRecurringIssues($complianceHistory)
+    {
+        $issues = [];
+        $issueCount = [];
+        
+        foreach ($complianceHistory as $check) {
+            if ($check['status'] !== 'COMPLIANT') {
+                $violations = json_decode($check['violations_json'], true);
+                foreach ($violations as $violation) {
+                    $issueKey = $violation['type'];
+                    if (!isset($issueCount[$issueKey])) {
+                        $issueCount[$issueKey] = 0;
+                    }
+                    $issueCount[$issueKey]++;
+                }
+            }
+        }
+        
+        // Filter recurring issues (appears 3+ times)
+        foreach ($issueCount as $issue => $count) {
+            if ($count >= 3) {
+                $issues[] = [
+                    'type' => $issue,
+                    'occurrence_count' => $count,
+                    'severity' => $count >= 5 ? 'HIGH' : 'MEDIUM'
+                ];
+            }
+        }
+        
+        return $issues;
+    }
+
+    /**
+     * Generate recommendation for an issue
+     */
+    private function generateRecommendation($issue)
+    {
+        $recommendations = [
+            'MINIMUM_WAGE' => [
+                'title' => 'Review and adjust salary structure',
+                'description' => 'Ensure all employees meet minimum wage requirements',
+                'priority' => 'HIGH',
+                'category' => 'LABOR_COMPLIANCE'
+            ],
+            'OVERTIME' => [
+                'title' => 'Implement overtime monitoring system',
+                'description' => 'Track and manage overtime hours to prevent violations',
+                'priority' => 'MEDIUM',
+                'category' => 'LABOR_COMPLIANCE'
+            ],
+            'TEMPERATURE_MONITORING' => [
+                'title' => 'Establish temperature logging procedures',
+                'description' => 'Implement regular temperature monitoring for food safety',
+                'priority' => 'HIGH',
+                'category' => 'FOOD_SAFETY'
+            ],
+            'EXPIRATION_TRACKING' => [
+                'title' => 'Improve inventory expiration tracking',
+                'description' => 'Set up automated expiration alerts for inventory items',
+                'priority' => 'CRITICAL',
+                'category' => 'FOOD_SAFETY'
+            ]
+        ];
+        
+        return $recommendations[$issue['type']] ?? [
+            'title' => 'Address recurring compliance issue',
+            'description' => "Review and resolve {$issue['type']} violations",
+            'priority' => $issue['severity'],
+            'category' => 'GENERAL'
+        ];
+    }
+
+    /**
+     * Get proactive compliance recommendations
+     */
+    private function getProactiveRecommendations($tenantId, $branchId)
+    {
+        return [
+            [
+                'title' => 'Schedule regular compliance training',
+                'description' => 'Conduct monthly compliance training for all staff',
+                'priority' => 'MEDIUM',
+                'category' => 'TRAINING'
+            ],
+            [
+                'title' => 'Implement compliance monitoring dashboard',
+                'description' => 'Set up real-time compliance monitoring and alerts',
+                'priority' => 'HIGH',
+                'category' => 'MONITORING'
+            ],
+            [
+                'title' => 'Review and update compliance documentation',
+                'description' => 'Ensure all compliance documents are current and accessible',
+                'priority' => 'MEDIUM',
+                'category' => 'DOCUMENTATION'
+            ]
+        ];
+    }
 }
