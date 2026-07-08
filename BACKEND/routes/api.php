@@ -171,6 +171,62 @@ if (!class_exists('TipManagementController')) {
     require_once __DIR__ . '/../modules/TipManagement/Controllers/TipManagementController.php';
 }
 
+// Central Kitchen Module
+if (!class_exists('CentralKitchenController')) {
+    require_once __DIR__ . '/../modules/CentralKitchen/Controllers/CentralKitchenController.php';
+}
+
+// Multi-Branch Module
+if (!class_exists('MultiBranchController')) {
+    require_once __DIR__ . '/../modules/MultiBranch/Controllers/MultiBranchController.php';
+}
+
+// Advanced HR Module
+if (!class_exists('AdvancedHRController')) {
+    require_once __DIR__ . '/../modules/HR/Controllers/AdvancedHRController.php;
+}
+
+
+// Advanced Marketing Module
+if (!class_exists('AdvancedMarketingController')) {
+    require_once __DIR__ . '/../modules/Marketing/Controllers/AdvancedMarketingController.php';
+}
+
+// Advanced Delivery Module
+if (!class_exists('AdvancedDeliveryController')) {
+    require_once __DIR__ . '/../modules/Delivery/Controllers/AdvancedDeliveryController.php';
+}
+
+// Multi-Currency Module
+if (!class_exists('MultiCurrencyController')) {
+    require_once __DIR__ . '/../modules/Currency/Controllers/MultiCurrencyController.php';
+}
+
+// HACCP Compliance Module
+if (!class_exists('HACCPController')) {
+    require_once __DIR__ . '/../modules/Compliance/Controllers/HACCPController.php';
+}
+
+// Quality Control Module
+if (!class_exists('QualityControlController')) {
+    require_once __DIR__ . '/../modules/Quality/Controllers/QualityControlController.php';
+}
+
+// Advanced Franchise Module
+if (!class_exists('AdvancedFranchiseController')) {
+    require_once __DIR__ . '/../modules/Franchise/Controllers/AdvancedFranchiseController.php';
+}
+
+// API Marketplace Module
+if (!class_exists('APIMarketplaceController')) {
+    require_once __DIR__ . '/../modules/API/Controllers/APIMarketplaceController.php';
+}
+
+// Infrastructure Monitoring Module
+if (!class_exists('InfrastructureMonitoringController')) {
+    require_once __DIR__ . '/../modules/Infrastructure/Controllers/InfrastructureMonitoringController.php';
+}
+
 // Daily Reports Module
 if (!class_exists('DailyReportsController')) {
     require_once __DIR__ . '/../modules/DailyReports/Controllers/DailyReportsController.php';
@@ -301,6 +357,9 @@ if (!class_exists('SmartProcurementController')) {
 }
 if (!class_exists('KitchenIntelligenceController')) {
     require_once __DIR__ . '/../modules/AI/Controllers/KitchenIntelligenceController.php';
+}
+if (!class_exists('AdvancedProcurementController')) {
+    require_once __DIR__ . '/../modules/Procurement/Controllers/AdvancedProcurementController.php';
 }
 if (!class_exists('CustomerIntelligenceController')) {
     require_once __DIR__ . '/../modules/AI/Controllers/CustomerIntelligenceController.php';
@@ -484,6 +543,17 @@ $foodWasteController = new FoodWasteController();
 $staffSchedulingController = new StaffSchedulingController();
 $tipManagementController = new TipManagementController();
 $dailyReportsController = new DailyReportsController();
+$centralKitchenController = new CentralKitchenController();
+$multiBranchController = new MultiBranchController();
+$advancedHRController = new AdvancedHRController();
+$advancedMarketingController = new AdvancedMarketingController();
+$advancedDeliveryController = new AdvancedDeliveryController();
+$multiCurrencyController = new MultiCurrencyController();
+$haccpController = new HACCPController();
+$qualityControlController = new QualityControlController();
+$advancedFranchiseController = new AdvancedFranchiseController();
+$apiMarketplaceController = new APIMarketplaceController();
+$infrastructureMonitoringController = new InfrastructureMonitoringController();
 $tableController = new TableController();
 $reservationController = new ReservationController();
 $inventoryController = new InventoryController();
@@ -532,6 +602,7 @@ $supplierPerformanceController = new SupplierPerformanceController();
 $currencyController = new CurrencyController();
 $smartProcurementController = new SmartProcurementController();
 $kitchenIntelligenceController = new KitchenIntelligenceController();
+$advancedProcurementController = new AdvancedProcurementController();
 $customerIntelligenceController = new CustomerIntelligenceController();
 $dynamicPricingController = new DynamicPricingController();
 $wasteReductionController = new WasteReductionController();
@@ -1155,6 +1226,514 @@ $router->addRoute('GET', '/api/v1/daily-reports/peak-hours', withAuth(
 $router->addRoute('GET', '/api/v1/daily-reports/comprehensive', withAuth(
     function($request) use ($dailyReportsController) {
         return $dailyReportsController->getComprehensive($request);
+    },
+    $authMiddleware
+));
+
+// Central Kitchen Routes
+$router->addRoute('POST', '/api/v1/central-kitchen/production-plans', withAuth(
+    function($request) use ($centralKitchenController) {
+        return $centralKitchenController->createProductionPlan($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/central-kitchen/production-plans', withAuth(
+    function($request) use ($centralKitchenController) {
+        return $centralKitchenController->getProductionPlans($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/central-kitchen/production-plans/{id}', withAuth(
+    function($request) use ($centralKitchenController) {
+        return $centralKitchenController->getProductionPlanDetails($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/central-kitchen/production-plans/{id}/ingredient-requirements', withAuth(
+    function($request) use ($centralKitchenController) {
+        return $centralKitchenController->calculateIngredientRequirements($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/central-kitchen/recipes/standardize', withAuth(
+    function($request) use ($centralKitchenController) {
+        return $centralKitchenController->standardizeRecipe($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/central-kitchen/yields', withAuth(
+    function($request) use ($centralKitchenController) {
+        return $centralKitchenController->trackYield($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/central-kitchen/yields', withAuth(
+    function($request) use ($centralKitchenController) {
+        return $centralKitchenController->getYieldAnalytics($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/central-kitchen/distributions', withAuth(
+    function($request) use ($centralKitchenController) {
+        return $centralKitchenController->createDistributionOrder($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/central-kitchen/distributions', withAuth(
+    function($request) use ($centralKitchenController) {
+        return $centralKitchenController->getDistributionOrders($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('PUT', '/api/v1/central-kitchen/distributions/{id}/status', withAuth(
+    function($request) use ($centralKitchenController) {
+        return $centralKitchenController->updateDistributionStatus($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/central-kitchen/summary', withAuth(
+    function($request) use ($centralKitchenController) {
+        return $centralKitchenController->getSummary($request);
+    },
+    $authMiddleware
+));
+
+// Multi-Branch Routes
+$router->addRoute('POST', '/api/v1/multi-branch/stock-transfers', withAuth(
+    function($request) use ($multiBranchController) {
+        return $multiBranchController->createStockTransfer($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/multi-branch/stock-transfers', withAuth(
+    function($request) use ($multiBranchController) {
+        return $multiBranchController->getStockTransfers($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('PUT', '/api/v1/multi-branch/stock-transfers/{id}/status', withAuth(
+    function($request) use ($multiBranchController) {
+        return $multiBranchController->updateTransferStatus($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/multi-branch/centralized-purchases', withAuth(
+    function($request) use ($multiBranchController) {
+        return $multiBranchController->createCentralizedPurchase($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/multi-branch/branch-performance', withAuth(
+    function($request) use ($multiBranchController) {
+        return $multiBranchController->getBranchPerformance($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/multi-branch/standardize-pricing', withAuth(
+    function($request) use ($multiBranchController) {
+        return $multiBranchController->standardizePricing($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/multi-branch/summary', withAuth(
+    function($request) use ($multiBranchController) {
+        return $multiBranchController->getSummary($request);
+    },
+    $authMiddleware
+));
+
+// Advanced HR Routes
+$router->addRoute('POST', '/api/v1/hr/multi-location-schedules', withAuth(
+    function($request) use ($advancedHRController) {
+        return $advancedHRController->createMultiLocationSchedule($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/hr/multi-location-schedules', withAuth(
+    function($request) use ($advancedHRController) {
+        return $advancedHRController->getMultiLocationSchedules($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/hr/labor-cost-analysis', withAuth(
+    function($request) use ($advancedHRController) {
+        return $advancedHRController->calculateLaborCost($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/hr/training-programs', withAuth(
+    function($request) use ($advancedHRController) {
+        return $advancedHRController->createTrainingProgram($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/hr/training-programs', withAuth(
+    function($request) use ($advancedHRController) {
+        return $advancedHRController->getTrainingPrograms($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/hr/training-completion', withAuth(
+    function($request) use ($advancedHRController) {
+        return $advancedHRController->recordTrainingCompletion($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/hr/staff-performance-labor', withAuth(
+    function($request) use ($advancedHRController) {
+        return $advancedHRController->getStaffPerformanceWithLaborCost($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/hr/summary', withAuth(
+    function($request) use ($advancedHRController) {
+        return $advancedHRController->getSummary($request);
+    },
+    $authMiddleware
+));
+
+// Advanced Marketing Routes
+$router->addRoute('POST', '/api/v1/marketing/customer-segments', withAuth(
+    function($request) use ($advancedMarketingController) {
+        return $advancedMarketingController->createCustomerSegment($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/marketing/customer-segments', withAuth(
+    function($request) use ($advancedMarketingController) {
+        return $advancedMarketingController->getCustomerSegments($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/marketing/customer-segments/{id}/members', withAuth(
+    function($request) use ($advancedMarketingController) {
+        return $advancedMarketingController->getSegmentMembers($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/marketing/email-campaigns', withAuth(
+    function($request) use ($advancedMarketingController) {
+        return $advancedMarketingController->createEmailCampaign($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/marketing/email-campaigns/{id}/send', withAuth(
+    function($request) use ($advancedMarketingController) {
+        return $advancedMarketingController->sendEmailCampaign($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/marketing/email-campaigns', withAuth(
+    function($request) use ($advancedMarketingController) {
+        return $advancedMarketingController->getEmailCampaigns($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/marketing/track-email', withAuth(
+    function($request) use ($advancedMarketingController) {
+        return $advancedMarketingController->trackEmailEngagement($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/marketing/promotion-tracking', withAuth(
+    function($request) use ($advancedMarketingController) {
+        return $advancedMarketingController->getPromotionTracking($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/marketing/summary', withAuth(
+    function($request) use ($advancedMarketingController) {
+        return $advancedMarketingController->getSummary($request);
+    },
+    $authMiddleware
+));
+
+// Advanced Delivery Routes
+$router->addRoute('POST', '/api/v1/delivery/drivers', withAuth(
+    function($request) use ($advancedDeliveryController) {
+        return $advancedDeliveryController->createDriver($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/delivery/drivers', withAuth(
+    function($request) use ($advancedDeliveryController) {
+        return $advancedDeliveryController->getDrivers($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/delivery/routes/optimize', withAuth(
+    function($request) use ($advancedDeliveryController) {
+        return $advancedDeliveryController->optimizeRoute($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/delivery/routes', withAuth(
+    function($request) use ($advancedDeliveryController) {
+        return $advancedDeliveryController->getDeliveryRoutes($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/delivery/tracking', withAuth(
+    function($request) use ($advancedDeliveryController) {
+        return $advancedDeliveryController->trackDeliveryLocation($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/delivery/tracking/{delivery_order_id}', withAuth(
+    function($request) use ($advancedDeliveryController) {
+        return $advancedDeliveryController->getDeliveryTracking($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/delivery/notifications', withAuth(
+    function($request) use ($advancedDeliveryController) {
+        return $advancedDeliveryController->sendCustomerNotification($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/delivery/notifications', withAuth(
+    function($request) use ($advancedDeliveryController) {
+        return $advancedDeliveryController->getDeliveryNotifications($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/delivery/summary', withAuth(
+    function($request) use ($advancedDeliveryController) {
+        return $advancedDeliveryController->getSummary($request);
+    },
+    $authMiddleware
+));
+
+// Multi-Currency Routes
+$router->addRoute('POST', '/api/v1/currency/exchange-rates', withAuth(
+    function($request) use ($multiCurrencyController) {
+        return $multiCurrencyController->updateExchangeRate($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/currency/exchange-rates', withAuth(
+    function($request) use ($multiCurrencyController) {
+        return $multiCurrencyController->getExchangeRates($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/currency/product-prices', withAuth(
+    function($request) use ($multiCurrencyController) {
+        return $multiCurrencyController->setMultiCurrencyPrice($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/currency/product-prices', withAuth(
+    function($request) use ($multiCurrencyController) {
+        return $multiCurrencyController->getProductPrices($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/currency/convert-historical', withAuth(
+    function($request) use ($multiCurrencyController) {
+        return $multiCurrencyController->convertWithHistoricalRate($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/currency/auto-update-rates', withAuth(
+    function($request) use ($multiCurrencyController) {
+        return $multiCurrencyController->autoUpdateExchangeRates($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/currency/summary', withAuth(
+    function($request) use ($multiCurrencyController) {
+        return $multiCurrencyController->getCurrencySummary($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/currency/conversion-history', withAuth(
+    function($request) use ($multiCurrencyController) {
+        return $multiCurrencyController->getConversionHistory($request);
+    },
+    $authMiddleware
+));
+
+// HACCP Compliance Routes
+$router->addRoute('POST', '/api/v1/haccp/ccps', withAuth(
+    function($request) use ($haccpController) {
+        return $haccpController->createCCP($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/haccp/ccps', withAuth(
+    function($request) use ($haccpController) {
+        return $haccpController->getCCPs($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/haccp/monitoring', withAuth(
+    function($request) use ($haccpController) {
+        return $haccpController->recordMonitoring($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/haccp/monitoring', withAuth(
+    function($request) use ($haccpController) {
+        return $haccpController->getMonitoringRecords($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/haccp/report', withAuth(
+    function($request) use ($haccpController) {
+        return $haccpController->generateHACCPReport($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/haccp/summary', withAuth(
+    function($request) use ($haccpController) {
+        return $haccpController->getSummary($request);
+    },
+    $authMiddleware
+));
+
+// Quality Control Routes
+$router->addRoute('POST', '/api/v1/quality/checks', withAuth(
+    function($request) use ($qualityControlController) {
+        return $qualityControlController->createQualityCheck($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/quality/checks', withAuth(
+    function($request) use ($qualityControlController) {
+        return $qualityControlController->getQualityChecks($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/quality/non-conformances', withAuth(
+    function($request) use ($qualityControlController) {
+        return $qualityControlController->getNonConformances($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('PUT', '/api/v1/quality/non-conformances/{id}/status', withAuth(
+    function($request) use ($qualityControlController) {
+        return $qualityControlController->updateNonConformanceStatus($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/quality/metrics', withAuth(
+    function($request) use ($qualityControlController) {
+        return $qualityControlController->getQualityMetrics($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/quality/summary', withAuth(
+    function($request) use ($qualityControlController) {
+        return $qualityControlController->getSummary($request);
+    },
+    $authMiddleware
+));
+
+// Advanced Franchise Routes
+$router->addRoute('POST', '/api/v1/franchise/compliance-checklists', withAuth(
+    function($request) use ($advancedFranchiseController) {
+        return $advancedFranchiseController->createComplianceChecklist($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/franchise/compliance-audits', withAuth(
+    function($request) use ($advancedFranchiseController) {
+        return $advancedFranchiseController->recordComplianceAudit($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/franchise/compliance-audits', withAuth(
+    function($request) use ($advancedFranchiseController) {
+        return $advancedFranchiseController->getComplianceAudits($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/franchise/performance-report', withAuth(
+    function($request) use ($advancedFranchiseController) {
+        return $advancedFranchiseController->generateFranchiseReport($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/franchise/summary', withAuth(
+    function($request) use ($advancedFranchiseController) {
+        return $advancedFranchiseController->getSummary($request);
+    },
+    $authMiddleware
+));
+
+// API Marketplace Routes
+$router->addRoute('POST', '/api/v1/api-marketplace/keys', withAuth(
+    function($request) use ($apiMarketplaceController) {
+        return $apiMarketplaceController->generateAPIKey($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/api-marketplace/keys', withAuth(
+    function($request) use ($apiMarketplaceController) {
+        return $apiMarketplaceController->getAPIKeys($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('DELETE', '/api/v1/api-marketplace/keys/{id}', withAuth(
+    function($request) use ($apiMarketplaceController) {
+        return $apiMarketplaceController->revokeAPIKey($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/api-marketplace/webhooks', withAuth(
+    function($request) use ($apiMarketplaceController) {
+        return $apiMarketplaceController->createWebhook($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/api-marketplace/webhooks', withAuth(
+    function($request) use ($apiMarketplaceController) {
+        return $apiMarketplaceController->getWebhooks($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/api-marketplace/analytics', withAuth(
+    function($request) use ($apiMarketplaceController) {
+        return $apiMarketplaceController->getAPIAnalytics($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/api-marketplace/summary', withAuth(
+    function($request) use ($apiMarketplaceController) {
+        return $apiMarketplaceController->getSummary($request);
+    },
+    $authMiddleware
+));
+
+// Infrastructure Monitoring Routes
+$router->addRoute('POST', '/api/v1/infrastructure/performance-metrics', withAuth(
+    function($request) use ($infrastructureMonitoringController) {
+        return $infrastructureMonitoringController->recordPerformanceMetrics($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/infrastructure/performance-metrics', withAuth(
+    function($request) use ($infrastructureMonitoringController) {
+        return $infrastructureMonitoringController->getPerformanceMetrics($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/infrastructure/alerts', withAuth(
+    function($request) use ($infrastructureMonitoringController) {
+        return $infrastructureMonitoringController->getAlerts($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/infrastructure/performance-report', withAuth(
+    function($request) use ($infrastructureMonitoringController) {
+        return $infrastructureMonitoringController->getPerformanceReport($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/infrastructure/summary', withAuth(
+    function($request) use ($infrastructureMonitoringController) {
+        return $infrastructureMonitoringController->getSummary($request);
     },
     $authMiddleware
 ));
@@ -2470,6 +3049,44 @@ $router->addRoute('GET', '/api/v1/settings/currencies/convert', function($reques
 $router->addRoute('POST', '/api/v1/ai/procurement/recommendations', function($request) use ($smartProcurementController) {
     return $smartProcurementController->generateRecommendation($request);
 });
+
+// Advanced Procurement Routes
+$router->addRoute('POST', '/api/v1/procurement/purchase-plans', withAuth(
+    function($request) use ($advancedProcurementController) {
+        return $advancedProcurementController->generatePurchasePlan($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/procurement/purchase-plans', withAuth(
+    function($request) use ($advancedProcurementController) {
+        return $advancedProcurementController->getPurchasePlans($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/procurement/three-way-match', withAuth(
+    function($request) use ($advancedProcurementController) {
+        return $advancedProcurementController->performThreeWayMatch($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/procurement/three-way-matches', withAuth(
+    function($request) use ($advancedProcurementController) {
+        return $advancedProcurementController->getThreeWayMatches($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('POST', '/api/v1/procurement/stock-forecast', withAuth(
+    function($request) use ($advancedProcurementController) {
+        return $advancedProcurementController->forecastStock($request);
+    },
+    $authMiddleware
+));
+$router->addRoute('GET', '/api/v1/procurement/summary', withAuth(
+    function($request) use ($advancedProcurementController) {
+        return $advancedProcurementController->getSummary($request);
+    },
+    $authMiddleware
+));
 
 // AI Kitchen Intelligence Routes
 $router->addRoute('POST', '/api/v1/ai/kitchen/analyze', function($request) use ($kitchenIntelligenceController) {
