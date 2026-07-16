@@ -47,11 +47,11 @@ test.describe('Restaurant Backend UI Tests', () => {
     await expect(page.locator('[data-tab="overview"]')).toHaveClass(/active/);
     await expect(page.locator('#overviewTab')).toHaveClass(/active/);
 
-    // Check stats are displayed
-    await expect(page.locator('#totalOrders')).toBeVisible();
-    await expect(page.locator('#totalRevenue')).toBeVisible();
-    await expect(page.locator('#activeTables')).toBeVisible();
-    await expect(page.locator('#pendingOrders')).toBeVisible();
+    // Check stats are displayed (use first() because stats are duplicated across tabs)
+    await expect(page.locator('#totalOrders').first()).toBeVisible();
+    await expect(page.locator('#totalRevenue').first()).toBeVisible();
+    await expect(page.locator('#activeTables').first()).toBeVisible();
+    await expect(page.locator('#pendingOrders').first()).toBeVisible();
   });
 
   test('should navigate between tabs', async ({ page }) => {

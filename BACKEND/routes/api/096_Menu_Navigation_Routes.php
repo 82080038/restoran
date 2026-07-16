@@ -3,7 +3,7 @@
 // Menu/Navigation Routes
 $router->addRoute('GET', '/api/v1/menu/user', withAuth(
     function($request) {
-        $menuController = new MenuController();
+        $menuController = new \App\Core\NavigationMenuController();
         return $menuController->getUserMenu($request);
     },
     $authMiddleware
@@ -11,7 +11,7 @@ $router->addRoute('GET', '/api/v1/menu/user', withAuth(
 
 $router->addRoute('POST', '/api/v1/menu/role', withAuth(
     function($request) {
-        $menuController = new MenuController();
+        $menuController = new \App\Core\NavigationMenuController();
         return $menuController->setRoleMenu($request);
     },
     $authMiddleware
@@ -19,7 +19,7 @@ $router->addRoute('POST', '/api/v1/menu/role', withAuth(
 
 $router->addRoute('GET', '/api/v1/menu/role', withAuth(
     function($request) {
-        $menuController = new MenuController();
+        $menuController = new \App\Core\NavigationMenuController();
         return $menuController->getRoleMenu($request);
     },
     $authMiddleware
@@ -27,7 +27,7 @@ $router->addRoute('GET', '/api/v1/menu/role', withAuth(
 
 $router->addRoute('POST', '/api/v1/menu/role/copy', withAuth(
     function($request) {
-        $menuController = new MenuController();
+        $menuController = new \App\Core\NavigationMenuController();
         return $menuController->copyRoleMenu($request);
     },
     $authMiddleware
@@ -35,7 +35,7 @@ $router->addRoute('POST', '/api/v1/menu/role/copy', withAuth(
 
 $router->addRoute('GET', '/api/v1/menu/access', withAuth(
     function($request) {
-        $menuController = new MenuController();
+        $menuController = new \App\Core\NavigationMenuController();
         return $menuController->checkAccess($request);
     },
     $authMiddleware
@@ -43,7 +43,7 @@ $router->addRoute('GET', '/api/v1/menu/access', withAuth(
 
 $router->addRoute('GET', '/api/v1/menu/role/modules', withAuth(
     function($request) {
-        $menuController = new MenuController();
+        $menuController = new \App\Core\NavigationMenuController();
         return $menuController->getRoleModules($request);
     },
     $authMiddleware

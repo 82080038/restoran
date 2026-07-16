@@ -61,7 +61,3 @@ $router->addRoute('GET', '/api/v1/emergency-closures/check', withAuth(
 if (!class_exists('RoleFallbackController')) {
     require_once __DIR__ . '/../../core/RoleFallbackController.php';
 }
-if (!class_exists('MenuController')) {
-    require_once __DIR__ . '/../../core/MenuController.php';
-}
-

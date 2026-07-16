@@ -5,17 +5,17 @@ namespace App\Core;
 // Load EBP Core and Backend Components
 require_once __DIR__ . '/../bootstrap.php';
 
-if (!class_exists('MenuService')) {
-    require_once __DIR__ . '/MenuService.php';
+if (!class_exists('\\\\App\\\\Core\\\\NavigationMenuService')) {
+    require_once __DIR__ . '/NavigationMenuService.php';
 }
 
-class MenuController
+class NavigationMenuController
 {
     private $service;
 
     public function __construct()
     {
-        $this->service = new MenuService();
+        $this->service = new \App\Core\NavigationMenuService();
     }
 
     /**
