@@ -75,8 +75,18 @@ if ($requestUri === '/' || $requestUri === '/index.html') {
 }
 
 // Serve static files from public directory (map.html, etc.)
-if (preg_match('/\.(html|css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf)$/', $requestUri)) {
-    $filePath = __DIR__ . $requestUri;
+// Exclude app directories that have their own routing
+$appDirs = ['/dashboard/', '/consumer/', '/kiosk/', '/mobile/'];
+$isAppDir = false;
+foreach ($appDirs as $dir) {
+    if (strpos($requestUri, $dir) === 0) {
+        $isAppDir = true;
+        break;
+    }
+}
+
+if (!$isAppDir && preg_match('/\.(html|css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf)$/', $requestUri)) {
+    $filePath = __DIR__ . DIRECTORY_SEPARATOR . ltrim($requestUri, '/');
     if (file_exists($filePath) && !is_dir($filePath)) {
         $mimeType = mime_content_type($filePath);
         header("Content-Type: $mimeType");
