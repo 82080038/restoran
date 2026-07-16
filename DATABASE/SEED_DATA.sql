@@ -50,6 +50,39 @@ INSERT IGNORE INTO users (user_id, tenant_id, branch_id, username, email, passwo
 INSERT IGNORE INTO user_roles (user_id, role_id) VALUES
 (1, 2);
 
+-- Quick Login Users for All Tenants and Roles (password: admin123)
+-- Tenant 1: EBP Restaurant Demo
+INSERT IGNORE INTO users (user_id, tenant_id, branch_id, username, email, password, full_name, status) VALUES
+(30, 1, 1, 'resto_platform_owner', 'resto_po@ebp.restaurant', '$2y$10$t.5aO/r4QatYko3Xpx7cseCiiCTc7K7wUcYAsFMaxLdmTgRomXDI6', 'Restaurant Platform Owner', 'ACTIVE'),
+(31, 1, 1, 'resto_admin', 'resto_admin@ebp.restaurant', '$2y$10$t.5aO/r4QatYko3Xpx7cseCiiCTc7K7wUcYAsFMaxLdmTgRomXDI6', 'Restaurant Admin', 'ACTIVE'),
+(32, 1, 1, 'resto_manager', 'resto_manager@ebp.restaurant', '$2y$10$t.5aO/r4QatYko3Xpx7cseCiiCTc7K7wUcYAsFMaxLdmTgRomXDI6', 'Restaurant Manager', 'ACTIVE'),
+(33, 1, 1, 'resto_cashier', 'resto_cashier@ebp.restaurant', '$2y$10$t.5aO/r4QatYko3Xpx7cseCiiCTc7K7wUcYAsFMaxLdmTgRomXDI6', 'Restaurant Cashier', 'ACTIVE'),
+(34, 1, 1, 'resto_kitchen', 'resto_kitchen@ebp.restaurant', '$2y$10$t.5aO/r4QatYko3Xpx7cseCiiCTc7K7wUcYAsFMaxLdmTgRomXDI6', 'Restaurant Kitchen Staff', 'ACTIVE');
+
+-- Tenant 2: EBP Coffee House
+INSERT IGNORE INTO users (user_id, tenant_id, branch_id, username, email, password, full_name, status) VALUES
+(40, 2, 2, 'cafe_platform_owner', 'cafe_po@ebp.restaurant', '$2y$10$t.5aO/r4QatYko3Xpx7cseCiiCTc7K7wUcYAsFMaxLdmTgRomXDI6', 'Coffee Platform Owner', 'ACTIVE'),
+(41, 2, 2, 'cafe_admin', 'cafe_admin@ebp.restaurant', '$2y$10$t.5aO/r4QatYko3Xpx7cseCiiCTc7K7wUcYAsFMaxLdmTgRomXDI6', 'Coffee Admin', 'ACTIVE'),
+(42, 2, 2, 'cafe_manager', 'cafe_manager@ebp.restaurant', '$2y$10$t.5aO/r4QatYko3Xpx7cseCiiCTc7K7wUcYAsFMaxLdmTgRomXDI6', 'Coffee Manager', 'ACTIVE'),
+(43, 2, 2, 'cafe_cashier', 'cafe_cashier@ebp.restaurant', '$2y$10$t.5aO/r4QatYko3Xpx7cseCiiCTc7K7wUcYAsFMaxLdmTgRomXDI6', 'Coffee Cashier', 'ACTIVE'),
+(44, 2, 2, 'cafe_kitchen', 'cafe_kitchen@ebp.restaurant', '$2y$10$t.5aO/r4QatYko3Xpx7cseCiiCTc7K7wUcYAsFMaxLdmTgRomXDI6', 'Coffee Barista', 'ACTIVE');
+
+-- Assign roles to tenant 1 users
+INSERT IGNORE INTO user_roles (user_id, role_id) VALUES
+(30, 1),  -- resto_platform_owner -> PLATFORM_OWNER
+(31, 2),  -- resto_admin -> ADMIN
+(32, 3),  -- resto_manager -> MANAGER
+(33, 4),  -- resto_cashier -> CASHIER
+(34, 5);  -- resto_kitchen -> KITCHEN
+
+-- Assign roles to tenant 2 users
+INSERT IGNORE INTO user_roles (user_id, role_id) VALUES
+(40, 1),  -- cafe_platform_owner -> PLATFORM_OWNER
+(41, 2),  -- cafe_admin -> ADMIN
+(42, 3),  -- cafe_manager -> MANAGER
+(43, 4),  -- cafe_cashier -> CASHIER
+(44, 5);  -- cafe_kitchen -> KITCHEN
+
 -- Product categories
 INSERT IGNORE INTO categories (category_id, tenant_id, category_code, category_name, description, sort_order, status) VALUES
 (1, 1, 'MAIN', 'Main Course', 'Primary dishes', 1, 'ACTIVE'),
