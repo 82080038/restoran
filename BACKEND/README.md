@@ -306,3 +306,45 @@ Get-ChildItem -Path routes\api -Filter *.php | ForEach-Object { & C:\xampp\php\p
 - CORS headers configuration
 
 > **Important:** Change `JWT_SECRET` and database credentials in `.env` before deploying to production. The default values in `bootstrap.php` are only for local development.
+
+---
+
+## Cleanup & Maintenance
+
+A deep audit of the repository is documented in `DOCUMENTATION/PROJECT_AUDIT_CLEANUP_AND_TESTING_PLAN.md`.
+
+**Quick cleanup targets:**
+- Generated artifacts: `BACKEND/test-results/`, `BACKEND/playwright-report/`, `BACKEND/screenshots/`, `BACKEND/logs/`, `BACKEND/.phpunit.result.cache`
+- Obsolete manual harnesses under `BACKEND/tests/` (consumer-*.php, test-*.php, run-*.sh, test-role-based-ui.html, simulation reports)
+- `BACKEND/public/.htaccess.backup`
+
+See `.devin/workflows/project-cleanup.md` for the exact PowerShell commands.
+
+## Playwright Headed-Browser Testing
+
+Canonical testing knowledge for the `playwright-headed-browser` agent and AI-driven E2E runs is in:
+
+- `.devin/knowledge/playwright-headed-browser.md`
+- `DOCUMENTATION/PROJECT_AUDIT_CLEANUP_AND_TESTING_PLAN.md` (section 5)
+
+Key commands:
+
+```powershell
+# Start dev server
+cd BACKEND
+C:\xampp\php\php.exe -S localhost:8000 -t public
+
+# PHPUnit smoke tests
+C:\xampp\php\php.exe vendor\phpunit\phpunit\phpunit --testsuite "Smoke Tests"
+
+# Playwright headed UI tests
+npx playwright test --project chromium --headed
+```
+
+## Devin Configuration
+
+Project-specific Devin workflows live in `.devin/workflows/`:
+
+- `ai-development-cycle.md` — main AI-driven development cycle.
+- `project-cleanup.md` — repository cleanup procedure.
+- `comprehensive-testing.md` — Playwright/PHPUnit testing procedure.

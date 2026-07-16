@@ -9,8 +9,8 @@
         "phpunit/phpunit": "^9.6"
     },
     "scripts": {
-        "test": "@php phpunit-9.6.phar --testsuite \"Smoke Tests\"",
-        "test:all": "@php phpunit-9.6.phar",
+        "test": "@php vendor/phpunit/phpunit/phpunit --testsuite \"Smoke Tests\"",
+        "test:all": "@php vendor/phpunit/phpunit/phpunit",
         "reload-autoload": "@php -r \"require 'vendor/autoload.php'; echo 'Autoloader ready. Run composer dump-autoload manually when available.\\n';\""
     },
     "config": {

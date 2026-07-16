@@ -1,4 +1,7 @@
 node_modules/
 playwright-report/
 test-results/
-.devin/
+
+# Allow Devin session workflows/knowledge to be shared across clones
+!.devin/workflows/
+!.devin/knowledge/

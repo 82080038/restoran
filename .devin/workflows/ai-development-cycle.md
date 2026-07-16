@@ -237,3 +237,11 @@ If any phase fails:
 
 **Version**: 1.0  
 **Last Updated**: 2026-07-05
+
+---
+
+## Supporting Workflows & Knowledge
+
+- **Cleanup**: Before committing, run `.devin/workflows/project-cleanup.md` to remove generated artifacts and obsolete test harnesses.
+- **Testing**: Execute `.devin/workflows/comprehensive-testing.md` for Playwright-headed and PHPUnit validation.
+- **Playwright Context**: Use `.devin/knowledge/playwright-headed-browser.md` as the canonical reference for selectors, URLs, test users, and E2E scenarios.
