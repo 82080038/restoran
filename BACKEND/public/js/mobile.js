@@ -421,7 +421,7 @@ class MobileApp {
     logout() {
         if (confirm('Are you sure you want to logout?')) {
             window.apiClient.clearAuth();
-            window.location.href = '/';
+            window.location.href = '/index.html';
         }
     }
 

@@ -54,7 +54,7 @@ class Dashboard {
 
     redirectToLogin() {
         const currentPath = window.location.pathname;
-        window.location.href = '/EBP/PLATFORM_BISNIS_ENTERPRISE/PRODUCTS/RESTAURANT_ERP/FRONTEND/login.html';
+        window.location.href = 'login.html';
     }
 
     loadUserInfo() {
@@ -599,7 +599,7 @@ class Dashboard {
 
     logout() {
         window.apiClient.clearAuth();
-        window.location.href = '/frontend/landing.html';
+        window.location.href = '/index.html';
     }
 
     formatPrice(price) {

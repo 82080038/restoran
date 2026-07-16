@@ -177,16 +177,16 @@
             </div>
             
             <div class="btn-group" id="btnGroup">
-                <a href="/EBP/PLATFORM_BISNIS_ENTERPRISE/PRODUCTS/RESTAURANT_ERP/FRONTEND/consumer/index.html" class="btn btn-primary">
+                <a href="consumer/index.html" class="btn btn-primary">
                     🍔 Browse as Consumer
                 </a>
-                <a href="/EBP/PLATFORM_BISNIS_ENTERPRISE/PRODUCTS/RESTAURANT_ERP/FRONTEND/login.html" class="btn btn-secondary">
+                <a href="login.html" class="btn btn-secondary">
                     👨‍💼 Admin Login
                 </a>
-                <a href="/EBP/PLATFORM_BISNIS_ENTERPRISE/PRODUCTS/RESTAURANT_ERP/FRONTEND/kiosk/index.html" class="btn btn-secondary">
+                <a href="kiosk/index.html" class="btn btn-secondary">
                     🖥️ Kiosk Mode
                 </a>
-                <a href="/EBP/PLATFORM_BISNIS_ENTERPRISE/PRODUCTS/RESTAURANT_ERP/FRONTEND/mobile/index.html" class="btn btn-secondary">
+                <a href="mobile/index.html" class="btn btn-secondary">
                     📱 Mobile Waiter
                 </a>
             </div>
@@ -204,77 +204,82 @@
             
             <select class="dev-login-select" id="devUserSelect">
                 <option value="">-- Select User --</option>
-                <optgroup label="Level 100 - Administrator">
-                    <option value="admin_restaurant">EBP Restaurant Demo</option>
-                    <option value="admin_cafe">EBP Coffee House</option>
-                    <option value="admin_bakery">EBP Artisan Bakery</option>
-                    <option value="admin_fastfood">EBP Burger Joint</option>
-                    <option value="admin_japanese">EBP Sushi Bar</option>
-                    <option value="admin_thai">EBP Thai Kitchen</option>
-                    <option value="admin_bar">EBP Sports Bar</option>
-                    <option value="admin_catering">EBP Catering Service</option>
-                    <option value="admin_babipangang">Babi Pangang Karo</option>
-                    <option value="admin_halal">Warung Makan Halal</option>
+                <optgroup label="Admin (Platform Owner)">
+                    <option value="admin_platform">Platform Administrator</option>
                 </optgroup>
-                <optgroup label="Level 80 - Manager">
-                    <option value="manager_restaurant">EBP Restaurant Demo</option>
-                    <option value="manager_cafe">EBP Coffee House</option>
-                    <option value="manager_bakery">EBP Artisan Bakery</option>
-                    <option value="manager_fastfood">EBP Burger Joint</option>
-                    <option value="manager_japanese">EBP Sushi Bar</option>
-                    <option value="manager_thai">EBP Thai Kitchen</option>
-                    <option value="manager_bar">EBP Sports Bar</option>
-                    <option value="manager_catering">EBP Catering Service</option>
-                    <option value="manager_babipangang">Babi Pangang Karo</option>
-                    <option value="manager_halal">Warung Makan Halal</option>
-                </optgroup>
-                <optgroup label="Level 50 - Kasir">
-                    <option value="kasir_restaurant">EBP Restaurant Demo</option>
-                    <option value="kasir_cafe">EBP Coffee House</option>
-                    <option value="kasir_bakery">EBP Artisan Bakery</option>
-                    <option value="kasir_fastfood">EBP Burger Joint</option>
-                    <option value="kasir_japanese">EBP Sushi Bar</option>
-                    <option value="kasir_thai">EBP Thai Kitchen</option>
-                    <option value="kasir_bar">EBP Sports Bar</option>
-                    <option value="kasir_catering">EBP Catering Service</option>
-                    <option value="kasir_babipangang">Babi Pangang Karo</option>
-                    <option value="kasir_halal">Warung Makan Halal</option>
-                </optgroup>
-                <optgroup label="Level 40 - Koki">
-                    <option value="koki_restaurant">EBP Restaurant Demo</option>
-                    <option value="koki_cafe">EBP Coffee House</option>
-                    <option value="koki_bakery">EBP Artisan Bakery</option>
-                    <option value="koki_fastfood">EBP Burger Joint</option>
-                    <option value="koki_japanese">EBP Sushi Bar</option>
-                    <option value="koki_thai">EBP Thai Kitchen</option>
-                    <option value="koki_bar">EBP Sports Bar</option>
-                    <option value="koki_catering">EBP Catering Service</option>
-                    <option value="koki_babipangang">Babi Pangang Karo</option>
-                    <option value="koki_halal">Warung Makan Halal</option>
-                </optgroup>
-                <optgroup label="Level 30 - Waiter">
-                    <option value="waiter_restaurant">EBP Restaurant Demo</option>
-                    <option value="waiter_cafe">EBP Coffee House</option>
-                    <option value="waiter_bakery">EBP Artisan Bakery</option>
-                    <option value="waiter_fastfood">EBP Burger Joint</option>
-                    <option value="waiter_japanese">EBP Sushi Bar</option>
-                    <option value="waiter_thai">EBP Thai Kitchen</option>
-                    <option value="waiter_bar">EBP Sports Bar</option>
-                    <option value="waiter_catering">EBP Catering Service</option>
-                    <option value="waiter_babipangang">Babi Pangang Karo</option>
-                    <option value="waiter_halal">Warung Makan Halal</option>
-                </optgroup>
-                <optgroup label="Level 20 - Stok">
-                    <option value="stok_restaurant">EBP Restaurant Demo</option>
-                    <option value="stok_cafe">EBP Coffee House</option>
-                    <option value="stok_bakery">EBP Artisan Bakery</option>
-                    <option value="stok_fastfood">EBP Burger Joint</option>
-                    <option value="stok_japanese">EBP Sushi Bar</option>
-                    <option value="stok_thai">EBP Thai Kitchen</option>
-                    <option value="stok_bar">EBP Sports Bar</option>
-                    <option value="stok_catering">EBP Catering Service</option>
-                    <option value="stok_babipangang">Babi Pangang Karo</option>
-                    <option value="stok_halal">Warung Makan Halal</option>
+                <optgroup label="Tenant Roles">
+                    <optgroup label="Administrator">
+                        <option value="admin_restaurant">EBP Restaurant Demo</option>
+                        <option value="admin_cafe">EBP Coffee House</option>
+                        <option value="admin_bakery">EBP Artisan Bakery</option>
+                        <option value="admin_fastfood">EBP Burger Joint</option>
+                        <option value="admin_japanese">EBP Sushi Bar</option>
+                        <option value="admin_thai">EBP Thai Kitchen</option>
+                        <option value="admin_bar">EBP Sports Bar</option>
+                        <option value="admin_catering">EBP Catering Service</option>
+                        <option value="admin_babipangang">Babi Pangang Karo</option>
+                        <option value="admin_halal">Warung Makan Halal</option>
+                    </optgroup>
+                    <optgroup label="Manager">
+                        <option value="manager_restaurant">EBP Restaurant Demo</option>
+                        <option value="manager_cafe">EBP Coffee House</option>
+                        <option value="manager_bakery">EBP Artisan Bakery</option>
+                        <option value="manager_fastfood">EBP Burger Joint</option>
+                        <option value="manager_japanese">EBP Sushi Bar</option>
+                        <option value="manager_thai">EBP Thai Kitchen</option>
+                        <option value="manager_bar">EBP Sports Bar</option>
+                        <option value="manager_catering">EBP Catering Service</option>
+                        <option value="manager_babipangang">Babi Pangang Karo</option>
+                        <option value="manager_halal">Warung Makan Halal</option>
+                    </optgroup>
+                    <optgroup label="Kasir">
+                        <option value="kasir_restaurant">EBP Restaurant Demo</option>
+                        <option value="kasir_cafe">EBP Coffee House</option>
+                        <option value="kasir_bakery">EBP Artisan Bakery</option>
+                        <option value="kasir_fastfood">EBP Burger Joint</option>
+                        <option value="kasir_japanese">EBP Sushi Bar</option>
+                        <option value="kasir_thai">EBP Thai Kitchen</option>
+                        <option value="kasir_bar">EBP Sports Bar</option>
+                        <option value="kasir_catering">EBP Catering Service</option>
+                        <option value="kasir_babipangang">Babi Pangang Karo</option>
+                        <option value="kasir_halal">Warung Makan Halal</option>
+                    </optgroup>
+                    <optgroup label="Koki">
+                        <option value="koki_restaurant">EBP Restaurant Demo</option>
+                        <option value="koki_cafe">EBP Coffee House</option>
+                        <option value="koki_bakery">EBP Artisan Bakery</option>
+                        <option value="koki_fastfood">EBP Burger Joint</option>
+                        <option value="koki_japanese">EBP Sushi Bar</option>
+                        <option value="koki_thai">EBP Thai Kitchen</option>
+                        <option value="koki_bar">EBP Sports Bar</option>
+                        <option value="koki_catering">EBP Catering Service</option>
+                        <option value="koki_babipangang">Babi Pangang Karo</option>
+                        <option value="koki_halal">Warung Makan Halal</option>
+                    </optgroup>
+                    <optgroup label="Waiter">
+                        <option value="waiter_restaurant">EBP Restaurant Demo</option>
+                        <option value="waiter_cafe">EBP Coffee House</option>
+                        <option value="waiter_bakery">EBP Artisan Bakery</option>
+                        <option value="waiter_fastfood">EBP Burger Joint</option>
+                        <option value="waiter_japanese">EBP Sushi Bar</option>
+                        <option value="waiter_thai">EBP Thai Kitchen</option>
+                        <option value="waiter_bar">EBP Sports Bar</option>
+                        <option value="waiter_catering">EBP Catering Service</option>
+                        <option value="waiter_babipangang">Babi Pangang Karo</option>
+                        <option value="waiter_halal">Warung Makan Halal</option>
+                    </optgroup>
+                    <optgroup label="Stok">
+                        <option value="stok_restaurant">EBP Restaurant Demo</option>
+                        <option value="stok_cafe">EBP Coffee House</option>
+                        <option value="stok_bakery">EBP Artisan Bakery</option>
+                        <option value="stok_fastfood">EBP Burger Joint</option>
+                        <option value="stok_japanese">EBP Sushi Bar</option>
+                        <option value="stok_thai">EBP Thai Kitchen</option>
+                        <option value="stok_bar">EBP Sports Bar</option>
+                        <option value="stok_catering">EBP Catering Service</option>
+                        <option value="stok_babipangang">Babi Pangang Karo</option>
+                        <option value="stok_halal">Warung Makan Halal</option>
+                    </optgroup>
                 </optgroup>
                 <optgroup label="Consumer Roles">
                     <option value="consumer_guest">Consumer Guest</option>
@@ -523,7 +528,7 @@
 
                         // Auto-redirect to dashboard after 2 seconds
                         setTimeout(() => {
-                            window.location.href = '/dashboard/index.html';
+                            window.location.href = 'dashboard/index.html';
                         }, 2000);
 
                         // Update button to show auto-redirect
@@ -532,10 +537,10 @@
                                 ✓ Logged in as ${userRole}${tenantDisplay}<br>
                                 <small>Redirecting to Dashboard...</small>
                             </p>
-                            <a href="/dashboard/index.html" class="btn btn-primary">
+                            <a href="dashboard/index.html" class="btn btn-primary">
                                 Go to Dashboard Now
                             </a>
-                            <a href="/consumer/index.html" class="btn btn-secondary">
+                            <a href="consumer/index.html" class="btn btn-secondary">
                                 Browse as Consumer Instead
                             </a>
                         `;
@@ -546,7 +551,7 @@
 
                         // Auto-redirect to consumer app after 2 seconds
                         setTimeout(() => {
-                            window.location.href = '/consumer/index.html';
+                            window.location.href = 'consumer/index.html';
                         }, 2000);
 
                         // Update button to show auto-redirect
@@ -555,10 +560,10 @@
                                 ✓ Logged in as ${userRole}<br>
                                 <small>Redirecting to Consumer App...</small>
                             </p>
-                            <a href="/consumer/index.html" class="btn btn-primary">
+                            <a href="consumer/index.html" class="btn btn-primary">
                                 Go to Consumer App Now
                             </a>
-                            <a href="/dashboard/index.html" class="btn btn-secondary">
+                            <a href="dashboard/index.html" class="btn btn-secondary">
                                 Go to Dashboard (if applicable)
                             </a>
                         `;
@@ -570,16 +575,16 @@
 
                     // Show default buttons
                     btnGroup.innerHTML = `
-                        <a href="/consumer/index.html" class="btn btn-primary">
+                        <a href="consumer/index.html" class="btn btn-primary">
                             🍔 Browse as Consumer
                         </a>
-                        <a href="/dashboard/index.html" class="btn btn-secondary">
+                        <a href="dashboard/index.html" class="btn btn-secondary">
                             👨‍💼 Admin Dashboard
                         </a>
-                        <a href="/kiosk/index.html" class="btn btn-secondary">
+                        <a href="kiosk/index.html" class="btn btn-secondary">
                             🖥️ Kiosk Mode
                         </a>
-                        <a href="/mobile/index.html" class="btn btn-secondary">
+                        <a href="mobile/index.html" class="btn btn-secondary">
                             📱 Mobile Waiter
                         </a>
                     `;

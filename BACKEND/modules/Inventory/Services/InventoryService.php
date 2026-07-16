@@ -16,7 +16,7 @@ class InventoryService
     {
         $this->inventoryRepository = new InventoryRepository();
         $this->transaction = new Transaction();
-        // $this->audit = new Audit();
+        $this->audit = new \App\Core\Audit();
     }
 
     public function getAllInventory(int $tenantId, ?int $branchId = null): array
@@ -60,7 +60,16 @@ class InventoryService
             $result = $this->inventoryRepository->create($inventory);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'INVENTORY',
+                    'CREATE_INVENTORY',
+                    $inventory->inventory_id,
+                    'inventory',
+                    null,
+                    $inventory->toArray()
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -88,7 +97,16 @@ class InventoryService
             $result = $this->inventoryRepository->update($inventory);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'INVENTORY',
+                    'UPDATE_INVENTORY',
+                    $inventoryId,
+                    'inventory',
+                    $oldInventory ? $oldInventory->toArray() : null,
+                    $inventory->toArray()
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -158,7 +176,16 @@ class InventoryService
                 
                 $this->inventoryRepository->recordTransaction($transaction);
                 
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'INVENTORY',
+                    'ADJUST_STOCK',
+                    $inventory->inventory_id,
+                    'inventory',
+                    ['old_quantity' => $oldQuantity],
+                    ['new_quantity' => $newQuantity, 'type' => $type, 'quantity' => $quantity]
+                );
                 
                 $this->transaction->commit();
                 return true;

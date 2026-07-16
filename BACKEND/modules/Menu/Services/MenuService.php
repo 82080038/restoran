@@ -31,7 +31,7 @@ class MenuService
         $this->productRepository = new ProductRepository();
         $this->recipeRepository = new RecipeRepository();
         $this->transaction = new Transaction();
-        // $this->audit = new Audit();
+        $this->audit = new \App\Core\Audit();
     }
 
     // Category Methods
@@ -57,7 +57,16 @@ class MenuService
             $result = $this->categoryRepository->create($category);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'MENU',
+                    'CREATE_CATEGORY',
+                    $category->category_id,
+                    'categories',
+                    null,
+                    $category->toArray()
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -85,7 +94,16 @@ class MenuService
             $result = $this->categoryRepository->update($category);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'MENU',
+                    'UPDATE_CATEGORY',
+                    $categoryId,
+                    'categories',
+                    $oldCategory ? $oldCategory->toArray() : null,
+                    $category->toArray()
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -109,7 +127,16 @@ class MenuService
             $result = $this->categoryRepository->delete($tenantId, $categoryId);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'MENU',
+                    'DELETE_CATEGORY',
+                    $categoryId,
+                    'categories',
+                    $oldCategory ? $oldCategory->toArray() : null,
+                    null
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -147,7 +174,16 @@ class MenuService
             $result = $this->productRepository->create($product);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'MENU',
+                    'CREATE_PRODUCT',
+                    $product->product_id,
+                    'products',
+                    null,
+                    $product->toArray()
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -175,7 +211,16 @@ class MenuService
             $result = $this->productRepository->update($product);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'MENU',
+                    'UPDATE_PRODUCT',
+                    $productId,
+                    'products',
+                    $oldProduct ? $oldProduct->toArray() : null,
+                    $product->toArray()
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -199,7 +244,16 @@ class MenuService
             $result = $this->productRepository->delete($tenantId, $productId);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'MENU',
+                    'DELETE_PRODUCT',
+                    $productId,
+                    'products',
+                    $oldProduct ? $oldProduct->toArray() : null,
+                    null
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -256,7 +310,16 @@ class MenuService
                     }
                 }
                 
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'MENU',
+                    'CREATE_RECIPE',
+                    $recipeId,
+                    'recipes',
+                    null,
+                    $recipe->toArray()
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -303,7 +366,16 @@ class MenuService
                     }
                 }
                 
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'MENU',
+                    'UPDATE_RECIPE',
+                    $recipeId,
+                    'recipes',
+                    $oldRecipe ? $oldRecipe->toArray() : null,
+                    $recipe->toArray()
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -327,7 +399,16 @@ class MenuService
             $result = $this->recipeRepository->delete($tenantId, $recipeId);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'MENU',
+                    'DELETE_RECIPE',
+                    $recipeId,
+                    'recipes',
+                    $oldRecipe ? $oldRecipe->toArray() : null,
+                    null
+                );
                 
                 $this->transaction->commit();
                 return true;

@@ -16,7 +16,7 @@ class TableService
     {
         $this->tableRepository = new TableRepository();
         $this->transaction = new Transaction();
-        // $this->audit = new Audit();
+        $this->audit = new \App\Core\Audit();
     }
 
     public function getAllTables(int $tenantId, ?int $branchId = null): array
@@ -60,7 +60,16 @@ class TableService
             $result = $this->tableRepository->create($table);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'TABLE',
+                    'CREATE_TABLE',
+                    $table->table_id,
+                    'restaurant_tables',
+                    null,
+                    $table->toArray()
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -88,7 +97,16 @@ class TableService
             $result = $this->tableRepository->update($table);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'TABLE',
+                    'UPDATE_TABLE',
+                    $tableId,
+                    'restaurant_tables',
+                    $oldTable ? $oldTable->toArray() : null,
+                    $table->toArray()
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -112,7 +130,16 @@ class TableService
             $result = $this->tableRepository->updateStatus($tenantId, $tableId, $status);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'TABLE',
+                    'UPDATE_TABLE_STATUS',
+                    $tableId,
+                    'restaurant_tables',
+                    ['old_status' => $oldTable ? $oldTable->status : null],
+                    ['new_status' => $status]
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -136,7 +163,16 @@ class TableService
             $result = $this->tableRepository->delete($tenantId, $tableId);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'TABLE',
+                    'DELETE_TABLE',
+                    $tableId,
+                    'restaurant_tables',
+                    $oldTable ? $oldTable->toArray() : null,
+                    null
+                );
                 
                 $this->transaction->commit();
                 return true;

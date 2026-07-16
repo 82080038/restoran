@@ -8,7 +8,7 @@
 const Config = {
     // API Configuration
     api: {
-        baseURL: window.API_BASE_URL || 'http://localhost:8000/api/v1',
+        baseURL: window.API_BASE_URL || '/api/v1',
         timeout: 30000, // 30 seconds
         retryAttempts: 3
     },

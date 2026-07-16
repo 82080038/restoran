@@ -16,7 +16,7 @@ class SettingService
     {
         $this->settingRepository = new SettingRepository();
         $this->transaction = new Transaction();
-        // $this->audit = new Audit();
+        $this->audit = new \App\Core\Audit();
     }
 
     public function getAllSettings(int $tenantId): array
@@ -64,7 +64,16 @@ class SettingService
             $result = $this->settingRepository->create($setting);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'SETTINGS',
+                    'CREATE_SETTING',
+                    $setting->setting_id,
+                    'settings',
+                    null,
+                    ['setting_key' => $setting->setting_key, 'setting_value' => $setting->setting_value]
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -92,7 +101,16 @@ class SettingService
             $result = $this->settingRepository->update($setting);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'SETTINGS',
+                    'UPDATE_SETTING',
+                    $settingId,
+                    'settings',
+                    ['old_value' => $oldSetting ? $oldSetting->setting_value : null],
+                    ['new_value' => $setting->setting_value]
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -114,7 +132,16 @@ class SettingService
             $result = $this->settingRepository->upsert($tenantId, $key, $value, $type, $description);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'SETTINGS',
+                    'UPSERT_SETTING',
+                    null,
+                    'settings',
+                    null,
+                    ['setting_key' => $key, 'setting_value' => $value, 'type' => $type]
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -138,7 +165,16 @@ class SettingService
             $result = $this->settingRepository->delete($tenantId, $settingId);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'SETTINGS',
+                    'DELETE_SETTING',
+                    $settingId,
+                    'settings',
+                    ['setting_id' => $settingId],
+                    null
+                );
                 
                 $this->transaction->commit();
                 return true;

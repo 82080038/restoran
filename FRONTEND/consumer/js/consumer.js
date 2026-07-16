@@ -9,7 +9,7 @@
 
 // API Configuration
 const API_CONFIG = {
-    BASE_URL: '/restoran/BACKEND/public/api/v1',
+    BASE_URL: '/api/v1',
     TIMEOUT: 30000,
     RETRY_ATTEMPTS: 3
 };
@@ -207,6 +207,7 @@ class RestaurantAPIClient {
             method: 'PUT',
             body: JSON.stringify(updateData)
         });
+    }
 
     async cancelReservation(reservationId) {
         return this.request(`/reservations/${reservationId}/cancel`, {

@@ -16,7 +16,7 @@ class ReservationService
     {
         $this->reservationRepository = new ReservationRepository();
         $this->transaction = new Transaction();
-        // $this->audit = new Audit();
+        $this->audit = new \App\Core\Audit();
     }
 
     public function getAllReservations(int $tenantId, ?int $branchId = null): array
@@ -74,7 +74,16 @@ class ReservationService
             $result = $this->reservationRepository->create($reservation);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'RESERVATION',
+                    'CREATE_RESERVATION',
+                    $reservation->reservation_id,
+                    'reservations',
+                    null,
+                    ['reservation_number' => $reservation->reservation_number, 'date' => $reservation->reservation_date, 'party_size' => $reservation->party_size]
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -121,7 +130,16 @@ class ReservationService
             $result = $this->reservationRepository->update($reservation);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'RESERVATION',
+                    'UPDATE_RESERVATION',
+                    $reservationId,
+                    'reservations',
+                    $oldReservation ? $oldReservation->toArray() : null,
+                    $reservation->toArray()
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -145,7 +163,16 @@ class ReservationService
             $result = $this->reservationRepository->updateStatus($tenantId, $reservationId, $status);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'RESERVATION',
+                    'UPDATE_RESERVATION_STATUS',
+                    $reservationId,
+                    'reservations',
+                    ['old_status' => $oldReservation ? $oldReservation->status : null],
+                    ['new_status' => $status]
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -169,7 +196,16 @@ class ReservationService
             $result = $this->reservationRepository->delete($tenantId, $reservationId);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'RESERVATION',
+                    'DELETE_RESERVATION',
+                    $reservationId,
+                    'reservations',
+                    $oldReservation ? $oldReservation->toArray() : null,
+                    null
+                );
                 
                 $this->transaction->commit();
                 return true;

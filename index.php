@@ -1,9 +1,8 @@
 <?php
 /**
  * Entry point for Restaurant ERP
- * Redirects to the Landing Page with role detection
+ * Routes all requests through the backend routing system
  */
 
-// Redirect to landing page
-header('Location: FRONTEND/landing.html');
-exit;
+// Include the backend routing
+require_once __DIR__ . '/BACKEND/public/index.php';

@@ -21,6 +21,7 @@ class Database
 {
     private string $host;
     private string $socket;
+    private string $port;
     private string $dbname;
     private string $username;
     private string $password;
@@ -31,7 +32,8 @@ class Database
     public function __construct(array $config = [])
     {
         $this->host = $config['host'] ?? getenv('DB_HOST') ?? 'localhost';
-        $this->socket = $config['socket'] ?? getenv('DB_SOCKET') ?? '/opt/lampp/var/mysql/mysql.sock';
+        $this->socket = $config['socket'] ?? getenv('DB_SOCKET') ?? '';
+        $this->port = $config['port'] ?? getenv('DB_PORT') ?? '3306';
         $this->dbname = $config['dbname'] ?? getenv('DB_NAME') ?? 'ebp_platform_db';
         $this->username = $config['username'] ?? getenv('DB_USER') ?? 'ebp_app';
         $this->password = $config['password'] ?? getenv('DB_PASSWORD') ?? 'ebp_secure_password_2026';
@@ -64,25 +66,14 @@ class Database
             return $this->pdo;
         }
 
+        // Determine connection strategy based on environment
+        $useSocket = !empty($this->socket) && file_exists($this->socket);
+        
         try {
-            // Try socket connection first
-            $this->pdo = new PDO(
-                "mysql:host={$this->host};unix_socket={$this->socket};dbname={$this->dbname};charset={$this->charset}",
-                $this->username,
-                $this->password,
-                [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_EMULATE_PREPARES => false,
-                    PDO::ATTR_PERSISTENT => false
-                ]
-            );
-            return $this->pdo;
-        } catch (PDOException $e) {
-            // Fallback to host connection if socket fails
-            try {
+            if ($useSocket) {
+                // Use Unix socket connection
                 $this->pdo = new PDO(
-                    "mysql:host={$this->host};dbname={$this->dbname};charset={$this->charset}",
+                    "mysql:host={$this->host};unix_socket={$this->socket};dbname={$this->dbname};charset={$this->charset}",
                     $this->username,
                     $this->password,
                     [
@@ -92,6 +83,55 @@ class Database
                         PDO::ATTR_PERSISTENT => false
                     ]
                 );
+            } else {
+                // Use TCP connection with port
+                $this->pdo = new PDO(
+                    "mysql:host={$this->host};port={$this->port};dbname={$this->dbname};charset={$this->charset}",
+                    $this->username,
+                    $this->password,
+                    [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                        PDO::ATTR_EMULATE_PREPARES => false,
+                        PDO::ATTR_PERSISTENT => false
+                    ]
+                );
+            }
+            return $this->pdo;
+        } catch (PDOException $e) {
+            // Fallback: try the other connection method
+            try {
+                if ($useSocket) {
+                    // Fallback to TCP
+                    $this->pdo = new PDO(
+                        "mysql:host={$this->host};port={$this->port};dbname={$this->dbname};charset={$this->charset}",
+                        $this->username,
+                        $this->password,
+                        [
+                            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                            PDO::ATTR_EMULATE_PREPARES => false,
+                            PDO::ATTR_PERSISTENT => false
+                        ]
+                    );
+                } else {
+                    // Fallback to socket (if specified)
+                    if (!empty($this->socket)) {
+                        $this->pdo = new PDO(
+                            "mysql:host={$this->host};unix_socket={$this->socket};dbname={$this->dbname};charset={$this->charset}",
+                            $this->username,
+                            $this->password,
+                            [
+                                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                                PDO::ATTR_EMULATE_PREPARES => false,
+                                PDO::ATTR_PERSISTENT => false
+                            ]
+                        );
+                    } else {
+                        throw $e;
+                    }
+                }
                 return $this->pdo;
             } catch (PDOException $e2) {
                 throw new PDOException("Database connection failed: " . $e2->getMessage());

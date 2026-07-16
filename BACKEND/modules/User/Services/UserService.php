@@ -16,7 +16,7 @@ class UserService
     {
         $this->userRepository = new UserRepository();
         $this->transaction = new Transaction();
-        // $this->audit = new Audit();
+        $this->audit = new \App\Core\Audit();
     }
 
     public function getAllUsers(int $tenantId, ?int $branchId = null): array
@@ -80,7 +80,16 @@ class UserService
                     $this->assignRoleByCode($userId, $data['role_code'], $tenantId);
                 }
 
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'USER',
+                    'CREATE_USER',
+                    $userId,
+                    'users',
+                    null,
+                    ['username' => $user->username, 'email' => $user->email, 'roles' => $data['roles'] ?? null]
+                );
 
                 $this->transaction->commit();
                 return true;
@@ -132,7 +141,16 @@ class UserService
                     return ['success' => false, 'message' => 'Role not found'];
                 }
 
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'USER',
+                    'CREATE_USER_WITH_ROLE',
+                    $userId,
+                    'users',
+                    null,
+                    ['username' => $user->username, 'email' => $user->email, 'role_code' => $roleCode]
+                );
 
                 $this->transaction->commit();
                 return ['success' => true, 'message' => 'User created successfully', 'user_id' => $userId];
@@ -208,7 +226,16 @@ class UserService
                     }
                 }
                 
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'USER',
+                    'UPDATE_USER',
+                    $userId,
+                    'users',
+                    ['old_data' => $oldUser ? $oldUser->toArray() : null],
+                    ['new_data' => $user->toArray()]
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -241,7 +268,16 @@ class UserService
             $result = $this->userRepository->updatePassword($tenantId, $userId, $hashedPassword);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'USER',
+                    'CHANGE_PASSWORD',
+                    $userId,
+                    'users',
+                    null,
+                    ['user_id' => $userId]
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -265,7 +301,16 @@ class UserService
             $result = $this->userRepository->delete($tenantId, $userId);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'USER',
+                    'DELETE_USER',
+                    $userId,
+                    'users',
+                    $oldUser ? $oldUser->toArray() : null,
+                    null
+                );
                 
                 $this->transaction->commit();
                 return true;

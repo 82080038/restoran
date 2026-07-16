@@ -16,7 +16,7 @@ class KitchenService
     {
         $this->kitchenRepository = new KitchenRepository();
         $this->transaction = new Transaction();
-        // $this->audit = new Audit();
+        $this->audit = new \App\Core\Audit();
     }
 
     public function getAllKitchenOrders(int $tenantId, ?int $branchId = null): array
@@ -111,7 +111,16 @@ class KitchenService
                     $this->kitchenRepository->createItem($kitchenOrderItem);
                 }
                 
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'KITCHEN',
+                    'CREATE_KITCHEN_ORDER',
+                    $kitchenOrderId,
+                    'kitchen_orders',
+                    null,
+                    ['order_id' => $orderId, 'branch_id' => $branchId]
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -135,7 +144,16 @@ class KitchenService
             $result = $this->kitchenRepository->updateStatus($tenantId, $kitchenOrderId, $status);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'KITCHEN',
+                    'UPDATE_KITCHEN_ORDER_STATUS',
+                    $kitchenOrderId,
+                    'kitchen_orders',
+                    ['old_status' => $oldKitchenOrder ? $oldKitchenOrder->status : null],
+                    ['new_status' => $status]
+                );
                 
                 $this->transaction->commit();
                 return true;
@@ -159,7 +177,16 @@ class KitchenService
             $result = $this->kitchenRepository->updatePriority($tenantId, $kitchenOrderId, $priority);
             
             if ($result) {
-                // $this->audit->log();
+                $this->audit->log(
+                    $tenantId,
+                    $_SESSION['user_id'] ?? null,
+                    'KITCHEN',
+                    'UPDATE_KITCHEN_ORDER_PRIORITY',
+                    $kitchenOrderId,
+                    'kitchen_orders',
+                    ['old_priority' => $oldKitchenOrder ? $oldKitchenOrder->priority : null],
+                    ['new_priority' => $priority]
+                );
                 
                 $this->transaction->commit();
                 return true;

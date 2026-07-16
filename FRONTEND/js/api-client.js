@@ -145,7 +145,7 @@ class APIClient {
                     // Handle 401 Unauthorized - token expired
                     if (response.status === 401) {
                         this.clearAuth();
-                        window.location.href = '/dashboard/index.html';
+                        window.location.href = 'login.html';
                         throw new Error('Session expired. Please login again.');
                     }
                     
