@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Franchise\Repositories;
+namespace App\Modules\Franchise\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class FranchiseRepository
 {

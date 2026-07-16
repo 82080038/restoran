@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Consumer\Repositories;
+namespace App\Modules\Consumer\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class ConsumerRepository
 {

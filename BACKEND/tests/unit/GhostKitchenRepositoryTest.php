@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\GhostKitchen\Repositories\GhostKitchenRepository;
-use Core\Database;
+use App\Modules\GhostKitchen\Repositories\GhostKitchenRepository;
+use App\Core\Database;
 
 class GhostKitchenRepositoryTest extends TestCase
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\GhostKitchen\Repositories;
+namespace App\Modules\GhostKitchen\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class GhostKitchenRepository
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Menu\Models;
+namespace App\Modules\Menu\Models;
 
 class ProductAllergen
 {

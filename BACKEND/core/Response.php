@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
+namespace App\Core;
+
 /**
  * EBP Core - API Response Handler
  * 
  * This is a core component of the Enterprise Business Platform
  * Used for standardized API responses across all EBP products
  * 
- * @package EBP\Core\API
+ * @package EBP\App\Core\API
  * @version 1.0.0
  */
 

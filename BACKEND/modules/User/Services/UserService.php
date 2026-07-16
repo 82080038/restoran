@@ -61,7 +61,7 @@ class UserService
             $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
 
             $data['tenant_id'] = $tenantId;
-            $user = new \Modules\User\Models\User($data);
+            $user = new \App\Modules\User\Models\User($data);
 
             $result = $this->userRepository->create($user);
 
@@ -118,7 +118,7 @@ class UserService
             $userData['tenant_id'] = $tenantId;
             $userData['branch_id'] = $branchId;
 
-            $user = new \Modules\User\Models\User($userData);
+            $user = new \App\Modules\User\Models\User($userData);
             $result = $this->userRepository->create($user);
 
             if ($result) {
@@ -189,7 +189,7 @@ class UserService
                 $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
             }
             
-            $user = new \Modules\User\Models\User($data);
+            $user = new \App\Modules\User\Models\User($data);
             
             $result = $this->userRepository->update($user);
             

@@ -8,15 +8,7 @@ class SimpleEmployeeController
     // Simple endpoint to get employees without middleware
     public function getEmployees($request = null)
     {
-                $host = 'localhost';
-        $dbname = 'ebp_restaurant_db';
-        $username = 'ebp_app';
-        $password = 'ebp_secure_password_2026';
-        $socket = '/opt/lampp/var/mysql/mysql.sock';
-
-        $dsn = "mysql:host=$host;dbname=$dbname;unix_socket=$socket;charset=utf8mb4";
-        $db = new PDO($dsn, $username, $password);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db = db();
 
         $sql = "SELECT e.employee_id, e.employee_name, e.position, e.phone, e.email, e.salary, e.start_date, e.status
                 FROM employees e

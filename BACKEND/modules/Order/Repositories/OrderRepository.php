@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Order\Repositories;
+namespace App\Modules\Order\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class OrderRepository
 {

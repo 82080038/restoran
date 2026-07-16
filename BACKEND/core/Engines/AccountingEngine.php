@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Core;
+
+
+use PDO;
 require_once __DIR__ . '/../Interfaces/EngineInterface.php';
 
 class AccountingEngine implements EngineInterface

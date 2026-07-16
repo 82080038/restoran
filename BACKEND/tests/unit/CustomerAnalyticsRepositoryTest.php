@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\CustomerAnalytics\Repositories\CustomerAnalyticsRepository;
-use Core\Database;
+use App\Modules\CustomerAnalytics\Repositories\CustomerAnalyticsRepository;
+use App\Core\Database;
 
 class CustomerAnalyticsRepositoryTest extends TestCase
 {

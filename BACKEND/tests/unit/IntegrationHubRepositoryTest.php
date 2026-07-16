@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\IntegrationHub\Repositories\IntegrationHubRepository;
-use Core\Database;
+use App\Modules\IntegrationHub\Repositories\IntegrationHubRepository;
+use App\Core\Database;
 
 class IntegrationHubRepositoryTest extends TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\Auth\Services\AuthService;
-use Modules\Auth\Repositories\AuthRepository;
-use Core\Database;
+use App\Modules\Auth\Services\AuthService;
+use App\Modules\Auth\Repositories\AuthRepository;
+use App\Core\Database;
 
 class AuthServiceTest extends TestCase
 {

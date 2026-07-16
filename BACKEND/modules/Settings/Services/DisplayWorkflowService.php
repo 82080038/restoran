@@ -6,7 +6,7 @@
  * Manages tenant-specific display workflow configurations
  * for different restaurant styles (Padang, buffet, display-based, etc.)
  * 
- * @package EBP\Modules\Settings\Services
+ * @package EBP\App\Modules\Settings\Services
  * @version 1.0.0
  */
 
@@ -16,15 +16,7 @@ class DisplayWorkflowService
 
     public function __construct()
     {
-        $host = 'localhost';
-        $dbname = 'ebp_restaurant_db';
-        $username = 'ebp_app';
-        $password = 'ebp_secure_password_2026';
-        $socket = '/opt/lampp/var/mysql/mysql.sock';
-
-        $dsn = "mysql:host=$host;dbname=$dbname;unix_socket=$socket;charset=utf8mb4";
-        $this->db = new PDO($dsn, $username, $password);
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->db = db();
     }
 
     /**

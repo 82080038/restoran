@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace App\Core;
+
 /**
  * EBP Core - Screen Size Helper
  * 

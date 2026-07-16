@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Reconciliation\Repositories;
+namespace App\Modules\Reconciliation\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class ReconciliationRepository
 {

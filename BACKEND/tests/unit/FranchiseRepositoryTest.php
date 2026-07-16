@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\Franchise\Repositories\FranchiseRepository;
-use Core\Database;
+use App\Modules\Franchise\Repositories\FranchiseRepository;
+use App\Core\Database;
 
 class FranchiseRepositoryTest extends TestCase
 {

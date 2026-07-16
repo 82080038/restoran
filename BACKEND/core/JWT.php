@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
+namespace App\Core;
+
 /**
  * EBP Core - JWT (JSON Web Token) Implementation
  * 
  * This is a core component of the Enterprise Business Platform
  * Used for authentication and authorization across all EBP products
  * 
- * @package EBP\Core\Authentication
+ * @package EBP\App\Core\Authentication
  * @version 1.0.0
  */
 

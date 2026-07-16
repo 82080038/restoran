@@ -1,12 +1,16 @@
 <?php
 
+namespace App\Core;
+
+
+use PDO;
 /**
  * Currency Service
  * 
  * Handles multi-currency support including conversion rates,
  * currency formatting, and tenant-specific currency configurations.
  * 
- * @package EBP\Core\Services
+ * @package EBP\App\Core\Services
  * @version 1.0.0
  */
 

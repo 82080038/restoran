@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\Order\Repositories\OrderRepository;
-use Core\Database;
+use App\Modules\Order\Repositories\OrderRepository;
+use App\Core\Database;
 
 class OrderRepositoryTest extends TestCase
 {

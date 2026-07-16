@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\IntegrationHub\Repositories;
+namespace App\Modules\IntegrationHub\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class IntegrationHubRepository
 {

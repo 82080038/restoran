@@ -1,44 +1,38 @@
 <?php
 
+namespace App\Core;
+
 // Load EBP Core and Backend Components
 require_once __DIR__ . '/../bootstrap.php';
 
 class Transaction
 {
+    private static ?self $instance = null;
 
     private $db;
 
-    public function __construct()
+    private function __construct()
     {
-        $database = new Database();
-        $this->db = $database->connect();
+        $this->db = Database::getInstance()->connect();
     }
 
-
-
-    public function begin()
+    public static function getInstance(): self
     {
-
-        $this->db->beginTransaction();
-
+        return self::$instance ??= new self();
     }
 
-
-
-    public function commit()
+    public static function begin(): void
     {
-
-        $this->db->commit();
-
+        self::getInstance()->db->beginTransaction();
     }
 
-
-
-    public function rollback()
+    public static function commit(): void
     {
-
-        $this->db->rollBack();
-
+        self::getInstance()->db->commit();
     }
 
+    public static function rollback(): void
+    {
+        self::getInstance()->db->rollBack();
+    }
 }

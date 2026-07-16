@@ -7,7 +7,7 @@ if (!class_exists('Database')) {
 /**
  * Loyalty Repository
  * 
- * @package EBP\Modules\Loyalty
+ * @package EBP\App\Modules\Loyalty
  * @version 1.0.0
  */
 

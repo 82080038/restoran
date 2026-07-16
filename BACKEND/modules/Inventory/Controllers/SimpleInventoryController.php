@@ -8,15 +8,7 @@ class SimpleInventoryController
     // Simple endpoint to get inventory without middleware
     public function getInventory($request = null)
     {
-                $host = 'localhost';
-        $dbname = 'ebp_restaurant_db';
-        $username = 'ebp_app';
-        $password = 'ebp_secure_password_2026';
-        $socket = '/opt/lampp/var/mysql/mysql.sock';
-
-        $dsn = "mysql:host=$host;dbname=$dbname;unix_socket=$socket;charset=utf8mb4";
-        $db = new PDO($dsn, $username, $password);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db = db();
 
         $sql = "SELECT i.inventory_id, i.product_id, i.quantity, i.unit, i.minimum_stock, i.maximum_stock, i.status,
                 p.product_name, p.product_code
@@ -34,15 +26,7 @@ class SimpleInventoryController
     // Simple endpoint to get low stock items without middleware
     public function getLowStock($request = null)
     {
-                $host = 'localhost';
-        $dbname = 'ebp_restaurant_db';
-        $username = 'ebp_app';
-        $password = 'ebp_secure_password_2026';
-        $socket = '/opt/lampp/var/mysql/mysql.sock';
-
-        $dsn = "mysql:host=$host;dbname=$dbname;unix_socket=$socket;charset=utf8mb4";
-        $db = new PDO($dsn, $username, $password);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $db = db();
 
         $sql = "SELECT i.inventory_id, i.product_id, i.quantity, i.minimum_stock, i.unit,
                 p.product_name, p.product_code

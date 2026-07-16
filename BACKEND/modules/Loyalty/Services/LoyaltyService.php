@@ -27,7 +27,7 @@ if (!class_exists('Audit')) {
 /**
  * Loyalty Service
  * 
- * @package EBP\Modules\Loyalty
+ * @package EBP\App\Modules\Loyalty
  * @version 1.0.0
  */
 

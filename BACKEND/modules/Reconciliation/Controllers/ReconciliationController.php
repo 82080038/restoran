@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Modules\Reconciliation\Controllers;
+use App\Core\Transaction;
+
 
 use App\Core\BaseController;
 use App\Modules\Reconciliation\Models\ReconciliationTransaction;

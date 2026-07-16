@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Modules\Offline\Services;
+use App\Core\Transaction;
+
 
 use App\Modules\Offline\Models\OfflineTransaction;
 use App\Modules\Offline\Models\OfflineDataSnapshot;

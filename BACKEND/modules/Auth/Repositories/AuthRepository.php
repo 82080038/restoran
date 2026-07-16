@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Auth\Repositories;
+namespace App\Modules\Auth\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class AuthRepository
 {
@@ -18,12 +18,12 @@ class AuthRepository
      */
     public function findByUsername($username)
     {
-        $sql = "SELECT u.user_id, u.username, u.password_hash, u.tenant_id, u.branch_id, 
+        $sql = "SELECT u.user_id, u.username, u.password, u.tenant_id, u.branch_id, 
                        u.full_name, u.email, u.phone, u.is_platform_owner, u.status,
-                       r.role_id, r.role_name, r.role_level
+                       r.role_id, r.role_name
                 FROM users u
-                INNER JOIN user_roles ur ON u.user_id = ur.user_id
-                INNER JOIN roles r ON ur.role_id = r.role_id
+                LEFT JOIN user_roles ur ON u.user_id = ur.user_id
+                LEFT JOIN roles r ON ur.role_id = r.role_id
                 WHERE u.username = :username 
                 AND u.status = 'ACTIVE'";
         
@@ -39,10 +39,10 @@ class AuthRepository
     {
         $sql = "SELECT u.user_id, u.username, u.tenant_id, u.branch_id, 
                        u.full_name, u.email, u.phone, u.is_platform_owner, u.status,
-                       r.role_id, r.role_name, r.role_level
+                       r.role_id, r.role_name
                 FROM users u
-                INNER JOIN user_roles ur ON u.user_id = ur.user_id
-                INNER JOIN roles r ON ur.role_id = r.role_id
+                LEFT JOIN user_roles ur ON u.user_id = ur.user_id
+                LEFT JOIN roles r ON ur.role_id = r.role_id
                 WHERE u.user_id = :user_id";
         
         $params = ['user_id' => $userId];
@@ -62,7 +62,7 @@ class AuthRepository
      */
     public function getUserPermissions($userId)
     {
-        $sql = "SELECT DISTINCT p.permission_code, p.permission_name, p.permission_description
+        $sql = "SELECT DISTINCT p.permission_code, p.permission_name, p.description as permission_description
                 FROM permissions p
                 INNER JOIN role_permissions rp ON p.permission_id = rp.permission_id
                 INNER JOIN user_roles ur ON rp.role_id = ur.role_id
@@ -78,10 +78,10 @@ class AuthRepository
      */
     public function createUser($data)
     {
-        $sql = "INSERT INTO users (tenant_id, branch_id, username, password_hash, full_name, email, phone, 
-                                     is_platform_owner, status, created_by, created_at)
-                VALUES (:tenant_id, :branch_id, :username, :password_hash, :full_name, :email, :phone,
-                        :is_platform_owner, :status, :created_by, NOW())";
+        $sql = "INSERT INTO users (tenant_id, branch_id, username, password, full_name, email, phone, 
+                                     is_platform_owner, status)
+                VALUES (:tenant_id, :branch_id, :username, :password, :full_name, :email, :phone,
+                        :is_platform_owner, :status)";
         
         $stmt = $this->db->prepare($sql);
         $stmt->execute($data);
@@ -93,13 +93,24 @@ class AuthRepository
      */
     public function assignRole($userId, $roleId)
     {
-        $sql = "INSERT INTO user_roles (user_id, role_id, created_at)
-                VALUES (:user_id, :role_id, NOW())";
+        $sql = "INSERT INTO user_roles (user_id, role_id)
+                VALUES (:user_id, :role_id)";
         
         $stmt = $this->db->prepare($sql);
         return $stmt->execute(['user_id' => $userId, 'role_id' => $roleId]);
     }
     
+    /**
+     * Remove role from user
+     */
+    public function removeRole($userId, $roleId)
+    {
+        $sql = "DELETE FROM user_roles WHERE user_id = :user_id AND role_id = :role_id";
+        
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute(['user_id' => $userId, 'role_id' => $roleId]);
+    }
+
     /**
      * Update user
      */
@@ -131,7 +142,7 @@ class AuthRepository
     public function updatePassword($userId, $passwordHash, $tenantId = null)
     {
         $sql = "UPDATE users 
-                SET password_hash = :password_hash, updated_at = NOW() 
+                SET password = :password_hash, updated_at = NOW() 
                 WHERE user_id = :user_id";
         
         $params = ['user_id' => $userId, 'password_hash' => $passwordHash];

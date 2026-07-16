@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\Innovation\Repositories\InnovationRepository;
-use Core\Database;
+use App\Modules\Innovation\Repositories\InnovationRepository;
+use App\Core\Database;
 
 class InnovationRepositoryTest extends TestCase
 {

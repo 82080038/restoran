@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Customer\Repositories;
+namespace App\Modules\Customer\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class CustomerRepository
 {

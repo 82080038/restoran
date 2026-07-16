@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Core;
+
 if (!class_exists('FeatureToggleService')) {
     require_once __DIR__ . '/FeatureToggleService.php';
 }

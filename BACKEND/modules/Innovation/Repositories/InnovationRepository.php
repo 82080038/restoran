@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Innovation\Repositories;
+namespace App\Modules\Innovation\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class InnovationRepository
 {

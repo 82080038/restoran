@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Feedback\Repositories;
+namespace App\Modules\Feedback\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class FeedbackRepository
 {

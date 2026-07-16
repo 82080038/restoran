@@ -1,12 +1,14 @@
 <?php
 
+namespace App\Core;
+
 /**
  * Integration Connector
  * 
  * Base class for external system integrations
  * Provides common functionality for API connections, webhooks, and data normalization
  * 
- * @package EBP\Core\Integration
+ * @package EBP\App\Core\Integration
  * @version 1.0.0
  */
 

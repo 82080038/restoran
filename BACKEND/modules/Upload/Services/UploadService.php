@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Upload\Services;
+namespace App\Modules\Upload\Services;
 
-use Core\Database;
-use Core\Transaction;
-use Core\Audit;
+use App\Core\Database;
+use App\Core\Transaction;
+use App\Core\Audit;
 
 class UploadService
 {

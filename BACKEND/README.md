@@ -64,7 +64,12 @@ PLATFORM_BISNIS_ENTERPRISE/PRODUCTS/RESTAURANT_ERP/
 │           └── Order.php
 │
 ├── routes/
-│   └── api.php
+│   ├── api.php              (bootstrap + include route files)
+│   ├── controllers.php      (controller requires until full PSR-4)
+│   └── api/                 (per-module route files)
+│       ├── 001_Auth_Routes.php
+│       ├── 004_Sales_Routes.php
+│       └── ...
 
 ├── database/
 │   ├── schema.sql
@@ -97,33 +102,37 @@ PLATFORM_BISNIS_ENTERPRISE/PRODUCTS/RESTAURANT_ERP/
 
 ## Setup
 
-1. **Database Setup:**
-   - Option 1: Use automated setup script (recommended):
-     ```bash
-     php setup_database.php
-     ```
-   - Option 2: Import from current data:
-     ```bash
-     mysql -u ebp_app -p ebp_restaurant_db < database/current_data.sql
-     ```
-   - Option 3: Import schema only:
-     ```bash
-     mysql -u ebp_app -p ebp_restaurant_db < database/schema.sql
-     ```
-   - Run seed data for initial admin user:
-     ```bash
-     php seed_data.php
-     ```
-   - Run sample data seeding for testing:
-     ```bash
-     php seed_sample_data.php
-     ```
+1. **Database Setup (migration-based):**
+   ```bash
+   php run_php_migrations.php
+   ```
+   This runs all PHP migrations in `migrations/` and tracks them in the `migrations` table.
 
-2. Configure environment variables:
+2. **Seed initial data:**
+   ```bash
+   mysql -u ebp_app -p ebp_restaurant_db < ../DATABASE/SEED_DATA.sql
+   ```
+
+3. **Configure environment variables:**
    - Copy `.env.example` to `.env`
-   - Update database credentials in `.env`
+   - Update database credentials and **change default JWT secret / DB password before production**
+   - Key variables: `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`
 
-3. Configure web server to point to `public/` directory
+4. **Autoloading:**
+   - Composer PSR-4 is configured in `composer.json`
+   - Regenerate autoload files with the bundled Composer phar:
+     ```bash
+     php composer.phar dump-autoload --no-dev
+     # or, via Composer script
+     php composer.phar run dump-autoload
+     ```
+
+5. Configure web server to point to `public/` directory
+
+6. **Start dev server (optional):**
+   ```bash
+   php -S localhost:8080 -t public
+   ```
 
 ## Database
 
@@ -155,7 +164,7 @@ See `database/README.md` for detailed database documentation.
 ```json
 {
   "username": "admin",
-  "password": "password"
+  "password": "admin123"
 }
 ```
 
@@ -211,6 +220,14 @@ Authorization: Bearer {access_token}
 }
 ```
 
+## Architecture Refactors
+
+- **PSR-4 Autoloading** - `App\Core\` and `App\Modules\` namespaces via Composer
+- **Lazy Controllers** - Controllers wrapped in `LazyController` so only the requested route instantiates a controller
+- **Split Routes** - `routes/api.php` delegates to per-module route files in `routes/api/`
+- **Centralized DB** - `db()` helper and `Database` singleton replace hard-coded PDO blocks
+- **Environment Config** - Credentials live in `.env` / `bootstrap.php` defaults, not in module files
+
 ## Enterprise Features Implemented
 
 ✅ **JWT Authentication** - Token-based authentication with expiration
@@ -262,6 +279,23 @@ Response
 6. **Engines** - Business engines (Stock, Kitchen, Accounting)
 7. **Audit** - Activity logging
 
+## Testing
+
+Run the PHPUnit smoke tests (public endpoints + login) against the dev server:
+
+```bash
+php -S localhost:8080 -t public
+C:\xampp\php\php.exe phpunit-9.6.phar --testsuite "Smoke Tests"
+# or, via Composer script
+php composer.phar test
+```
+
+Or lint all PHP route files:
+
+```powershell
+Get-ChildItem -Path routes\api -Filter *.php | ForEach-Object { & C:\xampp\php\php.exe -l $_.FullName }
+```
+
 ## Security Features
 
 - JWT token authentication
@@ -270,3 +304,5 @@ Response
 - Tenant data isolation
 - SQL injection prevention (PDO prepared statements)
 - CORS headers configuration
+
+> **Important:** Change `JWT_SECRET` and database credentials in `.env` before deploying to production. The default values in `bootstrap.php` are only for local development.

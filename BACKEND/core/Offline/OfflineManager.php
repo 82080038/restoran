@@ -1,12 +1,16 @@
 <?php
 
+namespace App\Core;
+
+
+use PDO;
 /**
  * OfflineManager - Offline Capability Manager
  * 
  * Handles offline data storage, synchronization, conflict resolution,
  * and offline mode detection for the RESTAURANT_ERP system
  * 
- * @package EBP\Core\Offline
+ * @package EBP\App\Core\Offline
  * @version 1.0.0
  */
 

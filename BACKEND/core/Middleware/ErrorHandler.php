@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Core;
+
+use Throwable;
+
 /**
  * Error Handler Middleware
  * Standardized error handling for the application with structured logging

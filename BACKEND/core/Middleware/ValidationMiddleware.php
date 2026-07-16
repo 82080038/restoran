@@ -1,11 +1,13 @@
 <?php
 
+namespace App\Core;
+
 /**
  * EBP Core - Request Validation Middleware
  * 
  * This middleware validates incoming request data
  * 
- * @package EBP\Core\Middleware
+ * @package EBP\App\Core\Middleware
  * @version 1.0.0
  */
 

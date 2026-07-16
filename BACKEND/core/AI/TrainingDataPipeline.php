@@ -1,7 +1,9 @@
 <?php
 
-use PDO;
+namespace App\Core;
 
+
+use PDO;
 require_once __DIR__ . '/../Interfaces/EngineInterface.php';
 
 /**
@@ -11,7 +13,7 @@ require_once __DIR__ . '/../Interfaces/EngineInterface.php';
  * It handles data extraction from various sources, feature engineering,
  * data validation, and export for model training.
  * 
- * @package EBP\Core\AI
+ * @package EBP\App\Core\AI
  * @version 1.0.0
  */
 

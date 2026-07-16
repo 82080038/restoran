@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Core;
+
+
+use PDO;
 class ReportQueueService
 {
     private $db;

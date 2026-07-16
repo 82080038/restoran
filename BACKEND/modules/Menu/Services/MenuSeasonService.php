@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Modules\Menu\Services;
+namespace App\Modules\Menu\Services;
 
-use Modules\Menu\Models\MenuSeason;
+use App\Modules\Menu\Models\MenuSeason;
 use PDO;
 
 class MenuSeasonService

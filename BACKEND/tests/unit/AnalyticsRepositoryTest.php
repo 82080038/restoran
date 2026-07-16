@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\Analytics\Repositories\AnalyticsRepository;
-use Core\Database;
+use App\Modules\Analytics\Repositories\AnalyticsRepository;
+use App\Core\Database;
 
 class AnalyticsRepositoryTest extends TestCase
 {

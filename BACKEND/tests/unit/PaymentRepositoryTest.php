@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\Payment\Repositories\PaymentRepository;
-use Core\Database;
+use App\Modules\Payment\Repositories\PaymentRepository;
+use App\Core\Database;
 
 class PaymentRepositoryTest extends TestCase
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Consumer\Services;
+namespace App\Modules\Consumer\Services;
 
-use Core\Database;
-use Core\Transaction;
-use Core\Audit;
-use Modules\Consumer\Repositories\ConsumerRepository;
+use App\Core\Database;
+use App\Core\Transaction;
+use App\Core\Audit;
+use App\Modules\Consumer\Repositories\ConsumerRepository;
 
 class ConsumerService
 {

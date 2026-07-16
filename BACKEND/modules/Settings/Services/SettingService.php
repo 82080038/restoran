@@ -59,7 +59,7 @@ class SettingService
             }
             
             $data['tenant_id'] = $tenantId;
-            $setting = new \Modules\Settings\Models\Setting($data);
+            $setting = new \App\Modules\Settings\Models\Setting($data);
             
             $result = $this->settingRepository->create($setting);
             
@@ -87,7 +87,7 @@ class SettingService
             
             $data['tenant_id'] = $tenantId;
             $data['setting_id'] = $settingId;
-            $setting = new \Modules\Settings\Models\Setting($data);
+            $setting = new \App\Modules\Settings\Models\Setting($data);
             
             $result = $this->settingRepository->update($setting);
             

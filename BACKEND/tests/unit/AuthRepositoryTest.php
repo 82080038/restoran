@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\Auth\Repositories\AuthRepository;
-use Core\Database;
+use App\Modules\Auth\Repositories\AuthRepository;
+use App\Core\Database;
 
 class AuthRepositoryTest extends TestCase
 {

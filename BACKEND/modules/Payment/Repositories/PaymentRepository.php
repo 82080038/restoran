@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Payment\Repositories;
+namespace App\Modules\Payment\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class PaymentRepository
 {

@@ -1,12 +1,16 @@
 <?php
 
+namespace App\Core;
+
+
+use PDO;
 /**
  * Webhook Handler
  * 
  * Handles incoming webhooks from external systems
  * Supports signature validation, payload parsing, and event routing
  * 
- * @package EBP\Core\Integration
+ * @package EBP\App\Core\Integration
  * @version 1.0.0
  */
 

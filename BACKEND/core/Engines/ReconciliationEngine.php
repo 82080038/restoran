@@ -1,7 +1,9 @@
 <?php
 
-use PDO;
+namespace App\Core;
 
+
+use PDO;
 require_once __DIR__ . '/../Interfaces/EngineInterface.php';
 
 /**
@@ -11,7 +13,7 @@ require_once __DIR__ . '/../Interfaces/EngineInterface.php';
  * discrepancy detection, and reconciliation reporting to solve the
  * fundamental problem of payment verification and data trust.
  * 
- * @package EBP\Core\Engines
+ * @package EBP\App\Core\Engines
  * @version 1.0.0
  */
 

@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\Reconciliation\Repositories\ReconciliationRepository;
-use Core\Database;
+use App\Modules\Reconciliation\Repositories\ReconciliationRepository;
+use App\Core\Database;
 
 class ReconciliationRepositoryTest extends TestCase
 {

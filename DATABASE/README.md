@@ -5,90 +5,108 @@ This directory contains the complete database schema for the RESTAURANT_ERP syst
 ## Structure
 
 ### Schema Files
-- `EBP_RESTAURANT_CAFE_MYSQL_SCHEMA.sql` - Complete database schema (main schema file)
+- `EBP_RESTAURANT_CAFE_MYSQL_SCHEMA.sql` - Legacy complete schema (kept for reference)
+- `EBP_RESTAURANT_CAFE_COMPLETE_SCHEMA.sql` - Full schema export (reference)
 - `EBP_DESAIN_DATABASE_RESTAURANT_CAFE.md` - Database design documentation
 - `EBP_ERD_RESTAURANT_CAFE.md` - Entity Relationship Diagram documentation
 
 ### Seed Data
-- `SEED_DATA.sql` - Initial seed data for development
+- `SEED_DATA.sql` - Initial seed data for development (aligned with the migration schema)
 
-## Migration Runner
+### Migration Files
+- `BACKEND/migrations/*.php` - Incremental PHP migrations (the active schema source)
+- `BACKEND/migrations/MigrationRunner.php` - Migration tracker/executor
 
-Use the automated migration runner to set up the database:
+## Migration Runner (Recommended)
+
+Use the PHP migration runner to set up the database:
 
 ```bash
 cd BACKEND
-php run_migrations.php
+C:\xampp\php\php.exe run_php_migrations.php migrate
 ```
 
-The migration runner will:
-- Automatically connect to MySQL (supports XAMPP, MAMP, Docker)
+Backend entry point: `BACKEND/public/index.php`.
+After migrations and seeding, verify with:
+
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8080/api/v1/public/menu/categories" -Method GET
+```
+
+Check migration status:
+
+```bash
+C:\xampp\php\php.exe run_php_migrations.php status
+```
+
+The runner will:
+- Automatically connect to MySQL using `BACKEND/.env` or built-in defaults
 - Create the database if it doesn't exist
-- Import the complete schema from `EBP_RESTAURANT_CAFE_MYSQL_SCHEMA.sql`
-- Track schema version in `schema_migrations` table
-- Provide detailed output with success/failure status
+- Execute pending PHP migrations in order
+- Track executed migrations in the `migrations` table
 
 ## Manual Setup
 
 ### 1. Create Database
 ```sql
-CREATE DATABASE IF NOT EXISTS ebp_restaurant_erp 
+CREATE DATABASE IF NOT EXISTS ebp_restaurant_db
 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-### 2. Import Schema
-```bash
-mysql -u root ebp_restaurant_erp < DATABASE/EBP_RESTAURANT_CAFE_MYSQL_SCHEMA.sql
+### 2. Create Application User
+```sql
+CREATE USER IF NOT EXISTS 'ebp_app'@'localhost' IDENTIFIED BY 'ebp_secure_password_2026';
+GRANT ALL PRIVILEGES ON ebp_restaurant_db.* TO 'ebp_app'@'localhost';
+FLUSH PRIVILEGES;
 ```
 
 ### 3. Import Seed Data (Optional)
 ```bash
-mysql -u root ebp_restaurant_erp < DATABASE/SEED_DATA.sql
+mysql -u ebp_app -pebp_secure_password_2026 ebp_restaurant_db < DATABASE/SEED_DATA.sql
 ```
 
 ## Database Configuration
 
-Default configuration (can be changed in `BACKEND/run_migrations.php`):
+Default configuration (can be changed in `BACKEND/.env`):
 - **Host**: localhost
 - **Port**: 3306
-- **Database**: ebp_restaurant_erp
-- **User**: root (development)
-- **Password**: (empty for development)
+- **Database**: ebp_restaurant_db
+- **User**: ebp_app
+- **Password**: ebp_secure_password_2026
 
 ## Migration Tracking
 
-The system tracks schema version in the `schema_migrations` table:
-- `migration_file` - Name of the schema file
-- `executed_at` - Timestamp when schema was imported
-- `checksum` - MD5 checksum of the schema file
+The PHP migration runner tracks applied migrations in the `migrations` table:
+- `migration` - Name of the migration file
+- `executed_at` - Timestamp when migration was applied
 
 ## Module Coverage
 
 The database covers all 19 modules from MEGAPLAN.md:
 
-1. ✅ Foundation & Trust (Reconciliation, Integration, Offline, Compliance, Security, i18n)
-2. ✅ Core Operations (POS, Inventory, Staff, Menu)
-3. ✅ Customer Experience (Reservations, Loyalty, Feedback, Online Ordering)
-4. ✅ Analytics & Intelligence (BI Dashboard, Sales, Customer, Performance)
-5. ✅ Supply Chain & Procurement (Suppliers, Purchase Orders, Analytics)
-6. ✅ Sustainability & Future-Ready (Sustainability, IoT, Innovation)
-7. ✅ Extended Capabilities (Marketing, International, Franchise, Ghost Kitchen, Emerging Tech, Segments, Integration Hub)
-8. ✅ Consumer-Facing Application (Consumer app features)
-9. ✅ Recipe & Ingredient Sourcing (Sourcing classification, Production recipes, Halal compliance)
-10. ✅ Business Scope & Flexibility (Tenant configuration, Modular features, Business types)
-11. ✅ Risk Assessment & Mitigation (Redundancy, Security, Risk management)
-12. ✅ Launch Strategy & Growth (Beta program, Geographic expansion, Growth acceleration)
-13. ✅ Advertising & Monetization (Advertising, Supplier ads, Data monetization)
-14. ✅ AI Implementation (Infrastructure, Predictive analytics, Decision support)
-15. ✅ Spin-off Applications (Supplier marketplace, Food discovery, Staff marketplace)
-16. ✅ Accounting & Financial Management (Core accounting)
-17. ✅ Role-Based Navigation & Permissions (RBAC)
-18. ✅ Platform Owner & Multi-Tenant Management (Platform dashboard)
-19. ✅ Image Upload & Media Management (Media library)
+1. ✅ Foundation & Trust
+2. ✅ Core Operations
+3. ✅ Customer Experience
+4. ✅ Analytics & Intelligence
+5. ✅ Supply Chain & Procurement
+6. ✅ Sustainability & Future-Ready
+7. ✅ Extended Capabilities
+8. ✅ Consumer-Facing Application
+9. ✅ Recipe & Ingredient Sourcing
+10. ✅ Business Scope & Flexibility
+11. ✅ Risk Assessment & Mitigation
+12. ✅ Launch Strategy & Growth
+13. ✅ Advertising & Monetization
+14. ✅ AI Implementation
+15. ✅ Spin-off Applications
+16. ✅ Accounting & Financial Management
+17. ✅ Role-Based Navigation & Permissions
+18. ✅ Platform Owner & Multi-Tenant Management
+19. ✅ Image Upload & Media Management
 
 ## Total Tables
 
-The complete database schema includes **78 tables** across all modules.
+The migrated schema currently includes **90+ tables** across all modules.
 
 ## Troubleshooting
 

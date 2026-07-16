@@ -13,16 +13,7 @@ class DynamicPricingService
     public function __construct()
     {
         $this->repository = new AIRepository();
-                
-        $host = 'localhost';
-        $dbname = 'ebp_restaurant_db';
-        $username = 'ebp_app';
-        $password = 'ebp_secure_password_2026';
-        $socket = '/opt/lampp/var/mysql/mysql.sock';
-
-        $dsn = "mysql:host=$host;dbname=$dbname;unix_socket=$socket;charset=utf8mb4";
-        $this->db = new PDO($dsn, $username, $password);
-        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->db = db();
     }
 
     public function generateDynamicPricing($tenantId, $branchId, $productId = null)

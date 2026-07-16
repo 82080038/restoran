@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.5/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
          bootstrap="bootstrap.php"
          colors="true"
-         cacheDirectory=".phpunit.cache"
+         cacheResultFile=".phpunit.result.cache"
          executionOrder="depends,defects"
          beStrictAboutOutputDuringTests="true"
          failOnRisky="true"
@@ -18,13 +18,17 @@
         <testsuite name="Middleware">
             <directory>tests/unit/middleware</directory>
         </testsuite>
+        <testsuite name="Smoke Tests">
+            <directory>tests/integration</directory>
+            <exclude>tests/integration/_archive</exclude>
+        </testsuite>
     </testsuites>
-    <source>
+    <coverage>
         <include>
             <directory suffix=".php">core</directory>
             <directory suffix=".php">modules</directory>
         </include>
-    </source>
+    </coverage>
     <php>
         <env name="DB_HOST" value="localhost"/>
         <env name="DB_PORT" value="3306"/>
@@ -35,5 +39,6 @@
         <env name="JWT_SECRET" value="test_secret_key"/>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_DEBUG" value="true"/>
+        <env name="API_BASE_URL" value="http://localhost:8080"/>
     </php>
 </phpunit>

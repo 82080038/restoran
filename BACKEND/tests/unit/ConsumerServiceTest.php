@@ -1,9 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\Consumer\Services\ConsumerService;
-use Modules\Consumer\Repositories\ConsumerRepository;
-use Core\Database;
+use App\Modules\Consumer\Services\ConsumerService;
+use App\Modules\Consumer\Repositories\ConsumerRepository;
+use App\Core\Database;
 
 class ConsumerServiceTest extends TestCase
 {

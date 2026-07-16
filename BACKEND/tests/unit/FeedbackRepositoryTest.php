@@ -1,8 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Modules\Feedback\Repositories\FeedbackRepository;
-use Core\Database;
+use App\Modules\Feedback\Repositories\FeedbackRepository;
+use App\Core\Database;
 
 class FeedbackRepositoryTest extends TestCase
 {

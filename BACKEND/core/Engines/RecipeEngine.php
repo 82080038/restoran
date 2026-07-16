@@ -1,7 +1,9 @@
 <?php
 
-use PDO;
+namespace App\Core;
 
+
+use PDO;
 require_once __DIR__ . '/../Interfaces/EngineInterface.php';
 
 /**
@@ -10,7 +12,7 @@ require_once __DIR__ . '/../Interfaces/EngineInterface.php';
  * This engine handles recipe cost calculation, yield management,
  * production workflow, and ingredient sourcing optimization
  * 
- * @package EBP\Core\Engines
+ * @package EBP\App\Core\Engines
  * @version 1.0.0
  */
 

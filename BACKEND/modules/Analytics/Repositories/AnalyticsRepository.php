@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Analytics\Repositories;
+namespace App\Modules\Analytics\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class AnalyticsRepository
 {

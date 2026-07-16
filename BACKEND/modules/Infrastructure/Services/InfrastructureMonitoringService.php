@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Modules\Infrastructure\Services;
+use App\Core\Response;
+
 
 use App\Core\Database;
 use App\Core\Audit;

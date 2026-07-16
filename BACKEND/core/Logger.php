@@ -2,13 +2,17 @@
 
 declare(strict_types=1);
 
+namespace App\Core;
+
+use Throwable;
+
 /**
  * EBP Core - Structured Logger
  * 
  * Provides structured logging with different log levels
  * Logs to files with rotation support
  * 
- * @package EBP\Core\Logger
+ * @package EBP\App\Core\Logger
  * @version 1.0.0
  */
 

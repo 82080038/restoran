@@ -2,13 +2,18 @@
 
 declare(strict_types=1);
 
+namespace App\Core;
+
+
+use PDO;
+use PDOException;
 /**
  * EBP Core - Database Connection Manager
  * 
  * This is a core component of the Enterprise Business Platform
  * Used for database connectivity across all EBP products
  * 
- * @package EBP\Core\Database
+ * @package EBP\App\Core\Database
  * @version 1.0.0
  */
 
@@ -21,6 +26,7 @@ class Database
     private string $password;
     private string $charset;
     private static ?Database $instance = null;
+    private ?PDO $pdo = null;
 
     public function __construct(array $config = [])
     {
@@ -54,9 +60,13 @@ class Database
      */
     public function connect(): PDO
     {
+        if ($this->pdo !== null) {
+            return $this->pdo;
+        }
+
         try {
             // Try socket connection first
-            $pdo = new PDO(
+            $this->pdo = new PDO(
                 "mysql:host={$this->host};unix_socket={$this->socket};dbname={$this->dbname};charset={$this->charset}",
                 $this->username,
                 $this->password,
@@ -67,11 +77,11 @@ class Database
                     PDO::ATTR_PERSISTENT => false
                 ]
             );
-            return $pdo;
+            return $this->pdo;
         } catch (PDOException $e) {
             // Fallback to host connection if socket fails
             try {
-                $pdo = new PDO(
+                $this->pdo = new PDO(
                     "mysql:host={$this->host};dbname={$this->dbname};charset={$this->charset}",
                     $this->username,
                     $this->password,
@@ -82,7 +92,7 @@ class Database
                         PDO::ATTR_PERSISTENT => false
                     ]
                 );
-                return $pdo;
+                return $this->pdo;
             } catch (PDOException $e2) {
                 throw new PDOException("Database connection failed: " . $e2->getMessage());
             }

@@ -1,7 +1,9 @@
 <?php
 
-use PDO;
+namespace App\Core;
 
+
+use PDO;
 require_once __DIR__ . '/../Interfaces/EngineInterface.php';
 
 /**
@@ -9,7 +11,7 @@ require_once __DIR__ . '/../Interfaces/EngineInterface.php';
  * 
  * This engine handles POS analytics, inventory reports, and business intelligence
  * 
- * @package EBP\Core\Engines
+ * @package EBP\App\Core\Engines
  * @version 1.0.0
  */
 

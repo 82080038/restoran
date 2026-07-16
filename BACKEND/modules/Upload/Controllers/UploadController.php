@@ -1,6 +1,6 @@
 <?php
 
-use Core\Response;
+use App\Core\Response;
 
 class UploadController
 {

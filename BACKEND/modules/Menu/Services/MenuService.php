@@ -52,7 +52,7 @@ class MenuService
         
         try {
             $data['tenant_id'] = $tenantId;
-            $category = new \Modules\Menu\Models\Category($data);
+            $category = new \App\Modules\Menu\Models\Category($data);
             
             $result = $this->categoryRepository->create($category);
             
@@ -80,7 +80,7 @@ class MenuService
             
             $data['tenant_id'] = $tenantId;
             $data['category_id'] = $categoryId;
-            $category = new \Modules\Menu\Models\Category($data);
+            $category = new \App\Modules\Menu\Models\Category($data);
             
             $result = $this->categoryRepository->update($category);
             
@@ -142,7 +142,7 @@ class MenuService
         
         try {
             $data['tenant_id'] = $tenantId;
-            $product = new \Modules\Menu\Models\Product($data);
+            $product = new \App\Modules\Menu\Models\Product($data);
             
             $result = $this->productRepository->create($product);
             
@@ -170,7 +170,7 @@ class MenuService
             
             $data['tenant_id'] = $tenantId;
             $data['product_id'] = $productId;
-            $product = new \Modules\Menu\Models\Product($data);
+            $product = new \App\Modules\Menu\Models\Product($data);
             
             $result = $this->productRepository->update($product);
             
@@ -237,7 +237,7 @@ class MenuService
         
         try {
             $data['tenant_id'] = $tenantId;
-            $recipe = new \Modules\Menu\Models\Recipe($data);
+            $recipe = new \App\Modules\Menu\Models\Recipe($data);
             
             $result = $this->recipeRepository->create($recipe);
             
@@ -279,7 +279,7 @@ class MenuService
             
             $data['tenant_id'] = $tenantId;
             $data['recipe_id'] = $recipeId;
-            $recipe = new \Modules\Menu\Models\Recipe($data);
+            $recipe = new \App\Modules\Menu\Models\Recipe($data);
             
             $result = $this->recipeRepository->update($recipe);
             

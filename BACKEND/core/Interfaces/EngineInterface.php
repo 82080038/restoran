@@ -1,12 +1,14 @@
 <?php
 
+namespace App\Core;
+
 /**
  * Engine Interface
  * 
  * Base interface for all business logic engines
  * Ensures consistent structure and behavior across all engines
  * 
- * @package EBP\Core\Interfaces
+ * @package EBP\App\Core\Interfaces
  * @version 1.0.0
  * @date 2026-07-08
  */

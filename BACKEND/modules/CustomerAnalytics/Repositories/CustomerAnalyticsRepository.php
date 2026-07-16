@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\CustomerAnalytics\Repositories;
+namespace App\Modules\CustomerAnalytics\Repositories;
 
-use Core\Database;
+use App\Core\Database;
 
 class CustomerAnalyticsRepository
 {

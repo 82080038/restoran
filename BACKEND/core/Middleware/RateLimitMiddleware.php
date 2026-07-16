@@ -1,12 +1,14 @@
 <?php
 
+namespace App\Core;
+
 /**
  * EBP Core - Rate Limiting Middleware
  * 
  * This middleware implements rate limiting for API endpoints
  * to prevent abuse and ensure fair usage
  * 
- * @package EBP\Core\Middleware
+ * @package EBP\App\Core\Middleware
  * @version 1.0.0
  */
 

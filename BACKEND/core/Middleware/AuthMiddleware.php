@@ -1,12 +1,14 @@
 <?php
 
+namespace App\Core;
+
 /**
  * EBP Core - Authentication Middleware
  * 
  * This is a core component of the Enterprise Business Platform
  * Used for authentication across all EBP products
  * 
- * @package EBP\Core\Authentication
+ * @package EBP\App\Core\Authentication
  * @version 1.0.0
  */
 

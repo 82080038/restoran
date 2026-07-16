@@ -83,7 +83,7 @@ class KitchenService
             $kitchenOrderNumber = $this->kitchenRepository->generateKitchenOrderNumber($tenantId, $branchId);
             
             // Create kitchen order
-            $kitchenOrder = new \Modules\Kitchen\Models\KitchenOrder([
+            $kitchenOrder = new \App\Modules\Kitchen\Models\KitchenOrder([
                 'tenant_id' => $tenantId,
                 'branch_id' => $branchId,
                 'order_id' => $orderId,
@@ -99,7 +99,7 @@ class KitchenService
                 
                 // Create kitchen order items
                 foreach ($items as $item) {
-                    $kitchenOrderItem = new \Modules\Kitchen\Models\KitchenOrderItem([
+                    $kitchenOrderItem = new \App\Modules\Kitchen\Models\KitchenOrderItem([
                         'kitchen_order_id' => $kitchenOrderId,
                         'order_item_id' => $item['order_item_id'],
                         'product_id' => $item['product_id'],

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Modules\Menu\Services;
+namespace App\Modules\Menu\Services;
 
 use PDO;
 

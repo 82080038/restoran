@@ -43,7 +43,7 @@ class InventoryService
         
         try {
             $data['tenant_id'] = $tenantId;
-            $inventory = new \Modules\Inventory\Models\Inventory($data);
+            $inventory = new \App\Modules\Inventory\Models\Inventory($data);
             
             // Check if inventory already exists for this product and branch
             $existing = $this->inventoryRepository->findByProduct(
@@ -83,7 +83,7 @@ class InventoryService
             
             $data['tenant_id'] = $tenantId;
             $data['inventory_id'] = $inventoryId;
-            $inventory = new \Modules\Inventory\Models\Inventory($data);
+            $inventory = new \App\Modules\Inventory\Models\Inventory($data);
             
             $result = $this->inventoryRepository->update($inventory);
             
@@ -112,7 +112,7 @@ class InventoryService
             
             if (!$inventory) {
                 // Create inventory if it doesn't exist
-                $inventory = new \Modules\Inventory\Models\Inventory([
+                $inventory = new \App\Modules\Inventory\Models\Inventory([
                     'tenant_id' => $tenantId,
                     'branch_id' => $branchId,
                     'product_id' => $productId,
@@ -144,7 +144,7 @@ class InventoryService
             
             if ($result) {
                 // Record transaction
-                $transaction = new \Modules\Inventory\Models\StockTransaction([
+                $transaction = new \App\Modules\Inventory\Models\StockTransaction([
                     'tenant_id' => $tenantId,
                     'branch_id' => $branchId,
                     'product_id' => $productId,
@@ -243,7 +243,7 @@ class InventoryService
             
             // Update or create inventory
             if (!$inventory) {
-                $inventory = new \Modules\Inventory\Models\Inventory([
+                $inventory = new \App\Modules\Inventory\Models\Inventory([
                     'tenant_id' => $tenantId,
                     'branch_id' => $branchId,
                     'product_id' => $productId,
@@ -257,7 +257,7 @@ class InventoryService
             }
             
             // Record transaction
-            $transaction = new \Modules\Inventory\Models\StockTransaction([
+            $transaction = new \App\Modules\Inventory\Models\StockTransaction([
                 'tenant_id' => $tenantId,
                 'branch_id' => $branchId,
                 'product_id' => $productId,

@@ -43,7 +43,7 @@ class TableService
         
         try {
             $data['tenant_id'] = $tenantId;
-            $table = new \Modules\Table\Models\Table($data);
+            $table = new \App\Modules\Table\Models\Table($data);
             
             // Check if table number already exists for this branch
             $existing = $this->tableRepository->findByNumber(
@@ -83,7 +83,7 @@ class TableService
             
             $data['tenant_id'] = $tenantId;
             $data['table_id'] = $tableId;
-            $table = new \Modules\Table\Models\Table($data);
+            $table = new \App\Modules\Table\Models\Table($data);
             
             $result = $this->tableRepository->update($table);
             

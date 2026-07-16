@@ -55,7 +55,7 @@ class ReservationService
                 $data['branch_id']
             );
             
-            $reservation = new \Modules\Reservation\Models\Reservation($data);
+            $reservation = new \App\Modules\Reservation\Models\Reservation($data);
             
             // Check availability before creating
             $isAvailable = $this->reservationRepository->checkAvailability(
@@ -97,7 +97,7 @@ class ReservationService
             
             $data['tenant_id'] = $tenantId;
             $data['reservation_id'] = $reservationId;
-            $reservation = new \Modules\Reservation\Models\Reservation($data);
+            $reservation = new \App\Modules\Reservation\Models\Reservation($data);
             
             // If date or time changed, check availability
             if (isset($data['reservation_date']) || isset($data['reservation_time'])) {
@@ -399,7 +399,7 @@ class ReservationService
                 $data['branch_id']
             );
             
-            $reservation = new \Modules\Reservation\Models\Reservation($data);
+            $reservation = new \App\Modules\Reservation\Models\Reservation($data);
             $result = $this->reservationRepository->create($reservation);
             
             if ($result) {

@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Modules\Menu\Controllers;
+namespace App\Modules\Menu\Controllers;
+use App\Core\Database;
+use App\Core\Response;
 
-use Modules\Menu\Services\AllergenDietaryService;
+
+use App\Modules\Menu\Services\AllergenDietaryService;
 use Response;
 
 class AllergenDietaryController
