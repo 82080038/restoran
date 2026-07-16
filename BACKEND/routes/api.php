@@ -152,6 +152,9 @@ $userController = new LazyController(UserController::class);
 $settingController = new LazyController(SettingController::class);
 $reportController = new LazyController(ReportController::class);
 $tenantController = new LazyController(TenantController::class);
+$floorController = new LazyController(\App\Modules\Facility\Controllers\FloorController::class);
+$zoneController = new LazyController(\App\Modules\Facility\Controllers\ZoneController::class);
+$kitchenStationController = new LazyController(\App\Modules\Facility\Controllers\KitchenStationController::class);
 // Loyalty controller instantiated per route to avoid dependency issues
 
 
@@ -255,6 +258,7 @@ require_once __DIR__ . '/api/096_Menu_Navigation_Routes.php';
 require_once __DIR__ . '/api/097_Custom_Role_Routes.php';
 require_once __DIR__ . '/api/098_Custom_Module_Routes.php';
 require_once __DIR__ . '/api/099_Custom_Permission_Routes.php';
+require_once __DIR__ . '/api/100_Facility_Routes.php';
 
 // Dispatch the request
 $router->dispatch();

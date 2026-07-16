@@ -50,6 +50,189 @@ INSERT IGNORE INTO branches (branch_id, tenant_id, company_id, branch_code, bran
 (11, 11, 11, 'TRUCK001', 'EBP Food Truck Jakarta', 'Mobile Location', '+62 21 1234 5678', 'ACTIVE'),
 (12, 12, 12, 'STALL001', 'EBP Stall Kiosk Jakarta', 'FX Sudirman Mall', '+62 21 2345 6789', 'ACTIVE');
 
+-- ========================================================
+-- FLOORS - Multi-Floor Support
+-- ========================================================
+-- Tenant 1: Restaurant (2 floors)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(1, 1, 1, 'FL1', 'Ground Floor', 1, 'DINING', 1, 'ACTIVE'),
+(2, 1, 1, 'FL2', 'Second Floor', 2, 'DINING', 2, 'ACTIVE');
+
+-- Tenant 2: Coffee Shop (1 floor)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(3, 2, 2, 'FL1', 'Ground Floor', 1, 'DINING', 1, 'ACTIVE');
+
+-- Tenant 3: Bar (2 floors)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(4, 3, 3, 'FL1', 'Ground Floor Bar', 1, 'DINING', 1, 'ACTIVE'),
+(5, 3, 3, 'FL2', 'Rooftop Bar', 2, 'DINING', 2, 'ACTIVE');
+
+-- Tenant 4: Fast Food (1 floor)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(6, 4, 4, 'FL1', 'Ground Floor', 1, 'DINING', 1, 'ACTIVE');
+
+-- Tenant 5: Food Court (1 floor)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(7, 5, 5, 'FL1', 'Ground Floor', 1, 'DINING', 1, 'ACTIVE');
+
+-- Tenant 6: Catering (1 floor - central kitchen)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(8, 6, 6, 'FL1', 'Central Kitchen Floor', 1, 'KITCHEN', 1, 'ACTIVE');
+
+-- Tenant 7: Fine Dining (2 floors)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(9, 7, 7, 'FL1', 'Main Dining Floor', 1, 'DINING', 1, 'ACTIVE'),
+(10, 7, 7, 'FL2', 'Private Dining Floor', 2, 'DINING', 2, 'ACTIVE');
+
+-- Tenant 8: Hotel (3 floors - lobby, restaurant floor, banquet floor)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(11, 8, 8, 'FL1', 'Lobby Floor', 1, 'DINING', 1, 'ACTIVE'),
+(12, 8, 8, 'FL2', 'Restaurant Floor', 2, 'DINING', 2, 'ACTIVE'),
+(13, 8, 8, 'FL3', 'Banquet Floor', 3, 'BANQUET', 3, 'ACTIVE');
+
+-- Tenant 9: Airport (1 floor)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(14, 9, 9, 'FL1', 'Terminal Floor', 1, 'DINING', 1, 'ACTIVE');
+
+-- Tenant 10: Mall (1 floor)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(15, 10, 10, 'FL1', 'Mall Floor', 1, 'DINING', 1, 'ACTIVE');
+
+-- Tenant 11: Food Truck (1 floor - mobile)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(16, 11, 11, 'FL1', 'Mobile Unit', 1, 'DINING', 1, 'ACTIVE');
+
+-- Tenant 12: Stall Kiosk (1 floor)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(17, 12, 12, 'FL1', 'Kiosk Floor', 1, 'DINING', 1, 'ACTIVE');
+
+-- ========================================================
+-- ZONES - Multi-Zone Support
+-- ========================================================
+-- Tenant 1: Restaurant Zones
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(1, 1, 1, 1, 'MAIN', 'Main Dining Hall', 'DINING', 'TABLE_SERVICE', 50, 1, 'ACTIVE'),
+(2, 1, 1, 1, 'BAR', 'Bar Area', 'BAR', 'TABLE_SERVICE', 20, 2, 'ACTIVE'),
+(3, 1, 1, 2, 'VIP', 'VIP Private Room', 'PRIVATE', 'TABLE_SERVICE', 15, 1, 'ACTIVE'),
+(4, 1, 1, 2, 'OUTDOOR', 'Outdoor Terrace', 'DINING', 'TABLE_SERVICE', 30, 2, 'ACTIVE');
+
+-- Tenant 2: Coffee Shop Zones
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(5, 2, 2, 3, 'MAIN', 'Main Cafe Area', 'DINING', 'TABLE_SERVICE', 40, 1, 'ACTIVE'),
+(6, 2, 2, 3, 'PATIO', 'Outdoor Patio', 'DINING', 'SELF_SERVICE', 25, 2, 'ACTIVE');
+
+-- Tenant 3: Bar Zones
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(7, 3, 3, 4, 'MAIN', 'Main Bar', 'BAR', 'TABLE_SERVICE', 35, 1, 'ACTIVE'),
+(8, 3, 3, 5, 'ROOFTOP', 'Rooftop Bar', 'BAR', 'TABLE_SERVICE', 45, 1, 'ACTIVE');
+
+-- Tenant 4: Fast Food Zones
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(9, 4, 4, 6, 'MAIN', 'Dining Area', 'DINING', 'SELF_SERVICE', 60, 1, 'ACTIVE'),
+(10, 4, 4, 6, 'DRIVETHRU', 'Drive Thru', 'DINING', 'SELF_SERVICE', 0, 2, 'ACTIVE');
+
+-- Tenant 5: Food Court Zones
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(11, 5, 5, 7, 'STALL1', 'Stall Area 1', 'DINING', 'SELF_SERVICE', 100, 1, 'ACTIVE'),
+(12, 5, 5, 7, 'STALL2', 'Stall Area 2', 'DINING', 'SELF_SERVICE', 100, 2, 'ACTIVE');
+
+-- Tenant 6: Catering Zones
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(13, 6, 6, 8, 'KITCHEN', 'Central Kitchen', 'KITCHEN', 'NONE', 0, 1, 'ACTIVE'),
+(14, 6, 6, 8, 'PACKING', 'Packing Area', 'KITCHEN', 'NONE', 0, 2, 'ACTIVE');
+
+-- Tenant 7: Fine Dining Zones
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(15, 7, 7, 9, 'MAIN', 'Main Dining Room', 'DINING', 'TABLE_SERVICE', 40, 1, 'ACTIVE'),
+(16, 7, 7, 10, 'VIP1', 'Private Room 1', 'PRIVATE', 'TABLE_SERVICE', 12, 1, 'ACTIVE'),
+(17, 7, 7, 10, 'VIP2', 'Private Room 2', 'PRIVATE', 'TABLE_SERVICE', 12, 2, 'ACTIVE'),
+(18, 7, 7, 10, 'WINE', 'Wine Cellar', 'BAR', 'TABLE_SERVICE', 8, 3, 'ACTIVE');
+
+-- Tenant 8: Hotel Zones
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(19, 8, 8, 11, 'LOBBY', 'Lobby Lounge', 'DINING', 'TABLE_SERVICE', 30, 1, 'ACTIVE'),
+(20, 8, 8, 12, 'RESTAURANT', 'Main Restaurant', 'DINING', 'TABLE_SERVICE', 80, 1, 'ACTIVE'),
+(21, 8, 8, 12, 'COFFEE', 'Coffee Shop', 'DINING', 'SELF_SERVICE', 25, 2, 'ACTIVE'),
+(22, 8, 8, 13, 'BANQUET', 'Banquet Hall', 'BANQUET', 'TABLE_SERVICE', 200, 1, 'ACTIVE'),
+(23, 8, 8, 13, 'MEETING', 'Meeting Room', 'PRIVATE', 'TABLE_SERVICE', 20, 2, 'ACTIVE');
+
+-- Tenant 9: Airport Zones
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(24, 9, 9, 14, 'MAIN', 'Main Terminal', 'DINING', 'SELF_SERVICE', 150, 1, 'ACTIVE'),
+(25, 9, 9, 14, 'GATE', 'Gate Area', 'DINING', 'SELF_SERVICE', 50, 2, 'ACTIVE');
+
+-- Tenant 10: Mall Zones
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(26, 10, 10, 15, 'MAIN', 'Food Court Area', 'DINING', 'SELF_SERVICE', 200, 1, 'ACTIVE');
+
+-- Tenant 11: Food Truck Zones
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(27, 11, 11, 16, 'MAIN', 'Serving Window', 'DINING', 'SELF_SERVICE', 0, 1, 'ACTIVE');
+
+-- Tenant 12: Stall Zones
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(28, 12, 12, 17, 'MAIN', 'Kiosk Counter', 'DINING', 'SELF_SERVICE', 10, 1, 'ACTIVE');
+
+-- ========================================================
+-- KITCHEN STATIONS - Multi-Kitchen Support
+-- ========================================================
+-- Tenant 1: Restaurant Kitchens
+INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
+(1, 1, 1, 1, 'Main Hot Kitchen', 'PREPARATION', 'HK_MAIN', 'HOT_KITCHEN', 'Main hot kitchen for all dishes', 5, 1, 1, 1),
+(2, 1, 1, 1, 'Cold Kitchen', 'PREPARATION', 'CK_MAIN', 'COLD_KITCHEN', 'Salads and cold appetizers', 3, 0, 2, 1),
+(3, 1, 1, 1, 'Pastry Station', 'PREPARATION', 'PS_MAIN', 'BAKERY', 'Desserts and pastries', 2, 0, 3, 1);
+
+-- Tenant 2: Coffee Shop Kitchens
+INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
+(4, 2, 2, 3, 'Coffee Bar', 'PREPARATION', 'CB_MAIN', 'COFFEE_STATION', 'Coffee and beverage preparation', 3, 1, 1, 1),
+(5, 2, 2, 3, 'Pastry Station', 'PREPARATION', 'PS_CAFE', 'BAKERY', 'Pastries and baked goods', 2, 0, 2, 1);
+
+-- Tenant 3: Bar Kitchens
+INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
+(6, 3, 3, 4, 'Main Bar Station', 'PREPARATION', 'BAR_MAIN', 'BAR_STATION', 'Main bar preparation', 4, 1, 1, 1),
+(7, 3, 3, 5, 'Rooftop Bar Station', 'PREPARATION', 'BAR_ROOF', 'BAR_STATION', 'Rooftop bar preparation', 3, 0, 1, 1);
+
+-- Tenant 4: Fast Food Kitchens
+INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
+(8, 4, 4, 6, 'Main Kitchen', 'PREPARATION', 'KF_FAST', 'HOT_KITCHEN', 'Fast food preparation line', 6, 1, 1, 1);
+
+-- Tenant 5: Food Court Kitchens
+INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
+(9, 5, 5, 7, 'Central Kitchen', 'PREPARATION', 'KC_CENTRAL', 'HOT_KITCHEN', 'Central kitchen for all stalls', 8, 1, 1, 1);
+
+-- Tenant 6: Catering Kitchens
+INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
+(10, 6, 6, 8, 'Central Production Kitchen', 'PREPARATION', 'CPK_CATER', 'HOT_KITCHEN', 'Central production kitchen for catering', 10, 1, 1, 1);
+
+-- Tenant 7: Fine Dining Kitchens
+INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
+(11, 7, 7, 9, 'Main Kitchen', 'PREPARATION', 'HK_FINE', 'HOT_KITCHEN', 'Main fine dining kitchen', 8, 1, 1, 1),
+(12, 7, 7, 9, 'Sauce Station', 'PREPARATION', 'SS_FINE', 'HOT_KITCHEN', 'Sauce and reduction station', 2, 0, 2, 1),
+(13, 7, 7, 9, 'Pastry Station', 'PREPARATION', 'PS_FINE', 'BAKERY', 'Fine dining pastry', 3, 0, 3, 1);
+
+-- Tenant 8: Hotel Kitchens
+INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
+(14, 8, 8, 12, 'Main Production Kitchen', 'PREPARATION', 'MPK_HOTEL', 'HOT_KITCHEN', 'Central production kitchen', 12, 1, 1, 1),
+(15, 8, 8, 12, 'Banquet Kitchen', 'PREPARATION', 'BK_HOTEL', 'HOT_KITCHEN', 'Banquet preparation kitchen', 15, 0, 2, 1),
+(16, 8, 8, 11, 'Lobby Kitchen', 'PREPARATION', 'LK_HOTEL', 'HOT_KITCHEN', 'Lobby lounge kitchen', 4, 0, 1, 1),
+(17, 8, 8, 12, 'Pastry Kitchen', 'PREPARATION', 'PK_HOTEL', 'BAKERY', 'Hotel pastry and bakery', 5, 0, 3, 1);
+
+-- Tenant 9: Airport Kitchens
+INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
+(18, 9, 9, 14, 'Airport Kitchen', 'PREPARATION', 'KA_AIRP', 'HOT_KITCHEN', 'Airport restaurant kitchen', 8, 1, 1, 1);
+
+-- Tenant 10: Mall Kitchens
+INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
+(19, 10, 10, 15, 'Food Court Kitchen', 'PREPARATION', 'KFC_MALL', 'HOT_KITCHEN', 'Food court central kitchen', 10, 1, 1, 1);
+
+-- Tenant 11: Food Truck Kitchens
+INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
+(20, 11, 11, 16, 'Truck Kitchen', 'PREPARATION', 'KT_TRUCK', 'HOT_KITCHEN', 'Food truck mobile kitchen', 3, 1, 1, 1);
+
+-- Tenant 12: Stall Kitchens
+INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
+(21, 12, 12, 17, 'Kiosk Kitchen', 'PREPARATION', 'KK_STALL', 'HOT_KITCHEN', 'Kiosk preparation area', 2, 1, 1, 1);
+
 -- System roles
 INSERT IGNORE INTO roles (role_id, tenant_id, role_code, role_name, is_system, status) VALUES
 (1, NULL, 'PLATFORM_OWNER', 'Platform Owner', 1, 'ACTIVE'),
