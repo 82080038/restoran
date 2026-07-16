@@ -15,6 +15,7 @@ class MobileApp {
         this.bindEvents();
         this.loadInitialData();
         this.bindScreenSizeChange();
+        this.setupRealtime();
     }
 
     bindEvents() {
@@ -116,17 +117,22 @@ class MobileApp {
     }
 
     async loadOrders() {
+        window.loadingManager.show('orders', 'Loading orders...');
         try {
             const response = await window.apiClient.getOrders({ status: 'PENDING,PREPARING,READY' });
             if (response && response.success) {
                 this.orders = response.data || [];
                 this.renderOrders();
+                window.toastManager.success('Orders loaded successfully');
             } else {
                 this.loadMockOrders();
             }
         } catch (error) {
             console.error('Error loading orders:', error);
+            window.toastManager.error('Failed to load orders');
             this.loadMockOrders();
+        } finally {
+            window.loadingManager.hide('orders');
         }
     }
 
@@ -167,17 +173,22 @@ class MobileApp {
     }
 
     async loadMenu() {
+        window.loadingManager.show('menu', 'Loading menu...');
         try {
             const response = await window.apiClient.getProducts();
             if (response && response.success) {
                 this.menu = response.data || [];
                 this.renderMenu();
+                window.toastManager.success('Menu loaded successfully');
             } else {
                 this.loadMockMenu();
             }
         } catch (error) {
             console.error('Error loading menu:', error);
+            window.toastManager.error('Failed to load menu');
             this.loadMockMenu();
+        } finally {
+            window.loadingManager.hide('menu');
         }
     }
 
@@ -228,17 +239,22 @@ class MobileApp {
     }
 
     async loadTables() {
+        window.loadingManager.show('tables', 'Loading tables...');
         try {
             const response = await window.apiClient.getTables();
             if (response && response.success) {
                 this.tables = response.data || [];
                 this.renderTables();
+                window.toastManager.success('Tables loaded successfully');
             } else {
                 this.loadMockTables();
             }
         } catch (error) {
             console.error('Error loading tables:', error);
+            window.toastManager.error('Failed to load tables');
             this.loadMockTables();
+        } finally {
+            window.loadingManager.hide('tables');
         }
     }
 
@@ -373,7 +389,7 @@ class MobileApp {
     quickAddToOrder() {
         const quantity = parseInt(document.getElementById('quickQtyInput').value);
         // In a real app, this would add to a current order
-        alert(`Added ${quantity}x ${this.currentQuickProduct.product_name} to order`);
+        window.toastManager.success(`Added ${quantity}x ${this.currentQuickProduct.product_name} to order`);
         this.closeModal('quickOrderModal');
     }
 
@@ -415,6 +431,29 @@ class MobileApp {
             // Reload data with new screen size parameters
             this.loadInitialData();
         });
+    }
+
+    setupRealtime() {
+        if (window.realtimeManager) {
+            // Subscribe to relevant channels
+            window.realtimeManager.subscribeOrders();
+            window.realtimeManager.subscribeTables();
+            
+            // Set up auto-refresh as fallback
+            window.realtimeManager.setupAutoRefresh('orders', () => this.loadOrders(), 30000);
+            window.realtimeManager.setupAutoRefresh('tables', () => this.loadTables(), 60000);
+            
+            // Listen to connection status
+            window.realtimeManager.client.on('connected', () => {
+                console.log('Real-time connection established');
+                window.toastManager.success('Real-time updates enabled');
+            });
+            
+            window.realtimeManager.client.on('disconnected', () => {
+                console.log('Real-time connection lost');
+                window.toastManager.warning('Real-time updates disabled - using auto-refresh');
+            });
+        }
     }
 
     openModal(modalId) {
