@@ -233,6 +233,86 @@ INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id,
 INSERT IGNORE INTO kitchen_stations (station_id, tenant_id, branch_id, floor_id, station_name, station_type, kitchen_code, kitchen_category, description, capacity, is_central, display_order, is_active) VALUES
 (21, 12, 12, 17, 'Kiosk Kitchen', 'PREPARATION', 'KK_STALL', 'HOT_KITCHEN', 'Kiosk preparation area', 2, 1, 1, 1);
 
+-- ========================================================
+-- KDS SCREENS - Kitchen Display System Screens
+-- ========================================================
+-- Tenant 1: Restaurant KDS Screens
+INSERT IGNORE INTO kds_screens (screen_id, tenant_id, branch_id, station_id, screen_name, screen_type, display_order, max_tickets_display, auto_refresh_seconds, is_active) VALUES
+(1, 1, 1, 1, 'Hot Kitchen Screen', 'PREP_STATION', 1, 20, 10, 1),
+(2, 1, 1, 2, 'Cold Kitchen Screen', 'PREP_STATION', 2, 15, 10, 1),
+(3, 1, 1, 3, 'Pastry Screen', 'PREP_STATION', 3, 10, 10, 1),
+(4, 1, 1, 1, 'Expediter Screen', 'EXPEDITER', 4, 30, 5, 1);
+
+-- Tenant 2: Coffee Shop KDS Screens
+INSERT IGNORE INTO kds_screens (screen_id, tenant_id, branch_id, station_id, screen_name, screen_type, display_order, max_tickets_display, auto_refresh_seconds, is_active) VALUES
+(5, 2, 2, 4, 'Coffee Bar Screen', 'PREP_STATION', 1, 15, 10, 1),
+(6, 2, 2, 5, 'Pastry Screen', 'PREP_STATION', 2, 10, 10, 1);
+
+-- Tenant 3: Bar KDS Screens
+INSERT IGNORE INTO kds_screens (screen_id, tenant_id, branch_id, station_id, screen_name, screen_type, display_order, max_tickets_display, auto_refresh_seconds, is_active) VALUES
+(7, 3, 3, 6, 'Main Bar Screen', 'PREP_STATION', 1, 20, 10, 1),
+(8, 3, 3, 7, 'Rooftop Bar Screen', 'PREP_STATION', 2, 15, 10, 1);
+
+-- ========================================================
+-- KDS ROUTING RULES - Automatic Order Routing
+-- ========================================================
+-- Tenant 1: Restaurant Routing Rules
+INSERT IGNORE INTO kds_routing_rules (rule_id, tenant_id, branch_id, rule_name, rule_type, condition_value, target_station_id, priority, apply_to_dinein, apply_to_takeout, apply_to_delivery, is_active) VALUES
+(1, 1, 1, 'Hot Items to Hot Kitchen', 'MENU_CATEGORY', 'HOT_ENTREES', 1, 1, 1, 1, 1, 1),
+(2, 1, 1, 'Cold Items to Cold Kitchen', 'MENU_CATEGORY', 'SALADS', 2, 2, 2, 1, 1, 1),
+(3, 1, 1, 'Desserts to Pastry', 'MENU_CATEGORY', 'DESSERTS', 3, 3, 3, 1, 1, 1),
+(4, 1, 1, 'Takeout to Pack Station', 'DINING_OPTION', 'TAKE_OUT', 1, 1, 10, 0, 1, 1);
+
+-- Tenant 2: Coffee Shop Routing Rules
+INSERT IGNORE INTO kds_routing_rules (rule_id, tenant_id, branch_id, rule_name, rule_type, condition_value, target_station_id, priority, apply_to_dinein, apply_to_takeout, apply_to_delivery, is_active) VALUES
+(5, 2, 2, 'Coffee to Coffee Bar', 'MENU_CATEGORY', 'COFFEE', 4, 1, 1, 1, 1, 1),
+(6, 2, 2, 'Pastries to Pastry', 'MENU_CATEGORY', 'PASTRIES', 5, 2, 2, 1, 1, 1);
+
+-- ========================================================
+-- PEAK HOUR SCHEDULES - Peak Hour Definitions
+-- ========================================================
+-- Tenant 1: Restaurant Peak Hours
+INSERT IGNORE INTO peak_hour_schedules (schedule_id, tenant_id, branch_id, day_of_week, start_time, end_time, peak_level, expected_volume_multiplier, staff_multiplier, is_active) VALUES
+(1, 1, 1, 'FRIDAY', '18:00:00', '22:00:00', 'HIGH', 1.50, 1.25, 1),
+(2, 1, 1, 'SATURDAY', '12:00:00', '15:00:00', 'HIGH', 1.75, 1.50, 1),
+(3, 1, 1, 'SATURDAY', '18:00:00', '23:00:00', 'EXTREME', 2.00, 1.75, 1),
+(4, 1, 1, 'SUNDAY', '12:00:00', '15:00:00', 'HIGH', 1.50, 1.25, 1);
+
+-- Tenant 2: Coffee Shop Peak Hours
+INSERT IGNORE INTO peak_hour_schedules (schedule_id, tenant_id, branch_id, day_of_week, start_time, end_time, peak_level, expected_volume_multiplier, staff_multiplier, is_active) VALUES
+(5, 2, 2, 'MONDAY', '07:00:00', '10:00:00', 'HIGH', 1.50, 1.25, 1),
+(6, 2, 2, 'SATURDAY', '08:00:00', '12:00:00', 'HIGH', 1.75, 1.50, 1),
+(7, 2, 2, 'SUNDAY', '08:00:00', '12:00:00', 'MEDIUM', 1.25, 1.10, 1);
+
+-- ========================================================
+-- COURSE SEQUENCES - Course Definitions
+-- ========================================================
+-- Tenant 1: Restaurant Courses
+INSERT IGNORE INTO course_sequences (course_id, tenant_id, branch_id, course_number, course_name, course_type, auto_fire_delay_minutes, manual_fire_only, display_order, is_active) VALUES
+(1, 1, 1, 1, 'Appetizers', 'APPETIZER', 0, 0, 1, 1),
+(2, 1, 1, 2, 'Soup', 'SOUP', 10, 0, 2, 1),
+(3, 1, 1, 3, 'Salad', 'SALAD', 15, 0, 3, 1),
+(4, 1, 1, 4, 'Main Course', 'MAIN', 20, 0, 4, 1),
+(5, 1, 1, 5, 'Dessert', 'DESSERT', 0, 1, 5, 1);
+
+-- Tenant 7: Fine Dining Courses
+INSERT IGNORE INTO course_sequences (course_id, tenant_id, branch_id, course_number, course_name, course_type, auto_fire_delay_minutes, manual_fire_only, display_order, is_active) VALUES
+(6, 7, 7, 1, 'Amuse Bouche', 'APPETIZER', 0, 0, 1, 1),
+(7, 7, 7, 2, 'First Course', 'APPETIZER', 15, 0, 2, 1),
+(8, 7, 7, 3, 'Second Course', 'MAIN', 20, 0, 3, 1),
+(9, 7, 7, 4, 'Main Course', 'MAIN', 25, 0, 4, 1),
+(10, 7, 7, 5, 'Cheese Course', 'CUSTOM', 10, 1, 5, 1),
+(11, 7, 7, 6, 'Dessert', 'DESSERT', 0, 1, 6, 1);
+
+-- ========================================================
+-- SAMPLE PERFORMANCE METRICS
+-- ========================================================
+-- Tenant 1: Restaurant Performance Metrics
+INSERT IGNORE INTO performance_metrics (metric_id, tenant_id, branch_id, station_id, date, hour, total_orders, completed_orders, cancelled_orders, avg_order_time, avg_prep_time, error_count, error_rate, on_time_rate, bottleneck_flag) VALUES
+(1, 1, 1, 1, CURDATE(), 18, 45, 42, 3, 900, 720, 2, 4.44, 93.33, 0),
+(2, 1, 1, 2, CURDATE(), 18, 30, 28, 2, 600, 480, 1, 3.33, 93.33, 0),
+(3, 1, 1, 3, CURDATE(), 18, 25, 24, 1, 480, 360, 0, 0.00, 96.00, 0);
+
 -- System roles
 INSERT IGNORE INTO roles (role_id, tenant_id, role_code, role_name, is_system, status) VALUES
 (1, NULL, 'PLATFORM_OWNER', 'Platform Owner', 1, 'ACTIVE'),

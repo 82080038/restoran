@@ -155,6 +155,15 @@ $tenantController = new LazyController(TenantController::class);
 $floorController = new LazyController(\App\Modules\Facility\Controllers\FloorController::class);
 $zoneController = new LazyController(\App\Modules\Facility\Controllers\ZoneController::class);
 $kitchenStationController = new LazyController(\App\Modules\Facility\Controllers\KitchenStationController::class);
+$kdsScreenController = new LazyController(\App\Modules\KDS\Controllers\KDSScreenController::class);
+$kdsRoutingRuleController = new LazyController(\App\Modules\KDS\Controllers\KDSRoutingRuleController::class);
+$kdsTicketController = new LazyController(\App\Modules\KDS\Controllers\KDSTicketController::class);
+$waitlistController = new LazyController(\App\Modules\Waitlist\Controllers\WaitlistController::class);
+$peakHourController = new LazyController(\App\Modules\Operations\Controllers\PeakHourController::class);
+$courseFiringController = new LazyController(\App\Modules\Operations\Controllers\CourseFiringController::class);
+$ayceController = new LazyController(\App\Modules\Operations\Controllers\AYCEController::class);
+$loadBalancingController = new LazyController(\App\Modules\Operations\Controllers\LoadBalancingController::class);
+$performanceMonitoringController = new LazyController(\App\Modules\Operations\Controllers\PerformanceMonitoringController::class);
 // Loyalty controller instantiated per route to avoid dependency issues
 
 
@@ -259,6 +268,7 @@ require_once __DIR__ . '/api/097_Custom_Role_Routes.php';
 require_once __DIR__ . '/api/098_Custom_Module_Routes.php';
 require_once __DIR__ . '/api/099_Custom_Permission_Routes.php';
 require_once __DIR__ . '/api/100_Facility_Routes.php';
+require_once __DIR__ . '/api/101_Advanced_Operations_Routes.php';
 
 // Dispatch the request
 $router->dispatch();
