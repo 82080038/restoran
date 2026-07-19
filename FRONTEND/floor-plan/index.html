@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floor Plan Editor - F&B Management System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; height: 100vh; overflow: hidden; }
+
+        /* Sidebar */
+        .sidebar { width: 260px; background: #2c3e50; color: white; display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar-header { padding: 16px 20px; border-bottom: 1px solid #3d4f63; }
+        .sidebar-header h3 { font-size: 16px; }
+        .sidebar-header p { font-size: 12px; color: #95a5a6; margin-top: 4px; }
+        .floor-list { flex-grow: 1; overflow-y: auto; padding: 10px; }
+        .floor-item { padding: 10px 14px; border-radius: 8px; cursor: pointer; margin-bottom: 4px; font-size: 13px; display: flex; align-items: center; gap: 8px; transition: background 0.15s; }
+        .floor-item:hover { background: #3d4f63; }
+        .floor-item.active { background: #667eea; }
+        .floor-item i { font-size: 16px; }
+        .sidebar-actions { padding: 10px; border-top: 1px solid #3d4f63; }
+        .sidebar-actions button { width: 100%; padding: 8px; border: none; border-radius: 6px; background: #667eea; color: white; cursor: pointer; font-size: 13px; margin-bottom: 4px; }
+        .sidebar-actions button:hover { background: #5568d3; }
+        .sidebar-actions button.danger { background: #e74c3c; }
+
+        /* Toolbar */
+        .toolbar { display: flex; align-items: center; padding: 8px 16px; background: white; border-bottom: 1px solid #e0e0e0; gap: 8px; flex-shrink: 0; }
+        .toolbar button { padding: 6px 12px; border: 1px solid #ddd; border-radius: 6px; background: white; cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+        .toolbar button:hover { background: #f0f0f5; }
+        .toolbar button.active { background: #667eea; color: white; border-color: #667eea; }
+        .toolbar .separator { width: 1px; height: 24px; background: #e0e0e0; }
+        .toolbar .info { margin-left: auto; font-size: 12px; color: #7f8c8d; }
+
+        /* Canvas Area */
+        .canvas-area { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
+        .canvas-wrapper { flex-grow: 1; overflow: auto; background: #e8eaed; position: relative; }
+        .floor-canvas { position: relative; background: white; margin: 20px auto; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+
+        /* Grid */
+        .floor-canvas.grid::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+            background-size: var(--grid-size) var(--grid-size);
+            pointer-events: none;
+        }
+
+        /* Zone */
+        .zone-box { position: absolute; border: 2px dashed #aaa; border-radius: 8px; background: rgba(232,244,248,0.3); pointer-events: none; }
+        .zone-label { position: absolute; top: 4px; left: 8px; font-size: 11px; color: #999; font-weight: 600; text-transform: uppercase; }
+
+        /* Table */
+        .table-item { position: absolute; cursor: move; user-select: none; }
+        .table-shape { position: relative; display: flex; align-items: center; justify-content: center; border: 2px solid #2c3e50; background: #a8d8ea; transition: box-shadow 0.15s; }
+        .table-shape.selected { box-shadow: 0 0 0 3px #667eea; border-color: #667eea; }
+        .table-shape.rectangle { border-radius: 4px; }
+        .table-shape.round { border-radius: 50%; }
+        .table-shape.square { border-radius: 4px; }
+        .table-shape.occupied { background: #f5b7b1; border-color: #c0392b; }
+        .table-shape.reserved { background: #f9e79f; border-color: #d4ac0d; }
+        .table-shape.cleaning { background: #d5dbdb; border-color: #7f8c8d; }
+        .table-label { font-size: 11px; font-weight: 700; color: #2c3e50; text-align: center; pointer-events: none; }
+        .table-number { font-size: 14px; font-weight: 800; }
+        .table-cap { font-size: 9px; opacity: 0.7; }
+
+        /* Chair */
+        .chair { position: absolute; width: 24px; height: 24px; background: #bdc3c7; border: 1px solid #7f8c8d; border-radius: 4px; pointer-events: none; }
+        .chair.round { border-radius: 50%; }
+
+        /* Properties Panel */
+        .properties { width: 280px; background: white; border-left: 1px solid #e0e0e0; padding: 16px; overflow-y: auto; flex-shrink: 0; }
+        .properties h4 { font-size: 14px; color: #2c3e50; margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
+        .prop-group { margin-bottom: 14px; }
+        .prop-group label { display: block; font-size: 12px; color: #7f8c8d; margin-bottom: 4px; }
+        .prop-group input, .prop-group select { width: 100%; padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; }
+        .prop-row { display: flex; gap: 8px; }
+        .prop-row .prop-group { flex: 1; }
+        .prop-actions { display: flex; gap: 6px; margin-top: 12px; }
+        .prop-actions button { flex: 1; padding: 8px; border: none; border-radius: 6px; font-size: 12px; cursor: pointer; }
+        .btn-save { background: #27ae60; color: white; }
+        .btn-delete { background: #e74c3c; color: white; }
+        .btn-add-chair { background: #667eea; color: white; }
+
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 9999; }
+        .modal-overlay.show { display: flex; }
+        .modal { background: white; border-radius: 12px; padding: 24px; width: 400px; max-width: 90%; }
+        .modal h3 { margin-bottom: 16px; }
+        .modal .form-group { margin-bottom: 12px; }
+        .modal .form-group label { font-size: 12px; color: #7f8c8d; display: block; margin-bottom: 4px; }
+        .modal .form-group input, .modal .form-group select { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+        .modal .modal-actions { display: flex; gap: 8px; margin-top: 16px; }
+        .modal .modal-actions button { flex: 1; padding: 10px; border: none; border-radius: 6px; font-size: 14px; cursor: pointer; }
+        .modal .btn-primary { background: #667eea; color: white; }
+        .modal .btn-secondary { background: #e0e0e0; }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: #95a5a6; }
+        .empty-state i { font-size: 48px; margin-bottom: 12px; }
+        .empty-state p { font-size: 14px; }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-map"></i> Floor Plan</h3>
+            <p>Pilih lantai untuk mengedit layout</p>
+        </div>
+        <div class="floor-list" id="floor-list">
+            <div class="empty-state"><i class="fas fa-building"></i><p>Loading floors...</p></div>
+        </div>
+        <div class="sidebar-actions">
+            <button onclick="showAddFloorModal()"><i class="fas fa-plus"></i> Tambah Lantai</button>
+            <button class="danger" onclick="deleteCurrentFloor()"><i class="fas fa-trash"></i> Hapus Lantai</button>
+        </div>
+    </div>
+
+    <!-- Canvas Area -->
+    <div class="canvas-area">
+        <div class="toolbar">
+            <button onclick="addTable()" title="Tambah Meja"><i class="fas fa-plus-square"></i> Tambah Meja</button>
+            <button onclick="addZone()" title="Tambah Zona"><i class="fas fa-vector-square"></i> Tambah Zona</button>
+            <div class="separator"></div>
+            <button id="gridBtn" class="active" onclick="toggleGrid()" title="Toggle Grid"><i class="fas fa-th"></i> Grid</button>
+            <button onclick="saveLayout()" title="Save"><i class="fas fa-save"></i> Simpan Layout</button>
+            <div class="separator"></div>
+            <button onclick="autoArrangeChairs()" title="Auto Arrange Chairs"><i class="fas fa-chair"></i> Auto Kursi</button>
+            <div class="info" id="canvas-info">Pilih lantai untuk mulai</div>
+        </div>
+        <div class="canvas-wrapper" id="canvas-wrapper">
+            <div class="empty-state" id="canvas-empty">
+                <i class="fas fa-map-marked-alt"></i>
+                <p>Pilih lantai dari sidebar untuk melihat atau mengedit floor plan</p>
+            </div>
+            <div class="floor-canvas grid" id="floor-canvas" style="display:none"></div>
+        </div>
+    </div>
+
+    <!-- Properties Panel -->
+    <div class="properties" id="properties">
+        <h4>Properties</h4>
+        <p style="font-size:12px;color:#95a5a6">Klik meja atau zona untuk mengedit</p>
+    </div>
+
+    <!-- Add Floor Modal -->
+    <div class="modal-overlay" id="floorModal">
+        <div class="modal">
+            <h3>Tambah Lantai</h3>
+            <div class="form-group">
+                <label>Nama Lantai</label>
+                <input type="text" id="floorName" placeholder="contoh: Lantai 1 - Indoor">
+            </div>
+            <div class="form-group">
+                <label>Level</label>
+                <input type="number" id="floorLevel" value="0">
+            </div>
+            <div class="form-group">
+                <label>Tipe</label>
+                <select id="floorType">
+                    <option value="dining">Dining Area</option>
+                    <option value="outdoor">Outdoor</option>
+                    <option value="vip">VIP Room</option>
+                    <option value="bar">Bar Area</option>
+                    <option value="smoking">Smoking Area</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Canvas Width</label>
+                <input type="number" id="canvasWidth" value="1200">
+            </div>
+            <div class="form-group">
+                <label>Canvas Height</label>
+                <input type="number" id="canvasHeight" value="800">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal('floorModal')">Batal</button>
+                <button class="btn-primary" onclick="createFloor()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Table Modal -->
+    <div class="modal-overlay" id="tableModal">
+        <div class="modal">
+            <h3>Tambah Meja</h3>
+            <div class="form-group">
+                <label>Nomor Meja</label>
+                <input type="text" id="tableNumber" placeholder="contoh: M01">
+            </div>
+            <div class="form-group">
+                <label>Nama Meja (opsional)</label>
+                <input type="text" id="tableName" placeholder="contoh: Meja Window">
+            </div>
+            <div class="form-group">
+                <label>Bentuk Meja</label>
+                <select id="tableShape">
+                    <option value="rectangle">Persegi Panjang</option>
+                    <option value="square">Persegi</option>
+                    <option value="round">Bulat</option>
+                </select>
+            </div>
+            <div class="prop-row">
+                <div class="form-group" style="flex:1">
+                    <label>Lebar (px)</label>
+                    <input type="number" id="tableWidth" value="80">
+                </div>
+                <div class="form-group" style="flex:1">
+                    <label>Tinggi (px)</label>
+                    <input type="number" id="tableHeight" value="80">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Kapasitas / Jumlah Kursi</label>
+                <input type="number" id="chairCount" value="4">
+            </div>
+            <div class="form-group">
+                <label>Zona</label>
+                <select id="tableZone"><option value="">-- Pilih Zona --</option></select>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal('tableModal')">Batal</button>
+                <button class="btn-primary" onclick="createTable()">Tambah</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Zone Modal -->
+    <div class="modal-overlay" id="zoneModal">
+        <div class="modal">
+            <h3>Tambah Zona</h3>
+            <div class="form-group">
+                <label>Nama Zona</label>
+                <input type="text" id="zoneName" placeholder="contoh: Smoking Area">
+            </div>
+            <div class="form-group">
+                <label>Tipe Zona</label>
+                <select id="zoneType">
+                    <option value="dining">Dining</option>
+                    <option value="vip">VIP</option>
+                    <option value="outdoor">Outdoor</option>
+                    <option value="bar">Bar</option>
+                    <option value="smoking">Smoking</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Warna</label>
+                <input type="color" id="zoneColor" value="#e8f4f8">
+            </div>
+            <div class="prop-row">
+                <div class="form-group" style="flex:1">
+                    <label>Lebar</label>
+                    <input type="number" id="zoneWidth" value="400">
+                </div>
+                <div class="form-group" style="flex:1">
+                    <label>Tinggi</label>
+                    <input type="number" id="zoneHeight" value="300">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal('zoneModal')">Batal</button>
+                <button class="btn-primary" onclick="createZone()">Tambah</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin + '/restoran/BACKEND/public/api/v1';
+        let token = localStorage.getItem('authToken') || '';
+        let currentFloorId = null;
+        let floorData = null;
+        let selectedTable = null;
+        let selectedZone = null;
+        let gridEnabled = true;
+        let dragState = null;
+
+        // Auth header
+        function authHeaders() {
+            return { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token };
+        }
+
+        // === FLOORS ===
+        async function loadFloors() {
+            try {
+                const resp = await fetch(`${API_BASE}/floor-plan/floors`, { headers: authHeaders() });
+                const data = await resp.json();
+                if (data.success) {
+                    renderFloors(data.data);
+                }
+            } catch (e) {
+                console.error('Failed to load floors', e);
+            }
+        }
+
+        function renderFloors(floors) {
+            const list = document.getElementById('floor-list');
+            if (!floors || floors.length === 0) {
+                list.innerHTML = '<div class="empty-state"><i class="fas fa-building"></i><p>Belum ada lantai</p></div>';
+                return;
+            }
+            list.innerHTML = floors.map(f => `
+                <div class="floor-item ${f.floor_id == currentFloorId ? 'active' : ''}" onclick="selectFloor(${f.floor_id})">
+                    <i class="fas fa-layer-group"></i>
+                    <div>
+                        <div>${f.floor_name}</div>
+                        <div style="font-size:10px;color:#95a5a6">${f.floor_type || ''}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function selectFloor(floorId) {
+            currentFloorId = floorId;
+            await loadLayout();
+            loadFloors(); // re-render active state
+        }
+
+        // === LAYOUT ===
+        async function loadLayout() {
+            if (!currentFloorId) return;
+            try {
+                const resp = await fetch(`${API_BASE}/floor-plan/layout?floor_id=${currentFloorId}`, { headers: authHeaders() });
+                const data = await resp.json();
+                if (data.success) {
+                    floorData = data.data;
+                    renderLayout();
+                }
+            } catch (e) {
+                console.error('Failed to load layout', e);
+            }
+        }
+
+        function renderLayout() {
+            const canvas = document.getElementById('floor-canvas');
+            const empty = document.getElementById('canvas-empty');
+            if (!floorData) { canvas.style.display = 'none'; empty.style.display = 'block'; return; }
+
+            empty.style.display = 'none';
+            canvas.style.display = 'block';
+            canvas.style.width = floorData.floor.canvas_width + 'px';
+            canvas.style.height = floorData.floor.canvas_height + 'px';
+            canvas.style.setProperty('--grid-size', (floorData.floor.grid_size || 20) + 'px');
+            gridEnabled = floorData.floor.grid_enabled == 1;
+            canvas.classList.toggle('grid', gridEnabled);
+            document.getElementById('gridBtn').classList.toggle('active', gridEnabled);
+
+            canvas.innerHTML = '';
+
+            // Render zones
+            (floorData.zones || []).forEach(zone => {
+                const z = document.createElement('div');
+                z.className = 'zone-box';
+                z.style.left = zone.pos_x + 'px';
+                z.style.top = zone.pos_y + 'px';
+                z.style.width = zone.zone_width + 'px';
+                z.style.height = zone.zone_height + 'px';
+                z.style.borderColor = zone.zone_color || '#aaa';
+                z.style.background = (zone.zone_color || '#e8f4f8') + '40';
+                z.innerHTML = `<div class="zone-label">${zone.zone_name}</div>`;
+                z.onclick = (e) => { e.stopPropagation(); selectZone(zone); };
+                canvas.appendChild(z);
+            });
+
+            // Render tables
+            (floorData.tables || []).forEach(table => {
+                const t = document.createElement('div');
+                t.className = 'table-item';
+                t.style.left = table.pos_x + 'px';
+                t.style.top = table.pos_y + 'px';
+                t.style.transform = `rotate(${table.table_rotation || 0}deg)`;
+
+                const shape = document.createElement('div');
+                shape.className = `table-shape ${table.table_shape || 'rectangle'} ${table.status?.toLowerCase()}`;
+                shape.style.width = table.table_width + 'px';
+                shape.style.height = table.table_height + 'px';
+                shape.innerHTML = `
+                    <div class="table-label">
+                        <div class="table-number">${table.table_number}</div>
+                        <div class="table-cap">${table.capacity || table.chair_count || 4} kursi</div>
+                    </div>
+                `;
+                t.appendChild(shape);
+
+                // Render chairs
+                (table.chairs || []).forEach(chair => {
+                    const c = document.createElement('div');
+                    c.className = `chair ${chair.chair_shape === 'round' ? 'round' : ''}`;
+                    c.style.left = chair.pos_x + 'px';
+                    c.style.top = chair.pos_y + 'px';
+                    c.style.transform = `rotate(${chair.chair_rotation || 0}deg)`;
+                    t.appendChild(c);
+                });
+
+                t.onmousedown = (e) => startDrag(e, table, t);
+                t.onclick = (e) => { e.stopPropagation(); selectTable(table); };
+                canvas.appendChild(t);
+            });
+
+            document.getElementById('canvas-info').textContent = `${floorData.floor.floor_name} — ${floorData.tables.length} meja, ${floorData.zones.length} zona`;
+        }
+
+        // === DRAG & DROP ===
+        function startDrag(e, table, el) {
+            e.preventDefault();
+            const canvas = document.getElementById('floor-canvas');
+            const rect = canvas.getBoundingClientRect();
+            const startX = e.clientX - rect.left - table.pos_x;
+            const startY = e.clientY - rect.top - table.pos_y;
+
+            selectTable(table);
+
+            const onMove = (ev) => {
+                const newX = ev.clientX - rect.left - startX;
+                const newY = ev.clientY - rect.top - startY;
+                table.pos_x = Math.round(newX / (floorData.floor.grid_size || 20)) * (floorData.floor.grid_size || 20);
+                table.pos_y = Math.round(newY / (floorData.floor.grid_size || 20)) * (floorData.floor.grid_size || 20);
+                el.style.left = table.pos_x + 'px';
+                el.style.top = table.pos_y + 'px';
+            };
+
+            const onUp = async () => {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onUp);
+                // Save position
+                try {
+                    await fetch(`${API_BASE}/floor-plan/tables/${table.table_id}/position`, {
+                        method: 'PUT', headers: authHeaders(),
+                        body: JSON.stringify({ pos_x: table.pos_x, pos_y: table.pos_y, rotation: table.table_rotation || 0 })
+                    });
+                } catch (e) { console.error('Save position failed', e); }
+            };
+
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onUp);
+        }
+
+        // === SELECTION ===
+        function selectTable(table) {
+            selectedTable = table;
+            selectedZone = null;
+            document.querySelectorAll('.table-shape').forEach(s => s.classList.remove('selected'));
+            renderTableProperties(table);
+        }
+
+        function selectZone(zone) {
+            selectedZone = zone;
+            selectedTable = null;
+            renderZoneProperties(zone);
+        }
+
+        function renderTableProperties(table) {
+            const panel = document.getElementById('properties');
+            panel.innerHTML = `
+                <h4><i class="fas fa-utensils"></i> Meja ${table.table_number}</h4>
+                <div class="prop-group">
+                    <label>Nomor Meja</label>
+                    <input type="text" id="prop-number" value="${table.table_number}">
+                </div>
+                <div class="prop-group">
+                    <label>Nama Meja</label>
+                    <input type="text" id="prop-name" value="${table.table_name || ''}">
+                </div>
+                <div class="prop-group">
+                    <label>Bentuk</label>
+                    <select id="prop-shape">
+                        <option value="rectangle" ${table.table_shape === 'rectangle' ? 'selected' : ''}>Persegi Panjang</option>
+                        <option value="square" ${table.table_shape === 'square' ? 'selected' : ''}>Persegi</option>
+                        <option value="round" ${table.table_shape === 'round' ? 'selected' : ''}>Bulat</option>
+                    </select>
+                </div>
+                <div class="prop-row">
+                    <div class="prop-group"><label>Lebar</label><input type="number" id="prop-width" value="${table.table_width}"></div>
+                    <div class="prop-group"><label>Tinggi</label><input type="number" id="prop-height" value="${table.table_height}"></div>
+                </div>
+                <div class="prop-row">
+                    <div class="prop-group"><label>Pos X</label><input type="number" id="prop-x" value="${table.pos_x}"></div>
+                    <div class="prop-group"><label>Pos Y</label><input type="number" id="prop-y" value="${table.pos_y}"></div>
+                </div>
+                <div class="prop-group">
+                    <label>Rotasi (derajat)</label>
+                    <input type="number" id="prop-rotation" value="${table.table_rotation || 0}">
+                </div>
+                <div class="prop-group">
+                    <label>Jumlah Kursi</label>
+                    <input type="number" id="prop-chairs" value="${table.chair_count || 4}">
+                </div>
+                <div class="prop-group">
+                    <label>Status</label>
+                    <select id="prop-status">
+                        <option value="AVAILABLE" ${table.status === 'AVAILABLE' ? 'selected' : ''}>Available</option>
+                        <option value="OCCUPIED" ${table.status === 'OCCUPIED' ? 'selected' : ''}>Occupied</option>
+                        <option value="RESERVED" ${table.status === 'RESERVED' ? 'selected' : ''}>Reserved</option>
+                        <option value="CLEANING" ${table.status === 'CLEANING' ? 'selected' : ''}>Cleaning</option>
+                    </select>
+                </div>
+                <div class="prop-actions">
+                    <button class="btn-save" onclick="updateTable()"><i class="fas fa-save"></i> Simpan</button>
+                    <button class="btn-add-chair" onclick="autoArrangeChairs(${table.table_id})"><i class="fas fa-chair"></i> Auto Kursi</button>
+                    <button class="btn-delete" onclick="deleteTable(${table.table_id})"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+        }
+
+        function renderZoneProperties(zone) {
+            const panel = document.getElementById('properties');
+            panel.innerHTML = `
+                <h4><i class="fas fa-vector-square"></i> ${zone.zone_name}</h4>
+                <div class="prop-group"><label>Nama Zona</label><input type="text" id="prop-zname" value="${zone.zone_name}"></div>
+                <div class="prop-group"><label>Warna</label><input type="color" id="prop-zcolor" value="${zone.zone_color || '#e8f4f8'}"></div>
+                <div class="prop-row">
+                    <div class="prop-group"><label>Lebar</label><input type="number" id="prop-zwidth" value="${zone.zone_width}"></div>
+                    <div class="prop-group"><label>Tinggi</label><input type="number" id="prop-zheight" value="${zone.zone_height}"></div>
+                </div>
+                <div class="prop-row">
+                    <div class="prop-group"><label>Pos X</label><input type="number" id="prop-zx" value="${zone.pos_x}"></div>
+                    <div class="prop-group"><label>Pos Y</label><input type="number" id="prop-zy" value="${zone.pos_y}"></div>
+                </div>
+                <div class="prop-actions">
+                    <button class="btn-save" onclick="updateZone()"><i class="fas fa-save"></i> Simpan</button>
+                </div>
+            `;
+        }
+
+        // === CRUD ===
+        async function updateTable() {
+            if (!selectedTable) return;
+            const body = {
+                table_number: document.getElementById('prop-number').value,
+                table_name: document.getElementById('prop-name').value,
+                table_shape: document.getElementById('prop-shape').value,
+                table_width: parseFloat(document.getElementById('prop-width').value),
+                table_height: parseFloat(document.getElementById('prop-height').value),
+                pos_x: parseFloat(document.getElementById('prop-x').value),
+                pos_y: parseFloat(document.getElementById('prop-y').value),
+                table_rotation: parseFloat(document.getElementById('prop-rotation').value),
+                chair_count: parseInt(document.getElementById('prop-chairs').value),
+                status: document.getElementById('prop-status').value,
+            };
+            try {
+                await fetch(`${API_BASE}/floor-plan/tables/${selectedTable.table_id}`, {
+                    method: 'PUT', headers: authHeaders(), body: JSON.stringify(body)
+                });
+                await loadLayout();
+            } catch (e) { alert('Gagal menyimpan'); }
+        }
+
+        async function updateZone() {
+            if (!selectedZone) return;
+            const body = {
+                zone_name: document.getElementById('prop-zname').value,
+                zone_color: document.getElementById('prop-zcolor').value,
+                zone_width: parseFloat(document.getElementById('prop-zwidth').value),
+                zone_height: parseFloat(document.getElementById('prop-zheight').value),
+                pos_x: parseFloat(document.getElementById('prop-zx').value),
+                pos_y: parseFloat(document.getElementById('prop-zy').value),
+            };
+            try {
+                await fetch(`${API_BASE}/floor-plan/zones/${selectedZone.zone_id}`, {
+                    method: 'PUT', headers: authHeaders(), body: JSON.stringify(body)
+                });
+                await loadLayout();
+            } catch (e) { alert('Gagal menyimpan zona'); }
+        }
+
+        async function deleteTable(tableId) {
+            if (!confirm('Hapus meja ini?')) return;
+            try {
+                await fetch(`${API_BASE}/floor-plan/tables/${tableId}`, { method: 'DELETE', headers: authHeaders() });
+                selectedTable = null;
+                document.getElementById('properties').innerHTML = '<h4>Properties</h4><p style="font-size:12px;color:#95a5a6">Klik meja untuk mengedit</p>';
+                await loadLayout();
+            } catch (e) { alert('Gagal menghapus'); }
+        }
+
+        async function deleteCurrentFloor() {
+            if (!currentFloorId || !confirm('Hapus lantai ini? Semua meja dan zona akan dihapus.')) return;
+            try {
+                await fetch(`${API_BASE}/floor-plan/floors/${currentFloorId}`, { method: 'DELETE', headers: authHeaders() });
+                currentFloorId = null;
+                floorData = null;
+                document.getElementById('floor-canvas').style.display = 'none';
+                document.getElementById('canvas-empty').style.display = 'block';
+                await loadFloors();
+            } catch (e) { alert('Gagal menghapus lantai'); }
+        }
+
+        // === MODALS ===
+        function showAddFloorModal() { document.getElementById('floorModal').classList.add('show'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+        async function createFloor() {
+            const body = {
+                floor_name: document.getElementById('floorName').value,
+                floor_level: parseInt(document.getElementById('floorLevel').value),
+                floor_type: document.getElementById('floorType').value,
+                canvas_width: parseInt(document.getElementById('canvasWidth').value),
+                canvas_height: parseInt(document.getElementById('canvasHeight').value),
+                branch_id: null
+            };
+            try {
+                const resp = await fetch(`${API_BASE}/floor-plan/floors`, {
+                    method: 'POST', headers: authHeaders(), body: JSON.stringify(body)
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    closeModal('floorModal');
+                    await loadFloors();
+                    selectFloor(data.data.floor_id);
+                }
+            } catch (e) { alert('Gagal membuat lantai'); }
+        }
+
+        async function addTable() {
+            if (!currentFloorId) { alert('Pilih lantai dulu'); return; }
+            // Load zones for dropdown
+            const zoneSelect = document.getElementById('tableZone');
+            zoneSelect.innerHTML = '<option value="">-- Pilih Zona --</option>';
+            (floorData.zones || []).forEach(z => {
+                zoneSelect.innerHTML += `<option value="${z.zone_id}">${z.zone_name}</option>`;
+            });
+            document.getElementById('tableModal').classList.add('show');
+        }
+
+        async function createTable() {
+            const shape = document.getElementById('tableShape').value;
+            const width = parseInt(document.getElementById('tableWidth').value);
+            const height = parseInt(document.getElementById('tableHeight').value);
+            const body = {
+                table_number: document.getElementById('tableNumber').value,
+                table_name: document.getElementById('tableName').value,
+                table_shape: shape,
+                table_width: width,
+                table_height: height,
+                chair_count: parseInt(document.getElementById('chairCount').value),
+                floor_id: parseInt(currentFloorId),
+                zone_id: document.getElementById('tableZone').value || null,
+                pos_x: 100,
+                pos_y: 100,
+                capacity: parseInt(document.getElementById('chairCount').value)
+            };
+            try {
+                const resp = await fetch(`${API_BASE}/floor-plan/tables`, {
+                    method: 'POST', headers: authHeaders(), body: JSON.stringify(body)
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    closeModal('tableModal');
+                    await loadLayout();
+                }
+            } catch (e) { alert('Gagal membuat meja'); }
+        }
+
+        async function addZone() {
+            if (!currentFloorId) { alert('Pilih lantai dulu'); return; }
+            document.getElementById('zoneModal').classList.add('show');
+        }
+
+        async function createZone() {
+            const body = {
+                floor_id: parseInt(currentFloorId),
+                zone_name: document.getElementById('zoneName').value,
+                zone_type: document.getElementById('zoneType').value,
+                zone_color: document.getElementById('zoneColor').value,
+                zone_width: parseInt(document.getElementById('zoneWidth').value),
+                zone_height: parseInt(document.getElementById('zoneHeight').value),
+                pos_x: 50,
+                pos_y: 50
+            };
+            try {
+                const resp = await fetch(`${API_BASE}/floor-plan/zones`, {
+                    method: 'POST', headers: authHeaders(), body: JSON.stringify(body)
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    closeModal('zoneModal');
+                    await loadLayout();
+                }
+            } catch (e) { alert('Gagal membuat zona'); }
+        }
+
+        // === GRID ===
+        function toggleGrid() {
+            gridEnabled = !gridEnabled;
+            document.getElementById('floor-canvas').classList.toggle('grid', gridEnabled);
+            document.getElementById('gridBtn').classList.toggle('active', gridEnabled);
+        }
+
+        // === SAVE LAYOUT ===
+        async function saveLayout() {
+            if (!floorData) return;
+            const body = {
+                floor_id: parseInt(currentFloorId),
+                floor: { canvas_width: floorData.floor.canvas_width, canvas_height: floorData.floor.canvas_height, grid_enabled: gridEnabled ? 1 : 0, grid_size: floorData.floor.grid_size },
+                zones: floorData.zones.map(z => ({ zone_id: z.zone_id, pos_x: z.pos_x, pos_y: z.pos_y, zone_width: z.zone_width, zone_height: z.zone_height, zone_color: z.zone_color })),
+                tables: floorData.tables.map(t => ({ table_id: t.table_id, pos_x: t.pos_x, pos_y: t.pos_y, table_width: t.table_width, table_height: t.table_height, table_rotation: t.table_rotation, table_shape: t.table_shape, chair_count: t.chair_count }))
+            };
+            try {
+                await fetch(`${API_BASE}/floor-plan/layout/save`, {
+                    method: 'POST', headers: authHeaders(), body: JSON.stringify(body)
+                });
+                alert('Layout disimpan!');
+            } catch (e) { alert('Gagal menyimpan layout'); }
+        }
+
+        // === AUTO CHAIRS ===
+        async function autoArrangeChairs(tableId) {
+            const tid = tableId || selectedTable?.table_id;
+            if (!tid) return;
+            // Re-fetch table and auto-arrange via update
+            const table = floorData.tables.find(t => t.table_id == tid);
+            if (!table) return;
+            // Generate chair positions client-side
+            const chairs = generateChairs(table.table_shape, table.chair_count || 4, table.table_width, table.table_height);
+            try {
+                await fetch(`${API_BASE}/floor-plan/tables/${tid}`, {
+                    method: 'PUT', headers: authHeaders(),
+                    body: JSON.stringify({ chairs })
+                });
+                await loadLayout();
+            } catch (e) { alert('Gagal auto-arrange kursi'); }
+        }
+
+        function generateChairs(shape, count, w, h) {
+            const chairs = [];
+            const cx = w / 2, cy = h / 2;
+            if (shape === 'round') {
+                const r = Math.max(w, h) / 2 + 20;
+                for (let i = 0; i < count; i++) {
+                    const a = (2 * Math.PI * i) / count - Math.PI / 2;
+                    chairs.push({ chair_number: i + 1, chair_shape: 'square', pos_x: cx + r * Math.cos(a) - 12, pos_y: cy + r * Math.sin(a) - 12, chair_rotation: (a * 180 / Math.PI) + 90 });
+                }
+            } else {
+                const perSide = Math.ceil(count / 4);
+                let idx = 0;
+                const sx = w / (perSide + 1);
+                for (let i = 0; i < perSide && idx < count; i++, idx++) chairs.push({ chair_number: idx + 1, pos_x: sx * (i + 1) - 12, pos_y: -22, chair_rotation: 180 });
+                for (let i = 0; i < perSide && idx < count; i++, idx++) chairs.push({ chair_number: idx + 1, pos_x: sx * (i + 1) - 12, pos_y: h + 6, chair_rotation: 0 });
+                const sy = h / (perSide + 1);
+                for (let i = 0; i < perSide && idx < count; i++, idx++) chairs.push({ chair_number: idx + 1, pos_x: -22, pos_y: sy * (i + 1) - 12, chair_rotation: 90 });
+                for (let i = 0; i < perSide && idx < count; i++, idx++) chairs.push({ chair_number: idx + 1, pos_x: w + 6, pos_y: sy * (i + 1) - 12, chair_rotation: 270 });
+            }
+            return chairs;
+        }
+
+        // Click on canvas background deselects
+        document.getElementById('floor-canvas').addEventListener('click', () => {
+            selectedTable = null;
+            selectedZone = null;
+            document.querySelectorAll('.table-shape').forEach(s => s.classList.remove('selected'));
+            document.getElementById('properties').innerHTML = '<h4>Properties</h4><p style="font-size:12px;color:#95a5a6">Klik meja atau zona untuk mengedit</p>';
+        });
+
+        // Init
+        loadFloors();
+    </script>
+</body>
+</html>

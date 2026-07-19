@@ -470,6 +470,11 @@ if (!class_exists('LoyaltyController')) {
     require_once __DIR__ . '/../modules/Loyalty/Controllers/LoyaltyController.php';
 }
 
+// Floor Plan Module
+if (!class_exists('FloorPlanController')) {
+    require_once __DIR__ . '/../modules/Table/Controllers/FloorPlanController.php';
+}
+
 // Simple Language / i18n Module (compatible with current router pattern)
 if (!class_exists('SimpleLanguageController')) {
     require_once __DIR__ . '/../modules/Language/Controllers/SimpleLanguageController.php';
