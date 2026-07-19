@@ -1,13 +1,27 @@
--- MySQL dump 10.13  Distrib 8.0.46, for Linux (x86_64)
+-- ============================================================
+-- EBP RESTAURANT CAFE - COMPLETE DATABASE SCHEMA
+-- Consolidated: All 281 tables (Core + Tier 1-4 + Gap Features)
+-- Date: 2026-07-19
+-- MySQL 8.x / MariaDB 10.4+ compatible
+-- ============================================================
+-- 
+-- HOW TO USE:
+--   1. Create database: CREATE DATABASE ebp_restaurant_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+--   2. Create user: CREATE USER 'ebp_app'@'localhost' IDENTIFIED BY 'ebp_secure_password_2026'; GRANT ALL ON ebp_restaurant_db.* TO 'ebp_app'@'localhost';
+--   3. Import schema: mysql -u root ebp_restaurant_db < EBP_RESTAURANT_CAFE_COMPLETE_SCHEMA.sql
+--   4. Import seed:   mysql -u root ebp_restaurant_db < SEED_DATA.sql
+-- ============================================================
+
+-- MariaDB dump 10.19  Distrib 10.4.32-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: ebp_restaurant_db
 -- ------------------------------------------------------
--- Server version	5.5.5-10.4.32-MariaDB
+-- Server version	10.4.32-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,7 +35,7 @@
 
 DROP TABLE IF EXISTS `accounts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `accounts` (
   `account_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -46,21 +60,12 @@ CREATE TABLE `accounts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `accounts`
---
-
-LOCK TABLES `accounts` WRITE;
-/*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `ad_analytics`
 --
 
 DROP TABLE IF EXISTS `ad_analytics`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ad_analytics` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ad_campaign_id` int(11) NOT NULL,
@@ -82,21 +87,12 @@ CREATE TABLE `ad_analytics` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ad_analytics`
---
-
-LOCK TABLES `ad_analytics` WRITE;
-/*!40000 ALTER TABLE `ad_analytics` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ad_analytics` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `ad_campaigns`
 --
 
 DROP TABLE IF EXISTS `ad_campaigns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ad_campaigns` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `campaign_name` varchar(100) NOT NULL,
@@ -126,21 +122,12 @@ CREATE TABLE `ad_campaigns` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ad_campaigns`
---
-
-LOCK TABLES `ad_campaigns` WRITE;
-/*!40000 ALTER TABLE `ad_campaigns` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ad_campaigns` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `ad_clicks`
 --
 
 DROP TABLE IF EXISTS `ad_clicks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ad_clicks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ad_campaign_id` int(11) NOT NULL,
@@ -163,21 +150,12 @@ CREATE TABLE `ad_clicks` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ad_clicks`
---
-
-LOCK TABLES `ad_clicks` WRITE;
-/*!40000 ALTER TABLE `ad_clicks` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ad_clicks` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `ad_conversions`
 --
 
 DROP TABLE IF EXISTS `ad_conversions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ad_conversions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ad_campaign_id` int(11) NOT NULL,
@@ -201,21 +179,12 @@ CREATE TABLE `ad_conversions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ad_conversions`
---
-
-LOCK TABLES `ad_conversions` WRITE;
-/*!40000 ALTER TABLE `ad_conversions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ad_conversions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `ad_impressions`
 --
 
 DROP TABLE IF EXISTS `ad_impressions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ad_impressions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ad_campaign_id` int(11) NOT NULL,
@@ -235,13 +204,30 @@ CREATE TABLE `ad_impressions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ad_impressions`
+-- Table structure for table `advancing_sheets`
 --
 
-LOCK TABLES `ad_impressions` WRITE;
-/*!40000 ALTER TABLE `ad_impressions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ad_impressions` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `advancing_sheets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `advancing_sheets` (
+  `advancing_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `concert_id` bigint(20) DEFAULT NULL,
+  `artist_name` varchar(200) DEFAULT NULL,
+  `contact_person` varchar(200) DEFAULT NULL,
+  `arrival_date` date DEFAULT NULL,
+  `soundcheck_time` time DEFAULT NULL,
+  `equipment_needed` text DEFAULT NULL,
+  `hospitality_requirements` text DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'DRAFT',
+  `confirmed_by` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`advancing_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `ai_decision_logs`
@@ -249,7 +235,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `ai_decision_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ai_decision_logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ai_model_id` int(11) NOT NULL,
@@ -272,21 +258,12 @@ CREATE TABLE `ai_decision_logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ai_decision_logs`
---
-
-LOCK TABLES `ai_decision_logs` WRITE;
-/*!40000 ALTER TABLE `ai_decision_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ai_decision_logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `ai_governance_logs`
 --
 
 DROP TABLE IF EXISTS `ai_governance_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ai_governance_logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ai_model_id` int(11) NOT NULL,
@@ -308,21 +285,12 @@ CREATE TABLE `ai_governance_logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ai_governance_logs`
---
-
-LOCK TABLES `ai_governance_logs` WRITE;
-/*!40000 ALTER TABLE `ai_governance_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ai_governance_logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `ai_model_feedback`
 --
 
 DROP TABLE IF EXISTS `ai_model_feedback`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ai_model_feedback` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ai_prediction_id` int(11) NOT NULL,
@@ -339,21 +307,12 @@ CREATE TABLE `ai_model_feedback` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ai_model_feedback`
---
-
-LOCK TABLES `ai_model_feedback` WRITE;
-/*!40000 ALTER TABLE `ai_model_feedback` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ai_model_feedback` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `ai_models`
 --
 
 DROP TABLE IF EXISTS `ai_models`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ai_models` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `model_name` varchar(100) NOT NULL,
@@ -377,22 +336,12 @@ CREATE TABLE `ai_models` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ai_models`
---
-
-LOCK TABLES `ai_models` WRITE;
-/*!40000 ALTER TABLE `ai_models` DISABLE KEYS */;
-INSERT INTO `ai_models` VALUES (1,'Demand Forecasting Model','predictive','demand_forecasting','1.0.0','Predicts daily/weekly demand based on historical data',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(2,'Inventory Optimization Model','predictive','inventory','1.0.0','Optimizes inventory levels and reorder points',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(3,'Staff Scheduling Model','predictive','staffing','1.0.0','Recommends optimal staff schedules',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(4,'Menu Engineering Model','decision_support','menu','1.0.0','Provides menu engineering recommendations',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(5,'Dynamic Pricing Model','decision_support','pricing','1.0.0','Suggests dynamic pricing adjustments',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(6,'Supplier Selection Model','decision_support','procurement','1.0.0','Recommends optimal suppliers',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(7,'Kitchen Operations AI','operational','kitchen','1.0.0','Optimizes kitchen operations and workflow',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(8,'Table Management AI','operational','front_of_house','1.0.0','Optimizes table assignment and turnover',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(9,'Delivery Optimization AI','operational','delivery','1.0.0','Optimizes delivery routes and timing',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(10,'Customer Personalization AI','customer_experience','personalization','1.0.0','Personalizes customer experience',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(11,'Sentiment Analysis AI','customer_experience','feedback','1.0.0','Analyzes customer sentiment from reviews',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(12,'Churn Prediction AI','customer_experience','retention','1.0.0','Predicts customer churn risk',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(13,'Revenue Forecasting AI','financial','forecasting','1.0.0','Forecasts revenue and financial metrics',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(14,'Cost Optimization AI','financial','cost_analysis','1.0.0','Identifies cost optimization opportunities',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09'),(15,'Fraud Detection AI','financial','security','1.0.0','Detects fraudulent transactions',NULL,NULL,NULL,NULL,'development',NULL,'2026-07-05 03:27:09','2026-07-05 03:27:09');
-/*!40000 ALTER TABLE `ai_models` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `ai_predictions`
 --
 
 DROP TABLE IF EXISTS `ai_predictions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ai_predictions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `ai_model_id` int(11) NOT NULL,
@@ -415,13 +364,82 @@ CREATE TABLE `ai_predictions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ai_predictions`
+-- Table structure for table `ai_sales_predictions`
 --
 
-LOCK TABLES `ai_predictions` WRITE;
-/*!40000 ALTER TABLE `ai_predictions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ai_predictions` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `ai_sales_predictions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ai_sales_predictions` (
+  `prediction_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `prediction_date` date DEFAULT NULL,
+  `product_id` bigint(20) DEFAULT NULL,
+  `predicted_qty` decimal(10,2) DEFAULT 0.00,
+  `confidence_level` decimal(5,2) DEFAULT 0.00,
+  `model_version` varchar(50) DEFAULT NULL,
+  `generated_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `predicted_hour` int(11) DEFAULT 0,
+  `predicted_revenue` decimal(15,2) DEFAULT 0.00,
+  `predicted_orders` int(11) DEFAULT 0,
+  `confidence_score` decimal(5,2) DEFAULT 0.00,
+  PRIMARY KEY (`prediction_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `allergen_tracking`
+--
+
+DROP TABLE IF EXISTS `allergen_tracking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `allergen_tracking` (
+  `tracking_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `product_id` bigint(20) DEFAULT NULL,
+  `allergen_id` bigint(20) DEFAULT NULL,
+  `contains` tinyint(1) DEFAULT 0,
+  `may_contain` tinyint(1) DEFAULT 0,
+  `dietary_tags` varchar(200) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `allergens` text DEFAULT NULL,
+  `contains_gluten` tinyint(1) DEFAULT 0,
+  `contains_dairy` tinyint(1) DEFAULT 0,
+  `contains_nuts` tinyint(1) DEFAULT 0,
+  `contains_eggs` tinyint(1) DEFAULT 0,
+  `contains_soy` tinyint(1) DEFAULT 0,
+  `contains_shellfish` tinyint(1) DEFAULT 0,
+  `contains_fish` tinyint(1) DEFAULT 0,
+  `contains_sesame` tinyint(1) DEFAULT 0,
+  `is_vegetarian` tinyint(1) DEFAULT 0,
+  `is_vegan` tinyint(1) DEFAULT 0,
+  `is_halal` tinyint(1) DEFAULT 0,
+  `is_kosher` tinyint(1) DEFAULT 0,
+  `certification_body` varchar(200) DEFAULT NULL,
+  `certification_number` varchar(100) DEFAULT NULL,
+  `certification_expiry` date DEFAULT NULL,
+  PRIMARY KEY (`tracking_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `allergens`
+--
+
+DROP TABLE IF EXISTS `allergens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `allergens` (
+  `allergen_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `allergen_name` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`allergen_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `api_logs`
@@ -429,7 +447,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `api_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `api_logs` (
   `log_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) DEFAULT NULL,
@@ -455,21 +473,12 @@ CREATE TABLE `api_logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `api_logs`
---
-
-LOCK TABLES `api_logs` WRITE;
-/*!40000 ALTER TABLE `api_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `api_logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `api_rate_limits`
 --
 
 DROP TABLE IF EXISTS `api_rate_limits`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `api_rate_limits` (
   `limit_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -491,13 +500,31 @@ CREATE TABLE `api_rate_limits` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `api_rate_limits`
+-- Table structure for table `artist_deals`
 --
 
-LOCK TABLES `api_rate_limits` WRITE;
-/*!40000 ALTER TABLE `api_rate_limits` DISABLE KEYS */;
-/*!40000 ALTER TABLE `api_rate_limits` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `artist_deals`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `artist_deals` (
+  `deal_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `deal_name` varchar(200) DEFAULT NULL,
+  `artist_name` varchar(200) DEFAULT NULL,
+  `deal_type` varchar(50) DEFAULT NULL,
+  `guarantee_amount` decimal(15,2) DEFAULT 0.00,
+  `percentage_door` decimal(5,2) DEFAULT 0.00,
+  `percentage_bar` decimal(5,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'DRAFT',
+  `signed_date` date DEFAULT NULL,
+  `signed_by` varchar(100) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`deal_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `attendance`
@@ -505,7 +532,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `attendance`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `attendance` (
   `attendance_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -531,21 +558,12 @@ CREATE TABLE `attendance` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `attendance`
---
-
-LOCK TABLES `attendance` WRITE;
-/*!40000 ALTER TABLE `attendance` DISABLE KEYS */;
-/*!40000 ALTER TABLE `attendance` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `audit_logs`
 --
 
 DROP TABLE IF EXISTS `audit_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `audit_logs` (
   `audit_log_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -571,13 +589,98 @@ CREATE TABLE `audit_logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `audit_logs`
+-- Table structure for table `auto_po_rules`
 --
 
-LOCK TABLES `audit_logs` WRITE;
-/*!40000 ALTER TABLE `audit_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `audit_logs` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `auto_po_rules`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auto_po_rules` (
+  `rule_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `inventory_id` bigint(20) DEFAULT NULL,
+  `reorder_point` decimal(10,2) DEFAULT 0.00,
+  `reorder_quantity` decimal(10,2) DEFAULT 0.00,
+  `preferred_supplier_id` bigint(20) DEFAULT NULL,
+  `fallback_supplier_id` bigint(20) DEFAULT NULL,
+  `auto_generate` tinyint(1) DEFAULT 0,
+  `requires_approval` tinyint(1) DEFAULT 1,
+  `is_active` tinyint(1) DEFAULT 1,
+  `last_po_generated_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`rule_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ayce_reorders`
+--
+
+DROP TABLE IF EXISTS `ayce_reorders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ayce_reorders` (
+  `reorder_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `session_id` bigint(20) unsigned NOT NULL,
+  `order_id` bigint(20) unsigned NOT NULL,
+  `reorder_number` int(11) NOT NULL,
+  `reorder_time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `item_count` int(11) DEFAULT 0,
+  `total_amount` decimal(10,2) DEFAULT 0.00,
+  `status` enum('PENDING','SENT_TO_KITCHEN','COMPLETED','CANCELLED') DEFAULT 'PENDING',
+  `kds_ticket_id` bigint(20) unsigned DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`reorder_id`),
+  KEY `idx_session` (`session_id`),
+  KEY `idx_order` (`order_id`),
+  KEY `idx_reorder_number` (`reorder_number`),
+  KEY `idx_status` (`status`),
+  CONSTRAINT `ayce_reorders_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `ayce_sessions` (`session_id`) ON DELETE CASCADE,
+  CONSTRAINT `ayce_reorders_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ayce_sessions`
+--
+
+DROP TABLE IF EXISTS `ayce_sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ayce_sessions` (
+  `session_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `order_id` bigint(20) unsigned NOT NULL,
+  `table_id` bigint(20) unsigned NOT NULL,
+  `session_type` enum('TIME_LIMITED','UNLIMITED') DEFAULT 'TIME_LIMITED',
+  `duration_minutes` int(11) DEFAULT 120,
+  `session_start` timestamp NOT NULL DEFAULT current_timestamp(),
+  `session_end` timestamp NULL DEFAULT NULL,
+  `max_reorders` int(11) DEFAULT NULL,
+  `current_reorder_count` int(11) DEFAULT 0,
+  `session_status` enum('ACTIVE','PAUSED','COMPLETED','CANCELLED') DEFAULT 'ACTIVE',
+  `total_amount` decimal(10,2) DEFAULT 0.00,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`session_id`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_order` (`order_id`),
+  KEY `idx_table` (`table_id`),
+  KEY `idx_status` (`session_status`),
+  KEY `idx_session_start` (`session_start`),
+  CONSTRAINT `ayce_sessions_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `ayce_sessions_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE,
+  CONSTRAINT `ayce_sessions_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
+  CONSTRAINT `ayce_sessions_ibfk_4` FOREIGN KEY (`table_id`) REFERENCES `tables` (`table_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `backup_logs`
@@ -585,7 +688,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `backup_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `backup_logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `backup_type` enum('full','incremental','differential') NOT NULL,
@@ -606,13 +709,262 @@ CREATE TABLE `backup_logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `backup_logs`
+-- Table structure for table `bar_count_items`
 --
 
-LOCK TABLES `backup_logs` WRITE;
-/*!40000 ALTER TABLE `backup_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `backup_logs` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `bar_count_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bar_count_items` (
+  `item_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `bar_count_id` bigint(20) NOT NULL,
+  `product_id` bigint(20) DEFAULT NULL,
+  `bottle_size` varchar(50) DEFAULT NULL,
+  `full_bottles` int(11) DEFAULT 0,
+  `partial_bottles` decimal(5,2) DEFAULT 0.00,
+  `opening_qty` decimal(10,2) DEFAULT 0.00,
+  `closing_qty` decimal(10,2) DEFAULT 0.00,
+  `variance` decimal(10,2) DEFAULT 0.00,
+  `variance_value` decimal(15,2) DEFAULT 0.00,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `bar_counts`
+--
+
+DROP TABLE IF EXISTS `bar_counts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bar_counts` (
+  `bar_count_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `count_date` date NOT NULL,
+  `count_type` varchar(30) DEFAULT 'OPENING',
+  `status` varchar(30) DEFAULT 'DRAFT',
+  `counted_by` varchar(100) DEFAULT NULL,
+  `submitted_by` varchar(100) DEFAULT NULL,
+  `submitted_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`bar_count_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `bar_tab_preauths`
+--
+
+DROP TABLE IF EXISTS `bar_tab_preauths`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bar_tab_preauths` (
+  `tab_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `card_last4` varchar(4) DEFAULT NULL,
+  `preauth_amount` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'OPEN',
+  `opened_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `closed_at` timestamp NULL DEFAULT NULL,
+  `captured_amount` decimal(15,2) DEFAULT 0.00,
+  `voided_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`tab_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `beach_club_cabanas`
+--
+
+DROP TABLE IF EXISTS `beach_club_cabanas`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `beach_club_cabanas` (
+  `cabana_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `cabana_number` varchar(20) DEFAULT NULL,
+  `cabana_type` varchar(50) DEFAULT NULL,
+  `capacity` int(11) DEFAULT 0,
+  `daily_rate` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'AVAILABLE',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `cabana_code` varchar(20) DEFAULT NULL,
+  `cabana_name` varchar(100) DEFAULT NULL,
+  `minimum_spend` decimal(15,2) DEFAULT 0.00,
+  `location` varchar(200) DEFAULT NULL,
+  `has_butler` tinyint(1) DEFAULT 0,
+  `has_private_pool` tinyint(1) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`cabana_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `beach_club_events`
+--
+
+DROP TABLE IF EXISTS `beach_club_events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `beach_club_events` (
+  `bce_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_name` varchar(200) DEFAULT NULL,
+  `event_date` date DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `ticket_price` decimal(15,2) DEFAULT 0.00,
+  `capacity` int(11) DEFAULT 0,
+  `status` varchar(30) DEFAULT 'SCHEDULED',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `start_time` time DEFAULT NULL,
+  `end_time` time DEFAULT NULL,
+  `theme` varchar(100) DEFAULT NULL,
+  `dj_name` varchar(100) DEFAULT NULL,
+  `music_genre` varchar(100) DEFAULT NULL,
+  `entrance_fee` decimal(15,2) DEFAULT 0.00,
+  `is_active` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`bce_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `beach_club_reservations`
+--
+
+DROP TABLE IF EXISTS `beach_club_reservations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `beach_club_reservations` (
+  `bcr_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `cabana_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `reservation_date` date DEFAULT NULL,
+  `party_size` int(11) DEFAULT 0,
+  `total_amount` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'PENDING',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `email` varchar(100) DEFAULT NULL,
+  `arrival_time` time DEFAULT NULL,
+  `daily_rate` decimal(15,2) DEFAULT 0.00,
+  `minimum_spend` decimal(15,2) DEFAULT 0.00,
+  `payment_status` varchar(30) DEFAULT 'PENDING',
+  `payment_method` varchar(50) DEFAULT NULL,
+  `includes_pool_access` tinyint(1) DEFAULT 1,
+  `includes_towel` tinyint(1) DEFAULT 1,
+  `special_requests` text DEFAULT NULL,
+  PRIMARY KEY (`bcr_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `beach_reservations`
+--
+
+DROP TABLE IF EXISTS `beach_reservations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `beach_reservations` (
+  `booking_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `seat_id` bigint(20) DEFAULT NULL,
+  `cabana_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `reservation_date` date DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'PENDING',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`booking_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `beach_seat_map`
+--
+
+DROP TABLE IF EXISTS `beach_seat_map`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `beach_seat_map` (
+  `seat_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `zone_id` bigint(20) DEFAULT NULL,
+  `seat_label` varchar(50) DEFAULT NULL,
+  `seat_type` varchar(50) DEFAULT NULL,
+  `position_x` decimal(10,2) DEFAULT 0.00,
+  `position_y` decimal(10,2) DEFAULT 0.00,
+  `is_available` tinyint(1) DEFAULT 1,
+  `is_reserved` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `zone_name` varchar(100) DEFAULT NULL,
+  `capacity` int(11) DEFAULT 2,
+  `width` decimal(10,2) DEFAULT 80.00,
+  `height` decimal(10,2) DEFAULT 80.00,
+  `base_price` decimal(15,2) DEFAULT 0.00,
+  `premium_multiplier` decimal(5,2) DEFAULT 1.00,
+  `minimum_spend` decimal(15,2) DEFAULT 0.00,
+  `is_bookable` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`seat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `beo_items`
+--
+
+DROP TABLE IF EXISTS `beo_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `beo_items` (
+  `beo_item_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `beo_id` bigint(20) NOT NULL,
+  `item_description` text DEFAULT NULL,
+  `category` varchar(100) DEFAULT NULL,
+  `quantity` int(11) DEFAULT 0,
+  `assigned_to` varchar(200) DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'PENDING',
+  `completed_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`beo_item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `beos`
+--
+
+DROP TABLE IF EXISTS `beos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `beos` (
+  `beo_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `proposal_id` bigint(20) DEFAULT NULL,
+  `beo_number` varchar(100) DEFAULT NULL,
+  `event_date` date DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'DRAFT',
+  `created_by` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`beo_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `beta_participants`
@@ -620,7 +972,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `beta_participants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `beta_participants` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `beta_program_id` int(11) NOT NULL,
@@ -642,21 +994,12 @@ CREATE TABLE `beta_participants` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `beta_participants`
---
-
-LOCK TABLES `beta_participants` WRITE;
-/*!40000 ALTER TABLE `beta_participants` DISABLE KEYS */;
-/*!40000 ALTER TABLE `beta_participants` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `beta_programs`
 --
 
 DROP TABLE IF EXISTS `beta_programs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `beta_programs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `program_name` varchar(100) NOT NULL,
@@ -677,13 +1020,118 @@ CREATE TABLE `beta_programs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `beta_programs`
+-- Table structure for table `beverage_cogs`
 --
 
-LOCK TABLES `beta_programs` WRITE;
-/*!40000 ALTER TABLE `beta_programs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `beta_programs` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `beverage_cogs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `beverage_cogs` (
+  `cogs_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `report_date` date NOT NULL,
+  `beverage_category` varchar(50) DEFAULT NULL,
+  `product_id` bigint(20) DEFAULT NULL,
+  `product_name` varchar(200) DEFAULT NULL,
+  `unit_type` varchar(30) DEFAULT NULL,
+  `opening_qty` decimal(10,2) DEFAULT 0.00,
+  `received_qty` decimal(10,2) DEFAULT 0.00,
+  `sold_qty` decimal(10,2) DEFAULT 0.00,
+  `closing_qty` decimal(10,2) DEFAULT 0.00,
+  `unit_cost` decimal(15,2) DEFAULT 0.00,
+  `total_cost` decimal(15,2) DEFAULT 0.00,
+  `revenue` decimal(15,2) DEFAULT 0.00,
+  `pour_cost_pct` decimal(5,2) DEFAULT 0.00,
+  `variance_qty` decimal(10,2) DEFAULT 0.00,
+  `variance_value` decimal(15,2) DEFAULT 0.00,
+  PRIMARY KEY (`cogs_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `booking_channel_sync`
+--
+
+DROP TABLE IF EXISTS `booking_channel_sync`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `booking_channel_sync` (
+  `sync_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `channel_name` varchar(100) DEFAULT NULL,
+  `sync_status` varchar(30) DEFAULT 'IDLE',
+  `last_synced_at` timestamp NULL DEFAULT NULL,
+  `booking_count` int(11) DEFAULT 0,
+  `error_message` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `channel_type` varchar(50) DEFAULT NULL,
+  `external_booking_id` varchar(200) DEFAULT NULL,
+  `internal_booking_id` bigint(20) DEFAULT NULL,
+  `synced_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`sync_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `bottle_service_assignments`
+--
+
+DROP TABLE IF EXISTS `bottle_service_assignments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bottle_service_assignments` (
+  `assignment_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `bottle_inventory_id` bigint(20) NOT NULL,
+  `bottle_inv_id` bigint(20) DEFAULT NULL,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_id` bigint(20) DEFAULT NULL,
+  `table_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `quantity` int(11) DEFAULT 1,
+  `status` varchar(30) DEFAULT 'ALLOCATED',
+  `served_by` varchar(100) DEFAULT NULL,
+  `served_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `assigned_by` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`assignment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `bottle_service_inventory`
+--
+
+DROP TABLE IF EXISTS `bottle_service_inventory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bottle_service_inventory` (
+  `bottle_inventory_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `product_id` bigint(20) DEFAULT NULL,
+  `bottle_name` varchar(200) DEFAULT NULL,
+  `bottle_size` varchar(50) DEFAULT NULL,
+  `brand` varchar(200) DEFAULT NULL,
+  `size` varchar(50) DEFAULT NULL,
+  `cost_price` decimal(15,2) DEFAULT 0.00,
+  `selling_price` decimal(15,2) DEFAULT 0.00,
+  `stock_qty` int(11) DEFAULT 0,
+  `quantity_on_hand` int(11) DEFAULT 0,
+  `allocated_qty` int(11) DEFAULT 0,
+  `served_qty` int(11) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `quantity_reserved` int(11) DEFAULT 0,
+  `quantity_sold` int(11) DEFAULT 0,
+  `unit_cost` decimal(15,2) DEFAULT 0.00,
+  `storage_location` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`bottle_inventory_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `branches`
@@ -691,7 +1139,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `branches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `branches` (
   `branch_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -719,18 +1167,8 @@ CREATE TABLE `branches` (
   KEY `idx_display_workflow` (`display_workflow_config_id`),
   CONSTRAINT `branches_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `branches_ibfk_2` FOREIGN KEY (`company_id`) REFERENCES `companies` (`company_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `branches`
---
-
-LOCK TABLES `branches` WRITE;
-/*!40000 ALTER TABLE `branches` DISABLE KEYS */;
-INSERT INTO `branches` VALUES (2,1,2,'MAIN','Main Branch','123 Main Street',NULL,NULL,NULL,NULL,5.00,0,'ACTIVE','2026-07-02 07:41:03','2026-07-02 07:41:03',NULL,NULL);
-/*!40000 ALTER TABLE `branches` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `business_type_pricing`
@@ -738,7 +1176,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `business_type_pricing`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `business_type_pricing` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `business_type` enum('home_based','small_restaurant','regional_chain','national_corporation','international_corporation') NOT NULL,
@@ -760,22 +1198,12 @@ CREATE TABLE `business_type_pricing` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `business_type_pricing`
---
-
-LOCK TABLES `business_type_pricing` WRITE;
-/*!40000 ALTER TABLE `business_type_pricing` DISABLE KEYS */;
-INSERT INTO `business_type_pricing` VALUES (1,'home_based','free',0.00,'[\"pos\", \"inventory\", \"menu\"]',1,2,50,0,0,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(2,'home_based','starter',29.00,'[\"pos\", \"inventory\", \"menu\", \"staff\"]',1,5,100,0,0,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(3,'small_restaurant','starter',49.00,'[\"pos\", \"inventory\", \"menu\", \"staff\", \"reservations\"]',1,10,200,0,0,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(4,'small_restaurant','standard',99.00,'[\"pos\", \"inventory\", \"menu\", \"staff\", \"reservations\", \"loyalty\", \"delivery\", \"analytics\"]',3,25,500,0,1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(5,'small_restaurant','professional',249.00,'[\"pos\", \"inventory\", \"menu\", \"staff\", \"reservations\", \"loyalty\", \"delivery\", \"analytics\", \"kitchen_display\", \"table_management\", \"procurement\"]',10,50,1000,1,1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(6,'regional_chain','standard',149.00,'[\"pos\", \"inventory\", \"menu\", \"staff\", \"reservations\", \"loyalty\", \"delivery\", \"analytics\", \"multi_location\"]',5,50,1000,0,1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(7,'regional_chain','professional',349.00,'[\"pos\", \"inventory\", \"menu\", \"staff\", \"reservations\", \"loyalty\", \"delivery\", \"analytics\", \"multi_location\", \"kitchen_display\", \"table_management\", \"procurement\", \"api_access\"]',15,100,2000,1,1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(8,'national_corporation','professional',499.00,'[\"pos\", \"inventory\", \"menu\", \"staff\", \"reservations\", \"loyalty\", \"delivery\", \"analytics\", \"multi_location\", \"kitchen_display\", \"table_management\", \"procurement\", \"api_access\", \"franchise\", \"sustainability\"]',50,200,5000,1,1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(9,'national_corporation','enterprise',999.00,'[\"pos\", \"inventory\", \"menu\", \"staff\", \"reservations\", \"loyalty\", \"delivery\", \"analytics\", \"multi_location\", \"kitchen_display\", \"table_management\", \"procurement\", \"api_access\", \"franchise\", \"sustainability\", \"international\", \"ai_analytics\"]',100,500,10000,1,1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(10,'international_corporation','enterprise',1499.00,'[\"pos\", \"inventory\", \"menu\", \"staff\", \"reservations\", \"loyalty\", \"delivery\", \"analytics\", \"multi_location\", \"kitchen_display\", \"table_management\", \"procurement\", \"api_access\", \"franchise\", \"sustainability\", \"international\", \"ai_analytics\", \"automation\"]',999,1000,50000,1,1,'2026-07-05 03:24:53','2026-07-05 03:24:53');
-/*!40000 ALTER TABLE `business_type_pricing` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `categories`
 --
 
 DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `categories` (
   `category_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -795,17 +1223,44 @@ CREATE TABLE `categories` (
   KEY `idx_categories_status` (`status`),
   CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `categories_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `categories`
+-- Table structure for table `catering_lead_pipeline`
 --
 
-LOCK TABLES `categories` WRITE;
-/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `catering_lead_pipeline`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `catering_lead_pipeline` (
+  `lead_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `lead_name` varchar(200) DEFAULT NULL,
+  `company` varchar(200) DEFAULT NULL,
+  `event_type` varchar(100) DEFAULT NULL,
+  `event_date` date DEFAULT NULL,
+  `guest_count` int(11) DEFAULT 0,
+  `estimated_value` decimal(15,2) DEFAULT 0.00,
+  `stage` varchar(50) DEFAULT 'NEW',
+  `source` varchar(100) DEFAULT NULL,
+  `assigned_to` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `lead_number` varchar(50) DEFAULT NULL,
+  `lead_source` varchar(100) DEFAULT NULL,
+  `client_name` varchar(200) DEFAULT NULL,
+  `client_company` varchar(200) DEFAULT NULL,
+  `client_phone` varchar(50) DEFAULT NULL,
+  `client_email` varchar(100) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `next_follow_up` date DEFAULT NULL,
+  `stage_updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `probability_pct` decimal(5,2) DEFAULT 0.00,
+  PRIMARY KEY (`lead_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `certifications`
@@ -813,7 +1268,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `certifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `certifications` (
   `certification_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -837,21 +1292,12 @@ CREATE TABLE `certifications` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `certifications`
---
-
-LOCK TABLES `certifications` WRITE;
-/*!40000 ALTER TABLE `certifications` DISABLE KEYS */;
-/*!40000 ALTER TABLE `certifications` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `chart_of_accounts`
 --
 
 DROP TABLE IF EXISTS `chart_of_accounts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `chart_of_accounts` (
   `account_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -870,17 +1316,65 @@ CREATE TABLE `chart_of_accounts` (
   KEY `idx_chart_of_accounts_parent_id` (`parent_id`),
   CONSTRAINT `chart_of_accounts_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `chart_of_accounts_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `chart_of_accounts` (`account_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `coat_check_items`
+--
+
+DROP TABLE IF EXISTS `coat_check_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `coat_check_items` (
+  `coat_check_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_id` bigint(20) DEFAULT NULL,
+  `item_description` varchar(200) DEFAULT NULL,
+  `ticket_number` varchar(50) DEFAULT NULL,
+  `checked_in_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `checked_out_at` timestamp NULL DEFAULT NULL,
+  `fee` decimal(10,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'CHECKED_IN',
+  `check_number` varchar(50) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `item_type` varchar(50) DEFAULT 'COAT',
+  `item_count` int(11) DEFAULT 1,
+  `fee_charged` decimal(10,2) DEFAULT 0.00,
+  `fee_paid` tinyint(1) DEFAULT 0,
+  `handled_by` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`coat_check_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `chart_of_accounts`
+-- Table structure for table `comp_guest_lists`
 --
 
-LOCK TABLES `chart_of_accounts` WRITE;
-/*!40000 ALTER TABLE `chart_of_accounts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chart_of_accounts` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `comp_guest_lists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `comp_guest_lists` (
+  `comp_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_id` bigint(20) DEFAULT NULL,
+  `guest_name` varchar(200) DEFAULT NULL,
+  `comp_type` varchar(50) DEFAULT NULL,
+  `authorized_by` varchar(100) DEFAULT NULL,
+  `checked_in` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `list_type` varchar(30) DEFAULT 'GUEST',
+  `guest_phone` varchar(50) DEFAULT NULL,
+  `party_size` int(11) DEFAULT 1,
+  `comp_value` decimal(15,2) DEFAULT 0.00,
+  `added_by` varchar(100) DEFAULT NULL,
+  `check_in_status` varchar(30) DEFAULT 'PENDING',
+  `checked_in_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`comp_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `companies`
@@ -888,7 +1382,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `companies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `companies` (
   `company_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -907,18 +1401,8 @@ CREATE TABLE `companies` (
   KEY `idx_companies_tenant_id` (`tenant_id`),
   KEY `idx_companies_status` (`status`),
   CONSTRAINT `companies_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `companies`
---
-
-LOCK TABLES `companies` WRITE;
-/*!40000 ALTER TABLE `companies` DISABLE KEYS */;
-INSERT INTO `companies` VALUES (2,1,'DEFAULT','Default Restaurant',NULL,NULL,NULL,NULL,'ACTIVE','2026-07-02 07:41:03','2026-07-02 07:41:03',NULL);
-/*!40000 ALTER TABLE `companies` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `competitor_prices`
@@ -926,7 +1410,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `competitor_prices`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `competitor_prices` (
   `competitor_price_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -946,21 +1430,12 @@ CREATE TABLE `competitor_prices` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `competitor_prices`
---
-
-LOCK TABLES `competitor_prices` WRITE;
-/*!40000 ALTER TABLE `competitor_prices` DISABLE KEYS */;
-/*!40000 ALTER TABLE `competitor_prices` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `compliance_alerts`
 --
 
 DROP TABLE IF EXISTS `compliance_alerts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `compliance_alerts` (
   `alert_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -980,21 +1455,12 @@ CREATE TABLE `compliance_alerts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `compliance_alerts`
---
-
-LOCK TABLES `compliance_alerts` WRITE;
-/*!40000 ALTER TABLE `compliance_alerts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `compliance_alerts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `compliance_checks`
 --
 
 DROP TABLE IF EXISTS `compliance_checks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `compliance_checks` (
   `check_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -1015,13 +1481,152 @@ CREATE TABLE `compliance_checks` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `compliance_checks`
+-- Table structure for table `corporate_meal_deliveries`
 --
 
-LOCK TABLES `compliance_checks` WRITE;
-/*!40000 ALTER TABLE `compliance_checks` DISABLE KEYS */;
-/*!40000 ALTER TABLE `compliance_checks` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `corporate_meal_deliveries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `corporate_meal_deliveries` (
+  `delivery_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `subscription_id` bigint(20) NOT NULL,
+  `tenant_id` bigint(20) NOT NULL,
+  `delivery_date` date NOT NULL,
+  `head_count_served` int(11) DEFAULT NULL,
+  `total_amount` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(20) DEFAULT 'SCHEDULED',
+  `delivered_at` timestamp NULL DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  PRIMARY KEY (`delivery_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `corporate_meal_subscriptions`
+--
+
+DROP TABLE IF EXISTS `corporate_meal_subscriptions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `corporate_meal_subscriptions` (
+  `subscription_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `company_name` varchar(200) DEFAULT NULL,
+  `contact_person` varchar(200) DEFAULT NULL,
+  `contact_phone` varchar(50) DEFAULT NULL,
+  `contact_email` varchar(100) DEFAULT NULL,
+  `billing_address` text DEFAULT NULL,
+  `meal_plan` varchar(50) DEFAULT 'DAILY_LUNCH',
+  `head_count` int(11) DEFAULT 10,
+  `delivery_address` text DEFAULT NULL,
+  `delivery_time` time DEFAULT NULL,
+  `frequency` varchar(20) DEFAULT 'WEEKLY',
+  `days_of_week` varchar(20) DEFAULT NULL,
+  `price_per_head` decimal(15,2) DEFAULT 0.00,
+  `monthly_total` decimal(15,2) DEFAULT 0.00,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `auto_renew` tinyint(1) DEFAULT 1,
+  `status` varchar(20) DEFAULT 'ACTIVE',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`subscription_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `course_sequences`
+--
+
+DROP TABLE IF EXISTS `course_sequences`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `course_sequences` (
+  `course_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `course_number` int(11) NOT NULL,
+  `course_name` varchar(100) NOT NULL,
+  `course_type` enum('APPETIZER','SOUP','SALAD','MAIN','DESSERT','BEVERAGE','CUSTOM') DEFAULT 'CUSTOM',
+  `auto_fire_delay_minutes` int(11) DEFAULT 0,
+  `manual_fire_only` tinyint(1) DEFAULT 0,
+  `display_order` int(11) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`course_id`),
+  UNIQUE KEY `unique_course` (`tenant_id`,`branch_id`,`course_number`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  CONSTRAINT `course_sequences_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `course_sequences_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `cross_zone_tabs`
+--
+
+DROP TABLE IF EXISTS `cross_zone_tabs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cross_zone_tabs` (
+  `tab_transfer_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tab_id` bigint(20) unsigned NOT NULL,
+  `from_zone_id` bigint(20) unsigned NOT NULL,
+  `to_zone_id` bigint(20) unsigned NOT NULL,
+  `from_table_id` bigint(20) unsigned DEFAULT NULL,
+  `to_table_id` bigint(20) unsigned DEFAULT NULL,
+  `transfer_reason` varchar(255) DEFAULT NULL,
+  `transferred_by` bigint(20) unsigned DEFAULT NULL,
+  `transfer_timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`tab_transfer_id`),
+  KEY `idx_tab` (`tab_id`),
+  KEY `idx_from_zone` (`from_zone_id`),
+  KEY `idx_to_zone` (`to_zone_id`),
+  KEY `idx_from_table` (`from_table_id`),
+  KEY `idx_to_table` (`to_table_id`),
+  KEY `idx_transferred_by` (`transferred_by`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `custom_orders`
+--
+
+DROP TABLE IF EXISTS `custom_orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `custom_orders` (
+  `custom_order_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `special_instructions` text DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'PENDING',
+  `quoted_price` decimal(15,2) DEFAULT 0.00,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `order_number` varchar(50) DEFAULT NULL,
+  `customer_phone` varchar(50) DEFAULT NULL,
+  `customer_email` varchar(100) DEFAULT NULL,
+  `product_name` varchar(200) DEFAULT NULL,
+  `product_description` text DEFAULT NULL,
+  `specifications` text DEFAULT NULL,
+  `quantity` int(11) DEFAULT 1,
+  `unit_price` decimal(15,2) DEFAULT 0.00,
+  `total_price` decimal(15,2) DEFAULT 0.00,
+  `deposit_required` decimal(15,2) DEFAULT 0.00,
+  `pickup_date` date DEFAULT NULL,
+  `pickup_time` time DEFAULT NULL,
+  `delivery_address` text DEFAULT NULL,
+  `delivery_fee` decimal(15,2) DEFAULT 0.00,
+  `fulfillment_type` varchar(30) DEFAULT 'PICKUP',
+  PRIMARY KEY (`custom_order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `customer_achievements`
@@ -1029,7 +1634,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `customer_achievements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer_achievements` (
   `achievement_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `customer_id` bigint(20) NOT NULL,
@@ -1044,21 +1649,12 @@ CREATE TABLE `customer_achievements` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `customer_achievements`
---
-
-LOCK TABLES `customer_achievements` WRITE;
-/*!40000 ALTER TABLE `customer_achievements` DISABLE KEYS */;
-/*!40000 ALTER TABLE `customer_achievements` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `customer_addresses`
 --
 
 DROP TABLE IF EXISTS `customer_addresses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer_addresses` (
   `address_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `customer_id` bigint(20) NOT NULL,
@@ -1079,21 +1675,12 @@ CREATE TABLE `customer_addresses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `customer_addresses`
---
-
-LOCK TABLES `customer_addresses` WRITE;
-/*!40000 ALTER TABLE `customer_addresses` DISABLE KEYS */;
-/*!40000 ALTER TABLE `customer_addresses` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `customer_loyalty`
 --
 
 DROP TABLE IF EXISTS `customer_loyalty`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer_loyalty` (
   `customer_loyalty_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -1121,22 +1708,12 @@ CREATE TABLE `customer_loyalty` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `customer_loyalty`
---
-
-LOCK TABLES `customer_loyalty` WRITE;
-/*!40000 ALTER TABLE `customer_loyalty` DISABLE KEYS */;
-INSERT INTO `customer_loyalty` VALUES (1,1,2,7620,'PLATINUM',0,1000,8500,880,'2026-07-05',2,'2026-07-05 13:55:25',2,'2026-07-05 14:32:46',NULL);
-/*!40000 ALTER TABLE `customer_loyalty` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `customer_preferences`
 --
 
 DROP TABLE IF EXISTS `customer_preferences`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer_preferences` (
   `preference_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `customer_id` bigint(20) NOT NULL,
@@ -1152,21 +1729,12 @@ CREATE TABLE `customer_preferences` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `customer_preferences`
---
-
-LOCK TABLES `customer_preferences` WRITE;
-/*!40000 ALTER TABLE `customer_preferences` DISABLE KEYS */;
-/*!40000 ALTER TABLE `customer_preferences` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `customer_pricing`
 --
 
 DROP TABLE IF EXISTS `customer_pricing`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customer_pricing` (
   `pricing_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -1197,21 +1765,12 @@ CREATE TABLE `customer_pricing` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `customer_pricing`
---
-
-LOCK TABLES `customer_pricing` WRITE;
-/*!40000 ALTER TABLE `customer_pricing` DISABLE KEYS */;
-/*!40000 ALTER TABLE `customer_pricing` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `customers`
 --
 
 DROP TABLE IF EXISTS `customers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `customers` (
   `customer_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -1238,17 +1797,40 @@ CREATE TABLE `customers` (
   KEY `idx_status` (`status`),
   KEY `idx_phone` (`phone`),
   KEY `idx_email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `customers`
+-- Table structure for table `daily_production_plans`
 --
 
-LOCK TABLES `customers` WRITE;
-/*!40000 ALTER TABLE `customers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `customers` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `daily_production_plans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `daily_production_plans` (
+  `plan_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `plan_date` date DEFAULT NULL,
+  `recipe_id` bigint(20) DEFAULT NULL,
+  `planned_qty` decimal(10,2) DEFAULT 0.00,
+  `actual_qty` decimal(10,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'PLANNED',
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `product_id` bigint(20) DEFAULT NULL,
+  `product_name` varchar(200) DEFAULT NULL,
+  `planned_quantity` decimal(10,2) DEFAULT 0.00,
+  `produced_quantity` decimal(10,2) DEFAULT 0.00,
+  `sold_quantity` decimal(10,2) DEFAULT 0.00,
+  `wasted_quantity` decimal(10,2) DEFAULT 0.00,
+  `remaining_quantity` decimal(10,2) DEFAULT 0.00,
+  `production_start` timestamp NULL DEFAULT NULL,
+  `production_end` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`plan_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `dashboards`
@@ -1256,7 +1838,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `dashboards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dashboards` (
   `dashboard_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -1275,21 +1857,12 @@ CREATE TABLE `dashboards` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `dashboards`
---
-
-LOCK TABLES `dashboards` WRITE;
-/*!40000 ALTER TABLE `dashboards` DISABLE KEYS */;
-/*!40000 ALTER TABLE `dashboards` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `data_product_subscriptions`
 --
 
 DROP TABLE IF EXISTS `data_product_subscriptions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_product_subscriptions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `data_product_id` int(11) NOT NULL,
@@ -1310,21 +1883,12 @@ CREATE TABLE `data_product_subscriptions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `data_product_subscriptions`
---
-
-LOCK TABLES `data_product_subscriptions` WRITE;
-/*!40000 ALTER TABLE `data_product_subscriptions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `data_product_subscriptions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `data_products`
 --
 
 DROP TABLE IF EXISTS `data_products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_products` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `product_name` varchar(100) NOT NULL,
@@ -1345,14 +1909,62 @@ CREATE TABLE `data_products` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `data_products`
+-- Table structure for table `delivery_route_stops`
 --
 
-LOCK TABLES `data_products` WRITE;
-/*!40000 ALTER TABLE `data_products` DISABLE KEYS */;
-INSERT INTO `data_products` VALUES (1,'Restaurant Industry Insights','aggregated_insights','Aggregated data on restaurant trends, pricing, and performance','[\"orders\", \"menus\", \"reviews\"]','subscription',99.00,'public',1,'2026-07-05 03:26:37','2026-07-05 03:26:37'),(2,'Supplier Lead Generation','lead_generation','Qualified leads for suppliers based on restaurant demand','[\"inventory\", \"procurement\"]','usage_based',5.00,'public',1,'2026-07-05 03:26:37','2026-07-05 03:26:37'),(3,'Market Trend Reports','market_report','Monthly reports on F&B market trends and forecasts','[\"orders\", \"searches\", \"reviews\"]','subscription',199.00,'public',1,'2026-07-05 03:26:37','2026-07-05 03:26:37'),(4,'Custom Analytics Dashboard','custom_analytics','Tailored analytics dashboard for specific business needs','[\"all\"]','subscription',299.00,'public',1,'2026-07-05 03:26:37','2026-07-05 03:26:37');
-/*!40000 ALTER TABLE `data_products` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `delivery_route_stops`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `delivery_route_stops` (
+  `stop_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `route_id` bigint(20) NOT NULL,
+  `order_id` bigint(20) DEFAULT NULL,
+  `stop_sequence` int(11) DEFAULT 0,
+  `address` text DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'PENDING',
+  `arrived_at` timestamp NULL DEFAULT NULL,
+  `departed_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `customer_name` varchar(200) DEFAULT NULL,
+  `contact_phone` varchar(50) DEFAULT NULL,
+  `items_summary` text DEFAULT NULL,
+  `amount` decimal(15,2) DEFAULT 0.00,
+  `proof_photo_path` varchar(500) DEFAULT NULL,
+  `signature_path` varchar(500) DEFAULT NULL,
+  `failure_reason` text DEFAULT NULL,
+  `delivered_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`stop_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `delivery_routes`
+--
+
+DROP TABLE IF EXISTS `delivery_routes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `delivery_routes` (
+  `route_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `driver_name` varchar(200) DEFAULT NULL,
+  `route_date` date DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'PLANNED',
+  `started_at` timestamp NULL DEFAULT NULL,
+  `completed_at` timestamp NULL DEFAULT NULL,
+  `total_stops` int(11) DEFAULT 0,
+  `completed_stops` int(11) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `driver_phone` varchar(50) DEFAULT NULL,
+  `vehicle` varchar(100) DEFAULT NULL,
+  `estimated_duration_minutes` int(11) DEFAULT NULL,
+  `actual_start_time` timestamp NULL DEFAULT NULL,
+  `actual_end_time` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`route_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `demand_forecasts`
@@ -1360,7 +1972,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `demand_forecasts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `demand_forecasts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -1383,21 +1995,12 @@ CREATE TABLE `demand_forecasts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `demand_forecasts`
---
-
-LOCK TABLES `demand_forecasts` WRITE;
-/*!40000 ALTER TABLE `demand_forecasts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `demand_forecasts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `disaster_recovery_plans`
 --
 
 DROP TABLE IF EXISTS `disaster_recovery_plans`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `disaster_recovery_plans` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -1418,21 +2021,12 @@ CREATE TABLE `disaster_recovery_plans` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `disaster_recovery_plans`
---
-
-LOCK TABLES `disaster_recovery_plans` WRITE;
-/*!40000 ALTER TABLE `disaster_recovery_plans` DISABLE KEYS */;
-/*!40000 ALTER TABLE `disaster_recovery_plans` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `display_workflow_configurations`
 --
 
 DROP TABLE IF EXISTS `display_workflow_configurations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `display_workflow_configurations` (
   `config_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -1464,14 +2058,50 @@ CREATE TABLE `display_workflow_configurations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `display_workflow_configurations`
+-- Table structure for table `drive_thru_sessions`
 --
 
-LOCK TABLES `display_workflow_configurations` WRITE;
-/*!40000 ALTER TABLE `display_workflow_configurations` DISABLE KEYS */;
-INSERT INTO `display_workflow_configurations` VALUES (1,1,NULL,'STANDARD','Standard Display','INDIVIDUAL_ITEMS',0,1,0,NULL,NULL,'SHOW_ALL',1,0,'AUTO','STAFF_SERVE',1,'2026-07-08 10:56:31','2026-07-08 10:56:31',NULL,NULL),(2,1,NULL,'PADANG_DISPLAY','Padang Style Display','GROUPED_DISPLAY',0,1,0,NULL,NULL,'SHOW_ALL',1,0,'AUTO','SELF_SERVE',0,'2026-07-08 10:56:31','2026-07-08 10:56:31',NULL,NULL),(3,1,NULL,'BUFFET','Buffet Display','CATEGORY_DISPLAY',0,1,0,NULL,NULL,'SHOW_ALL',1,0,'AUTO','SELF_SERVE',0,'2026-07-08 10:56:31','2026-07-08 10:56:31',NULL,NULL);
-/*!40000 ALTER TABLE `display_workflow_configurations` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `drive_thru_sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `drive_thru_sessions` (
+  `session_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `lane_number` int(11) DEFAULT 1,
+  `vehicle_description` varchar(200) DEFAULT NULL,
+  `order_id` bigint(20) DEFAULT NULL,
+  `detected_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `greeted_at` timestamp NULL DEFAULT NULL,
+  `order_taken_at` timestamp NULL DEFAULT NULL,
+  `payment_at` timestamp NULL DEFAULT NULL,
+  `pickup_at` timestamp NULL DEFAULT NULL,
+  `total_wait_seconds` int(11) DEFAULT NULL,
+  `status` varchar(20) DEFAULT 'DETECTED',
+  `order_total` decimal(15,2) DEFAULT 0.00,
+  PRIMARY KEY (`session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `dynamic_price_history`
+--
+
+DROP TABLE IF EXISTS `dynamic_price_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dynamic_price_history` (
+  `history_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `product_id` bigint(20) DEFAULT NULL,
+  `original_price` decimal(15,2) DEFAULT NULL,
+  `adjusted_price` decimal(15,2) DEFAULT NULL,
+  `rule_id` bigint(20) DEFAULT NULL,
+  `adjustment_reason` varchar(200) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`history_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `dynamic_pricing_rules`
@@ -1479,7 +2109,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `dynamic_pricing_rules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dynamic_pricing_rules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -1494,6 +2124,15 @@ CREATE TABLE `dynamic_pricing_rules` (
   `is_active` tinyint(1) DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `branch_id` bigint(20) DEFAULT NULL,
+  `category_id` bigint(20) DEFAULT NULL,
+  `trigger_type` varchar(50) DEFAULT NULL,
+  `trigger_condition` text DEFAULT NULL,
+  `price_modifier_type` varchar(20) DEFAULT NULL,
+  `price_modifier_value` decimal(15,2) DEFAULT NULL,
+  `priority` int(11) DEFAULT 0,
+  `valid_from` date DEFAULT NULL,
+  `valid_to` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_tenant_id` (`tenant_id`),
   KEY `idx_product_id` (`product_id`),
@@ -1502,13 +2141,33 @@ CREATE TABLE `dynamic_pricing_rules` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `dynamic_pricing_rules`
+-- Table structure for table `e_signatures`
 --
 
-LOCK TABLES `dynamic_pricing_rules` WRITE;
-/*!40000 ALTER TABLE `dynamic_pricing_rules` DISABLE KEYS */;
-/*!40000 ALTER TABLE `dynamic_pricing_rules` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `e_signatures`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `e_signatures` (
+  `signature_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `contract_id` bigint(20) DEFAULT NULL,
+  `document_type` varchar(50) DEFAULT 'CATERING_CONTRACT',
+  `document_title` varchar(200) DEFAULT NULL,
+  `document_content` longtext DEFAULT NULL,
+  `document_hash` varchar(64) DEFAULT NULL,
+  `signer_name` varchar(200) DEFAULT NULL,
+  `signer_email` varchar(100) DEFAULT NULL,
+  `signer_role` varchar(50) DEFAULT NULL,
+  `signature_data` text DEFAULT NULL,
+  `signature_ip` varchar(45) DEFAULT NULL,
+  `signed_at` timestamp NULL DEFAULT NULL,
+  `status` varchar(20) DEFAULT 'PENDING',
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`signature_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `employee_availability`
@@ -1516,7 +2175,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `employee_availability`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `employee_availability` (
   `availability_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `employee_id` bigint(20) NOT NULL,
@@ -1533,21 +2192,12 @@ CREATE TABLE `employee_availability` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `employee_availability`
---
-
-LOCK TABLES `employee_availability` WRITE;
-/*!40000 ALTER TABLE `employee_availability` DISABLE KEYS */;
-/*!40000 ALTER TABLE `employee_availability` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `employee_skills`
 --
 
 DROP TABLE IF EXISTS `employee_skills`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `employee_skills` (
   `employee_skill_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `employee_id` bigint(20) NOT NULL,
@@ -1566,21 +2216,12 @@ CREATE TABLE `employee_skills` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `employee_skills`
---
-
-LOCK TABLES `employee_skills` WRITE;
-/*!40000 ALTER TABLE `employee_skills` DISABLE KEYS */;
-/*!40000 ALTER TABLE `employee_skills` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `employees`
 --
 
 DROP TABLE IF EXISTS `employees`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `employees` (
   `employee_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -1613,17 +2254,8 @@ CREATE TABLE `employees` (
   KEY `idx_branch` (`branch_id`),
   KEY `idx_status` (`status`),
   KEY `idx_position` (`position`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `employees`
---
-
-LOCK TABLES `employees` WRITE;
-/*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-/*!40000 ALTER TABLE `employees` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `energy_consumption`
@@ -1631,7 +2263,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `energy_consumption`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `energy_consumption` (
   `consumption_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -1651,13 +2283,86 @@ CREATE TABLE `energy_consumption` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `energy_consumption`
+-- Table structure for table `entertainer_rotations`
 --
 
-LOCK TABLES `energy_consumption` WRITE;
-/*!40000 ALTER TABLE `energy_consumption` DISABLE KEYS */;
-/*!40000 ALTER TABLE `energy_consumption` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `entertainer_rotations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `entertainer_rotations` (
+  `rotation_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_id` bigint(20) DEFAULT NULL,
+  `entertainer_name` varchar(200) DEFAULT NULL,
+  `stage` varchar(100) DEFAULT NULL,
+  `start_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `end_time` timestamp NULL DEFAULT NULL,
+  `performance_type` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `entertainer_type` varchar(50) DEFAULT 'DJ',
+  `set_number` int(11) DEFAULT 1,
+  `set_start_time` timestamp NULL DEFAULT NULL,
+  `set_end_time` timestamp NULL DEFAULT NULL,
+  `set_duration_minutes` int(11) DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'SCHEDULED',
+  PRIMARY KEY (`rotation_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `entrance_tickets`
+--
+
+DROP TABLE IF EXISTS `entrance_tickets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `entrance_tickets` (
+  `ticket_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_id` bigint(20) DEFAULT NULL,
+  `ticket_type` varchar(50) DEFAULT NULL,
+  `price` decimal(15,2) DEFAULT 0.00,
+  `qr_code` varchar(500) DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'UNSOLD',
+  `scanned_at` timestamp NULL DEFAULT NULL,
+  `scanned_by` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `expires_at` timestamp NULL DEFAULT NULL,
+  `used_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`ticket_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `eod_closeouts`
+--
+
+DROP TABLE IF EXISTS `eod_closeouts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `eod_closeouts` (
+  `closeout_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `closeout_date` date NOT NULL,
+  `opened_by` varchar(100) DEFAULT NULL,
+  `opening_cash` decimal(15,2) DEFAULT 0.00,
+  `closed_by` varchar(100) DEFAULT NULL,
+  `closed_at` timestamp NULL DEFAULT NULL,
+  `cash_in` decimal(15,2) DEFAULT 0.00,
+  `cash_out` decimal(15,2) DEFAULT 0.00,
+  `counted_cash` decimal(15,2) DEFAULT 0.00,
+  `expected_cash` decimal(15,2) DEFAULT 0.00,
+  `cash_variance` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'OPEN',
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`closeout_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `equipment`
@@ -1665,7 +2370,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `equipment`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `equipment` (
   `equipment_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -1696,13 +2401,164 @@ CREATE TABLE `equipment` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `equipment`
+-- Table structure for table `equipment_assets`
 --
 
-LOCK TABLES `equipment` WRITE;
-/*!40000 ALTER TABLE `equipment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `equipment` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `equipment_assets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `equipment_assets` (
+  `equipment_id` bigint(20) DEFAULT NULL,
+  `asset_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `asset_name` varchar(200) DEFAULT NULL,
+  `equipment_name` varchar(200) DEFAULT NULL,
+  `category` varchar(100) DEFAULT NULL,
+  `equipment_type` varchar(50) DEFAULT 'MISC',
+  `serial_number` varchar(100) DEFAULT NULL,
+  `purchase_date` date DEFAULT NULL,
+  `value` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'AVAILABLE',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `brand` varchar(100) DEFAULT NULL,
+  `model` varchar(100) DEFAULT NULL,
+  `purchase_cost` decimal(15,2) DEFAULT NULL,
+  `condition_status` varchar(30) DEFAULT 'GOOD',
+  `assigned_to` varchar(200) DEFAULT NULL,
+  `assigned_location` varchar(200) DEFAULT NULL,
+  `is_cross_hire` tinyint(1) DEFAULT 0,
+  `cross_hire_from` varchar(200) DEFAULT NULL,
+  `cross_hire_return_date` date DEFAULT NULL,
+  PRIMARY KEY (`asset_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `equipment_assignments`
+--
+
+DROP TABLE IF EXISTS `equipment_assignments`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `equipment_assignments` (
+  `assignment_id` bigint(20) DEFAULT NULL,
+  `equipment_id` bigint(20) DEFAULT NULL,
+  `ea_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `asset_id` bigint(20) NOT NULL,
+  `assigned_to` varchar(200) DEFAULT NULL,
+  `assigned_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `returned_at` timestamp NULL DEFAULT NULL,
+  `condition` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `event_id` bigint(20) DEFAULT NULL,
+  `room_id` bigint(20) DEFAULT NULL,
+  `assigned_by` varchar(100) DEFAULT NULL,
+  `condition_at_return` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`ea_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `event_cost_items`
+--
+
+DROP TABLE IF EXISTS `event_cost_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `event_cost_items` (
+  `cost_item_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `profitability_id` bigint(20) NOT NULL,
+  `category` varchar(100) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `amount` decimal(15,2) DEFAULT 0.00,
+  `vendor` varchar(200) DEFAULT NULL,
+  `invoice_number` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`cost_item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `event_holds_calendar`
+--
+
+DROP TABLE IF EXISTS `event_holds_calendar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `event_holds_calendar` (
+  `hold_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_id` bigint(20) DEFAULT NULL,
+  `hold_type` varchar(50) DEFAULT NULL,
+  `start_time` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `description` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `event_date` date DEFAULT NULL,
+  `artist_name` varchar(200) DEFAULT NULL,
+  `priority_rank` int(11) DEFAULT 1,
+  `promoter_name` varchar(200) DEFAULT NULL,
+  `hold_expires_at` timestamp NULL DEFAULT NULL,
+  `released_at` timestamp NULL DEFAULT NULL,
+  `rolled_to_date` date DEFAULT NULL,
+  PRIMARY KEY (`hold_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `event_profitability`
+--
+
+DROP TABLE IF EXISTS `event_profitability`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `event_profitability` (
+  `profitability_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_name` varchar(200) DEFAULT NULL,
+  `event_date` date DEFAULT NULL,
+  `revenue` decimal(15,2) DEFAULT 0.00,
+  `total_costs` decimal(15,2) DEFAULT 0.00,
+  `net_profit` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'DRAFT',
+  `finalized_by` varchar(100) DEFAULT NULL,
+  `finalized_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`profitability_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `event_proposals`
+--
+
+DROP TABLE IF EXISTS `event_proposals`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `event_proposals` (
+  `proposal_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `client_name` varchar(200) DEFAULT NULL,
+  `event_type` varchar(100) DEFAULT NULL,
+  `event_date` date DEFAULT NULL,
+  `guest_count` int(11) DEFAULT 0,
+  `proposed_budget` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'DRAFT',
+  `deposit_amount` decimal(15,2) DEFAULT 0.00,
+  `deposit_paid` tinyint(1) DEFAULT 0,
+  `converted_to_beo` tinyint(1) DEFAULT 0,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`proposal_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `feature_modules`
@@ -1710,7 +2566,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `feature_modules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `feature_modules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `module_code` varchar(50) NOT NULL,
@@ -1729,22 +2585,12 @@ CREATE TABLE `feature_modules` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `feature_modules`
---
-
-LOCK TABLES `feature_modules` WRITE;
-/*!40000 ALTER TABLE `feature_modules` DISABLE KEYS */;
-INSERT INTO `feature_modules` VALUES (1,'pos','Point of Sale','core','Basic POS functionality','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(2,'inventory','Inventory Management','core','Inventory tracking and management','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(3,'menu','Menu Management','core','Menu item and category management','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(4,'staff','Staff Management','core','Staff scheduling and management','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(5,'reservations','Reservation System','customer','Table reservation management','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(6,'loyalty','Loyalty Program','customer','Customer loyalty and rewards','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(7,'delivery','Delivery Integration','operations','Delivery platform integration','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(8,'analytics','Analytics Dashboard','reporting','Business analytics and reporting','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(9,'multi_location','Multi-Location','enterprise','Multi-location management','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(10,'api_access','API Access','enterprise','API access for integrations','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(11,'kitchen_display','Kitchen Display System','operations','KDS for kitchen operations','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(12,'table_management','Table Management','operations','Table and floor management','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(13,'procurement','Procurement','supply_chain','Purchase order and supplier management','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(14,'franchise','Franchise Management','enterprise','Franchise operations management','[\"multi_location\"]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(15,'ghost_kitchen','Ghost Kitchen','operations','Virtual brand and ghost kitchen management','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(16,'sustainability','Sustainability','reporting','Environmental impact tracking','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(17,'international','International','enterprise','Multi-currency and multi-language support','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(18,'ai_analytics','AI Analytics','advanced','AI-powered analytics and predictions','[\"analytics\"]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(19,'automation','Automation','advanced','Workflow automation and triggers','[]',1,'2026-07-05 03:24:53','2026-07-05 03:24:53');
-/*!40000 ALTER TABLE `feature_modules` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `featured_restaurant_requests`
 --
 
 DROP TABLE IF EXISTS `featured_restaurant_requests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `featured_restaurant_requests` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -1766,21 +2612,12 @@ CREATE TABLE `featured_restaurant_requests` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `featured_restaurant_requests`
---
-
-LOCK TABLES `featured_restaurant_requests` WRITE;
-/*!40000 ALTER TABLE `featured_restaurant_requests` DISABLE KEYS */;
-/*!40000 ALTER TABLE `featured_restaurant_requests` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `feedback`
 --
 
 DROP TABLE IF EXISTS `feedback`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `feedback` (
   `feedback_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -1810,13 +2647,34 @@ CREATE TABLE `feedback` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `feedback`
+-- Table structure for table `floors`
 --
 
-LOCK TABLES `feedback` WRITE;
-/*!40000 ALTER TABLE `feedback` DISABLE KEYS */;
-/*!40000 ALTER TABLE `feedback` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `floors`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `floors` (
+  `floor_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `floor_code` varchar(50) NOT NULL,
+  `floor_name` varchar(100) NOT NULL,
+  `floor_level` int(11) NOT NULL DEFAULT 0,
+  `floor_type` varchar(50) DEFAULT 'DINING',
+  `description` text DEFAULT NULL,
+  `sort_order` int(11) DEFAULT 0,
+  `status` varchar(20) DEFAULT 'ACTIVE',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`floor_id`),
+  UNIQUE KEY `unique_floor_code` (`tenant_id`,`branch_id`,`floor_code`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_level` (`floor_level`),
+  CONSTRAINT `floors_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `floors_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `food_discovery_app`
@@ -1824,7 +2682,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `food_discovery_app`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `food_discovery_app` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -1859,21 +2717,12 @@ CREATE TABLE `food_discovery_app` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `food_discovery_app`
---
-
-LOCK TABLES `food_discovery_app` WRITE;
-/*!40000 ALTER TABLE `food_discovery_app` DISABLE KEYS */;
-/*!40000 ALTER TABLE `food_discovery_app` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `food_waste`
 --
 
 DROP TABLE IF EXISTS `food_waste`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `food_waste` (
   `waste_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -1894,21 +2743,12 @@ CREATE TABLE `food_waste` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `food_waste`
---
-
-LOCK TABLES `food_waste` WRITE;
-/*!40000 ALTER TABLE `food_waste` DISABLE KEYS */;
-/*!40000 ALTER TABLE `food_waste` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `geographic_expansions`
 --
 
 DROP TABLE IF EXISTS `geographic_expansions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `geographic_expansions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `expansion_name` varchar(100) NOT NULL,
@@ -1936,21 +2776,12 @@ CREATE TABLE `geographic_expansions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `geographic_expansions`
---
-
-LOCK TABLES `geographic_expansions` WRITE;
-/*!40000 ALTER TABLE `geographic_expansions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `geographic_expansions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `growth_metrics`
 --
 
 DROP TABLE IF EXISTS `growth_metrics`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `growth_metrics` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `metric_date` date NOT NULL,
@@ -1970,21 +2801,12 @@ CREATE TABLE `growth_metrics` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `growth_metrics`
---
-
-LOCK TABLES `growth_metrics` WRITE;
-/*!40000 ALTER TABLE `growth_metrics` DISABLE KEYS */;
-/*!40000 ALTER TABLE `growth_metrics` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `guest_preferences`
 --
 
 DROP TABLE IF EXISTS `guest_preferences`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `guest_preferences` (
   `preference_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -2004,21 +2826,12 @@ CREATE TABLE `guest_preferences` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `guest_preferences`
---
-
-LOCK TABLES `guest_preferences` WRITE;
-/*!40000 ALTER TABLE `guest_preferences` DISABLE KEYS */;
-/*!40000 ALTER TABLE `guest_preferences` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `haccp_checkpoints`
 --
 
 DROP TABLE IF EXISTS `haccp_checkpoints`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `haccp_checkpoints` (
   `checkpoint_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -2038,21 +2851,12 @@ CREATE TABLE `haccp_checkpoints` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `haccp_checkpoints`
---
-
-LOCK TABLES `haccp_checkpoints` WRITE;
-/*!40000 ALTER TABLE `haccp_checkpoints` DISABLE KEYS */;
-/*!40000 ALTER TABLE `haccp_checkpoints` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `halal_certifications`
 --
 
 DROP TABLE IF EXISTS `halal_certifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `halal_certifications` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -2071,13 +2875,32 @@ CREATE TABLE `halal_certifications` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `halal_certifications`
+-- Table structure for table `id_scans`
 --
 
-LOCK TABLES `halal_certifications` WRITE;
-/*!40000 ALTER TABLE `halal_certifications` DISABLE KEYS */;
-/*!40000 ALTER TABLE `halal_certifications` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `id_scans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `id_scans` (
+  `scan_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_id` bigint(20) DEFAULT NULL,
+  `guest_name` varchar(200) DEFAULT NULL,
+  `id_type` varchar(30) DEFAULT 'KTP',
+  `id_number` varchar(100) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `age_calculated` int(11) DEFAULT NULL,
+  `is_over_21` tinyint(1) DEFAULT 0,
+  `is_over_18` tinyint(1) DEFAULT 0,
+  `scan_result` varchar(20) DEFAULT 'APPROVED',
+  `rejection_reason` varchar(200) DEFAULT NULL,
+  `scanned_by` varchar(100) DEFAULT NULL,
+  `scanned_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `photo_path` varchar(500) DEFAULT NULL,
+  PRIMARY KEY (`scan_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `ingredient_substitutes`
@@ -2085,7 +2908,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `ingredient_substitutes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ingredient_substitutes` (
   `substitute_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `ingredient_id` bigint(20) NOT NULL,
@@ -2101,21 +2924,12 @@ CREATE TABLE `ingredient_substitutes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `ingredient_substitutes`
---
-
-LOCK TABLES `ingredient_substitutes` WRITE;
-/*!40000 ALTER TABLE `ingredient_substitutes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ingredient_substitutes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `integration_logs`
 --
 
 DROP TABLE IF EXISTS `integration_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `integration_logs` (
   `log_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `integration_id` bigint(20) NOT NULL,
@@ -2134,21 +2948,12 @@ CREATE TABLE `integration_logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `integration_logs`
---
-
-LOCK TABLES `integration_logs` WRITE;
-/*!40000 ALTER TABLE `integration_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `integration_logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `integrations`
 --
 
 DROP TABLE IF EXISTS `integrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `integrations` (
   `integration_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -2173,21 +2978,12 @@ CREATE TABLE `integrations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `integrations`
---
-
-LOCK TABLES `integrations` WRITE;
-/*!40000 ALTER TABLE `integrations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `integrations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `inventory`
 --
 
 DROP TABLE IF EXISTS `inventory`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `inventory` (
   `inventory_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -2217,17 +3013,33 @@ CREATE TABLE `inventory` (
   CONSTRAINT `inventory_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `inventory_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `inventory_ibfk_3` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `inventory`
+-- Table structure for table `inventory_batches`
 --
 
-LOCK TABLES `inventory` WRITE;
-/*!40000 ALTER TABLE `inventory` DISABLE KEYS */;
-/*!40000 ALTER TABLE `inventory` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `inventory_batches`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `inventory_batches` (
+  `batch_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `batch_number` varchar(100) DEFAULT NULL,
+  `product_id` bigint(20) DEFAULT NULL,
+  `received_date` date DEFAULT NULL,
+  `expiry_date` date DEFAULT NULL,
+  `initial_qty` decimal(10,2) DEFAULT 0.00,
+  `current_qty` decimal(10,2) DEFAULT 0.00,
+  `discount_percentage` decimal(5,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'ACTIVE',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`batch_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `inventory_categories`
@@ -2235,7 +3047,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `inventory_categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `inventory_categories` (
   `category_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -2248,17 +3060,8 @@ CREATE TABLE `inventory_categories` (
   KEY `idx_tenant` (`tenant_id`),
   KEY `idx_parent` (`parent_category_id`),
   CONSTRAINT `inventory_categories_ibfk_1` FOREIGN KEY (`parent_category_id`) REFERENCES `inventory_categories` (`category_id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `inventory_categories`
---
-
-LOCK TABLES `inventory_categories` WRITE;
-/*!40000 ALTER TABLE `inventory_categories` DISABLE KEYS */;
-/*!40000 ALTER TABLE `inventory_categories` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `inventory_items`
@@ -2266,7 +3069,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `inventory_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `inventory_items` (
   `item_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `inventory_id` bigint(20) NOT NULL,
@@ -2292,21 +3095,12 @@ CREATE TABLE `inventory_items` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `inventory_items`
---
-
-LOCK TABLES `inventory_items` WRITE;
-/*!40000 ALTER TABLE `inventory_items` DISABLE KEYS */;
-/*!40000 ALTER TABLE `inventory_items` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `inventory_optimizations`
 --
 
 DROP TABLE IF EXISTS `inventory_optimizations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `inventory_optimizations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -2329,21 +3123,12 @@ CREATE TABLE `inventory_optimizations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `inventory_optimizations`
---
-
-LOCK TABLES `inventory_optimizations` WRITE;
-/*!40000 ALTER TABLE `inventory_optimizations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `inventory_optimizations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `inventory_reorder`
 --
 
 DROP TABLE IF EXISTS `inventory_reorder`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `inventory_reorder` (
   `reorder_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -2366,21 +3151,12 @@ CREATE TABLE `inventory_reorder` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `inventory_reorder`
---
-
-LOCK TABLES `inventory_reorder` WRITE;
-/*!40000 ALTER TABLE `inventory_reorder` DISABLE KEYS */;
-/*!40000 ALTER TABLE `inventory_reorder` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `invoices`
 --
 
 DROP TABLE IF EXISTS `invoices`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `invoices` (
   `invoice_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -2413,13 +3189,30 @@ CREATE TABLE `invoices` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `invoices`
+-- Table structure for table `item_86_status`
 --
 
-LOCK TABLES `invoices` WRITE;
-/*!40000 ALTER TABLE `invoices` DISABLE KEYS */;
-/*!40000 ALTER TABLE `invoices` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `item_86_status`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `item_86_status` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `product_id` bigint(20) DEFAULT NULL,
+  `is_86ed` tinyint(1) DEFAULT 0,
+  `86ed_at` timestamp NULL DEFAULT NULL,
+  `86ed_by` varchar(100) DEFAULT NULL,
+  `restock_expected_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `reason` text DEFAULT NULL,
+  `expected_restock_date` date DEFAULT NULL,
+  `restocked_by` varchar(100) DEFAULT NULL,
+  `restocked_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `journal_entries`
@@ -2427,7 +3220,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `journal_entries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `journal_entries` (
   `journal_entry_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -2453,21 +3246,12 @@ CREATE TABLE `journal_entries` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `journal_entries`
---
-
-LOCK TABLES `journal_entries` WRITE;
-/*!40000 ALTER TABLE `journal_entries` DISABLE KEYS */;
-/*!40000 ALTER TABLE `journal_entries` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `journal_lines`
 --
 
 DROP TABLE IF EXISTS `journal_lines`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `journal_lines` (
   `journal_line_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `journal_entry_id` bigint(20) unsigned NOT NULL,
@@ -2485,13 +3269,399 @@ CREATE TABLE `journal_lines` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `journal_lines`
+-- Table structure for table `karaoke_overtime_charges`
 --
 
-LOCK TABLES `journal_lines` WRITE;
-/*!40000 ALTER TABLE `journal_lines` DISABLE KEYS */;
-/*!40000 ALTER TABLE `journal_lines` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `karaoke_overtime_charges`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `karaoke_overtime_charges` (
+  `overtime_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `room_id` bigint(20) DEFAULT NULL,
+  `reservation_id` bigint(20) DEFAULT NULL,
+  `overtime_minutes` int(11) DEFAULT 0,
+  `charge_amount` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'PENDING',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `booked_end_time` timestamp NULL DEFAULT NULL,
+  `actual_end_time` timestamp NULL DEFAULT NULL,
+  `overtime_rate_per_hour` decimal(15,2) DEFAULT 0.00,
+  `overtime_charge` decimal(15,2) DEFAULT 0.00,
+  PRIMARY KEY (`overtime_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `karaoke_reservations`
+--
+
+DROP TABLE IF EXISTS `karaoke_reservations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `karaoke_reservations` (
+  `kres_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `room_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `party_size` int(11) DEFAULT 0,
+  `reservation_date` date DEFAULT NULL,
+  `start_time` time DEFAULT NULL,
+  `end_time` time DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'BOOKED',
+  `checked_in_at` timestamp NULL DEFAULT NULL,
+  `checked_out_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `email` varchar(100) DEFAULT NULL,
+  `hourly_rate` decimal(15,2) DEFAULT 0.00,
+  `room_charge` decimal(15,2) DEFAULT 0.00,
+  `minimum_spend` decimal(15,2) DEFAULT 0.00,
+  `total_amount` decimal(15,2) DEFAULT 0.00,
+  `payment_status` varchar(30) DEFAULT 'PENDING',
+  `payment_method` varchar(50) DEFAULT NULL,
+  `special_requests` text DEFAULT NULL,
+  `actual_end_time` time DEFAULT NULL,
+  PRIMARY KEY (`kres_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `karaoke_room_calendar`
+--
+
+DROP TABLE IF EXISTS `karaoke_room_calendar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `karaoke_room_calendar` (
+  `krc_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `room_id` bigint(20) DEFAULT NULL,
+  `event_date` date DEFAULT NULL,
+  `start_time` time DEFAULT NULL,
+  `end_time` time DEFAULT NULL,
+  `booking_type` varchar(50) DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'AVAILABLE',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `reservation_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  PRIMARY KEY (`krc_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `karaoke_room_orders`
+--
+
+DROP TABLE IF EXISTS `karaoke_room_orders`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `karaoke_room_orders` (
+  `room_order_id` bigint(20) DEFAULT NULL,
+  `kro_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `room_id` bigint(20) DEFAULT NULL,
+  `order_id` bigint(20) DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'PENDING',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `reservation_id` bigint(20) DEFAULT NULL,
+  `order_type` varchar(30) DEFAULT 'FNB',
+  `items_json` text DEFAULT NULL,
+  `total_amount` decimal(15,2) DEFAULT 0.00,
+  `ordered_by` varchar(100) DEFAULT NULL,
+  `ordered_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `served_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`kro_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `karaoke_rooms`
+--
+
+DROP TABLE IF EXISTS `karaoke_rooms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `karaoke_rooms` (
+  `room_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `room_number` varchar(20) DEFAULT NULL,
+  `room_name` varchar(100) DEFAULT NULL,
+  `capacity` int(11) DEFAULT 0,
+  `hourly_rate` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'AVAILABLE',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `room_code` varchar(20) DEFAULT NULL,
+  `room_type` varchar(50) DEFAULT 'STANDARD',
+  `minimum_spend` decimal(15,2) DEFAULT 0.00,
+  `has_private_bathroom` tinyint(1) DEFAULT 0,
+  `has_waiter_button` tinyint(1) DEFAULT 1,
+  `equipment_status` varchar(30) DEFAULT 'ACTIVE',
+  `sort_order` int(11) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`room_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `karaoke_scores`
+--
+
+DROP TABLE IF EXISTS `karaoke_scores`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `karaoke_scores` (
+  `score_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `room_id` bigint(20) DEFAULT NULL,
+  `singer_name` varchar(200) DEFAULT NULL,
+  `song_title` varchar(300) DEFAULT NULL,
+  `score` decimal(5,2) DEFAULT 0.00,
+  `scored_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `song_id` bigint(20) DEFAULT NULL,
+  `pitch_accuracy` decimal(5,2) DEFAULT NULL,
+  `rhythm_accuracy` decimal(5,2) DEFAULT NULL,
+  `volume_level` decimal(5,2) DEFAULT NULL,
+  `duration_seconds` int(11) DEFAULT NULL,
+  `applause_rating` int(11) DEFAULT NULL,
+  PRIMARY KEY (`score_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `karaoke_song_catalog`
+--
+
+DROP TABLE IF EXISTS `karaoke_song_catalog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `karaoke_song_catalog` (
+  `song_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `title` varchar(300) DEFAULT NULL,
+  `artist` varchar(200) DEFAULT NULL,
+  `genre` varchar(100) DEFAULT NULL,
+  `language` varchar(50) DEFAULT NULL,
+  `duration_seconds` int(11) DEFAULT 0,
+  `popularity_score` int(11) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `song_code` varchar(50) DEFAULT NULL,
+  `year` int(11) DEFAULT NULL,
+  `file_path` varchar(500) DEFAULT NULL,
+  `lyrics_available` tinyint(1) DEFAULT 0,
+  `date_added` date DEFAULT NULL,
+  `play_count` int(11) DEFAULT 0,
+  `last_played_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`song_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `karaoke_song_requests`
+--
+
+DROP TABLE IF EXISTS `karaoke_song_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `karaoke_song_requests` (
+  `request_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `room_id` bigint(20) DEFAULT NULL,
+  `song_id` bigint(20) DEFAULT NULL,
+  `requested_by` varchar(200) DEFAULT NULL,
+  `queue_position` int(11) DEFAULT 0,
+  `status` varchar(30) DEFAULT 'QUEUED',
+  `played_at` timestamp NULL DEFAULT NULL,
+  `skipped` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `reservation_id` bigint(20) DEFAULT NULL,
+  `request_source` varchar(50) DEFAULT 'QR_APP',
+  PRIMARY KEY (`request_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `kds_routing_rules`
+--
+
+DROP TABLE IF EXISTS `kds_routing_rules`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `kds_routing_rules` (
+  `rule_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `rule_name` varchar(100) NOT NULL,
+  `rule_type` enum('MENU_CATEGORY','DINING_OPTION','ITEM_MODIFIER','ORDER_SOURCE','CUSTOM') DEFAULT 'MENU_CATEGORY',
+  `condition_value` varchar(255) DEFAULT NULL,
+  `target_station_id` bigint(20) NOT NULL,
+  `priority` int(11) DEFAULT 0,
+  `is_reroute` tinyint(1) DEFAULT 0,
+  `also_send_to_station_id` bigint(20) DEFAULT NULL,
+  `apply_to_takeout` tinyint(1) DEFAULT 0,
+  `apply_to_delivery` tinyint(1) DEFAULT 0,
+  `apply_to_dinein` tinyint(1) DEFAULT 1,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`rule_id`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_target_station` (`target_station_id`),
+  KEY `idx_also_station` (`also_send_to_station_id`),
+  CONSTRAINT `kds_routing_rules_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `kds_routing_rules_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE,
+  CONSTRAINT `kds_routing_rules_ibfk_3` FOREIGN KEY (`target_station_id`) REFERENCES `kitchen_stations` (`station_id`) ON DELETE CASCADE,
+  CONSTRAINT `kds_routing_rules_ibfk_4` FOREIGN KEY (`also_send_to_station_id`) REFERENCES `kitchen_stations` (`station_id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `kds_screens`
+--
+
+DROP TABLE IF EXISTS `kds_screens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `kds_screens` (
+  `screen_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `station_id` bigint(20) NOT NULL,
+  `screen_name` varchar(100) NOT NULL,
+  `screen_type` enum('PREP_STATION','EXPEDITER','OVERVIEW') DEFAULT 'PREP_STATION',
+  `display_order` int(11) DEFAULT 0,
+  `max_tickets_display` int(11) DEFAULT 20,
+  `auto_refresh_seconds` int(11) DEFAULT 10,
+  `show_completed_tickets` tinyint(1) DEFAULT 0,
+  `color_scheme` varchar(50) DEFAULT 'DEFAULT',
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`screen_id`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_station` (`station_id`),
+  CONSTRAINT `kds_screens_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `kds_screens_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE,
+  CONSTRAINT `kds_screens_ibfk_3` FOREIGN KEY (`station_id`) REFERENCES `kitchen_stations` (`station_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `kds_ticket_items`
+--
+
+DROP TABLE IF EXISTS `kds_ticket_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `kds_ticket_items` (
+  `ticket_item_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `ticket_id` bigint(20) unsigned NOT NULL,
+  `order_item_id` bigint(20) unsigned NOT NULL,
+  `item_name` varchar(255) NOT NULL,
+  `quantity` int(11) DEFAULT 1,
+  `modifiers` text DEFAULT NULL,
+  `special_instructions` text DEFAULT NULL,
+  `item_status` enum('PENDING','IN_PROGRESS','READY','FULFILLED','CANCELLED') DEFAULT 'PENDING',
+  `prep_started_at` timestamp NULL DEFAULT NULL,
+  `ready_at` timestamp NULL DEFAULT NULL,
+  `fulfilled_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`ticket_item_id`),
+  KEY `idx_ticket` (`ticket_id`),
+  KEY `idx_order_item` (`order_item_id`),
+  KEY `idx_status` (`item_status`),
+  CONSTRAINT `kds_ticket_items_ibfk_1` FOREIGN KEY (`ticket_id`) REFERENCES `kds_tickets` (`ticket_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `kds_tickets`
+--
+
+DROP TABLE IF EXISTS `kds_tickets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `kds_tickets` (
+  `ticket_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `order_id` bigint(20) unsigned NOT NULL,
+  `station_id` bigint(20) NOT NULL,
+  `screen_id` bigint(20) unsigned NOT NULL,
+  `ticket_number` varchar(50) NOT NULL,
+  `table_id` bigint(20) unsigned DEFAULT NULL,
+  `customer_name` varchar(100) DEFAULT NULL,
+  `dining_option` enum('DINE_IN','TAKE_OUT','DELIVERY','CURBSIDE') DEFAULT 'DINE_IN',
+  `ticket_status` enum('NEW','IN_PROGRESS','READY','FULFILLED','CANCELLED') DEFAULT 'NEW',
+  `urgency_level` enum('NORMAL','HIGH','URGENT','OVERDUE') DEFAULT 'NORMAL',
+  `estimated_prep_time` int(11) DEFAULT NULL,
+  `actual_prep_time` int(11) DEFAULT NULL,
+  `prep_started_at` timestamp NULL DEFAULT NULL,
+  `ready_at` timestamp NULL DEFAULT NULL,
+  `fulfilled_at` timestamp NULL DEFAULT NULL,
+  `course_number` int(11) DEFAULT 1,
+  `is_rerouted` tinyint(1) DEFAULT 0,
+  `also_at_stations` text DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`ticket_id`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_order` (`order_id`),
+  KEY `idx_station` (`station_id`),
+  KEY `idx_screen` (`screen_id`),
+  KEY `idx_status` (`ticket_status`),
+  KEY `idx_urgency` (`urgency_level`),
+  KEY `idx_created` (`created_at`),
+  CONSTRAINT `kds_tickets_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `kds_tickets_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE,
+  CONSTRAINT `kds_tickets_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
+  CONSTRAINT `kds_tickets_ibfk_4` FOREIGN KEY (`station_id`) REFERENCES `kitchen_stations` (`station_id`) ON DELETE CASCADE,
+  CONSTRAINT `kds_tickets_ibfk_5` FOREIGN KEY (`screen_id`) REFERENCES `kds_screens` (`screen_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `keg_tracking`
+--
+
+DROP TABLE IF EXISTS `keg_tracking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `keg_tracking` (
+  `keg_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `keg_number` varchar(50) DEFAULT NULL,
+  `product_id` bigint(20) DEFAULT NULL,
+  `received_date` date DEFAULT NULL,
+  `tapped_date` date DEFAULT NULL,
+  `empty_date` date DEFAULT NULL,
+  `initial_weight` decimal(10,2) DEFAULT 0.00,
+  `current_weight` decimal(10,2) DEFAULT 0.00,
+  `beer_remaining` decimal(10,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'RECEIVED',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`keg_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `kitchen_order_items`
@@ -2499,7 +3669,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `kitchen_order_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kitchen_order_items` (
   `kitchen_order_item_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `kitchen_order_id` bigint(20) unsigned NOT NULL,
@@ -2522,21 +3692,12 @@ CREATE TABLE `kitchen_order_items` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `kitchen_order_items`
---
-
-LOCK TABLES `kitchen_order_items` WRITE;
-/*!40000 ALTER TABLE `kitchen_order_items` DISABLE KEYS */;
-/*!40000 ALTER TABLE `kitchen_order_items` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `kitchen_orders`
 --
 
 DROP TABLE IF EXISTS `kitchen_orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kitchen_orders` (
   `kitchen_order_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -2562,28 +3723,24 @@ CREATE TABLE `kitchen_orders` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `kitchen_orders`
---
-
-LOCK TABLES `kitchen_orders` WRITE;
-/*!40000 ALTER TABLE `kitchen_orders` DISABLE KEYS */;
-/*!40000 ALTER TABLE `kitchen_orders` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `kitchen_stations`
 --
 
 DROP TABLE IF EXISTS `kitchen_stations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kitchen_stations` (
   `station_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
   `branch_id` bigint(20) NOT NULL,
+  `floor_id` int(10) unsigned DEFAULT NULL,
   `station_name` varchar(100) NOT NULL,
   `station_type` varchar(50) DEFAULT 'PREPARATION',
+  `kitchen_code` varchar(50) DEFAULT NULL,
+  `kitchen_category` varchar(50) DEFAULT NULL,
   `description` text DEFAULT NULL,
+  `capacity` int(11) DEFAULT 0,
+  `is_central` tinyint(1) DEFAULT 0,
   `display_order` int(11) DEFAULT 0,
   `is_active` tinyint(1) DEFAULT 1,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -2592,17 +3749,8 @@ CREATE TABLE `kitchen_stations` (
   KEY `idx_tenant` (`tenant_id`),
   KEY `idx_branch` (`branch_id`),
   KEY `idx_active` (`is_active`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `kitchen_stations`
---
-
-LOCK TABLES `kitchen_stations` WRITE;
-/*!40000 ALTER TABLE `kitchen_stations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `kitchen_stations` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `kpi_metrics`
@@ -2610,7 +3758,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `kpi_metrics`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `kpi_metrics` (
   `metric_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -2632,21 +3780,12 @@ CREATE TABLE `kpi_metrics` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `kpi_metrics`
---
-
-LOCK TABLES `kpi_metrics` WRITE;
-/*!40000 ALTER TABLE `kpi_metrics` DISABLE KEYS */;
-/*!40000 ALTER TABLE `kpi_metrics` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `languages`
 --
 
 DROP TABLE IF EXISTS `languages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `languages` (
   `language_id` int(11) NOT NULL AUTO_INCREMENT,
   `language_code` varchar(10) DEFAULT NULL,
@@ -2662,13 +3801,95 @@ CREATE TABLE `languages` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `languages`
+-- Table structure for table `live_music_concerts`
 --
 
-LOCK TABLES `languages` WRITE;
-/*!40000 ALTER TABLE `languages` DISABLE KEYS */;
-/*!40000 ALTER TABLE `languages` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `live_music_concerts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `live_music_concerts` (
+  `concert_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `artist_name` varchar(200) DEFAULT NULL,
+  `concert_date` date DEFAULT NULL,
+  `venue_capacity` int(11) DEFAULT 0,
+  `ticket_price` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'SCHEDULED',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `concert_name` varchar(200) DEFAULT NULL,
+  `genre` varchar(100) DEFAULT NULL,
+  `doors_open_time` time DEFAULT NULL,
+  `show_time` time DEFAULT NULL,
+  `end_time` time DEFAULT NULL,
+  `poster_url` varchar(500) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`concert_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `live_music_seating_sections`
+--
+
+DROP TABLE IF EXISTS `live_music_seating_sections`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `live_music_seating_sections` (
+  `section_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `concert_id` bigint(20) NOT NULL,
+  `section_name` varchar(100) DEFAULT NULL,
+  `capacity` int(11) DEFAULT 0,
+  `price_tier` varchar(50) DEFAULT NULL,
+  `seats_available` int(11) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `tenant_id` bigint(20) NOT NULL DEFAULT 1,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `section_type` varchar(50) DEFAULT 'GA_STANDING',
+  `price` decimal(15,2) DEFAULT 0.00,
+  `is_numbered` tinyint(1) DEFAULT 0,
+  `sort_order` int(11) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`section_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `live_music_tickets`
+--
+
+DROP TABLE IF EXISTS `live_music_tickets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `live_music_tickets` (
+  `lmt_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `concert_id` bigint(20) NOT NULL,
+  `section_id` bigint(20) DEFAULT NULL,
+  `seat_number` varchar(20) DEFAULT NULL,
+  `price` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'UNSOLD',
+  `sold_to` varchar(200) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `tenant_id` bigint(20) NOT NULL DEFAULT 1,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `ticket_type` varchar(50) DEFAULT 'GA',
+  `unit_price` decimal(15,2) DEFAULT 0.00,
+  `quantity` int(11) DEFAULT 1,
+  `total_amount` decimal(15,2) DEFAULT 0.00,
+  `ticket_code` varchar(50) DEFAULT NULL,
+  `payment_status` varchar(30) DEFAULT 'PENDING',
+  `payment_method` varchar(50) DEFAULT NULL,
+  `sold_by` varchar(100) DEFAULT NULL,
+  `sold_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `check_in_status` tinyint(1) DEFAULT 0,
+  `check_in_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`lmt_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `loyalty_members`
@@ -2676,7 +3897,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `loyalty_members`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `loyalty_members` (
   `member_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `customer_id` bigint(20) NOT NULL,
@@ -2699,21 +3920,12 @@ CREATE TABLE `loyalty_members` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `loyalty_members`
---
-
-LOCK TABLES `loyalty_members` WRITE;
-/*!40000 ALTER TABLE `loyalty_members` DISABLE KEYS */;
-/*!40000 ALTER TABLE `loyalty_members` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `loyalty_points`
 --
 
 DROP TABLE IF EXISTS `loyalty_points`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `loyalty_points` (
   `loyalty_point_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -2737,22 +3949,12 @@ CREATE TABLE `loyalty_points` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `loyalty_points`
---
-
-LOCK TABLES `loyalty_points` WRITE;
-/*!40000 ALTER TABLE `loyalty_points` DISABLE KEYS */;
-INSERT INTO `loyalty_points` VALUES (2,1,2,100,0,'EARNED',NULL,'WELCOME_BONUS','Welcome bonus points',2,'2026-07-05 13:55:25'),(8,1,2,100,0,'EARNED',NULL,NULL,'Test award points',2,'2026-07-05 13:59:05'),(9,1,2,0,50,'REDEEMED',NULL,NULL,'Test redeem points',2,'2026-07-05 13:59:08'),(10,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 13:59:23'),(11,1,2,0,30,'REDEEMED',NULL,NULL,NULL,2,'2026-07-05 13:59:23'),(12,1,2,500,0,'EARNED',NULL,NULL,'Tier upgrade test',2,'2026-07-05 13:59:23'),(13,1,2,100,0,'EARNED',NULL,NULL,'Test award points',2,'2026-07-05 14:00:12'),(14,1,2,0,50,'REDEEMED',NULL,NULL,'Test redeem points',2,'2026-07-05 14:00:15'),(15,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:00:31'),(16,1,2,0,30,'REDEEMED',NULL,NULL,NULL,2,'2026-07-05 14:00:31'),(17,1,2,500,0,'EARNED',NULL,NULL,'Tier upgrade test',2,'2026-07-05 14:00:31'),(18,1,2,100,0,'EARNED',NULL,NULL,'Test',2,'2026-07-05 14:00:47'),(19,1,2,100,0,'EARNED',NULL,NULL,'Test award points',2,'2026-07-05 14:02:09'),(20,1,2,0,50,'REDEEMED',NULL,NULL,'Test redeem points',2,'2026-07-05 14:02:10'),(21,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:02:22'),(22,1,2,0,30,'REDEEMED',NULL,NULL,NULL,2,'2026-07-05 14:02:22'),(23,1,2,500,0,'EARNED',NULL,NULL,'Tier upgrade test',2,'2026-07-05 14:02:23'),(24,1,2,100,0,'EARNED',NULL,NULL,'Test award points',2,'2026-07-05 14:03:37'),(25,1,2,0,50,'REDEEMED',NULL,NULL,'Test redeem points',2,'2026-07-05 14:03:38'),(26,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:03:49'),(27,1,2,0,30,'REDEEMED',NULL,NULL,NULL,2,'2026-07-05 14:03:49'),(28,1,2,500,0,'EARNED',NULL,NULL,'Tier upgrade test',2,'2026-07-05 14:03:49'),(29,1,2,100,0,'EARNED',NULL,NULL,'Test award points',2,'2026-07-05 14:04:45'),(30,1,2,0,50,'REDEEMED',NULL,NULL,'Test redeem points',2,'2026-07-05 14:04:45'),(31,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:04:57'),(32,1,2,0,30,'REDEEMED',NULL,NULL,NULL,2,'2026-07-05 14:04:57'),(33,1,2,500,0,'EARNED',NULL,NULL,'Tier upgrade test',2,'2026-07-05 14:04:58'),(34,1,2,100,0,'EARNED',NULL,NULL,'Test award points',2,'2026-07-05 14:06:30'),(35,1,2,0,50,'REDEEMED',NULL,NULL,'Test redeem points',2,'2026-07-05 14:06:30'),(36,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:06:33'),(37,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:06:37'),(38,1,2,0,30,'REDEEMED',NULL,NULL,NULL,2,'2026-07-05 14:06:37'),(39,1,2,500,0,'EARNED',NULL,NULL,'Tier upgrade test',2,'2026-07-05 14:06:38'),(40,1,2,100,0,'EARNED',NULL,NULL,'Test award points',2,'2026-07-05 14:07:25'),(41,1,2,0,50,'REDEEMED',NULL,NULL,'Test redeem points',2,'2026-07-05 14:07:25'),(42,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:07:29'),(43,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:07:30'),(44,1,2,0,30,'REDEEMED',NULL,NULL,NULL,2,'2026-07-05 14:07:30'),(45,1,2,500,0,'EARNED',NULL,NULL,'Tier upgrade test',2,'2026-07-05 14:07:30'),(46,1,2,100,0,'EARNED',NULL,NULL,'Test award points',2,'2026-07-05 14:07:52'),(47,1,2,0,50,'REDEEMED',NULL,NULL,'Test redeem points',2,'2026-07-05 14:07:52'),(48,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:07:56'),(49,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:07:58'),(50,1,2,0,30,'REDEEMED',NULL,NULL,NULL,2,'2026-07-05 14:07:58'),(51,1,2,500,0,'EARNED',NULL,NULL,'Tier upgrade test',2,'2026-07-05 14:07:58'),(52,1,2,100,0,'EARNED',NULL,NULL,'Test award points',2,'2026-07-05 14:08:18'),(53,1,2,0,50,'REDEEMED',NULL,NULL,'Test redeem points',2,'2026-07-05 14:08:18'),(54,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:08:19'),(55,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:08:21'),(56,1,2,0,30,'REDEEMED',NULL,NULL,NULL,2,'2026-07-05 14:08:21'),(57,1,2,500,0,'EARNED',NULL,NULL,'Tier upgrade test',2,'2026-07-05 14:08:21'),(58,1,2,100,0,'EARNED',NULL,NULL,'Test award points',2,'2026-07-05 14:10:33'),(59,1,2,0,50,'REDEEMED',NULL,NULL,'Test redeem points',2,'2026-07-05 14:10:33'),(60,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:10:34'),(61,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:10:35'),(62,1,2,0,30,'REDEEMED',NULL,NULL,NULL,2,'2026-07-05 14:10:35'),(63,1,2,500,0,'EARNED',NULL,NULL,'Tier upgrade test',2,'2026-07-05 14:10:35'),(64,1,2,100,0,'EARNED',NULL,NULL,'Test award points',2,'2026-07-05 14:32:43'),(65,1,2,0,50,'REDEEMED',NULL,NULL,'Test redeem points',2,'2026-07-05 14:32:43'),(66,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:32:44'),(67,1,2,100,0,'EARNED',NULL,NULL,NULL,2,'2026-07-05 14:32:46'),(68,1,2,0,30,'REDEEMED',NULL,NULL,NULL,2,'2026-07-05 14:32:46'),(69,1,2,500,0,'EARNED',NULL,NULL,'Tier upgrade test',2,'2026-07-05 14:32:46');
-/*!40000 ALTER TABLE `loyalty_points` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `loyalty_promotions`
 --
 
 DROP TABLE IF EXISTS `loyalty_promotions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `loyalty_promotions` (
   `promotion_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -2774,21 +3976,12 @@ CREATE TABLE `loyalty_promotions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `loyalty_promotions`
---
-
-LOCK TABLES `loyalty_promotions` WRITE;
-/*!40000 ALTER TABLE `loyalty_promotions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `loyalty_promotions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `loyalty_redemptions`
 --
 
 DROP TABLE IF EXISTS `loyalty_redemptions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `loyalty_redemptions` (
   `redemption_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `customer_id` bigint(20) NOT NULL,
@@ -2811,21 +4004,12 @@ CREATE TABLE `loyalty_redemptions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `loyalty_redemptions`
---
-
-LOCK TABLES `loyalty_redemptions` WRITE;
-/*!40000 ALTER TABLE `loyalty_redemptions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `loyalty_redemptions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `loyalty_rewards`
 --
 
 DROP TABLE IF EXISTS `loyalty_rewards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `loyalty_rewards` (
   `reward_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -2856,22 +4040,12 @@ CREATE TABLE `loyalty_rewards` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `loyalty_rewards`
---
-
-LOCK TABLES `loyalty_rewards` WRITE;
-/*!40000 ALTER TABLE `loyalty_rewards` DISABLE KEYS */;
-INSERT INTO `loyalty_rewards` VALUES (1,1,'WELCOME_BONUS','Bonus Selamat Datang','Welcome Bonus','Poin bonus untuk pelanggan baru',100,'DISCOUNT',NULL,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 13:45:24',NULL,'2026-07-05 13:45:24',NULL),(2,1,'BIRTHDAY_BONUS','Bonus Ulang Tahun','Birthday Bonus','Poin bonus spesial ulang tahun',200,'FREE_ITEM',NULL,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 13:45:24',NULL,'2026-07-05 13:45:24',NULL),(3,1,'REFERRAL_BONUS','Bonus Referral','Referral Bonus','Poin bonus untuk referral pelanggan baru',150,'DISCOUNT',NULL,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 13:45:24',NULL,'2026-07-05 13:45:24',NULL),(4,1,'TEST001','Test Reward',NULL,NULL,50,'DISCOUNT',10.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:02:57',NULL,'2026-07-05 14:02:57',NULL),(5,1,'TEST_REWARD_1783260218508','Test Reward','Test Reward','Test reward for Playwright',100,'DISCOUNT',10.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:03:38',NULL,'2026-07-05 14:03:38',NULL),(6,1,'TEST_REWARD_1783260285775','Test Reward','Test Reward','Test reward for Playwright',100,'DISCOUNT',10.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:04:45',NULL,'2026-07-05 14:04:45',NULL),(7,1,'TEST_REWARD_1783260390833','Test Reward','Test Reward','Test reward for Playwright',100,'DISCOUNT',10.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:06:30',NULL,'2026-07-05 14:06:30',NULL),(8,1,'REDEEM_TEST_1783260393771','Redeem Test Reward',NULL,NULL,50,'DISCOUNT',5.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:06:33',NULL,'2026-07-05 14:06:33',NULL),(9,1,'TEST_REWARD_1783260446132','Test Reward','Test Reward','Test reward for Playwright',100,'DISCOUNT',10.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:07:26',NULL,'2026-07-05 14:07:26',NULL),(10,1,'REDEEM_TEST_1783260449049','Redeem Test Reward',NULL,NULL,50,'DISCOUNT',5.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:07:29',NULL,'2026-07-05 14:07:29',NULL),(11,1,'TEST_REWARD_1783260473043','Test Reward','Test Reward','Test reward for Playwright',100,'DISCOUNT',10.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:07:53',NULL,'2026-07-05 14:07:53',NULL),(12,1,'REDEEM_TEST_1783260476452','Redeem Test Reward',NULL,NULL,50,'DISCOUNT',5.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:07:56',NULL,'2026-07-05 14:07:56',NULL),(13,1,'TEST_REWARD_1783260499261','Test Reward','Test Reward','Test reward for Playwright',100,'DISCOUNT',10.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:08:19',NULL,'2026-07-05 14:08:19',NULL),(14,1,'REDEEM_TEST_1783260499689','Redeem Test Reward',NULL,NULL,50,'DISCOUNT',5.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:08:19',NULL,'2026-07-05 14:08:19',NULL),(15,1,'TEST_REWARD_1783260633734','Test Reward','Test Reward','Test reward for Playwright',100,'DISCOUNT',10.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:10:33',NULL,'2026-07-05 14:10:33',NULL),(16,1,'REDEEM_TEST_1783260634220','Redeem Test Reward',NULL,NULL,50,'DISCOUNT',5.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:10:34',NULL,'2026-07-05 14:10:34',NULL),(17,1,'TEST_REWARD_1783261963698','Test Reward','Test Reward','Test reward for Playwright',100,'DISCOUNT',10.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:32:43',NULL,'2026-07-05 14:32:43',NULL),(18,1,'REDEEM_TEST_1783261964487','Redeem Test Reward',NULL,NULL,50,'DISCOUNT',5.00,NULL,'ACTIVE',NULL,NULL,NULL,'2026-07-05 14:32:44',NULL,'2026-07-05 14:32:44',NULL);
-/*!40000 ALTER TABLE `loyalty_rewards` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `loyalty_transactions`
 --
 
 DROP TABLE IF EXISTS `loyalty_transactions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `loyalty_transactions` (
   `transaction_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `customer_id` bigint(20) NOT NULL,
@@ -2892,21 +4066,12 @@ CREATE TABLE `loyalty_transactions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `loyalty_transactions`
---
-
-LOCK TABLES `loyalty_transactions` WRITE;
-/*!40000 ALTER TABLE `loyalty_transactions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `loyalty_transactions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `marketplace_orders`
 --
 
 DROP TABLE IF EXISTS `marketplace_orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `marketplace_orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -2931,13 +4096,57 @@ CREATE TABLE `marketplace_orders` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `marketplace_orders`
+-- Table structure for table `membership_transactions`
 --
 
-LOCK TABLES `marketplace_orders` WRITE;
-/*!40000 ALTER TABLE `marketplace_orders` DISABLE KEYS */;
-/*!40000 ALTER TABLE `marketplace_orders` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `membership_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `membership_transactions` (
+  `mt_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `membership_id` bigint(20) NOT NULL,
+  `transaction_type` varchar(20) NOT NULL,
+  `points` int(11) DEFAULT 0,
+  `order_id` bigint(20) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`mt_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `memberships`
+--
+
+DROP TABLE IF EXISTS `memberships`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `memberships` (
+  `membership_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `membership_type` varchar(50) DEFAULT NULL,
+  `points_balance` int(11) DEFAULT 0,
+  `total_earned` int(11) DEFAULT 0,
+  `total_redeemed` int(11) DEFAULT 0,
+  `joined_date` date DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `member_name` varchar(200) DEFAULT NULL,
+  `member_email` varchar(100) DEFAULT NULL,
+  `member_phone` varchar(50) DEFAULT NULL,
+  `tier` varchar(30) DEFAULT 'BRONZE',
+  `join_date` date DEFAULT NULL,
+  `expiry_date` date DEFAULT NULL,
+  `family_account` tinyint(1) DEFAULT 0,
+  `guest_passes_remaining` int(11) DEFAULT 0,
+  `total_spent` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'ACTIVE',
+  PRIMARY KEY (`membership_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `menu_ab_test_variants`
@@ -2945,7 +4154,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `menu_ab_test_variants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `menu_ab_test_variants` (
   `variant_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `test_id` bigint(20) NOT NULL,
@@ -2963,21 +4172,12 @@ CREATE TABLE `menu_ab_test_variants` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `menu_ab_test_variants`
---
-
-LOCK TABLES `menu_ab_test_variants` WRITE;
-/*!40000 ALTER TABLE `menu_ab_test_variants` DISABLE KEYS */;
-/*!40000 ALTER TABLE `menu_ab_test_variants` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `menu_ab_tests`
 --
 
 DROP TABLE IF EXISTS `menu_ab_tests`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `menu_ab_tests` (
   `test_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -3000,21 +4200,12 @@ CREATE TABLE `menu_ab_tests` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `menu_ab_tests`
---
-
-LOCK TABLES `menu_ab_tests` WRITE;
-/*!40000 ALTER TABLE `menu_ab_tests` DISABLE KEYS */;
-/*!40000 ALTER TABLE `menu_ab_tests` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `menu_engineering_recommendations`
 --
 
 DROP TABLE IF EXISTS `menu_engineering_recommendations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `menu_engineering_recommendations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -3038,13 +4229,31 @@ CREATE TABLE `menu_engineering_recommendations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `menu_engineering_recommendations`
+-- Table structure for table `merchant_fees`
 --
 
-LOCK TABLES `menu_engineering_recommendations` WRITE;
-/*!40000 ALTER TABLE `menu_engineering_recommendations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `menu_engineering_recommendations` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `merchant_fees`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `merchant_fees` (
+  `fee_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `order_id` bigint(20) DEFAULT NULL,
+  `transaction_date` date NOT NULL,
+  `payment_method` varchar(50) DEFAULT NULL,
+  `processor_name` varchar(100) DEFAULT NULL,
+  `gross_amount` decimal(15,2) DEFAULT 0.00,
+  `fee_amount` decimal(15,2) DEFAULT 0.00,
+  `fee_percentage` decimal(5,2) DEFAULT 0.00,
+  `net_amount` decimal(15,2) DEFAULT 0.00,
+  `external_transaction_id` varchar(200) DEFAULT NULL,
+  `metadata` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`fee_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `migrations`
@@ -3052,7 +4261,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `migrations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `migrations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `migration` varchar(255) NOT NULL,
@@ -3063,22 +4272,12 @@ CREATE TABLE `migrations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `migrations`
---
-
-LOCK TABLES `migrations` WRITE;
-/*!40000 ALTER TABLE `migrations` DISABLE KEYS */;
-INSERT INTO `migrations` VALUES (1,'001_create_tenant_tables.php','2026-07-08 08:29:27'),(2,'002_create_user_tables.php','2026-07-08 08:29:45'),(3,'003_create_reconciliation_tables.php','2026-07-08 08:31:07'),(4,'004_create_customer_tables.php','2026-07-08 08:31:07'),(5,'005_create_menu_tables.php','2026-07-08 08:48:35'),(6,'006_create_inventory_tables.php','2026-07-08 08:49:50'),(7,'007_create_order_tables.php','2026-07-08 08:52:36'),(8,'008_create_kitchen_tables.php','2026-07-08 08:53:58'),(9,'009_create_loyalty_tables.php','2026-07-08 08:54:55'),(10,'010_create_staff_tables.php','2026-07-08 08:56:08'),(11,'011_create_accounting_tables.php','2026-07-08 08:56:08'),(12,'012_create_reporting_tables.php','2026-07-08 08:56:38'),(13,'013_create_compliance_tables.php','2026-07-08 08:56:38'),(14,'014_create_sustainability_tables.php','2026-07-08 08:56:38'),(15,'015_create_risk_tables.php','2026-07-08 08:56:58'),(16,'016_create_production_tables.php','2026-07-08 08:58:14'),(17,'017_create_settings_tables.php','2026-07-08 08:58:14'),(18,'018_create_integration_tables.php','2026-07-08 08:58:14'),(19,'019_create_reservation_tables.php','2026-07-08 08:59:13'),(20,'020_create_feedback_tables.php','2026-07-08 08:59:13'),(21,'021_create_language_tables.php','2026-07-08 08:59:45'),(22,'022_create_security_tables.php','2026-07-08 08:59:45'),(23,'023_create_analytics_tables.php','2026-07-08 08:59:46'),(24,'024_create_procurement_tables.php','2026-07-08 09:00:19'),(25,'025_create_inventory_reorder_tables.php','2026-07-08 09:00:44'),(26,'026_create_split_order_tables.php','2026-07-08 09:00:44'),(27,'027_create_payroll_tables.php','2026-07-08 09:00:44'),(28,'028_create_ab_test_tables.php','2026-07-08 09:00:44'),(29,'029_create_seasonal_menu_tables.php','2026-07-08 09:00:45'),(30,'030_create_referral_achievement_tables.php','2026-07-08 09:00:45'),(31,'031_create_staff_messages_tables.php','2026-07-08 09:00:45'),(32,'032_add_weight_based_pricing.php','2026-07-08 09:09:31'),(33,'033_create_inventory_items_table.php','2026-07-08 09:09:31'),(34,'034_add_availability_check_function.php','2026-07-08 09:09:56');
-/*!40000 ALTER TABLE `migrations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `network_effects`
 --
 
 DROP TABLE IF EXISTS `network_effects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `network_effects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `effect_type` enum('restaurant_to_restaurant','consumer_to_restaurant','restaurant_to_consumer','consumer_to_consumer') NOT NULL,
@@ -3098,14 +4297,148 @@ CREATE TABLE `network_effects` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `network_effects`
+-- Table structure for table `nightclub_bottle_service`
 --
 
-LOCK TABLES `network_effects` WRITE;
-/*!40000 ALTER TABLE `network_effects` DISABLE KEYS */;
-INSERT INTO `network_effects` VALUES (1,'restaurant_to_restaurant','Supplier Marketplace','Restaurants sharing supplier information improves marketplace value',50,0,1,7,NULL,'2026-07-05 03:25:53','2026-07-05 03:25:53'),(2,'consumer_to_restaurant','Restaurant Discovery','More consumers using app increases restaurant visibility',100,0,1,7,NULL,'2026-07-05 03:25:53','2026-07-05 03:25:53'),(3,'restaurant_to_consumer','Menu Recommendations','More restaurants provide better menu recommendations',20,0,1,7,NULL,'2026-07-05 03:25:53','2026-07-05 03:25:53'),(4,'consumer_to_consumer','Social Features','More consumers enable social sharing and reviews',200,0,1,7,NULL,'2026-07-05 03:25:53','2026-07-05 03:25:53');
-/*!40000 ALTER TABLE `network_effects` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `nightclub_bottle_service`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `nightclub_bottle_service` (
+  `bottle_service_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) NOT NULL,
+  `event_id` bigint(20) NOT NULL,
+  `table_id` bigint(20) DEFAULT NULL,
+  `zone_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) NOT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `party_size` int(11) DEFAULT 1,
+  `package_name` varchar(200) DEFAULT NULL,
+  `bottle_type` varchar(200) DEFAULT NULL,
+  `bottle_quantity` int(11) DEFAULT 1,
+  `unit_price` decimal(15,2) DEFAULT 0.00,
+  `minimum_spend` decimal(15,2) DEFAULT 0.00,
+  `total_amount` decimal(15,2) DEFAULT 0.00,
+  `reservation_date` date DEFAULT NULL,
+  `reservation_time` time DEFAULT NULL,
+  `status` varchar(50) DEFAULT 'PENDING',
+  `payment_status` varchar(50) DEFAULT 'PENDING',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`bottle_service_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `nightclub_entrance_fees`
+--
+
+DROP TABLE IF EXISTS `nightclub_entrance_fees`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `nightclub_entrance_fees` (
+  `fee_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) NOT NULL,
+  `event_id` bigint(20) NOT NULL,
+  `fee_name` varchar(200) NOT NULL,
+  `fee_type` varchar(50) DEFAULT 'COVER_CHARGE',
+  `price` decimal(15,2) DEFAULT 0.00,
+  `applicable_days` varchar(20) DEFAULT NULL,
+  `start_time` time DEFAULT NULL,
+  `end_time` time DEFAULT NULL,
+  `min_age` int(11) DEFAULT 21,
+  `gender_restriction` varchar(20) DEFAULT NULL,
+  `includes_drink` tinyint(1) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`fee_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `nightclub_events`
+--
+
+DROP TABLE IF EXISTS `nightclub_events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `nightclub_events` (
+  `event_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) NOT NULL,
+  `event_name` varchar(200) NOT NULL,
+  `description` text DEFAULT NULL,
+  `event_date` date NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `theme` varchar(100) DEFAULT NULL,
+  `dj_name` varchar(100) DEFAULT NULL,
+  `dj_genre` varchar(100) DEFAULT NULL,
+  `capacity` int(11) DEFAULT 0,
+  `status` varchar(50) DEFAULT 'SCHEDULED',
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`event_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `nightclub_guest_lists`
+--
+
+DROP TABLE IF EXISTS `nightclub_guest_lists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `nightclub_guest_lists` (
+  `guest_list_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) NOT NULL,
+  `event_id` bigint(20) NOT NULL,
+  `guest_name` varchar(200) NOT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `party_size` int(11) DEFAULT 1,
+  `entry_type` varchar(50) DEFAULT 'FREE_ENTRY',
+  `discount_percentage` decimal(5,2) DEFAULT 0.00,
+  `added_by` varchar(100) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`guest_list_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `nightclub_table_reservations`
+--
+
+DROP TABLE IF EXISTS `nightclub_table_reservations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `nightclub_table_reservations` (
+  `reservation_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) NOT NULL,
+  `event_id` bigint(20) NOT NULL,
+  `table_id` bigint(20) DEFAULT NULL,
+  `zone_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) NOT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `email` varchar(200) DEFAULT NULL,
+  `party_size` int(11) DEFAULT 1,
+  `reservation_date` date DEFAULT NULL,
+  `arrival_time` time DEFAULT NULL,
+  `minimum_spend` decimal(15,2) DEFAULT 0.00,
+  `table_type` varchar(50) DEFAULT NULL,
+  `status` varchar(50) DEFAULT 'PENDING',
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`reservation_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `notifications`
@@ -3113,7 +4446,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `notifications`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notifications` (
   `notification_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -3137,13 +4470,45 @@ CREATE TABLE `notifications` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `notifications`
+-- Table structure for table `occupancy_events`
 --
 
-LOCK TABLES `notifications` WRITE;
-/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
-/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `occupancy_events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `occupancy_events` (
+  `oe_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `occupancy_id` bigint(20) NOT NULL,
+  `event_type` varchar(20) NOT NULL,
+  `person_count` int(11) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`oe_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `occupancy_tracking`
+--
+
+DROP TABLE IF EXISTS `occupancy_tracking`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `occupancy_tracking` (
+  `occupancy_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_id` bigint(20) DEFAULT NULL,
+  `current_count` int(11) DEFAULT 0,
+  `max_capacity` int(11) DEFAULT 0,
+  `last_updated` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `tracking_date` date DEFAULT NULL,
+  `current_occupancy` int(11) DEFAULT 0,
+  `entry_count` int(11) DEFAULT 0,
+  `exit_count` int(11) DEFAULT 0,
+  `status` varchar(30) DEFAULT 'OPEN',
+  PRIMARY KEY (`occupancy_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `onboarding_templates`
@@ -3151,7 +4516,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `onboarding_templates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `onboarding_templates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `business_type` enum('home_based','small_restaurant','regional_chain','national_corporation','international_corporation') NOT NULL,
@@ -3166,14 +4531,31 @@ CREATE TABLE `onboarding_templates` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `onboarding_templates`
+-- Table structure for table `order_courses`
 --
 
-LOCK TABLES `onboarding_templates` WRITE;
-/*!40000 ALTER TABLE `onboarding_templates` DISABLE KEYS */;
-INSERT INTO `onboarding_templates` VALUES (1,'home_based','Home-Based Quick Start','[{\"step\": 1, \"title\": \"Account Setup\", \"duration\": 5}, {\"step\": 2, \"title\": \"Business Info\", \"duration\": 3}, {\"step\": 3, \"title\": \"Menu Setup\", \"duration\": 10}, {\"step\": 4, \"title\": \"Inventory Setup\", \"duration\": 5}, {\"step\": 5, \"title\": \"Staff Setup\", \"duration\": 2}]',25,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(2,'small_restaurant','Restaurant Standard Onboarding','[{\"step\": 1, \"title\": \"Account Setup\", \"duration\": 5}, {\"step\": 2, \"title\": \"Business Info\", \"duration\": 5}, {\"step\": 3, \"title\": \"Menu Setup\", \"duration\": 15}, {\"step\": 4, \"title\": \"Inventory Setup\", \"duration\": 10}, {\"step\": 5, \"title\": \"Staff Setup\", \"duration\": 10}, {\"step\": 6, \"title\": \"Table Setup\", \"duration\": 5}, {\"step\": 7, \"title\": \"Payment Setup\", \"duration\": 5}]',55,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(3,'regional_chain','Chain Restaurant Onboarding','[{\"step\": 1, \"title\": \"Account Setup\", \"duration\": 10}, {\"step\": 2, \"title\": \"Business Info\", \"duration\": 10}, {\"step\": 3, \"title\": \"Location Setup\", \"duration\": 15}, {\"step\": 4, \"title\": \"Menu Setup\", \"duration\": 20}, {\"step\": 5, \"title\": \"Inventory Setup\", \"duration\": 15}, {\"step\": 6, \"title\": \"Staff Setup\", \"duration\": 15}, {\"step\": 7, \"title\": \"Table Setup\", \"duration\": 10}, {\"step\": 8, \"title\": \"Payment Setup\", \"duration\": 10}, {\"step\": 9, \"title\": \"Multi-Location Config\", \"duration\": 15}]',120,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(4,'national_corporation','Enterprise Onboarding','[{\"step\": 1, \"title\": \"Account Setup\", \"duration\": 15}, {\"step\": 2, \"title\": \"Business Info\", \"duration\": 15}, {\"step\": 3, \"title\": \"Location Setup\", \"duration\": 20}, {\"step\": 4, \"title\": \"Menu Setup\", \"duration\": 30}, {\"step\": 5, \"title\": \"Inventory Setup\", \"duration\": 20}, {\"step\": 6, \"title\": \"Staff Setup\", \"duration\": 20}, {\"step\": 7, \"title\": \"Table Setup\", \"duration\": 15}, {\"step\": 8, \"title\": \"Payment Setup\", \"duration\": 15}, {\"step\": 9, \"title\": \"Multi-Location Config\", \"duration\": 20}, {\"step\": 10, \"title\": \"API Integration\", \"duration\": 30}, {\"step\": 11, \"title\": \"Custom Configuration\", \"duration\": 30}]',240,'2026-07-05 03:24:53','2026-07-05 03:24:53'),(5,'international_corporation','International Enterprise Onboarding','[{\"step\": 1, \"title\": \"Account Setup\", \"duration\": 20}, {\"step\": 2, \"title\": \"Business Info\", \"duration\": 20}, {\"step\": 3, \"title\": \"Location Setup\", \"duration\": 30}, {\"step\": 4, \"title\": \"Menu Setup\", \"duration\": 40}, {\"step\": 5, \"title\": \"Inventory Setup\", \"duration\": 30}, {\"step\": 6, \"title\": \"Staff Setup\", \"duration\": 30}, {\"step\": 7, \"title\": \"Table Setup\", \"duration\": 20}, {\"step\": 8, \"title\": \"Payment Setup\", \"duration\": 20}, {\"step\": 9, \"title\": \"Multi-Location Config\", \"duration\": 30}, {\"step\": 10, \"title\": \"API Integration\", \"duration\": 40}, {\"step\": 11, \"title\": \"International Config\", \"duration\": 30}, {\"step\": 12, \"title\": \"Custom Configuration\", \"duration\": 40}]',360,'2026-07-05 03:24:53','2026-07-05 03:24:53');
-/*!40000 ALTER TABLE `onboarding_templates` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `order_courses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_courses` (
+  `order_course_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` bigint(20) unsigned NOT NULL,
+  `course_id` bigint(20) unsigned NOT NULL,
+  `course_number` int(11) NOT NULL,
+  `fire_status` enum('PENDING','FIRED','COMPLETED','CANCELLED') DEFAULT 'PENDING',
+  `fired_at` timestamp NULL DEFAULT NULL,
+  `fired_by` bigint(20) unsigned DEFAULT NULL,
+  `completed_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`order_course_id`),
+  KEY `idx_order` (`order_id`),
+  KEY `idx_course` (`course_id`),
+  KEY `idx_status` (`fire_status`),
+  CONSTRAINT `order_courses_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
+  CONSTRAINT `order_courses_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `course_sequences` (`course_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `order_item_modifiers`
@@ -3181,7 +4563,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `order_item_modifiers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `order_item_modifiers` (
   `order_item_modifier_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `order_item_id` bigint(20) unsigned NOT NULL,
@@ -3198,21 +4580,12 @@ CREATE TABLE `order_item_modifiers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `order_item_modifiers`
---
-
-LOCK TABLES `order_item_modifiers` WRITE;
-/*!40000 ALTER TABLE `order_item_modifiers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `order_item_modifiers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `order_items`
 --
 
 DROP TABLE IF EXISTS `order_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `order_items` (
   `order_item_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` bigint(20) unsigned NOT NULL,
@@ -3239,13 +4612,95 @@ CREATE TABLE `order_items` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `order_items`
+-- Table structure for table `order_routing`
 --
 
-LOCK TABLES `order_items` WRITE;
-/*!40000 ALTER TABLE `order_items` DISABLE KEYS */;
-/*!40000 ALTER TABLE `order_items` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `order_routing`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_routing` (
+  `routing_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` bigint(20) unsigned NOT NULL,
+  `order_item_id` bigint(20) unsigned DEFAULT NULL,
+  `source_zone_id` bigint(20) unsigned NOT NULL,
+  `target_kitchen_id` bigint(20) unsigned NOT NULL,
+  `routing_status` varchar(50) DEFAULT 'PENDING',
+  `priority` int(11) DEFAULT 0,
+  `estimated_time` int(11) DEFAULT NULL,
+  `actual_time` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`routing_id`),
+  KEY `idx_order` (`order_id`),
+  KEY `idx_order_item` (`order_item_id`),
+  KEY `idx_source_zone` (`source_zone_id`),
+  KEY `idx_target_kitchen` (`target_kitchen_id`),
+  KEY `idx_status` (`routing_status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `order_throttling_config`
+--
+
+DROP TABLE IF EXISTS `order_throttling_config`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_throttling_config` (
+  `config_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `max_orders_per_slot` int(11) DEFAULT 0,
+  `slot_duration_minutes` int(11) DEFAULT 15,
+  `is_paused` tinyint(1) DEFAULT 0,
+  `paused_until` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `channel` varchar(50) DEFAULT 'ALL',
+  `auto_pause_threshold` int(11) DEFAULT 20,
+  `current_orders_in_slot` int(11) DEFAULT 0,
+  `current_slot_start` timestamp NULL DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`config_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `order_timing_metrics`
+--
+
+DROP TABLE IF EXISTS `order_timing_metrics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `order_timing_metrics` (
+  `timing_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `order_id` bigint(20) unsigned NOT NULL,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `order_placed_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `sent_to_kitchen_at` timestamp NULL DEFAULT NULL,
+  `prep_started_at` timestamp NULL DEFAULT NULL,
+  `ready_at` timestamp NULL DEFAULT NULL,
+  `served_at` timestamp NULL DEFAULT NULL,
+  `total_prep_time` int(11) DEFAULT NULL,
+  `total_service_time` int(11) DEFAULT NULL,
+  `estimated_time` int(11) DEFAULT NULL,
+  `time_variance` int(11) DEFAULT NULL,
+  `is_on_time` tinyint(1) DEFAULT 1,
+  `delay_reason` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`timing_id`),
+  KEY `idx_order` (`order_id`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_placed` (`order_placed_at`),
+  KEY `idx_on_time` (`is_on_time`),
+  CONSTRAINT `order_timing_metrics_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
+  CONSTRAINT `order_timing_metrics_ibfk_2` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `order_timing_metrics_ibfk_3` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `orders`
@@ -3253,7 +4708,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `orders` (
   `order_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -3308,21 +4763,12 @@ CREATE TABLE `orders` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `orders`
---
-
-LOCK TABLES `orders` WRITE;
-/*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-/*!40000 ALTER TABLE `orders` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `payments`
 --
 
 DROP TABLE IF EXISTS `payments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payments` (
   `payment_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` bigint(20) unsigned NOT NULL,
@@ -3343,21 +4789,12 @@ CREATE TABLE `payments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `payments`
---
-
-LOCK TABLES `payments` WRITE;
-/*!40000 ALTER TABLE `payments` DISABLE KEYS */;
-/*!40000 ALTER TABLE `payments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `payroll_entries`
 --
 
 DROP TABLE IF EXISTS `payroll_entries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payroll_entries` (
   `entry_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `period_id` bigint(20) NOT NULL,
@@ -3379,21 +4816,12 @@ CREATE TABLE `payroll_entries` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `payroll_entries`
---
-
-LOCK TABLES `payroll_entries` WRITE;
-/*!40000 ALTER TABLE `payroll_entries` DISABLE KEYS */;
-/*!40000 ALTER TABLE `payroll_entries` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `payroll_periods`
 --
 
 DROP TABLE IF EXISTS `payroll_periods`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `payroll_periods` (
   `period_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -3415,13 +4843,73 @@ CREATE TABLE `payroll_periods` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `payroll_periods`
+-- Table structure for table `peak_hour_schedules`
 --
 
-LOCK TABLES `payroll_periods` WRITE;
-/*!40000 ALTER TABLE `payroll_periods` DISABLE KEYS */;
-/*!40000 ALTER TABLE `payroll_periods` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `peak_hour_schedules`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `peak_hour_schedules` (
+  `schedule_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `day_of_week` enum('MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY') NOT NULL,
+  `start_time` time NOT NULL,
+  `end_time` time NOT NULL,
+  `peak_level` enum('LOW','MEDIUM','HIGH','EXTREME') DEFAULT 'HIGH',
+  `expected_volume_multiplier` decimal(3,2) DEFAULT 1.50,
+  `staff_multiplier` decimal(3,2) DEFAULT 1.25,
+  `is_active` tinyint(1) DEFAULT 1,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`schedule_id`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_day` (`day_of_week`),
+  KEY `idx_time` (`start_time`,`end_time`),
+  CONSTRAINT `peak_hour_schedules_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `peak_hour_schedules_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `performance_metrics`
+--
+
+DROP TABLE IF EXISTS `performance_metrics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `performance_metrics` (
+  `metric_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `station_id` bigint(20) DEFAULT NULL,
+  `date` date NOT NULL,
+  `hour` int(11) DEFAULT NULL,
+  `total_orders` int(11) DEFAULT 0,
+  `completed_orders` int(11) DEFAULT 0,
+  `cancelled_orders` int(11) DEFAULT 0,
+  `avg_order_time` int(11) DEFAULT NULL,
+  `avg_prep_time` int(11) DEFAULT NULL,
+  `error_count` int(11) DEFAULT 0,
+  `error_rate` decimal(5,2) DEFAULT 0.00,
+  `on_time_rate` decimal(5,2) DEFAULT 0.00,
+  `bottleneck_flag` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`metric_id`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_station` (`station_id`),
+  KEY `idx_date` (`date`),
+  KEY `idx_hour` (`hour`),
+  KEY `idx_bottleneck` (`bottleneck_flag`),
+  CONSTRAINT `performance_metrics_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `performance_metrics_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE,
+  CONSTRAINT `performance_metrics_ibfk_3` FOREIGN KEY (`station_id`) REFERENCES `kitchen_stations` (`station_id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `permissions`
@@ -3429,7 +4917,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `permissions` (
   `permission_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `permission_code` varchar(100) NOT NULL,
@@ -3447,14 +4935,34 @@ CREATE TABLE `permissions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `permissions`
+-- Table structure for table `pos_bank_deposits`
 --
 
-LOCK TABLES `permissions` WRITE;
-/*!40000 ALTER TABLE `permissions` DISABLE KEYS */;
-INSERT INTO `permissions` VALUES (1,'MENU_MANAGE','MENU_MANAGE',NULL,NULL,'MENU MANAGE','2026-07-02 07:41:03','2026-07-02 07:41:03'),(2,'TABLE_MANAGE','TABLE_MANAGE',NULL,NULL,'TABLE MANAGE','2026-07-02 07:41:03','2026-07-02 07:41:03'),(3,'RESERVATION_MANAGE','RESERVATION_MANAGE',NULL,NULL,'RESERVATION MANAGE','2026-07-02 07:41:03','2026-07-02 07:41:03'),(4,'INVENTORY_MANAGE','INVENTORY_MANAGE',NULL,NULL,'INVENTORY MANAGE','2026-07-02 07:41:03','2026-07-02 07:41:03'),(5,'KITCHEN_VIEW','KITCHEN_VIEW',NULL,NULL,'KITCHEN VIEW','2026-07-02 07:41:03','2026-07-02 07:41:03'),(6,'USER_MANAGE','USER_MANAGE',NULL,NULL,'USER MANAGE','2026-07-02 07:41:03','2026-07-02 07:41:03'),(7,'SETTINGS_MANAGE','SETTINGS_MANAGE',NULL,NULL,'SETTINGS MANAGE','2026-07-02 07:41:03','2026-07-02 07:41:03'),(8,'REPORT_VIEW','REPORT_VIEW',NULL,NULL,'REPORT VIEW','2026-07-02 07:41:03','2026-07-02 07:41:03'),(9,'SALES_MANAGE','SALES_MANAGE',NULL,NULL,'SALES MANAGE','2026-07-02 07:41:03','2026-07-02 07:41:03');
-/*!40000 ALTER TABLE `permissions` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `pos_bank_deposits`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pos_bank_deposits` (
+  `deposit_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `deposit_date` date NOT NULL,
+  `pos_sales_total` decimal(15,2) DEFAULT 0.00,
+  `cash_sales_total` decimal(15,2) DEFAULT 0.00,
+  `non_cash_sales_total` decimal(15,2) DEFAULT 0.00,
+  `bank_deposit_amount` decimal(15,2) DEFAULT 0.00,
+  `cash_drawer_counted` decimal(15,2) DEFAULT 0.00,
+  `cash_drawer_expected` decimal(15,2) DEFAULT 0.00,
+  `cash_variance` decimal(15,2) DEFAULT 0.00,
+  `total_variance` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'PENDING',
+  `matched_by` varchar(100) DEFAULT NULL,
+  `matched_at` timestamp NULL DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`deposit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `price_history`
@@ -3462,7 +4970,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `price_history`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `price_history` (
   `history_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `product_id` bigint(20) NOT NULL,
@@ -3483,21 +4991,12 @@ CREATE TABLE `price_history` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `price_history`
---
-
-LOCK TABLES `price_history` WRITE;
-/*!40000 ALTER TABLE `price_history` DISABLE KEYS */;
-/*!40000 ALTER TABLE `price_history` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `product_modifier_assignments`
 --
 
 DROP TABLE IF EXISTS `product_modifier_assignments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `product_modifier_assignments` (
   `assignment_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `product_id` bigint(20) unsigned NOT NULL,
@@ -3513,21 +5012,12 @@ CREATE TABLE `product_modifier_assignments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `product_modifier_assignments`
---
-
-LOCK TABLES `product_modifier_assignments` WRITE;
-/*!40000 ALTER TABLE `product_modifier_assignments` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product_modifier_assignments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `product_modifier_groups`
 --
 
 DROP TABLE IF EXISTS `product_modifier_groups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `product_modifier_groups` (
   `modifier_group_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -3547,21 +5037,12 @@ CREATE TABLE `product_modifier_groups` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `product_modifier_groups`
---
-
-LOCK TABLES `product_modifier_groups` WRITE;
-/*!40000 ALTER TABLE `product_modifier_groups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product_modifier_groups` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `product_modifiers`
 --
 
 DROP TABLE IF EXISTS `product_modifiers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `product_modifiers` (
   `modifier_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `modifier_group_id` bigint(20) unsigned NOT NULL,
@@ -3580,21 +5061,12 @@ CREATE TABLE `product_modifiers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `product_modifiers`
---
-
-LOCK TABLES `product_modifiers` WRITE;
-/*!40000 ALTER TABLE `product_modifiers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product_modifiers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `product_prices`
 --
 
 DROP TABLE IF EXISTS `product_prices`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `product_prices` (
   `price_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `product_id` bigint(20) NOT NULL,
@@ -3613,21 +5085,12 @@ CREATE TABLE `product_prices` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `product_prices`
---
-
-LOCK TABLES `product_prices` WRITE;
-/*!40000 ALTER TABLE `product_prices` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product_prices` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `product_variants`
 --
 
 DROP TABLE IF EXISTS `product_variants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `product_variants` (
   `variant_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `product_id` bigint(20) unsigned NOT NULL,
@@ -3646,21 +5109,12 @@ CREATE TABLE `product_variants` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `product_variants`
---
-
-LOCK TABLES `product_variants` WRITE;
-/*!40000 ALTER TABLE `product_variants` DISABLE KEYS */;
-/*!40000 ALTER TABLE `product_variants` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `production_batches`
 --
 
 DROP TABLE IF EXISTS `production_batches`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `production_batches` (
   `batch_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -3686,21 +5140,12 @@ CREATE TABLE `production_batches` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `production_batches`
---
-
-LOCK TABLES `production_batches` WRITE;
-/*!40000 ALTER TABLE `production_batches` DISABLE KEYS */;
-/*!40000 ALTER TABLE `production_batches` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `products`
 --
 
 DROP TABLE IF EXISTS `products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `products` (
   `product_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -3728,17 +5173,103 @@ CREATE TABLE `products` (
   KEY `idx_products_status` (`status`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `products_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `promoter_guest_lists`
+--
+
+DROP TABLE IF EXISTS `promoter_guest_lists`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `promoter_guest_lists` (
+  `guest_id` bigint(20) DEFAULT NULL,
+  `pgl_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `promoter_id` bigint(20) NOT NULL,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_id` bigint(20) DEFAULT NULL,
+  `guest_name` varchar(200) DEFAULT NULL,
+  `guest_phone` varchar(50) DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `party_size` int(11) DEFAULT 1,
+  `entry_type` varchar(50) DEFAULT 'FREE_ENTRY',
+  `checked_in` tinyint(1) DEFAULT 0,
+  `checked_in_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `discount_amount` decimal(15,2) DEFAULT 0.00,
+  `commission_amount` decimal(15,2) DEFAULT 0.00,
+  `check_in_status` varchar(30) DEFAULT 'PENDING',
+  PRIMARY KEY (`pgl_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `products`
+-- Table structure for table `promoters`
 --
 
-LOCK TABLES `products` WRITE;
-/*!40000 ALTER TABLE `products` DISABLE KEYS */;
-/*!40000 ALTER TABLE `products` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `promoters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `promoters` (
+  `promoter_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `name` varchar(200) DEFAULT NULL,
+  `promoter_name` varchar(200) DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `commission_rate` decimal(5,2) DEFAULT 0.00,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `promoter_code` varchar(50) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `commission_type` varchar(30) DEFAULT 'PER_HEAD',
+  `guest_list_limit` int(11) DEFAULT NULL,
+  `total_guests_brought` int(11) DEFAULT 0,
+  `total_commission_earned` decimal(15,2) DEFAULT 0.00,
+  `notes` text DEFAULT NULL,
+  PRIMARY KEY (`promoter_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `proposal_addons`
+--
+
+DROP TABLE IF EXISTS `proposal_addons`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `proposal_addons` (
+  `addon_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `proposal_id` bigint(20) NOT NULL,
+  `addon_name` varchar(200) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `price` decimal(15,2) DEFAULT 0.00,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`addon_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `proposal_menu_items`
+--
+
+DROP TABLE IF EXISTS `proposal_menu_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `proposal_menu_items` (
+  `pmi_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `proposal_id` bigint(20) NOT NULL,
+  `menu_item` varchar(200) DEFAULT NULL,
+  `quantity` int(11) DEFAULT 0,
+  `unit_price` decimal(15,2) DEFAULT 0.00,
+  `total_price` decimal(15,2) DEFAULT 0.00,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`pmi_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `purchase_order_items`
@@ -3746,7 +5277,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `purchase_order_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `purchase_order_items` (
   `poi_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `po_id` bigint(20) NOT NULL,
@@ -3762,21 +5293,12 @@ CREATE TABLE `purchase_order_items` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `purchase_order_items`
---
-
-LOCK TABLES `purchase_order_items` WRITE;
-/*!40000 ALTER TABLE `purchase_order_items` DISABLE KEYS */;
-/*!40000 ALTER TABLE `purchase_order_items` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `purchase_orders`
 --
 
 DROP TABLE IF EXISTS `purchase_orders`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `purchase_orders` (
   `po_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -3807,13 +5329,72 @@ CREATE TABLE `purchase_orders` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `purchase_orders`
+-- Table structure for table `qr_ticket_scans`
 --
 
-LOCK TABLES `purchase_orders` WRITE;
-/*!40000 ALTER TABLE `purchase_orders` DISABLE KEYS */;
-/*!40000 ALTER TABLE `purchase_orders` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `qr_ticket_scans`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qr_ticket_scans` (
+  `scan_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `ticket_id` bigint(20) DEFAULT NULL,
+  `event_id` bigint(20) DEFAULT NULL,
+  `scan_time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `gate` varchar(50) DEFAULT NULL,
+  `is_valid` tinyint(1) DEFAULT 1,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `qr_code` varchar(500) DEFAULT NULL,
+  `scan_result` varchar(30) DEFAULT NULL,
+  `scanned_by` varchar(100) DEFAULT NULL,
+  `device_id` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`scan_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `radius_clause_checks`
+--
+
+DROP TABLE IF EXISTS `radius_clause_checks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `radius_clause_checks` (
+  `check_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `deal_id` bigint(20) DEFAULT NULL,
+  `artist_name` varchar(200) DEFAULT NULL,
+  `clause_radius_km` decimal(10,2) DEFAULT NULL,
+  `clause_days` int(11) DEFAULT NULL,
+  `event_date` date DEFAULT NULL,
+  `conflicting_venue` varchar(200) DEFAULT NULL,
+  `conflicting_venue_distance_km` decimal(10,2) DEFAULT NULL,
+  `conflicting_event_date` date DEFAULT NULL,
+  `check_result` varchar(30) DEFAULT 'CLEAR',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`check_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `recipe_depletion_logs`
+--
+
+DROP TABLE IF EXISTS `recipe_depletion_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recipe_depletion_logs` (
+  `log_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `order_id` bigint(20) DEFAULT NULL,
+  `recipe_id` bigint(20) DEFAULT NULL,
+  `ingredient_id` bigint(20) DEFAULT NULL,
+  `quantity_depleted` decimal(10,2) DEFAULT 0.00,
+  `depletion_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `recipe_ingredients`
@@ -3821,7 +5402,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `recipe_ingredients`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `recipe_ingredients` (
   `recipe_ingredient_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `recipe_id` bigint(20) unsigned NOT NULL,
@@ -3840,21 +5421,12 @@ CREATE TABLE `recipe_ingredients` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `recipe_ingredients`
---
-
-LOCK TABLES `recipe_ingredients` WRITE;
-/*!40000 ALTER TABLE `recipe_ingredients` DISABLE KEYS */;
-/*!40000 ALTER TABLE `recipe_ingredients` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `recipes`
 --
 
 DROP TABLE IF EXISTS `recipes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `recipes` (
   `recipe_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -3887,21 +5459,12 @@ CREATE TABLE `recipes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `recipes`
---
-
-LOCK TABLES `recipes` WRITE;
-/*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reconciliation_alerts`
 --
 
 DROP TABLE IF EXISTS `reconciliation_alerts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reconciliation_alerts` (
   `alert_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `order_id` bigint(20) NOT NULL,
@@ -3928,21 +5491,12 @@ CREATE TABLE `reconciliation_alerts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reconciliation_alerts`
---
-
-LOCK TABLES `reconciliation_alerts` WRITE;
-/*!40000 ALTER TABLE `reconciliation_alerts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reconciliation_alerts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reconciliation_batch_jobs`
 --
 
 DROP TABLE IF EXISTS `reconciliation_batch_jobs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reconciliation_batch_jobs` (
   `batch_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -3970,21 +5524,12 @@ CREATE TABLE `reconciliation_batch_jobs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reconciliation_batch_jobs`
---
-
-LOCK TABLES `reconciliation_batch_jobs` WRITE;
-/*!40000 ALTER TABLE `reconciliation_batch_jobs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reconciliation_batch_jobs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reconciliation_logs`
 --
 
 DROP TABLE IF EXISTS `reconciliation_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reconciliation_logs` (
   `log_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `order_id` bigint(20) NOT NULL,
@@ -4012,21 +5557,12 @@ CREATE TABLE `reconciliation_logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reconciliation_logs`
---
-
-LOCK TABLES `reconciliation_logs` WRITE;
-/*!40000 ALTER TABLE `reconciliation_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reconciliation_logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reconciliation_rules`
 --
 
 DROP TABLE IF EXISTS `reconciliation_rules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reconciliation_rules` (
   `rule_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4051,21 +5587,12 @@ CREATE TABLE `reconciliation_rules` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reconciliation_rules`
---
-
-LOCK TABLES `reconciliation_rules` WRITE;
-/*!40000 ALTER TABLE `reconciliation_rules` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reconciliation_rules` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reconciliation_sources`
 --
 
 DROP TABLE IF EXISTS `reconciliation_sources`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reconciliation_sources` (
   `source_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4091,21 +5618,12 @@ CREATE TABLE `reconciliation_sources` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reconciliation_sources`
---
-
-LOCK TABLES `reconciliation_sources` WRITE;
-/*!40000 ALTER TABLE `reconciliation_sources` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reconciliation_sources` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reconciliation_transactions`
 --
 
 DROP TABLE IF EXISTS `reconciliation_transactions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reconciliation_transactions` (
   `transaction_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `log_id` bigint(20) NOT NULL,
@@ -4132,21 +5650,12 @@ CREATE TABLE `reconciliation_transactions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reconciliation_transactions`
---
-
-LOCK TABLES `reconciliation_transactions` WRITE;
-/*!40000 ALTER TABLE `reconciliation_transactions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reconciliation_transactions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `referral_programs`
 --
 
 DROP TABLE IF EXISTS `referral_programs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `referral_programs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `program_name` varchar(100) NOT NULL,
@@ -4168,22 +5677,12 @@ CREATE TABLE `referral_programs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `referral_programs`
---
-
-LOCK TABLES `referral_programs` WRITE;
-/*!40000 ALTER TABLE `referral_programs` DISABLE KEYS */;
-INSERT INTO `referral_programs` VALUES (1,'Restaurant Referral Program','restaurant_referral','credit',500.00,500.00,10,'2026-07-05',NULL,'active','Refer a restaurant and both get $500 credit when they sign up for a paid plan.','2026-07-05 03:25:53','2026-07-05 03:25:53'),(2,'Consumer Referral Program','consumer_referral','discount',10.00,5.00,50,'2026-07-05',NULL,'active','Refer a friend and get $10 discount, they get $5 discount on first order.','2026-07-05 03:25:53','2026-07-05 03:25:53');
-/*!40000 ALTER TABLE `referral_programs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `referrals`
 --
 
 DROP TABLE IF EXISTS `referrals`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `referrals` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `referral_program_id` int(11) NOT NULL,
@@ -4205,21 +5704,12 @@ CREATE TABLE `referrals` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `referrals`
---
-
-LOCK TABLES `referrals` WRITE;
-/*!40000 ALTER TABLE `referrals` DISABLE KEYS */;
-/*!40000 ALTER TABLE `referrals` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reorder_alerts`
 --
 
 DROP TABLE IF EXISTS `reorder_alerts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reorder_alerts` (
   `alert_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4241,21 +5731,12 @@ CREATE TABLE `reorder_alerts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reorder_alerts`
---
-
-LOCK TABLES `reorder_alerts` WRITE;
-/*!40000 ALTER TABLE `reorder_alerts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reorder_alerts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `report_schedules`
 --
 
 DROP TABLE IF EXISTS `report_schedules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `report_schedules` (
   `schedule_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4278,21 +5759,12 @@ CREATE TABLE `report_schedules` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `report_schedules`
---
-
-LOCK TABLES `report_schedules` WRITE;
-/*!40000 ALTER TABLE `report_schedules` DISABLE KEYS */;
-/*!40000 ALTER TABLE `report_schedules` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `reports`
 --
 
 DROP TABLE IF EXISTS `reports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reports` (
   `report_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4315,13 +5787,35 @@ CREATE TABLE `reports` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reports`
+-- Table structure for table `reservation_deposits`
 --
 
-LOCK TABLES `reports` WRITE;
-/*!40000 ALTER TABLE `reports` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reports` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `reservation_deposits`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reservation_deposits` (
+  `deposit_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `reservation_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `party_size` int(11) DEFAULT NULL,
+  `reservation_date` date DEFAULT NULL,
+  `reservation_time` time DEFAULT NULL,
+  `deposit_amount` decimal(15,2) DEFAULT 0.00,
+  `deposit_type` varchar(30) DEFAULT 'PER_PERSON',
+  `payment_method` varchar(50) DEFAULT NULL,
+  `payment_ref` varchar(200) DEFAULT NULL,
+  `paid_at` timestamp NULL DEFAULT NULL,
+  `forfeited_at` timestamp NULL DEFAULT NULL,
+  `refunded_at` timestamp NULL DEFAULT NULL,
+  `no_show_cutoff` timestamp NULL DEFAULT NULL,
+  `status` varchar(20) DEFAULT 'PENDING',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`deposit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `reservations`
@@ -4329,7 +5823,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `reservations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `reservations` (
   `reservation_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -4361,21 +5855,12 @@ CREATE TABLE `reservations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `reservations`
---
-
-LOCK TABLES `reservations` WRITE;
-/*!40000 ALTER TABLE `reservations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `reservations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `restaurant_tables`
 --
 
 DROP TABLE IF EXISTS `restaurant_tables`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `restaurant_tables` (
   `table_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4398,21 +5883,12 @@ CREATE TABLE `restaurant_tables` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `restaurant_tables`
---
-
-LOCK TABLES `restaurant_tables` WRITE;
-/*!40000 ALTER TABLE `restaurant_tables` DISABLE KEYS */;
-/*!40000 ALTER TABLE `restaurant_tables` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `risk_assessments`
 --
 
 DROP TABLE IF EXISTS `risk_assessments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `risk_assessments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -4437,21 +5913,12 @@ CREATE TABLE `risk_assessments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `risk_assessments`
---
-
-LOCK TABLES `risk_assessments` WRITE;
-/*!40000 ALTER TABLE `risk_assessments` DISABLE KEYS */;
-/*!40000 ALTER TABLE `risk_assessments` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `risk_incidents`
 --
 
 DROP TABLE IF EXISTS `risk_incidents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `risk_incidents` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -4477,21 +5944,12 @@ CREATE TABLE `risk_incidents` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `risk_incidents`
---
-
-LOCK TABLES `risk_incidents` WRITE;
-/*!40000 ALTER TABLE `risk_incidents` DISABLE KEYS */;
-/*!40000 ALTER TABLE `risk_incidents` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `risk_mitigation_plans`
 --
 
 DROP TABLE IF EXISTS `risk_mitigation_plans`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `risk_mitigation_plans` (
   `plan_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4517,21 +5975,12 @@ CREATE TABLE `risk_mitigation_plans` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `risk_mitigation_plans`
---
-
-LOCK TABLES `risk_mitigation_plans` WRITE;
-/*!40000 ALTER TABLE `risk_mitigation_plans` DISABLE KEYS */;
-/*!40000 ALTER TABLE `risk_mitigation_plans` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `risk_register`
 --
 
 DROP TABLE IF EXISTS `risk_register`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `risk_register` (
   `risk_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4558,21 +6007,12 @@ CREATE TABLE `risk_register` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `risk_register`
---
-
-LOCK TABLES `risk_register` WRITE;
-/*!40000 ALTER TABLE `risk_register` DISABLE KEYS */;
-/*!40000 ALTER TABLE `risk_register` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `role_permissions`
 --
 
 DROP TABLE IF EXISTS `role_permissions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role_permissions` (
   `role_permission_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `role_id` bigint(20) unsigned NOT NULL,
@@ -4584,18 +6024,8 @@ CREATE TABLE `role_permissions` (
   KEY `idx_role_permissions_permission_id` (`permission_id`),
   CONSTRAINT `role_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `role_permissions_ibfk_2` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`permission_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `role_permissions`
---
-
-LOCK TABLES `role_permissions` WRITE;
-/*!40000 ALTER TABLE `role_permissions` DISABLE KEYS */;
-INSERT INTO `role_permissions` VALUES (1,2,1,'2026-07-02 07:41:03'),(2,2,2,'2026-07-02 07:41:03'),(3,2,3,'2026-07-02 07:41:03'),(4,2,4,'2026-07-02 07:41:03'),(5,2,5,'2026-07-02 07:41:03'),(6,2,6,'2026-07-02 07:41:03'),(7,2,7,'2026-07-02 07:41:03'),(8,2,8,'2026-07-02 07:41:03'),(9,2,9,'2026-07-02 07:41:03');
-/*!40000 ALTER TABLE `role_permissions` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `roles`
@@ -4603,7 +6033,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `roles` (
   `role_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -4620,18 +6050,8 @@ CREATE TABLE `roles` (
   KEY `idx_roles_tenant_id` (`tenant_id`),
   KEY `idx_roles_status` (`status`),
   CONSTRAINT `roles_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `roles`
---
-
-LOCK TABLES `roles` WRITE;
-/*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` VALUES (2,1,'ADMIN','Administrator','Full system access',0,'ACTIVE','2026-07-02 07:41:03','2026-07-02 07:41:03',NULL);
-/*!40000 ALTER TABLE `roles` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `saved_reports`
@@ -4639,7 +6059,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `saved_reports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `saved_reports` (
   `report_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4660,21 +6080,12 @@ CREATE TABLE `saved_reports` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `saved_reports`
---
-
-LOCK TABLES `saved_reports` WRITE;
-/*!40000 ALTER TABLE `saved_reports` DISABLE KEYS */;
-/*!40000 ALTER TABLE `saved_reports` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `schedules`
 --
 
 DROP TABLE IF EXISTS `schedules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `schedules` (
   `schedule_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4698,21 +6109,12 @@ CREATE TABLE `schedules` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `schedules`
---
-
-LOCK TABLES `schedules` WRITE;
-/*!40000 ALTER TABLE `schedules` DISABLE KEYS */;
-/*!40000 ALTER TABLE `schedules` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `seasonal_menu_items`
 --
 
 DROP TABLE IF EXISTS `seasonal_menu_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `seasonal_menu_items` (
   `menu_item_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `menu_id` bigint(20) NOT NULL,
@@ -4728,21 +6130,12 @@ CREATE TABLE `seasonal_menu_items` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `seasonal_menu_items`
---
-
-LOCK TABLES `seasonal_menu_items` WRITE;
-/*!40000 ALTER TABLE `seasonal_menu_items` DISABLE KEYS */;
-/*!40000 ALTER TABLE `seasonal_menu_items` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `seasonal_menus`
 --
 
 DROP TABLE IF EXISTS `seasonal_menus`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `seasonal_menus` (
   `menu_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4765,21 +6158,12 @@ CREATE TABLE `seasonal_menus` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `seasonal_menus`
---
-
-LOCK TABLES `seasonal_menus` WRITE;
-/*!40000 ALTER TABLE `seasonal_menus` DISABLE KEYS */;
-/*!40000 ALTER TABLE `seasonal_menus` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `security_audit_logs`
 --
 
 DROP TABLE IF EXISTS `security_audit_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `security_audit_logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) DEFAULT NULL,
@@ -4802,21 +6186,12 @@ CREATE TABLE `security_audit_logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `security_audit_logs`
---
-
-LOCK TABLES `security_audit_logs` WRITE;
-/*!40000 ALTER TABLE `security_audit_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `security_audit_logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `security_events`
 --
 
 DROP TABLE IF EXISTS `security_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `security_events` (
   `event_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4840,21 +6215,12 @@ CREATE TABLE `security_events` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `security_events`
---
-
-LOCK TABLES `security_events` WRITE;
-/*!40000 ALTER TABLE `security_events` DISABLE KEYS */;
-/*!40000 ALTER TABLE `security_events` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `security_incidents`
 --
 
 DROP TABLE IF EXISTS `security_incidents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `security_incidents` (
   `incident_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4879,13 +6245,34 @@ CREATE TABLE `security_incidents` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `security_incidents`
+-- Table structure for table `service_speed_metrics`
 --
 
-LOCK TABLES `security_incidents` WRITE;
-/*!40000 ALTER TABLE `security_incidents` DISABLE KEYS */;
-/*!40000 ALTER TABLE `security_incidents` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `service_speed_metrics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `service_speed_metrics` (
+  `metric_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `order_id` bigint(20) DEFAULT NULL,
+  `kitchen_time` int(11) DEFAULT 0,
+  `service_time` int(11) DEFAULT 0,
+  `total_time` int(11) DEFAULT 0,
+  `measured_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `metric_date` date DEFAULT NULL,
+  `metric_hour` int(11) DEFAULT 0,
+  `order_received_at` timestamp NULL DEFAULT NULL,
+  `order_started_at` timestamp NULL DEFAULT NULL,
+  `order_ready_at` timestamp NULL DEFAULT NULL,
+  `order_served_at` timestamp NULL DEFAULT NULL,
+  `total_prep_seconds` int(11) DEFAULT NULL,
+  `total_service_seconds` int(11) DEFAULT NULL,
+  `order_type` varchar(30) DEFAULT 'DINE_IN',
+  `items_count` int(11) DEFAULT NULL,
+  PRIMARY KEY (`metric_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `settings`
@@ -4893,7 +6280,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `settings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `settings` (
   `setting_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -4911,13 +6298,51 @@ CREATE TABLE `settings` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `settings`
+-- Table structure for table `settlement_items`
 --
 
-LOCK TABLES `settings` WRITE;
-/*!40000 ALTER TABLE `settings` DISABLE KEYS */;
-/*!40000 ALTER TABLE `settings` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `settlement_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `settlement_items` (
+  `item_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `settlement_id` bigint(20) NOT NULL,
+  `item_type` varchar(50) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `amount` decimal(15,2) DEFAULT 0.00,
+  `is_deduction` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `settlements`
+--
+
+DROP TABLE IF EXISTS `settlements`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `settlements` (
+  `settlement_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `concert_id` bigint(20) DEFAULT NULL,
+  `deal_id` bigint(20) DEFAULT NULL,
+  `settlement_date` date DEFAULT NULL,
+  `gross_door` decimal(15,2) DEFAULT 0.00,
+  `gross_bar` decimal(15,2) DEFAULT 0.00,
+  `artist_share` decimal(15,2) DEFAULT 0.00,
+  `venue_share` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'DRAFT',
+  `finalized_by` varchar(100) DEFAULT NULL,
+  `finalized_at` timestamp NULL DEFAULT NULL,
+  `paid_date` date DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`settlement_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `skills`
@@ -4925,7 +6350,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `skills`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `skills` (
   `skill_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -4940,21 +6365,12 @@ CREATE TABLE `skills` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `skills`
---
-
-LOCK TABLES `skills` WRITE;
-/*!40000 ALTER TABLE `skills` DISABLE KEYS */;
-/*!40000 ALTER TABLE `skills` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `sla_monitoring`
 --
 
 DROP TABLE IF EXISTS `sla_monitoring`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sla_monitoring` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -4974,13 +6390,60 @@ CREATE TABLE `sla_monitoring` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sla_monitoring`
+-- Table structure for table `social_group_booking_members`
 --
 
-LOCK TABLES `sla_monitoring` WRITE;
-/*!40000 ALTER TABLE `sla_monitoring` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sla_monitoring` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `social_group_booking_members`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `social_group_booking_members` (
+  `member_id` bigint(20) DEFAULT NULL,
+  `group_booking_id` bigint(20) DEFAULT NULL,
+  `sgbm_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `sgb_id` bigint(20) NOT NULL,
+  `member_name` varchar(200) DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `share_amount` decimal(15,2) DEFAULT 0.00,
+  `paid` tinyint(1) DEFAULT 0,
+  `paid_at` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `member_phone` varchar(50) DEFAULT NULL,
+  `member_email` varchar(100) DEFAULT NULL,
+  `share_paid` tinyint(1) DEFAULT 0,
+  PRIMARY KEY (`sgbm_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `social_group_bookings`
+--
+
+DROP TABLE IF EXISTS `social_group_bookings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `social_group_bookings` (
+  `group_booking_id` bigint(20) DEFAULT NULL,
+  `sgb_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_date` date DEFAULT NULL,
+  `organizer_name` varchar(200) DEFAULT NULL,
+  `total_amount` decimal(15,2) DEFAULT 0.00,
+  `per_person_amount` decimal(15,2) DEFAULT 0.00,
+  `party_size` int(11) DEFAULT 0,
+  `status` varchar(30) DEFAULT 'PENDING',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `organizer_phone` varchar(50) DEFAULT NULL,
+  `organizer_email` varchar(100) DEFAULT NULL,
+  `event_name` varchar(200) DEFAULT NULL,
+  `total_party_size` int(11) DEFAULT 1,
+  `deposit_collected` decimal(15,2) DEFAULT 0.00,
+  `split_type` varchar(20) DEFAULT 'EVEN',
+  `invite_link` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`sgb_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `spinoff_analytics`
@@ -4988,7 +6451,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `spinoff_analytics`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `spinoff_analytics` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `spinoff_app_id` int(11) NOT NULL,
@@ -5008,21 +6471,12 @@ CREATE TABLE `spinoff_analytics` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `spinoff_analytics`
---
-
-LOCK TABLES `spinoff_analytics` WRITE;
-/*!40000 ALTER TABLE `spinoff_analytics` DISABLE KEYS */;
-/*!40000 ALTER TABLE `spinoff_analytics` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `spinoff_apps`
 --
 
 DROP TABLE IF EXISTS `spinoff_apps`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `spinoff_apps` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `app_name` varchar(100) NOT NULL,
@@ -5052,22 +6506,12 @@ CREATE TABLE `spinoff_apps` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `spinoff_apps`
---
-
-LOCK TABLES `spinoff_apps` WRITE;
-/*!40000 ALTER TABLE `spinoff_apps` DISABLE KEYS */;
-INSERT INTO `spinoff_apps` VALUES (1,'Supplier Marketplace','SUPP_MKT','supplier_facing','B2B marketplace connecting restaurants with suppliers','Restaurants and Suppliers','Inefficient supplier discovery and ordering','high','high','high','medium',6,150000.00,'marketplace','idea',NULL,NULL,'2026-07-05 03:27:33','2026-07-05 03:27:33'),(2,'Halal Food Finder','HALAL_FOOD','consumer_facing','App for finding halal-certified restaurants','Muslim consumers','Difficulty finding halal food options','high','high','high','low',4,80000.00,'freemium','idea',NULL,NULL,'2026-07-05 03:27:33','2026-07-05 03:27:33'),(3,'Food Waste Reduction','FOOD_WASTE','consumer_facing','App connecting restaurants with consumers for discounted near-expiry food','Eco-conscious consumers','Food waste in restaurants','medium','medium','high','medium',5,100000.00,'transaction','idea',NULL,NULL,'2026-07-05 03:27:33','2026-07-05 03:27:33'),(4,'Staff Marketplace','STAFF_MKT','staff_facing','Gig economy platform for restaurant staff','Restaurant workers and restaurants','Staff shortage and flexible staffing needs','high','high','high','medium',6,120000.00,'marketplace','idea',NULL,NULL,'2026-07-05 03:27:33','2026-07-05 03:27:33'),(5,'Food Traceability','FOOD_TRACE','supplier_facing','Blockchain-based food traceability system','Food industry','Food safety and transparency concerns','medium','medium','medium','high',8,200000.00,'subscription','idea',NULL,NULL,'2026-07-05 03:27:33','2026-07-05 03:27:33'),(6,'Indonesian Food Discovery','INDO_FOOD','international','App for discovering Indonesian food globally','International foodies','Lack of Indonesian food visibility abroad','medium','high','medium','medium',5,90000.00,'freemium','idea',NULL,NULL,'2026-07-05 03:27:33','2026-07-05 03:27:33');
-/*!40000 ALTER TABLE `spinoff_apps` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `spinoff_milestones`
 --
 
 DROP TABLE IF EXISTS `spinoff_milestones`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `spinoff_milestones` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `spinoff_app_id` int(11) NOT NULL,
@@ -5090,21 +6534,12 @@ CREATE TABLE `spinoff_milestones` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `spinoff_milestones`
---
-
-LOCK TABLES `spinoff_milestones` WRITE;
-/*!40000 ALTER TABLE `spinoff_milestones` DISABLE KEYS */;
-/*!40000 ALTER TABLE `spinoff_milestones` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `split_bill_items`
 --
 
 DROP TABLE IF EXISTS `split_bill_items`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `split_bill_items` (
   `split_bill_item_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `split_bill_id` bigint(20) unsigned NOT NULL,
@@ -5120,21 +6555,12 @@ CREATE TABLE `split_bill_items` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `split_bill_items`
---
-
-LOCK TABLES `split_bill_items` WRITE;
-/*!40000 ALTER TABLE `split_bill_items` DISABLE KEYS */;
-/*!40000 ALTER TABLE `split_bill_items` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `split_bills`
 --
 
 DROP TABLE IF EXISTS `split_bills`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `split_bills` (
   `split_bill_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` bigint(20) unsigned NOT NULL,
@@ -5148,21 +6574,12 @@ CREATE TABLE `split_bills` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `split_bills`
---
-
-LOCK TABLES `split_bills` WRITE;
-/*!40000 ALTER TABLE `split_bills` DISABLE KEYS */;
-/*!40000 ALTER TABLE `split_bills` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `staff_gig_bookings`
 --
 
 DROP TABLE IF EXISTS `staff_gig_bookings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `staff_gig_bookings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -5189,21 +6606,12 @@ CREATE TABLE `staff_gig_bookings` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `staff_gig_bookings`
---
-
-LOCK TABLES `staff_gig_bookings` WRITE;
-/*!40000 ALTER TABLE `staff_gig_bookings` DISABLE KEYS */;
-/*!40000 ALTER TABLE `staff_gig_bookings` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `staff_marketplace`
 --
 
 DROP TABLE IF EXISTS `staff_marketplace`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `staff_marketplace` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -5232,21 +6640,12 @@ CREATE TABLE `staff_marketplace` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `staff_marketplace`
---
-
-LOCK TABLES `staff_marketplace` WRITE;
-/*!40000 ALTER TABLE `staff_marketplace` DISABLE KEYS */;
-/*!40000 ALTER TABLE `staff_marketplace` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `staff_messages`
 --
 
 DROP TABLE IF EXISTS `staff_messages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `staff_messages` (
   `message_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -5268,21 +6667,12 @@ CREATE TABLE `staff_messages` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `staff_messages`
---
-
-LOCK TABLES `staff_messages` WRITE;
-/*!40000 ALTER TABLE `staff_messages` DISABLE KEYS */;
-/*!40000 ALTER TABLE `staff_messages` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `staff_schedule_recommendations`
 --
 
 DROP TABLE IF EXISTS `staff_schedule_recommendations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `staff_schedule_recommendations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -5302,13 +6692,65 @@ CREATE TABLE `staff_schedule_recommendations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `staff_schedule_recommendations`
+-- Table structure for table `staff_zone_assignment`
 --
 
-LOCK TABLES `staff_schedule_recommendations` WRITE;
-/*!40000 ALTER TABLE `staff_schedule_recommendations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `staff_schedule_recommendations` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `staff_zone_assignment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `staff_zone_assignment` (
+  `assignment_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `floor_id` bigint(20) unsigned DEFAULT NULL,
+  `zone_id` bigint(20) unsigned DEFAULT NULL,
+  `kitchen_id` bigint(20) unsigned DEFAULT NULL,
+  `is_primary` tinyint(1) DEFAULT 0,
+  `assignment_date` date DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`assignment_id`),
+  KEY `idx_user` (`user_id`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_floor` (`floor_id`),
+  KEY `idx_zone` (`zone_id`),
+  KEY `idx_kitchen` (`kitchen_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `station_load_metrics`
+--
+
+DROP TABLE IF EXISTS `station_load_metrics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `station_load_metrics` (
+  `metric_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `station_id` bigint(20) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `active_tickets` int(11) DEFAULT 0,
+  `pending_items` int(11) DEFAULT 0,
+  `avg_prep_time` int(11) DEFAULT NULL,
+  `capacity_utilization` decimal(5,2) DEFAULT 0.00,
+  `load_level` enum('LOW','MEDIUM','HIGH','OVERLOADED') DEFAULT 'LOW',
+  `staff_count` int(11) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`metric_id`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_station` (`station_id`),
+  KEY `idx_timestamp` (`timestamp`),
+  KEY `idx_load_level` (`load_level`),
+  CONSTRAINT `station_load_metrics_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `station_load_metrics_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE,
+  CONSTRAINT `station_load_metrics_ibfk_3` FOREIGN KEY (`station_id`) REFERENCES `kitchen_stations` (`station_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `stock_balances`
@@ -5316,7 +6758,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `stock_balances`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stock_balances` (
   `stock_balance_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `branch_id` bigint(20) NOT NULL,
@@ -5333,21 +6775,12 @@ CREATE TABLE `stock_balances` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `stock_balances`
---
-
-LOCK TABLES `stock_balances` WRITE;
-/*!40000 ALTER TABLE `stock_balances` DISABLE KEYS */;
-/*!40000 ALTER TABLE `stock_balances` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `stock_transactions`
 --
 
 DROP TABLE IF EXISTS `stock_transactions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `stock_transactions` (
   `stock_transaction_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -5373,21 +6806,12 @@ CREATE TABLE `stock_transactions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `stock_transactions`
---
-
-LOCK TABLES `stock_transactions` WRITE;
-/*!40000 ALTER TABLE `stock_transactions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `stock_transactions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `supplier_ad_placements`
 --
 
 DROP TABLE IF EXISTS `supplier_ad_placements`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplier_ad_placements` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `supplier_name` varchar(255) NOT NULL,
@@ -5408,21 +6832,12 @@ CREATE TABLE `supplier_ad_placements` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `supplier_ad_placements`
---
-
-LOCK TABLES `supplier_ad_placements` WRITE;
-/*!40000 ALTER TABLE `supplier_ad_placements` DISABLE KEYS */;
-/*!40000 ALTER TABLE `supplier_ad_placements` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `supplier_contracts`
 --
 
 DROP TABLE IF EXISTS `supplier_contracts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplier_contracts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -5442,21 +6857,12 @@ CREATE TABLE `supplier_contracts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `supplier_contracts`
---
-
-LOCK TABLES `supplier_contracts` WRITE;
-/*!40000 ALTER TABLE `supplier_contracts` DISABLE KEYS */;
-/*!40000 ALTER TABLE `supplier_contracts` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `supplier_marketplace`
 --
 
 DROP TABLE IF EXISTS `supplier_marketplace`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplier_marketplace` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `supplier_name` varchar(255) NOT NULL,
@@ -5485,21 +6891,12 @@ CREATE TABLE `supplier_marketplace` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `supplier_marketplace`
---
-
-LOCK TABLES `supplier_marketplace` WRITE;
-/*!40000 ALTER TABLE `supplier_marketplace` DISABLE KEYS */;
-/*!40000 ALTER TABLE `supplier_marketplace` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `supplier_products`
 --
 
 DROP TABLE IF EXISTS `supplier_products`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `supplier_products` (
   `supplier_product_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `supplier_id` bigint(20) NOT NULL,
@@ -5518,21 +6915,12 @@ CREATE TABLE `supplier_products` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `supplier_products`
---
-
-LOCK TABLES `supplier_products` WRITE;
-/*!40000 ALTER TABLE `supplier_products` DISABLE KEYS */;
-/*!40000 ALTER TABLE `supplier_products` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `suppliers`
 --
 
 DROP TABLE IF EXISTS `suppliers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `suppliers` (
   `supplier_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -5565,21 +6953,12 @@ CREATE TABLE `suppliers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `suppliers`
---
-
-LOCK TABLES `suppliers` WRITE;
-/*!40000 ALTER TABLE `suppliers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `suppliers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `survey_responses`
 --
 
 DROP TABLE IF EXISTS `survey_responses`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `survey_responses` (
   `response_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `survey_id` bigint(20) NOT NULL,
@@ -5596,21 +6975,12 @@ CREATE TABLE `survey_responses` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `survey_responses`
---
-
-LOCK TABLES `survey_responses` WRITE;
-/*!40000 ALTER TABLE `survey_responses` DISABLE KEYS */;
-/*!40000 ALTER TABLE `survey_responses` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `surveys`
 --
 
 DROP TABLE IF EXISTS `surveys`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `surveys` (
   `survey_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -5629,21 +6999,12 @@ CREATE TABLE `surveys` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `surveys`
---
-
-LOCK TABLES `surveys` WRITE;
-/*!40000 ALTER TABLE `surveys` DISABLE KEYS */;
-/*!40000 ALTER TABLE `surveys` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `sustainability_reports`
 --
 
 DROP TABLE IF EXISTS `sustainability_reports`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sustainability_reports` (
   `report_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -5663,21 +7024,12 @@ CREATE TABLE `sustainability_reports` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sustainability_reports`
---
-
-LOCK TABLES `sustainability_reports` WRITE;
-/*!40000 ALTER TABLE `sustainability_reports` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sustainability_reports` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `system_backups`
 --
 
 DROP TABLE IF EXISTS `system_backups`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `system_backups` (
   `backup_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -5699,21 +7051,12 @@ CREATE TABLE `system_backups` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `system_backups`
---
-
-LOCK TABLES `system_backups` WRITE;
-/*!40000 ALTER TABLE `system_backups` DISABLE KEYS */;
-/*!40000 ALTER TABLE `system_backups` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `system_health_checks`
 --
 
 DROP TABLE IF EXISTS `system_health_checks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `system_health_checks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `check_type` varchar(50) NOT NULL,
@@ -5732,22 +7075,12 @@ CREATE TABLE `system_health_checks` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `system_health_checks`
---
-
-LOCK TABLES `system_health_checks` WRITE;
-/*!40000 ALTER TABLE `system_health_checks` DISABLE KEYS */;
-INSERT INTO `system_health_checks` VALUES (1,'database','Database Connectivity','healthy',NULL,NULL,'2026-07-05 03:25:26',1,1),(2,'database','Database Replication Lag','healthy',NULL,NULL,'2026-07-05 03:25:26',5,1),(3,'api','API Response Time','healthy',NULL,NULL,'2026-07-05 03:25:26',1,1),(4,'api','API Error Rate','healthy',NULL,NULL,'2026-07-05 03:25:26',5,1),(5,'storage','Disk Space','healthy',NULL,NULL,'2026-07-05 03:25:26',5,1),(6,'storage','Backup Integrity','healthy',NULL,NULL,'2026-07-05 03:25:26',60,1),(7,'security','SSL Certificate','healthy',NULL,NULL,'2026-07-05 03:25:26',60,1),(8,'security','Failed Login Attempts','healthy',NULL,NULL,'2026-07-05 03:25:26',5,1),(9,'performance','Memory Usage','healthy',NULL,NULL,'2026-07-05 03:25:26',1,1),(10,'performance','CPU Usage','healthy',NULL,NULL,'2026-07-05 03:25:26',1,1),(11,'external','Payment Gateway','healthy',NULL,NULL,'2026-07-05 03:25:26',5,1),(12,'external','Delivery API','healthy',NULL,NULL,'2026-07-05 03:25:26',5,1);
-/*!40000 ALTER TABLE `system_health_checks` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `system_incidents`
 --
 
 DROP TABLE IF EXISTS `system_incidents`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `system_incidents` (
   `incident_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -5769,13 +7102,74 @@ CREATE TABLE `system_incidents` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `system_incidents`
+-- Table structure for table `table_deposits`
 --
 
-LOCK TABLES `system_incidents` WRITE;
-/*!40000 ALTER TABLE `system_incidents` DISABLE KEYS */;
-/*!40000 ALTER TABLE `system_incidents` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `table_deposits`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `table_deposits` (
+  `deposit_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `event_id` bigint(20) DEFAULT NULL,
+  `reservation_id` bigint(20) DEFAULT NULL,
+  `table_id` bigint(20) DEFAULT NULL,
+  `zone_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `customer_phone` varchar(50) DEFAULT NULL,
+  `event_date` date DEFAULT NULL,
+  `deposit_amount` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'PENDING',
+  `paid_date` date DEFAULT NULL,
+  `forfeited_date` date DEFAULT NULL,
+  `refunded_date` date DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `payment_method` varchar(50) DEFAULT NULL,
+  `payment_ref` varchar(200) DEFAULT NULL,
+  `minimum_spend` decimal(15,2) DEFAULT 0.00,
+  `no_show_cutoff` timestamp NULL DEFAULT NULL,
+  `deposit_status` varchar(30) DEFAULT 'PENDING',
+  PRIMARY KEY (`deposit_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `table_turnover_metrics`
+--
+
+DROP TABLE IF EXISTS `table_turnover_metrics`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `table_turnover_metrics` (
+  `metric_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `table_id` bigint(20) unsigned NOT NULL,
+  `zone_id` bigint(20) unsigned DEFAULT NULL,
+  `date` date NOT NULL,
+  `hour` int(11) DEFAULT NULL,
+  `turnover_count` int(11) DEFAULT 0,
+  `avg_seat_time` int(11) DEFAULT NULL,
+  `avg_turnover_time` int(11) DEFAULT NULL,
+  `revenue_per_turnover` decimal(10,2) DEFAULT NULL,
+  `peak_hour_flag` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`metric_id`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_table` (`table_id`),
+  KEY `idx_zone` (`zone_id`),
+  KEY `idx_date` (`date`),
+  KEY `idx_hour` (`hour`),
+  CONSTRAINT `table_turnover_metrics_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `table_turnover_metrics_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE,
+  CONSTRAINT `table_turnover_metrics_ibfk_3` FOREIGN KEY (`table_id`) REFERENCES `tables` (`table_id`) ON DELETE CASCADE,
+  CONSTRAINT `table_turnover_metrics_ibfk_4` FOREIGN KEY (`zone_id`) REFERENCES `zones` (`zone_id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `tables`
@@ -5783,7 +7177,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tables`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tables` (
   `table_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -5807,13 +7201,72 @@ CREATE TABLE `tables` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tables`
+-- Table structure for table `tasting_menu_courses`
 --
 
-LOCK TABLES `tables` WRITE;
-/*!40000 ALTER TABLE `tables` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tables` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `tasting_menu_courses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tasting_menu_courses` (
+  `course_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tasting_menu_id` bigint(20) NOT NULL,
+  `course_number` int(11) NOT NULL,
+  `course_name` varchar(200) DEFAULT NULL,
+  `course_description` text DEFAULT NULL,
+  `product_id` bigint(20) DEFAULT NULL,
+  `pairing_beverage` varchar(200) DEFAULT NULL,
+  `prep_time_minutes` int(11) DEFAULT 10,
+  `is_optional` tinyint(1) DEFAULT 0,
+  PRIMARY KEY (`course_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tasting_menu_reservations`
+--
+
+DROP TABLE IF EXISTS `tasting_menu_reservations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tasting_menu_reservations` (
+  `reservation_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `tasting_menu_id` bigint(20) NOT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `party_size` int(11) DEFAULT 2,
+  `reservation_date` date DEFAULT NULL,
+  `reservation_time` time DEFAULT NULL,
+  `table_id` bigint(20) DEFAULT NULL,
+  `total_amount` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(20) DEFAULT 'PENDING',
+  `special_requests` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`reservation_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tasting_menus`
+--
+
+DROP TABLE IF EXISTS `tasting_menus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tasting_menus` (
+  `tasting_menu_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `menu_name` varchar(200) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `price_per_cover` decimal(15,2) DEFAULT 0.00,
+  `course_count` int(11) DEFAULT 5,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`tasting_menu_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `temperature_logs`
@@ -5821,7 +7274,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `temperature_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `temperature_logs` (
   `log_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -5841,21 +7294,12 @@ CREATE TABLE `temperature_logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `temperature_logs`
---
-
-LOCK TABLES `temperature_logs` WRITE;
-/*!40000 ALTER TABLE `temperature_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `temperature_logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tenant_configurations`
 --
 
 DROP TABLE IF EXISTS `tenant_configurations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tenant_configurations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -5881,21 +7325,12 @@ CREATE TABLE `tenant_configurations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tenant_configurations`
---
-
-LOCK TABLES `tenant_configurations` WRITE;
-/*!40000 ALTER TABLE `tenant_configurations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tenant_configurations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tenant_feature_modules`
 --
 
 DROP TABLE IF EXISTS `tenant_feature_modules`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tenant_feature_modules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tenant_id` int(11) NOT NULL,
@@ -5911,21 +7346,12 @@ CREATE TABLE `tenant_feature_modules` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tenant_feature_modules`
---
-
-LOCK TABLES `tenant_feature_modules` WRITE;
-/*!40000 ALTER TABLE `tenant_feature_modules` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tenant_feature_modules` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tenants`
 --
 
 DROP TABLE IF EXISTS `tenants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tenants` (
   `tenant_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_code` varchar(50) NOT NULL,
@@ -5938,18 +7364,8 @@ CREATE TABLE `tenants` (
   PRIMARY KEY (`tenant_id`),
   UNIQUE KEY `tenant_code` (`tenant_code`),
   KEY `idx_tenants_status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tenants`
---
-
-LOCK TABLES `tenants` WRITE;
-/*!40000 ALTER TABLE `tenants` DISABLE KEYS */;
-INSERT INTO `tenants` VALUES (1,'DEFAULT','Default Tenant','RESTAURANT','ACTIVE','2026-07-02 07:41:03','2026-07-02 07:41:03',NULL);
-/*!40000 ALTER TABLE `tenants` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `translations`
@@ -5957,7 +7373,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `translations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `translations` (
   `translation_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `language_id` int(11) NOT NULL,
@@ -5975,21 +7391,12 @@ CREATE TABLE `translations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `translations`
---
-
-LOCK TABLES `translations` WRITE;
-/*!40000 ALTER TABLE `translations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `translations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `transportation_logs`
 --
 
 DROP TABLE IF EXISTS `transportation_logs`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `transportation_logs` (
   `transport_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -6009,21 +7416,12 @@ CREATE TABLE `transportation_logs` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `transportation_logs`
---
-
-LOCK TABLES `transportation_logs` WRITE;
-/*!40000 ALTER TABLE `transportation_logs` DISABLE KEYS */;
-/*!40000 ALTER TABLE `transportation_logs` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `user_ad_preferences`
 --
 
 DROP TABLE IF EXISTS `user_ad_preferences`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_ad_preferences` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
@@ -6039,21 +7437,12 @@ CREATE TABLE `user_ad_preferences` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user_ad_preferences`
---
-
-LOCK TABLES `user_ad_preferences` WRITE;
-/*!40000 ALTER TABLE `user_ad_preferences` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_ad_preferences` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `user_language_preferences`
 --
 
 DROP TABLE IF EXISTS `user_language_preferences`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_language_preferences` (
   `preference_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
@@ -6066,21 +7455,12 @@ CREATE TABLE `user_language_preferences` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user_language_preferences`
---
-
-LOCK TABLES `user_language_preferences` WRITE;
-/*!40000 ALTER TABLE `user_language_preferences` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_language_preferences` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `user_roles`
 --
 
 DROP TABLE IF EXISTS `user_roles`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user_roles` (
   `user_role_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
@@ -6092,18 +7472,8 @@ CREATE TABLE `user_roles` (
   KEY `idx_user_roles_role_id` (`role_id`),
   CONSTRAINT `user_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=131 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `user_roles`
---
-
-LOCK TABLES `user_roles` WRITE;
-/*!40000 ALTER TABLE `user_roles` DISABLE KEYS */;
-INSERT INTO `user_roles` VALUES (2,2,2,'2026-07-02 07:41:04');
-/*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
@@ -6111,7 +7481,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
   `user_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) unsigned NOT NULL,
@@ -6122,6 +7492,9 @@ CREATE TABLE `users` (
   `full_name` varchar(100) DEFAULT NULL,
   `phone` varchar(50) DEFAULT NULL,
   `status` enum('ACTIVE','INACTIVE','SUSPENDED') DEFAULT 'ACTIVE',
+  `is_platform_owner` tinyint(1) DEFAULT 0,
+  `is_tenant_owner` tinyint(1) DEFAULT 0,
+  `last_login` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -6133,18 +7506,29 @@ CREATE TABLE `users` (
   KEY `idx_users_status` (`status`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `users_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=145 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
+-- Table structure for table `variance_reports`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (2,1,2,'admin','admin@restaurant.com','$2y$10$kQgQqm06RpPVrBqACkLNneJkQVRdb1SOMgKz.1pnwnFHi/6yErbHm','System Administrator',NULL,'ACTIVE','2026-07-02 07:41:03','2026-07-02 07:41:03',NULL);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `variance_reports`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `variance_reports` (
+  `report_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `report_date` date NOT NULL,
+  `total_variance_value` decimal(15,2) DEFAULT 0.00,
+  `status` varchar(30) DEFAULT 'GENERATED',
+  `generated_by` varchar(100) DEFAULT NULL,
+  `details` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`report_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `viral_campaigns`
@@ -6152,7 +7536,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `viral_campaigns`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `viral_campaigns` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `campaign_name` varchar(100) NOT NULL,
@@ -6178,13 +7562,27 @@ CREATE TABLE `viral_campaigns` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `viral_campaigns`
+-- Table structure for table `waiter_button_presses`
 --
 
-LOCK TABLES `viral_campaigns` WRITE;
-/*!40000 ALTER TABLE `viral_campaigns` DISABLE KEYS */;
-/*!40000 ALTER TABLE `viral_campaigns` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `waiter_button_presses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `waiter_button_presses` (
+  `press_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `table_id` bigint(20) DEFAULT NULL,
+  `pressed_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `responded_at` timestamp NULL DEFAULT NULL,
+  `responded_by` varchar(100) DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'PENDING',
+  `room_id` bigint(20) DEFAULT NULL,
+  `response_seconds` int(11) DEFAULT NULL,
+  `response_type` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`press_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `waitlist`
@@ -6192,7 +7590,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `waitlist`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `waitlist` (
   `waitlist_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -6217,13 +7615,139 @@ CREATE TABLE `waitlist` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `waitlist`
+-- Table structure for table `waitlist_entries`
 --
 
-LOCK TABLES `waitlist` WRITE;
-/*!40000 ALTER TABLE `waitlist` DISABLE KEYS */;
-/*!40000 ALTER TABLE `waitlist` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `waitlist_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `waitlist_entries` (
+  `entry_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `customer_name` varchar(100) NOT NULL,
+  `phone` varchar(50) NOT NULL,
+  `party_size` int(11) NOT NULL,
+  `guest_count` int(11) DEFAULT NULL,
+  `arrival_status` enum('ARRIVING_LATER','HERE_NOW','SEATED','CANCELLED','NO_SHOW') DEFAULT 'ARRIVING_LATER',
+  `queue_position` int(11) NOT NULL,
+  `estimated_wait_time` int(11) DEFAULT NULL,
+  `actual_wait_time` int(11) DEFAULT NULL,
+  `joined_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `estimated_seating_time` timestamp NULL DEFAULT NULL,
+  `seated_at` timestamp NULL DEFAULT NULL,
+  `cancelled_at` timestamp NULL DEFAULT NULL,
+  `no_show_at` timestamp NULL DEFAULT NULL,
+  `table_id` bigint(20) unsigned DEFAULT NULL,
+  `zone_id` bigint(20) unsigned DEFAULT NULL,
+  `special_requests` text DEFAULT NULL,
+  `customer_notes` text DEFAULT NULL,
+  `staff_notes` text DEFAULT NULL,
+  `source` enum('WALK_IN','ONLINE','APP','PHONE') DEFAULT 'WALK_IN',
+  `is_vip` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`entry_id`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_status` (`arrival_status`),
+  KEY `idx_position` (`queue_position`),
+  KEY `idx_joined` (`joined_at`),
+  KEY `idx_phone` (`phone`),
+  KEY `idx_table` (`table_id`),
+  KEY `idx_zone` (`zone_id`),
+  CONSTRAINT `waitlist_entries_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `waitlist_entries_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE,
+  CONSTRAINT `waitlist_entries_ibfk_3` FOREIGN KEY (`table_id`) REFERENCES `tables` (`table_id`) ON DELETE SET NULL,
+  CONSTRAINT `waitlist_entries_ibfk_4` FOREIGN KEY (`zone_id`) REFERENCES `zones` (`zone_id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `waitlist_notifications`
+--
+
+DROP TABLE IF EXISTS `waitlist_notifications`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `waitlist_notifications` (
+  `notification_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `entry_id` bigint(20) unsigned NOT NULL,
+  `notification_type` enum('POSITION_UPDATE','READY_TO_SEAT','REMINDER','CUSTOM') DEFAULT 'POSITION_UPDATE',
+  `message` text NOT NULL,
+  `sent_via` enum('SMS','PUSH','EMAIL','WHATSAPP') DEFAULT 'SMS',
+  `sent_at` timestamp NULL DEFAULT NULL,
+  `delivered_at` timestamp NULL DEFAULT NULL,
+  `read_at` timestamp NULL DEFAULT NULL,
+  `status` enum('PENDING','SENT','DELIVERED','READ','FAILED') DEFAULT 'PENDING',
+  `error_message` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`notification_id`),
+  KEY `idx_entry` (`entry_id`),
+  KEY `idx_status` (`status`),
+  KEY `idx_sent` (`sent_at`),
+  CONSTRAINT `waitlist_notifications_ibfk_1` FOREIGN KEY (`entry_id`) REFERENCES `waitlist_entries` (`entry_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `weather_policies`
+--
+
+DROP TABLE IF EXISTS `weather_policies`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `weather_policies` (
+  `policy_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `policy_name` varchar(200) DEFAULT NULL,
+  `rain_threshold` decimal(5,2) DEFAULT 0.00,
+  `refund_percentage` decimal(5,2) DEFAULT 0.00,
+  `reschedule_days` int(11) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `rain_threshold_mm` decimal(5,2) DEFAULT 5.00,
+  `auto_issue_rain_check` tinyint(1) DEFAULT 0,
+  `reschedule_window_days` int(11) DEFAULT 30,
+  `refund_policy` varchar(30) DEFAULT 'CREDIT',
+  `partial_refund_pct` decimal(5,2) DEFAULT 0.00,
+  `notification_template` text DEFAULT NULL,
+  PRIMARY KEY (`policy_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `weather_rain_checks`
+--
+
+DROP TABLE IF EXISTS `weather_rain_checks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `weather_rain_checks` (
+  `rain_check_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `reservation_id` bigint(20) DEFAULT NULL,
+  `booking_id` bigint(20) DEFAULT NULL,
+  `customer_name` varchar(200) DEFAULT NULL,
+  `original_date` date DEFAULT NULL,
+  `rain_check_date` date DEFAULT NULL,
+  `status` varchar(30) DEFAULT 'ISSUED',
+  `refunded` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `customer_phone` varchar(50) DEFAULT NULL,
+  `customer_email` varchar(100) DEFAULT NULL,
+  `weather_condition` varchar(100) DEFAULT NULL,
+  `refund_amount` decimal(15,2) DEFAULT 0.00,
+  `issued_by` varchar(100) DEFAULT NULL,
+  `expiry_date` date DEFAULT NULL,
+  `rescheduled_date` date DEFAULT NULL,
+  `rescheduled_to` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`rain_check_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `webhook_deliveries`
@@ -6231,7 +7755,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `webhook_deliveries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `webhook_deliveries` (
   `delivery_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `webhook_id` bigint(20) NOT NULL,
@@ -6250,21 +7774,12 @@ CREATE TABLE `webhook_deliveries` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `webhook_deliveries`
---
-
-LOCK TABLES `webhook_deliveries` WRITE;
-/*!40000 ALTER TABLE `webhook_deliveries` DISABLE KEYS */;
-/*!40000 ALTER TABLE `webhook_deliveries` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `webhooks`
 --
 
 DROP TABLE IF EXISTS `webhooks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `webhooks` (
   `webhook_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `tenant_id` bigint(20) NOT NULL,
@@ -6284,13 +7799,92 @@ CREATE TABLE `webhooks` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `webhooks`
+-- Table structure for table `wine_list`
 --
 
-LOCK TABLES `webhooks` WRITE;
-/*!40000 ALTER TABLE `webhooks` DISABLE KEYS */;
-/*!40000 ALTER TABLE `webhooks` ENABLE KEYS */;
-UNLOCK TABLES;
+DROP TABLE IF EXISTS `wine_list`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wine_list` (
+  `wine_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `branch_id` bigint(20) DEFAULT NULL,
+  `wine_name` varchar(200) DEFAULT NULL,
+  `vintage` int(11) DEFAULT NULL,
+  `varietal` varchar(100) DEFAULT NULL,
+  `region` varchar(100) DEFAULT NULL,
+  `bottle_price` decimal(15,2) DEFAULT 0.00,
+  `glass_price` decimal(15,2) DEFAULT 0.00,
+  `stock_qty` int(11) DEFAULT 0,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `country` varchar(50) DEFAULT NULL,
+  `wine_type` varchar(20) DEFAULT 'RED',
+  `cost_per_bottle` decimal(15,2) DEFAULT NULL,
+  `inventory_bottles` int(11) DEFAULT 0,
+  `pairings` text DEFAULT NULL,
+  `tasting_notes` text DEFAULT NULL,
+  `alcohol_pct` decimal(5,2) DEFAULT NULL,
+  `rating` decimal(3,1) DEFAULT NULL,
+  `is_available` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`wine_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `wine_pairing_suggestions`
+--
+
+DROP TABLE IF EXISTS `wine_pairing_suggestions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `wine_pairing_suggestions` (
+  `pairing_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) NOT NULL,
+  `wine_id` bigint(20) DEFAULT NULL,
+  `menu_item_id` bigint(20) DEFAULT NULL,
+  `pairing_notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `product_id` bigint(20) DEFAULT NULL,
+  `pairing_strength` varchar(30) DEFAULT 'GOOD',
+  `pairing_reason` text DEFAULT NULL,
+  PRIMARY KEY (`pairing_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `zones`
+--
+
+DROP TABLE IF EXISTS `zones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `zones` (
+  `zone_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `tenant_id` bigint(20) unsigned NOT NULL,
+  `branch_id` bigint(20) unsigned NOT NULL,
+  `floor_id` bigint(20) unsigned NOT NULL,
+  `zone_code` varchar(50) NOT NULL,
+  `zone_name` varchar(100) NOT NULL,
+  `zone_type` varchar(50) DEFAULT 'DINING',
+  `service_type` varchar(50) DEFAULT 'TABLE_SERVICE',
+  `description` text DEFAULT NULL,
+  `capacity` int(11) DEFAULT 0,
+  `sort_order` int(11) DEFAULT 0,
+  `status` varchar(20) DEFAULT 'ACTIVE',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`zone_id`),
+  UNIQUE KEY `unique_zone_code` (`tenant_id`,`branch_id`,`floor_id`,`zone_code`),
+  KEY `idx_tenant` (`tenant_id`),
+  KEY `idx_branch` (`branch_id`),
+  KEY `idx_floor` (`floor_id`),
+  KEY `idx_type` (`zone_type`),
+  CONSTRAINT `zones_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `tenants` (`tenant_id`) ON DELETE CASCADE,
+  CONSTRAINT `zones_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branches` (`branch_id`) ON DELETE CASCADE,
+  CONSTRAINT `zones_ibfk_3` FOREIGN KEY (`floor_id`) REFERENCES `floors` (`floor_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -6301,4 +7895,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-07-08 19:08:33
+-- Dump completed on 2026-07-19 20:46:55
