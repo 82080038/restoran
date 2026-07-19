@@ -26,6 +26,22 @@ $router->addRoute('POST', '/api/v1/auth/change-password', function($request) use
     return $authController->changePassword($request);
 });
 
+// Forgot password (public - no auth required)
+$router->addRoute('POST', '/api/v1/auth/forgot-password', function($request) use ($authController) {
+    // Rate limit: 3 reset attempts per minute per IP
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $rateLimit = new \App\Core\RateLimitMiddleware();
+    if (!$rateLimit->check('forgot_' . $ip, 3, 60)) {
+        return \App\Core\Response::error('Too many reset attempts. Please try again later.', 429);
+    }
+    return $authController->forgotPassword($request);
+});
+
+// Reset password (public - uses token)
+$router->addRoute('POST', '/api/v1/auth/reset-password', function($request) use ($authController) {
+    return $authController->resetPassword($request);
+});
+
 // Get current user info (requires valid token)
 $router->addRoute('GET', '/api/v1/auth/me', function($request) {
     try {

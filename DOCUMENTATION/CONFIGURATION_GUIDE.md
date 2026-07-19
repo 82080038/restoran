@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the configuration management system for the EBP Restaurant ERP application, including how to manage environment-specific settings and avoid hardcoded values.
+This document describes the configuration management system for the Food & Beverages Management System application, including how to manage environment-specific settings and avoid hardcoded values.
 
 ## Backend Configuration
 
@@ -119,7 +119,7 @@ const Config = {
     
     // Application Configuration
     app: {
-        name: 'EBP Restaurant',
+        name: 'F&B Management System',
         version: '1.0.0',
         environment: window.APP_ENV || 'development',
         debug: window.APP_DEBUG === 'true' || false

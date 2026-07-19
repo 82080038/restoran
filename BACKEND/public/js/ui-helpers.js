@@ -1,5 +1,5 @@
 /**
- * EBP Restaurant ERP - UI Helpers for Role-Based Access
+ * Food & Beverages Management System - UI Helpers for Role-Based Access
  * 
  * Helper functions for hiding/showing UI elements based on user role and permissions
  * Based on the research document: RESEARCH_ROLE_BASED_NAVIGATION_F&B_INDUSTRY.md

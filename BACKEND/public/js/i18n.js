@@ -2,7 +2,7 @@
 const translations = {
     id: {
         app: {
-            title: "EBP Restaurant"
+            title: "F&B Management"
         },
         guest: "Tamu",
         login_prompt: "Login untuk akses fitur",
@@ -119,7 +119,7 @@ const translations = {
     },
     en: {
         app: {
-            title: "EBP Restaurant"
+            title: "F&B Management"
         },
         guest: "Guest",
         login_prompt: "Login to access features",

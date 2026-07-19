@@ -1,12 +1,12 @@
-# RESTAURANT_ERP
+# Food & Beverages Management System
 
-**The Restaurant ERP You Can Trust**
+**The F&B Management System You Can Trust**
 
-A comprehensive restaurant management system built on the Enterprise Business Platform (EBP), designed to solve the fundamental trust and data problems that plague current restaurant software solutions.
+A comprehensive food & beverages management system built on the Enterprise Business Platform (EBP), designed to solve the fundamental trust and data problems that plague current F&B software solutions. Supports restaurants, cafes, bars, food courts, and entertainment venues.
 
 ## 🚀 Quick Overview
 
-RESTAURANT_ERP provides:
+The system provides:
 - **Unified Reconciliation Engine** - Order-level reconciliation across all payment sources
 - **Open API Architecture** - API-first design with free access to customer data
 - **True Offline Capability** - Fully functional offline architecture

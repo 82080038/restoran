@@ -22,7 +22,7 @@
 # 1. Document Purpose
 
 
-Dokumen ini mendefinisikan standar API untuk EBP Restaurant & Cafe ERP.
+Dokumen ini mendefinisikan standar API untuk Food & Beverages Management System.
 
 
 API bertanggung jawab sebagai:
@@ -1208,7 +1208,7 @@ AI Assistant
 
 # 35. Conclusion
 
-API EBP Restaurant & Cafe ERP dirancang sebagai:
+API Food & Beverages Management System dirancang sebagai:
 
 ```
 

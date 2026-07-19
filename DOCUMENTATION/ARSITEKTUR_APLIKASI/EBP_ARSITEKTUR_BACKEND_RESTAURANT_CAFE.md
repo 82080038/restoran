@@ -24,7 +24,7 @@ REST API Architecture
 # 1. Pendahuluan
 
 
-Dokumen ini mendefinisikan arsitektur backend EBP Restaurant & Cafe ERP.
+Dokumen ini mendefinisikan arsitektur backend Food & Beverages Management System.
 
 
 Tujuan:
@@ -1341,7 +1341,7 @@ Menghapus Data Permanen
 # 40. Conclusion
 
 
-Backend EBP Restaurant & Cafe ERP dirancang sebagai:
+Backend Food & Beverages Management System dirancang sebagai:
 
 
 ```

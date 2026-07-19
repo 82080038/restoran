@@ -1,7 +1,7 @@
 {
-  "name": "ebp-restaurant-backend",
+  "name": "fnb-management-backend",
   "version": "1.0.0",
-  "description": "EBP Restaurant Backend - Enterprise Business Platform Restaurant Management System",
+  "description": "Food & Beverages Management System Backend - Enterprise Business Platform F&B Management System",
   "main": "public/index.php",
   "scripts": {
     "test": "npx playwright test",

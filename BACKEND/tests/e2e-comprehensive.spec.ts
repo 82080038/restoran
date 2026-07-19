@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 /**
  * Comprehensive E2E Test Suite
- * Tests all major features, flows, and logic of the EBP Restaurant Backend application
+ * Tests all major features, flows, and logic of the Food & Beverages Management System backend application
  */
 
 test.describe('E2E Comprehensive Tests', () => {
@@ -130,7 +130,7 @@ test.describe('E2E Comprehensive Tests', () => {
       await page.setViewportSize({ width: 375, height: 667 });
 
       // Check that the page has loaded with proper title
-      await expect(page).toHaveTitle(/EBP Restaurant/);
+      await expect(page).toHaveTitle(/F&B Management/);
     });
   });
 
@@ -158,7 +158,7 @@ test.describe('E2E Comprehensive Tests', () => {
       await page.goto('http://localhost:8000/frontend/kiosk/');
 
       // Check that the page has loaded with proper title
-      await expect(page).toHaveTitle(/EBP Restaurant/);
+      await expect(page).toHaveTitle(/F&B Management/);
     });
   });
 
@@ -172,7 +172,7 @@ test.describe('E2E Comprehensive Tests', () => {
       await page.route('**/api/**', route => route.abort());
 
       // Page should still load even with API failures
-      await expect(page).toHaveTitle(/EBP Restaurant/);
+      await expect(page).toHaveTitle(/F&B Management/);
     });
   });
 

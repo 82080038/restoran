@@ -1355,12 +1355,12 @@ Based on comprehensive research across 25 research files covering producer opera
 - **Quaternary**: Fine dining operations requiring sophisticated features
 
 ### Value Proposition
-**"The Restaurant ERP You Can Trust"**
+**"The F&B Management System You Can Trust"**
 
-RESTAURANT_ERP is the only restaurant management system that solves the fundamental trust and data problems that plague current solutions. By providing unified reconciliation, open APIs, true offline capability, and restaurant-first design, RESTAURANT_ERP enables operators to trust their data, optimize their operations, and scale their businesses with confidence.
+The Food & Beverages Management System is the only F&B platform that solves the fundamental trust and data problems that plague current solutions. By providing unified reconciliation, open APIs, true offline capability, and F&B-first design, it enables operators to trust their data, optimize their operations, and scale their businesses with confidence.
 
 ### Differentiation
-Unlike competitors who focus on features and lock-in, RESTAURANT_ERP focuses on:
+Unlike competitors who focus on features and lock-in, the Food & Beverages Management System focuses on:
 - **Trust**: Operators can trust their data
 - **Transparency**: Complete transparency in pricing and operations
 - **Openness**: Open ecosystem with no vendor lock-in

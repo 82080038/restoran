@@ -1355,7 +1355,7 @@ Business Recommendation
 # 30. Kesimpulan
 
 
-ERD EBP Restaurant & Cafe ERP dirancang sebagai:
+ERD Food & Beverages Management System dirancang sebagai:
 
 
 ```

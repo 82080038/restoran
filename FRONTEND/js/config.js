@@ -1,5 +1,5 @@
 /**
- * EBP Restaurant Frontend Configuration
+ * Food & Beverages Management System Frontend Configuration
  * 
  * This file contains all configuration values for the frontend application.
  * In production, these should be loaded from environment-specific config files.
@@ -15,7 +15,7 @@ const Config = {
     
     // Application Configuration
     app: {
-        name: 'EBP Restaurant',
+        name: 'F&B Management System',
         version: '1.0.0',
         environment: window.APP_ENV || 'development',
         debug: window.APP_DEBUG === 'true' || false

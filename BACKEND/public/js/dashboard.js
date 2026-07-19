@@ -1,5 +1,5 @@
 /**
- * EBP Restaurant Admin Dashboard
+ * F&B Management System Admin Dashboard
  * Admin dashboard functionality with role-based navigation
  */
 class Dashboard {

@@ -134,6 +134,7 @@ $freePaymentController = new LazyController(FreePaymentController::class);
 $notificationController = new LazyController(NotificationController::class);
 $deliveryIntegrationController = new LazyController(DeliveryIntegrationController::class);
 $qrOrderingController = new LazyController(QROrderingController::class);
+$happyHourController = new LazyController(HappyHourController::class);
 $taxCalculationController = new LazyController(TaxCalculationController::class);
 $purchasePlanningController = new LazyController(PurchasePlanningController::class);
 $supplierPerformanceController = new LazyController(SupplierPerformanceController::class);

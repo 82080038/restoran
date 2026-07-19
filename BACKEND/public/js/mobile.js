@@ -1,5 +1,5 @@
 /**
- * EBP Restaurant Mobile Waiter App
+ * F&B Management System Mobile Waiter App
  * Mobile waiter application functionality
  */
 class MobileApp {

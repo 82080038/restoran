@@ -1,5 +1,5 @@
 /**
- * EBP Restaurant Kiosk Application
+ * F&B Management System Kiosk Application
  * Self-service kiosk functionality
  */
 class KioskApp {

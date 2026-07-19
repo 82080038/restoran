@@ -1,4 +1,4 @@
-# EBP Restaurant ERP - Backend
+# Food & Beverages Management System - Backend
 
 ## Project Structure
 

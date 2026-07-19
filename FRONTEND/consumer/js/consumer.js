@@ -1,8 +1,8 @@
 /**
- * EBP Restaurant - Consumer App API Integration
+ * Food & Beverages Management System - Consumer App API Integration
  * 
  * This file handles all API integration between the consumer app
- * and the RESTAURANT_ERP backend system
+ * and the F&B Management System backend
  * 
  * @version 1.0.0
  */

@@ -33,7 +33,7 @@ class EmailService
     {
         $this->db = Database::getInstance();
         $this->fromEmail = getenv('MAIL_FROM_EMAIL') ?: 'noreply@ebp-restaurant.com';
-        $this->fromName = getenv('MAIL_FROM_NAME') ?: 'EBP Restaurant';
+        $this->fromName = getenv('MAIL_FROM_NAME') ?: 'F&B Management System';
         $this->smtpEnabled = strtolower(getenv('MAIL_SMTP_ENABLED') ?: 'false') === 'true';
         $this->smtpHost = getenv('MAIL_SMTP_HOST') ?: 'localhost';
         $this->smtpPort = (int)(getenv('MAIL_SMTP_PORT') ?: 587);

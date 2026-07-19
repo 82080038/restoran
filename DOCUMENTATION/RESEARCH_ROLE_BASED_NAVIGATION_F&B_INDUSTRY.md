@@ -1,8 +1,8 @@
-# EBP Restaurant ERP - Penelitian Navigasi Berbasis Role untuk Industri F&B
+# Food & Beverages Management System - Penelitian Navigasi Berbasis Role untuk Industri F&B
 
 **Tanggal**: 2026-07-06  
 **Tujuan**: Analisis mendalam navigasi/menu berbasis role untuk aplikasi restoran berdasarkan praktik terbaik industri F&B dan kurasi internet  
-**Produk**: EBP Restaurant & Cafe ERP  
+**Produk**: Food & Beverages Management System
 **Platform**: Enterprise Business Platform (EBP)
 
 ---
@@ -29,7 +29,7 @@
 
 ## 1. Executive Summary
 
-Penelitian ini menggabungkan analisis sistem EBP Restaurant ERP yang ada dengan praktik terbaik industri F&B global untuk menghasilkan rekomendasi navigasi berbasis role yang komprehensif. Dokumen ini mencakup:
+Penelitian ini menggabungkan analisis sistem Food & Beverages Management System yang ada dengan praktik terbaik industri F&B global untuk menghasilkan rekomendasi navigasi berbasis role yang komprehensif. Dokumen ini mencakup:
 
 - **3 Level Hierarki**: Platform Owner, Tenant Owner, Tenant Member
 - **7+ Role Utama**: Administrator, Restaurant Manager, Waiter, Kitchen Staff, Cashier, Inventory Manager, Host/Hostess
@@ -49,7 +49,7 @@ Penelitian ini menggabungkan analisis sistem EBP Restaurant ERP yang ada dengan 
 
 ### 2.1 Arsitektur Multi-Tenant
 
-EBP Restaurant ERP menggunakan arsitektur multi-tenant dengan 3 level:
+Food & Beverages Management System menggunakan arsitektur multi-tenant dengan 3 level:
 
 ```
 Platform Owner (EBP Company)
@@ -1028,14 +1028,14 @@ function getMenuForUser(user) {
 
 ## 10. Kesimpulan
 
-Penelitian ini menunjukkan bahwa EBP Restaurant ERP sudah memiliki fondasi yang baik untuk role-based navigation, namun perlu penyempurnaan pada:
+Penelitian ini menunjukkan bahwa Food & Beverages Management System sudah memiliki fondasi yang baik untuk role-based navigation, namun perlu penyempurnaan pada:
 
 1. **Granularitas permissions**: Dari level modul ke level action
 2. **Role coverage**: Menambah role industri standar (Bartender, Barista, Sommelier)
 3. **Restaurant type adaptation**: Menyesuaikan navigasi berdasarkan tipe restoran
 4. **UI/UX optimization**: Mengimplementasikan "glance-and-act" pattern
 
-Dengan mengimplementasikan rekomendasi ini, EBP Restaurant ERP akan menjadi platform yang lebih user-friendly, secure, dan sesuai dengan standar industri F&B global.
+Dengan mengimplementasikan rekomendasi ini, Food & Beverages Management System akan menjadi platform yang lebih user-friendly, secure, dan sesuai dengan standar industri F&B global.
 
 ---
 

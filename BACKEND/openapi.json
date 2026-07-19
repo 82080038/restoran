@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "EBP Restaurant ERP API",
-    "description": "Enterprise Restaurant Management System API with multi-tenant support",
+    "title": "Food & Beverages Management System API",
+    "description": "Enterprise Food & Beverages Management System API with multi-tenant support",
     "version": "1.0.0",
     "contact": {
       "name": "EBP Platform",

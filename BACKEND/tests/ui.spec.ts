@@ -6,7 +6,7 @@ test.describe('Restaurant Backend UI Tests', () => {
     await page.goto('http://localhost:8000');
 
     // Check if page loads with restaurant UI
-    await expect(page.locator('h1')).toContainText('EBP Restaurant Management System');
+    await expect(page.locator('h1')).toContainText('Food & Beverages Management System');
     await expect(page.locator('#landingPage')).toBeVisible();
     await expect(page.locator('#loginBtn')).toBeVisible();
   });

@@ -1,5 +1,5 @@
 /**
- * EBP Restaurant API Client
+ * F&B Management System API Client
  * Handles all API communication with the backend
  */
 class APIClient {

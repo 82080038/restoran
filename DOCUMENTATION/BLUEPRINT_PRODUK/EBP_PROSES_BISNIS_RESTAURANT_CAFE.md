@@ -6,7 +6,7 @@
 **Versi:** 1.0  
 **Status:** Business Analysis Standard  
 **Klasifikasi:** Operational Blueprint  
-**Product:** EBP Restaurant & Cafe ERP  
+**Product:** Food & Beverages Management System
 
 
 ---

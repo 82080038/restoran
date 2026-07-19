@@ -1,14 +1,14 @@
-# RESTAURANT_ERP - The Restaurant ERP You Can Trust
+# Food & Beverages Management System - The F&B System You Can Trust
 
 ## Overview
 
-RESTAURANT_ERP is a comprehensive restaurant management system built on the Enterprise Business Platform (EBP). Based on extensive research across 25 research files covering producer operations, consumer behavior, competitor analysis, and regulatory requirements, RESTAURANT_ERP addresses the fundamental trust and data problems that plague current restaurant software solutions.
+The Food & Beverages Management System is a comprehensive F&B management platform built on the Enterprise Business Platform (EBP). Based on extensive research across 25 research files covering producer operations, consumer behavior, competitor analysis, and regulatory requirements, it addresses the fundamental trust and data problems that plague current F&B software solutions. Supports restaurants, cafes, bars, food courts, and entertainment venues.
 
 ## Value Proposition
 
-**"The Restaurant ERP You Can Trust"**
+**"The F&B Management System You Can Trust"**
 
-RESTAURANT_ERP is the only restaurant management system that solves the fundamental trust and data problems that plague current solutions. By providing unified reconciliation, open APIs, true offline capability, and restaurant-first design, RESTAURANT_ERP enables operators to trust their data, optimize their operations, and scale their businesses with confidence.
+The Food & Beverages Management System is the only F&B platform that solves the fundamental trust and data problems that plague current solutions. By providing unified reconciliation, open APIs, true offline capability, and F&B-first design, it enables operators to trust their data, optimize their operations, and scale their businesses with confidence.
 
 ## Key Competitive Advantages
 
@@ -30,14 +30,14 @@ RESTAURANT_ERP is the only restaurant management system that solves the fundamen
 
 **Solves**: Walled garden problem - 37% of restaurant brands cite fragmented systems as AI bottleneck
 
-### 3. Restaurant-First Design 🍽️
-- **Complete Feature Set**: All restaurant features built-in (open tabs, split checks, kitchen routing, etc.)
-- **Industry Expertise**: Designed by restaurant industry experts based on real-world research
-- **Workflow Optimization**: Optimized for restaurant workflows, not adapted retail systems
+### 3. F&B-First Design 🍽️
+- **Complete Feature Set**: All F&B features built-in (open tabs, split checks, kitchen routing, etc.)
+- **Industry Expertise**: Designed by F&B industry experts based on real-world research
+- **Workflow Optimization**: Optimized for F&B workflows, not adapted retail systems
 - **No Workarounds**: No need for workarounds or hacks
-- **Intuitive Design**: Intuitive design for restaurant staff
+- **Intuitive Design**: Intuitive design for F&B staff
 
-**Solves**: Missing core restaurant features in retail-adapted systems
+**Solves**: Missing core F&B features in retail-adapted systems
 
 ### 4. Multi-Location Native 🏢
 - **Built for Scale**: Designed for multi-location from ground up
@@ -137,7 +137,7 @@ RESTAURANT_ERP is the only restaurant management system that solves the fundamen
 
 ## Research Foundation
 
-RESTAURANT_ERP is built on comprehensive research across 25 research files:
+The system is built on comprehensive research across 25 research files:
 
 ### Producer Perspective (9 Files)
 1. Industry Overview & Operations
@@ -337,7 +337,7 @@ RESTAURANT_ERP is built on comprehensive research across 25 research files:
 ## Contact
 
 - **Platform**: Enterprise Business Platform (EBP)
-- **Product**: RESTAURANT_ERP
+- **Product**: Food & Beverages Management System
 - **Repository**: https://github.com/82080038/EBP
 - **Status**: Research Complete - Development in Progress
 

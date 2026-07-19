@@ -1,5 +1,5 @@
 /**
- * EBP Restaurant ERP - Permission Helpers
+ * Food & Beverages Management System - Permission Helpers
  * 
  * Helper functions for checking granular permissions at the action level
  * Based on the research document: RESEARCH_ROLE_BASED_NAVIGATION_F&B_INDUSTRY.md

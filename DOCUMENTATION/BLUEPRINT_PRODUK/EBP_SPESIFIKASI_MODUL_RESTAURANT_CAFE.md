@@ -7,7 +7,7 @@
 **Versi:** 1.0  
 **Status:** System Analysis Standard  
 **Klasifikasi:** Product Technical Specification  
-**Product:** EBP Restaurant & Cafe ERP  
+**Product:** Food & Beverages Management System
 
 
 ---
@@ -36,7 +36,7 @@ Tujuan:
 # 2. Modul Architecture Overview
 
 
-EBP Restaurant & Cafe ERP terdiri dari:
+Food & Beverages Management System terdiri dari:
 
 
 ```
@@ -1364,7 +1364,7 @@ Integration
 # 30. Kesimpulan
 
 
-Modul EBP Restaurant & Cafe ERP dirancang bukan sebagai aplikasi kasir.
+Modul Food & Beverages Management System dirancang bukan sebagai aplikasi kasir.
 
 
 Tetapi sebagai:

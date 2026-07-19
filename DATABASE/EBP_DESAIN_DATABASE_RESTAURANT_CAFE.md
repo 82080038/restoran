@@ -18,7 +18,7 @@
 ## 1.1 Tujuan
 
 
-Dokumen ini mendefinisikan desain database untuk EBP Restaurant & Cafe ERP.
+Dokumen ini mendefinisikan desain database untuk Food & Beverages Management System.
 
 
 Database harus mampu:
@@ -1482,7 +1482,7 @@ AI Platform
 # 42. Kesimpulan
 
 
-Database EBP Restaurant & Cafe ERP dirancang sebagai:
+Database Food & Beverages Management System dirancang sebagai:
 
 
 ```

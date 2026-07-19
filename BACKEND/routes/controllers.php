@@ -470,6 +470,11 @@ if (!class_exists('LoyaltyController')) {
     require_once __DIR__ . '/../modules/Loyalty/Controllers/LoyaltyController.php';
 }
 
+// Happy Hour / Promotional Pricing Module
+if (!class_exists('HappyHourController')) {
+    require_once __DIR__ . '/../modules/Marketing/Controllers/HappyHourController.php';
+}
+
 // QR Ordering Module
 if (!class_exists('QROrderingController')) {
     require_once __DIR__ . '/../modules/QROrdering/Controllers/QROrderingController.php';

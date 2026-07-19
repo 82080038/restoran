@@ -17,7 +17,7 @@
 ## 1.1 Tujuan Produk
 
 
-EBP Restaurant & Cafe ERP adalah platform bisnis terpadu untuk mengelola seluruh aktivitas usaha makanan dan minuman.
+Food & Beverages Management System adalah platform bisnis terpadu untuk mengelola seluruh aktivitas usaha makanan dan minuman.
 
 
 Target:
@@ -1039,7 +1039,7 @@ Arah:
 # 37. Kesimpulan
 
 
-EBP Restaurant & Cafe ERP bukan sekadar aplikasi kasir.
+Food & Beverages Management System bukan sekadar aplikasi kasir.
 
 
 Ini adalah:

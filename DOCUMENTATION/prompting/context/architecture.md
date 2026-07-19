@@ -2,7 +2,7 @@
 
 ## System Overview
 
-RESTAURANT_ERP is a comprehensive restaurant management system built on the Enterprise Business Platform (EBP). It follows a multi-tenant, service-oriented architecture with REST API design.
+The Food & Beverages Management System is a comprehensive F&B management platform built on the Enterprise Business Platform (EBP). It follows a multi-tenant, service-oriented architecture with REST API design.
 
 ## Architecture Layers
 

@@ -29,7 +29,7 @@ REST API
 # 1. Pendahuluan
 
 
-Dokumen ini mendefinisikan arsitektur frontend EBP Restaurant & Cafe ERP.
+Dokumen ini mendefinisikan arsitektur frontend Food & Beverages Management System.
 
 
 Frontend bertanggung jawab:
@@ -1336,7 +1336,7 @@ AI Assistant
 # 44. Kesimpulan
 
 
-Frontend EBP Restaurant & Cafe ERP dirancang sebagai:
+Frontend Food & Beverages Management System dirancang sebagai:
 
 
 ```
