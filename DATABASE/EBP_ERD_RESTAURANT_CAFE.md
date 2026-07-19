@@ -14,7 +14,7 @@
 # 1. Tujuan ERD
 
 
-Dokumen ini menjelaskan hubungan antar entity database pada sistem EBP Restaurant & Cafe ERP.
+Dokumen ini menjelaskan hubungan antar entity database pada sistem Food & Beverages Management System.
 
 
 Tujuan:

@@ -32,7 +32,7 @@
 
 ### First-Time Login
 
-1. Open your browser and navigate to the EBP Restaurant URL
+1. Open your browser and navigate to the F&B Management System URL
 2. Enter your username and password
 3. Click "Login"
 4. You will be redirected to the dashboard
@@ -600,7 +600,7 @@ Segments include:
 
 ## Contact Information
 
-**EBP Restaurant ERP Support**
+**Food & Beverages Management System Support**
 
 - **Email**: support@ebp-restaurant.com
 - **Phone**: +62 21 1234 5678

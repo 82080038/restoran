@@ -1,5 +1,5 @@
 /**
- * EBP Restaurant Authentication Manager
+ * F&B Management System Authentication Manager
  * Handles authentication flow, token refresh, and permission-based UI
  */
 class AuthManager {

@@ -1,5 +1,5 @@
 /**
- * EBP Restaurant API Client
+ * F&B Management System API Client
  * Handles all API communication with the backend
  */
 class APIClient {
@@ -1334,6 +1334,114 @@ class APIClient {
         return this.request(`/free-payment/wallet/topups?${queryString}`, {
             method: 'GET', skipCache: true
         });
+    }
+
+    // === LANGUAGE / I18N ===
+
+    async getLanguages() {
+        return this.request('/languages', { method: 'GET', skipCache: false });
+    }
+
+    async getTranslations(langCode, context = null) {
+        const params = {};
+        if (context) params.context = context;
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/languages/${langCode}/translations${queryString ? '?' + queryString : ''}`, {
+            method: 'GET', skipCache: false
+        });
+    }
+
+    async getLanguagePreference() {
+        return this.request('/languages/preference', { method: 'GET', skipCache: true });
+    }
+
+    async setLanguagePreference(langCode) {
+        return this.request('/languages/preference', {
+            method: 'POST', body: JSON.stringify({ language_code: langCode }), skipCache: true
+        });
+    }
+
+    async getAllTranslations(params = {}) {
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/languages/translations/all${queryString ? '?' + queryString : ''}`, {
+            method: 'GET', skipCache: true
+        });
+    }
+
+    async saveTranslation(data) {
+        return this.request('/languages/translations', {
+            method: 'POST', body: JSON.stringify(data), skipCache: true
+        });
+    }
+
+    async deleteTranslation(translationId) {
+        return this.request(`/languages/translations/${translationId}`, {
+            method: 'DELETE', skipCache: true
+        });
+    }
+
+    async getTranslationContexts() {
+        return this.request('/languages/contexts', { method: 'GET', skipCache: true });
+    }
+
+    // === FEEDBACK / REVIEWS ===
+
+    async getReviews(params = {}) {
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/feedback/reviews${queryString ? '?' + queryString : ''}`, {
+            method: 'GET', skipCache: true
+        });
+    }
+
+    async getReview(reviewId) {
+        return this.request(`/feedback/reviews/${reviewId}`, {
+            method: 'GET', skipCache: true
+        });
+    }
+
+    async createReview(data) {
+        return this.request('/feedback/reviews', {
+            method: 'POST', body: JSON.stringify(data), skipCache: true
+        });
+    }
+
+    async updateReviewStatus(reviewId, status) {
+        return this.request(`/feedback/reviews/${reviewId}/status`, {
+            method: 'PATCH', body: JSON.stringify({ status }), skipCache: true
+        });
+    }
+
+    async respondToReview(reviewId, responseText) {
+        return this.request(`/feedback/reviews/${reviewId}/respond`, {
+            method: 'POST', body: JSON.stringify({ response_text: responseText }), skipCache: true
+        });
+    }
+
+    async getFeedback(params = {}) {
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/feedback${queryString ? '?' + queryString : ''}`, {
+            method: 'GET', skipCache: true
+        });
+    }
+
+    async createFeedback(data) {
+        return this.request('/feedback', {
+            method: 'POST', body: JSON.stringify(data), skipCache: true
+        });
+    }
+
+    async updateFeedbackStatus(feedbackId, status) {
+        return this.request(`/feedback/${feedbackId}/status`, {
+            method: 'PATCH', body: JSON.stringify({ status }), skipCache: true
+        });
+    }
+
+    async getFeedbackStatistics() {
+        return this.request('/feedback/statistics', { method: 'GET', skipCache: true });
+    }
+
+    async getReviewCategories() {
+        return this.request('/feedback/review-categories', { method: 'GET', skipCache: true });
     }
 
     // SSE Notification Stream

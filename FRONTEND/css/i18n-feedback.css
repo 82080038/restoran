@@ -1,0 +1,246 @@
+/* Language Switcher Styles */
+.lang-switcher {
+    position: relative;
+    display: inline-block;
+    margin-left: 12px;
+}
+
+.lang-switcher-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.1);
+    cursor: pointer;
+    font-size: 13px;
+    color: inherit;
+    transition: background 0.2s;
+    user-select: none;
+}
+
+.lang-switcher-btn:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.lang-switcher-btn .lang-flag {
+    font-size: 18px;
+}
+
+.lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    min-width: 180px;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.lang-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #2c3e50;
+    transition: background 0.15s;
+}
+
+.lang-option:hover {
+    background: #f0f0f5;
+}
+
+.lang-option.active {
+    background: #667eea;
+    color: white;
+}
+
+.lang-option .lang-flag {
+    font-size: 18px;
+}
+
+/* Feedback Widget Styles */
+.feedback-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+}
+
+.feedback-fab {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #667eea;
+    color: white;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+    transition: transform 0.2s, background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.feedback-fab:hover {
+    transform: scale(1.1);
+    background: #5568d3;
+}
+
+.feedback-modal {
+    position: fixed;
+    bottom: 85px;
+    right: 20px;
+    width: 380px;
+    max-width: 90vw;
+    max-height: 80vh;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.feedback-modal.show {
+    display: flex;
+}
+
+.feedback-modal-header {
+    padding: 16px 20px;
+    background: #667eea;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.feedback-modal-header h5 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.feedback-modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.feedback-type-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.feedback-type-btn {
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    font-size: 13px;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.feedback-type-btn.selected {
+    border-color: #667eea;
+    background: rgba(102,126,234,0.1);
+    color: #667eea;
+}
+
+.feedback-type-btn i {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.star-rating {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+}
+
+.star-rating i {
+    font-size: 28px;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.15s;
+}
+
+.star-rating i.active {
+    color: #f5a623;
+}
+
+.feedback-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 12px;
+    font-family: inherit;
+}
+
+.feedback-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 12px;
+    min-height: 80px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.feedback-submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.feedback-submit-btn:hover {
+    background: #5568d3;
+}
+
+.feedback-submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.feedback-success {
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.feedback-success i {
+    font-size: 48px;
+    color: #27ae60;
+    margin-bottom: 12px;
+}
+
+.feedback-success h5 {
+    color: #2c3e50;
+    margin-bottom: 6px;
+}
+
+.feedback-success p {
+    color: #7f8c8d;
+    font-size: 13px;
+}

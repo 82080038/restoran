@@ -266,7 +266,7 @@ test.describe('Integrated Backend-Middleware-Frontend Tests', () => {
       
       if (response.status === 200) {
         const text = await response.text();
-        expect(text).toContain('EBP Restaurant');
+        expect(text).toContain('F&B Management');
       }
     });
 

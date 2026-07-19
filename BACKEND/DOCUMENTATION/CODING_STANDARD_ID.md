@@ -410,7 +410,7 @@ public function test_membuat_pesanan_baru_berhasil() {
 - Jelaskan dengan jelas dan ringkas
 
 ```markdown
-# EBP Restaurant Backend
+# Food & Beverages Management System Backend
 
 Sistem manajemen restoran untuk Enterprise Business Platform.
 

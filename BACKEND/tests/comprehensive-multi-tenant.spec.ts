@@ -30,7 +30,7 @@ const FRONTEND_URL = 'http://localhost/EBP/PLATFORM_BISNIS_ENTERPRISE/PRODUCTS/R
 const TENANTS = [
   {
     id: 1,
-    name: 'EBP Restaurant Jakarta',
+    name: 'F&B Restaurant Jakarta',
     type: 'RESTAURANT',
     branches: [
       { id: 1, name: 'Jakarta Central' },

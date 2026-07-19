@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide explains how to set up the EBP Restaurant database on a new development machine. The database is designed to be portable and can be easily set up on any platform (Linux, Windows, Mac) with any MySQL installation (XAMPP, MAMP, Docker, native MySQL).
+This guide explains how to set up the Food & Beverages Management System database on a new development machine. The database is designed to be portable and can be easily set up on any platform (Linux, Windows, Mac) with any MySQL installation (XAMPP, MAMP, Docker, native MySQL).
 
 ## Quick Start (Recommended)
 

@@ -1,7 +1,7 @@
 # Mobile Smart Features Implementation Plan
 
 ## Overview
-Enhance the EBP Restaurant mobile application to be mobile-friendly, informative, pro-active, and intelligent.
+Enhance the Food & Beverages Management System mobile application to be mobile-friendly, informative, pro-active, and intelligent.
 
 ## Requirements Analysis
 

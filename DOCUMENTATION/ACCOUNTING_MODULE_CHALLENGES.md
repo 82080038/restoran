@@ -1,7 +1,7 @@
 # Kurasi Permasalahan dan Solusi Modul Akuntansi
 
 ## Overview
-Dokumentasi ini berisi kurasi permasalahan yang mungkin dihadapi dalam implementasi dan penggunaan modul akuntansi EBP Restaurant ERP, beserta solusi dan mitigasinya.
+Dokumentasi ini berisi kurasi permasalahan yang mungkin dihadapi dalam implementasi dan penggunaan modul akuntansi Food & Beverages Management System, beserta solusi dan mitigasinya.
 
 ---
 

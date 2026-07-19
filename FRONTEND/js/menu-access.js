@@ -1,5 +1,5 @@
 /**
- * EBP Restaurant ERP - Role-Based Menu Access Configuration
+ * Food & Beverages Management System - Role-Based Menu Access Configuration
  * 
  * This file defines which menu tabs are accessible to each role
  * based on the research document: RESEARCH_ROLE_BASED_NAVIGATION_F&B_INDUSTRY.md

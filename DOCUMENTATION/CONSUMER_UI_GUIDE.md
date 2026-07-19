@@ -2,7 +2,7 @@
 
 ## Overview
 
-The EBP Restaurant ERP includes multiple consumer-facing interfaces for different use cases:
+The Food & Beverages Management System includes multiple consumer-facing interfaces for different use cases:
 
 1. **Consumer App** - Full-featured mobile web app for customers
 2. **Kiosk App** - Self-service ordering kiosk for in-restaurant use

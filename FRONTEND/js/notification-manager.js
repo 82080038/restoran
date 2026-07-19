@@ -1,5 +1,5 @@
 /**
- * EBP Restaurant Notification Manager
+ * F&B Management System Notification Manager
  * Handles real-time SSE notifications and displays them to the user
  */
 class NotificationManager {

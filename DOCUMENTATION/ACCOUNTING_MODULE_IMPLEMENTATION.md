@@ -1,7 +1,7 @@
 # Accounting Module Implementation Report
 
 ## Overview
-Complete implementation of enterprise-grade accounting module for EBP Restaurant ERP.
+Complete implementation of enterprise-grade accounting module for Food & Beverages Management System.
 
 ## Completed Implementations
 

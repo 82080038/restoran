@@ -1,4 +1,4 @@
-# UI Role-Based Analysis - EBP Restaurant ERP
+# UI Role-Based Analysis - Food & Beverages Management System
 
 ## Current Status Analysis
 

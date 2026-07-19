@@ -12,7 +12,7 @@
 ## Executive Summary
 
 Comprehensive multi-tenant testing was conducted to simulate:
-- 3 tenants (EBP Restaurant Jakarta, EBP Cafe Bandung, EBP Fast Food Surabaya)
+- 3 tenants (F&B Restaurant Jakarta, EBP Cafe Bandung, EBP Fast Food Surabaya)
 - 7 user roles per tenant (Administrator, Restaurant Manager, Waiter, Kitchen Staff, Cashier, Inventory Manager, Host/Hostess)
 - 9 feature modules (Tenant Setup, Role Authentication, Order Processing, Kitchen Operations, Inventory Management, Payment Processing, Customer Management, AI & Analytics, Reports)
 - 3-month business simulation
@@ -28,7 +28,7 @@ Comprehensive multi-tenant testing was conducted to simulate:
 - **Status**: ✅ PASSED
 
 **Details**:
-- EBP Restaurant Jakarta: PASS (2 branches, 7 users)
+- F&B Restaurant Jakarta: PASS (2 branches, 7 users)
 - EBP Cafe Bandung: PASS (1 branch, 5 users)
 - EBP Fast Food Surabaya: PASS (2 branches, 4 users)
 

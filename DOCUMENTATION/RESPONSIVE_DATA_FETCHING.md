@@ -2,7 +2,7 @@
 
 ## Overview
 
-This implementation enables the EBP Restaurant application to automatically adjust the amount and type of data fetched based on the user's screen size. This optimizes performance and user experience by:
+This implementation enables the Food & Beverages Management System application to automatically adjust the amount and type of data fetched based on the user's screen size. This optimizes performance and user experience by:
 
 - **Mobile devices**: Fetching limited data with fewer fields to reduce bandwidth and improve load times
 - **Tablet devices**: Fetching moderate amounts of data with additional fields

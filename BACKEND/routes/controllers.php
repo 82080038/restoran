@@ -470,6 +470,16 @@ if (!class_exists('LoyaltyController')) {
     require_once __DIR__ . '/../modules/Loyalty/Controllers/LoyaltyController.php';
 }
 
+// Simple Language / i18n Module (compatible with current router pattern)
+if (!class_exists('SimpleLanguageController')) {
+    require_once __DIR__ . '/../modules/Language/Controllers/SimpleLanguageController.php';
+}
+
+// Simple Feedback Module (compatible with current router pattern)
+if (!class_exists('SimpleFeedbackController')) {
+    require_once __DIR__ . '/../modules/Feedback/Controllers/SimpleFeedbackController.php';
+}
+
 // Happy Hour / Promotional Pricing Module
 if (!class_exists('HappyHourController')) {
     require_once __DIR__ . '/../modules/Marketing/Controllers/HappyHourController.php';

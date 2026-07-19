@@ -2,7 +2,7 @@
 
 ## Overview
 
-EBP Restaurant ERP now supports platform-level users who can manage the entire system without being tied to a specific tenant. This allows for:
+Food & Beverages Management System now supports platform-level users who can manage the entire system without being tied to a specific tenant. This allows for:
 
 - **Platform Owners** - Full system access across all tenants
 - **Platform Admins** - Can manage tenants and system settings

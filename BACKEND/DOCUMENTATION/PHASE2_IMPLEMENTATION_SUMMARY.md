@@ -181,7 +181,7 @@
 
 ## Integration with Existing Modules
 
-All Phase 2 modules integrate seamlessly with existing EBP Restaurant ERP infrastructure:
+All Phase 2 modules integrate seamlessly with existing Food & Beverages Management System infrastructure:
 - Multi-tenant architecture support
 - Audit logging for all operations
 - Session-based authentication

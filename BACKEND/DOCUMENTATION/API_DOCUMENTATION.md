@@ -1,4 +1,4 @@
-# EBP Restaurant Backend API Documentation
+# Food & Beverages Management System Backend API Documentation
 
 **Version:** 1.0.0
 

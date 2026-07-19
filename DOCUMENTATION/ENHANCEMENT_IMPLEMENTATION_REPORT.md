@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-This document details the implementation of the medium and low priority enhancements recommended in the SISA_KERJA_ANALYSIS_REPORT.md. All recommended features have been successfully implemented and integrated into the EBP Restaurant ERP system.
+This document details the implementation of the medium and low priority enhancements recommended in the SISA_KERJA_ANALYSIS_REPORT.md. All recommended features have been successfully implemented and integrated into the Food & Beverages Management System.
 
 ---
 

@@ -13,7 +13,7 @@ test.describe('Consumer Guest UI Tests', () => {
     
     // Check if page title is correct
     const title = await page.title();
-    expect(title).toContain('EBP Restaurant');
+    expect(title).toContain('F&B Management');
     
     console.log('✅ Page loads successfully');
   });

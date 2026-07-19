@@ -5,7 +5,7 @@
 
 ## Overview
 
-This report documents the testing and simulation of consumer-facing features for the EBP Restaurant ERP system.
+This report documents the testing and simulation of consumer-facing features for the Food & Beverages Management System.
 
 ## Mock Data Prepared
 

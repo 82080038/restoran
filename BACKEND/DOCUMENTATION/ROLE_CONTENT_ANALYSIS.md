@@ -1,4 +1,4 @@
-# EBP Restaurant ERP - Role-Based Content Analysis
+# Food & Beverages Management System - Role-Based Content Analysis
 
 **Date**: 2026-07-05
 **Purpose**: Deep analysis of page content per role for all 28 tabs

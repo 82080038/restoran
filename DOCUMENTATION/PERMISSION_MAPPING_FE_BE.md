@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the permission synchronization system between the Frontend (FE) and Backend (BE) of the EBP Restaurant ERP application.
+This document describes the permission synchronization system between the Frontend (FE) and Backend (BE) of the Food & Beverages Management System application.
 
 ## Architecture
 

@@ -1,4 +1,4 @@
-# EBP Restaurant ERP - Role-Based Menu Analysis
+# Food & Beverages Management System - Role-Based Menu Analysis
 
 **Date**: 2026-07-05
 **Purpose**: Deep analysis of appropriate menu access per hierarchy level and role
