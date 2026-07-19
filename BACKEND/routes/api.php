@@ -138,6 +138,7 @@ $happyHourController = new LazyController(HappyHourController::class);
 $simpleLanguageController = new LazyController(SimpleLanguageController::class);
 $simpleFeedbackController = new LazyController(SimpleFeedbackController::class);
 $floorPlanController = new LazyController(FloorPlanController::class);
+$billSplitController = new LazyController(BillSplitController::class);
 $taxCalculationController = new LazyController(TaxCalculationController::class);
 $purchasePlanningController = new LazyController(PurchasePlanningController::class);
 $supplierPerformanceController = new LazyController(SupplierPerformanceController::class);

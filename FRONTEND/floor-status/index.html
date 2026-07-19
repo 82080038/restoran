@@ -74,6 +74,43 @@
         .table-shape.occupied { background: #f5b7b1; border-color: #c0392b; }
         .table-shape.reserved { background: #f9e79f; border-color: #d4ac0d; }
         .table-shape.cleaning { background: #d5dbdb; border-color: #7f8c8d; }
+
+        /* Status Animations */
+        .table-shape.available { animation: anim-available 3s ease-in-out infinite; }
+        @keyframes anim-available {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(168,216,234,0.5); }
+            50% { box-shadow: 0 0 0 6px rgba(168,216,234,0.15); }
+        }
+        .table-shape.occupied { animation: anim-occupied 2s ease-in-out infinite; }
+        @keyframes anim-occupied {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(245,183,177,0.6); transform: scale(1); }
+            50% { box-shadow: 0 0 0 8px rgba(245,183,177,0.2); transform: scale(1.02); }
+        }
+        .table-shape.reserved { animation: anim-reserved 2.5s ease-in-out infinite; }
+        @keyframes anim-reserved {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(249,231,159,0.5); }
+            50% { box-shadow: 0 0 0 6px rgba(249,231,159,0.2); }
+        }
+        .table-shape.cleaning { animation: anim-cleaning 1.5s linear infinite; }
+        @keyframes anim-cleaning {
+            0% { background: #d5dbdb; }
+            50% { background: #bdc3c7; }
+            100% { background: #d5dbdb; }
+        }
+        /* Chair status indicators */
+        .chair.chair-occupied { background: #f5b7b1; border-color: #c0392b; animation: anim-chair-occ 2s ease-in-out infinite; }
+        @keyframes anim-chair-occ {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        .chair.chair-reserved { background: #f9e79f; border-color: #d4ac0d; }
+        .chair.chair-available { background: #a8d8ea; border-color: #2c3e50; }
+        .chair.chair-cleaning { background: #d5dbdb; border-color: #7f8c8d; opacity: 0.5; }
+
+        /* Group indicator on table */
+        .table-groups-badge { position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; font-size: 10px; font-weight: 700; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border: 2px solid white; z-index: 5; }
+        .table-group-color-bar { position: absolute; bottom: -4px; left: 0; right: 0; height: 4px; border-radius: 0 0 6px 6px; display: flex; }
+        .group-color-segment { flex: 1; }
         .table-label { text-align: center; pointer-events: none; }
         .table-number { font-size: 14px; font-weight: 800; color: #2c3e50; }
         .table-cap { font-size: 9px; color: #555; }
@@ -293,9 +330,28 @@
                 t.appendChild(shape);
 
                 // Render chairs
+                // Group badge if multiple groups
+                if (table.group_count > 1) {
+                    const badge = document.createElement('div');
+                    badge.className = 'table-groups-badge';
+                    badge.textContent = table.group_count;
+                    shape.appendChild(badge);
+
+                    const bar = document.createElement('div');
+                    bar.className = 'table-group-color-bar';
+                    (table.groups || []).forEach(g => {
+                        const seg = document.createElement('div');
+                        seg.className = 'group-color-segment';
+                        seg.style.background = g.group_color || '#667eea';
+                        bar.appendChild(seg);
+                    });
+                    shape.appendChild(bar);
+                }
+
                 (table.chairs || []).forEach(chair => {
                     const c = document.createElement('div');
-                    c.className = `chair ${chair.chair_shape === 'round' ? 'round' : ''}`;
+                    const chairStatus = chair.status || (table.status === 'OCCUPIED' ? 'occupied' : 'available');
+                    c.className = 'chair ' + (chair.chair_shape === 'round' ? 'round ' : '') + 'chair-' + chairStatus.toLowerCase();
                     c.style.left = chair.pos_x + 'px';
                     c.style.top = chair.pos_y + 'px';
                     c.style.transform = `rotate(${chair.chair_rotation || 0}deg)`;
@@ -338,11 +394,26 @@
             qa.classList.add('show');
 
             document.getElementById('qa-title').textContent = `Meja ${table.table_number}${table.table_name ? ' - ' + table.table_name : ''}`;
-            document.getElementById('qa-info').innerHTML = `
-                Status: <strong>${table.status}</strong><br>
-                Kapasitas: ${table.capacity || table.chair_count || 4} kursi<br>
-                Zona: ${table.area || '-'}
-            `;
+            var groupInfo = table.group_count > 1
+                ? '<br>Groups: <strong>' + table.group_count + '</strong> kelompok<br>Bills: ' + (table.active_bills || table.group_count) + ' terpisah'
+                : '';
+            document.getElementById('qa-info').innerHTML =
+                'Status: <strong>' + table.status + '</strong><br>' +
+                'Kapasitas: ' + (table.capacity || table.chair_count || 4) + ' kursi<br>' +
+                'Zona: ' + (table.area || '-') + groupInfo;
+
+            var qaDiv = document.getElementById('quick-action');
+            var existingBillBtn = document.getElementById('qa-bill-btn');
+            if (existingBillBtn) existingBillBtn.remove();
+            if (table.status === 'OCCUPIED') {
+                var billBtn = document.createElement('button');
+                billBtn.id = 'qa-bill-btn';
+                billBtn.className = 'qa-btn';
+                billBtn.style.cssText = 'background:#667eea;color:white;margin-top:8px;font-weight:600';
+                billBtn.innerHTML = '<i class="fas fa-receipt"></i> Kelola Bill (Split/Merge)';
+                billBtn.onclick = function() { window.open('../bill-split/index.html?table_id=' + table.table_id, '_blank'); };
+                qaDiv.appendChild(billBtn);
+            }
         }
 
         async function setTableStatus(status) {

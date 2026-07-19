@@ -470,6 +470,11 @@ if (!class_exists('LoyaltyController')) {
     require_once __DIR__ . '/../modules/Loyalty/Controllers/LoyaltyController.php';
 }
 
+// Bill Split Module
+if (!class_exists('BillSplitController')) {
+    require_once __DIR__ . '/../modules/Table/Controllers/BillSplitController.php';
+}
+
 // Floor Plan Module
 if (!class_exists('FloorPlanController')) {
     require_once __DIR__ . '/../modules/Table/Controllers/FloorPlanController.php';
