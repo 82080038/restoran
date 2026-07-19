@@ -1,5 +1,5 @@
 # SISA KERJA Analysis Report
-## Restaurant ERP Feature Gap Analysis and Implementation Status
+## F&B Management System Feature Gap Analysis and Implementation Status
 
 **Date:** 2026-07-08  
 **Analysis Scope:** All items from DOCUMENTATION/sisa kerja.md  

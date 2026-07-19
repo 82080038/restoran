@@ -163,6 +163,46 @@
             background: #cce5ff;
             color: #004085;
         }
+        .hero-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(102,126,234,0.08), rgba(118,75,162,0.08));
+            border-radius: 12px;
+        }
+        .hero-section h2 {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .hero-section p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .hero-section .btn {
+            display: inline-block;
+            padding: 10px 24px;
+            margin: 4px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            background: #667eea;
+            color: white;
+            transition: background 0.2s;
+        }
+        .hero-section .btn:hover {
+            background: #5568d3;
+        }
+        .hero-section .btn-map {
+            background: #27ae60;
+        }
+        .hero-section .btn-map:hover {
+            background: #219a52;
+        }
     </style>
 </head>
 <body>
@@ -170,7 +210,13 @@
         <div class="landing-container">
             <div class="logo">🍽️</div>
             <h1>Food & Beverages Management System</h1>
-            <p>Welcome to the Enterprise Business Platform Food & Beverages Management System</p>
+
+            <div class="hero-section">
+                <h2>Enterprise Business Platform - Food & Beverages Module</h2>
+                <p>Platform manajemen Food & Beverages enterprise yang mendukung berbagai jenis usaha kuliner dengan fitur lengkap untuk multi-tenant, multi-cabang, dan multi-role.</p>
+                <button class="btn" id="loginBtn" onclick="window.location.href='login.html'">Login ke Sistem</button>
+                <a href="map.html" class="btn btn-map" target="_blank">🗺️ Cari Lokasi Restoran</a>
+            </div>
             
             <div id="roleInfo">
                 <span class="role-badge role-guest" id="roleBadge">Guest</span>
@@ -210,73 +256,73 @@
                 <optgroup label="Tenant Roles">
                     <optgroup label="Administrator">
                         <option value="admin_restaurant">F&B Demo Restaurant</option>
-                        <option value="admin_cafe">EBP Coffee House</option>
-                        <option value="admin_bakery">EBP Artisan Bakery</option>
-                        <option value="admin_fastfood">EBP Burger Joint</option>
-                        <option value="admin_japanese">EBP Sushi Bar</option>
-                        <option value="admin_thai">EBP Thai Kitchen</option>
-                        <option value="admin_bar">EBP Sports Bar</option>
-                        <option value="admin_catering">EBP Catering Service</option>
+                        <option value="admin_cafe">F&B Coffee House</option>
+                        <option value="admin_bakery">F&B Artisan Bakery</option>
+                        <option value="admin_fastfood">F&B Burger Joint</option>
+                        <option value="admin_japanese">F&B Sushi Bar</option>
+                        <option value="admin_thai">F&B Thai Kitchen</option>
+                        <option value="admin_bar">F&B Sports Bar</option>
+                        <option value="admin_catering">F&B Catering Service</option>
                         <option value="admin_babipangang">Babi Pangang Karo</option>
                         <option value="admin_halal">Warung Makan Halal</option>
                     </optgroup>
                     <optgroup label="Manager">
                         <option value="manager_restaurant">F&B Demo Restaurant</option>
-                        <option value="manager_cafe">EBP Coffee House</option>
-                        <option value="manager_bakery">EBP Artisan Bakery</option>
-                        <option value="manager_fastfood">EBP Burger Joint</option>
-                        <option value="manager_japanese">EBP Sushi Bar</option>
-                        <option value="manager_thai">EBP Thai Kitchen</option>
-                        <option value="manager_bar">EBP Sports Bar</option>
-                        <option value="manager_catering">EBP Catering Service</option>
+                        <option value="manager_cafe">F&B Coffee House</option>
+                        <option value="manager_bakery">F&B Artisan Bakery</option>
+                        <option value="manager_fastfood">F&B Burger Joint</option>
+                        <option value="manager_japanese">F&B Sushi Bar</option>
+                        <option value="manager_thai">F&B Thai Kitchen</option>
+                        <option value="manager_bar">F&B Sports Bar</option>
+                        <option value="manager_catering">F&B Catering Service</option>
                         <option value="manager_babipangang">Babi Pangang Karo</option>
                         <option value="manager_halal">Warung Makan Halal</option>
                     </optgroup>
                     <optgroup label="Kasir">
                         <option value="kasir_restaurant">F&B Demo Restaurant</option>
-                        <option value="kasir_cafe">EBP Coffee House</option>
-                        <option value="kasir_bakery">EBP Artisan Bakery</option>
-                        <option value="kasir_fastfood">EBP Burger Joint</option>
-                        <option value="kasir_japanese">EBP Sushi Bar</option>
-                        <option value="kasir_thai">EBP Thai Kitchen</option>
-                        <option value="kasir_bar">EBP Sports Bar</option>
-                        <option value="kasir_catering">EBP Catering Service</option>
+                        <option value="kasir_cafe">F&B Coffee House</option>
+                        <option value="kasir_bakery">F&B Artisan Bakery</option>
+                        <option value="kasir_fastfood">F&B Burger Joint</option>
+                        <option value="kasir_japanese">F&B Sushi Bar</option>
+                        <option value="kasir_thai">F&B Thai Kitchen</option>
+                        <option value="kasir_bar">F&B Sports Bar</option>
+                        <option value="kasir_catering">F&B Catering Service</option>
                         <option value="kasir_babipangang">Babi Pangang Karo</option>
                         <option value="kasir_halal">Warung Makan Halal</option>
                     </optgroup>
                     <optgroup label="Koki">
                         <option value="koki_restaurant">F&B Demo Restaurant</option>
-                        <option value="koki_cafe">EBP Coffee House</option>
-                        <option value="koki_bakery">EBP Artisan Bakery</option>
-                        <option value="koki_fastfood">EBP Burger Joint</option>
-                        <option value="koki_japanese">EBP Sushi Bar</option>
-                        <option value="koki_thai">EBP Thai Kitchen</option>
-                        <option value="koki_bar">EBP Sports Bar</option>
-                        <option value="koki_catering">EBP Catering Service</option>
+                        <option value="koki_cafe">F&B Coffee House</option>
+                        <option value="koki_bakery">F&B Artisan Bakery</option>
+                        <option value="koki_fastfood">F&B Burger Joint</option>
+                        <option value="koki_japanese">F&B Sushi Bar</option>
+                        <option value="koki_thai">F&B Thai Kitchen</option>
+                        <option value="koki_bar">F&B Sports Bar</option>
+                        <option value="koki_catering">F&B Catering Service</option>
                         <option value="koki_babipangang">Babi Pangang Karo</option>
                         <option value="koki_halal">Warung Makan Halal</option>
                     </optgroup>
                     <optgroup label="Waiter">
                         <option value="waiter_restaurant">F&B Demo Restaurant</option>
-                        <option value="waiter_cafe">EBP Coffee House</option>
-                        <option value="waiter_bakery">EBP Artisan Bakery</option>
-                        <option value="waiter_fastfood">EBP Burger Joint</option>
-                        <option value="waiter_japanese">EBP Sushi Bar</option>
-                        <option value="waiter_thai">EBP Thai Kitchen</option>
-                        <option value="waiter_bar">EBP Sports Bar</option>
-                        <option value="waiter_catering">EBP Catering Service</option>
+                        <option value="waiter_cafe">F&B Coffee House</option>
+                        <option value="waiter_bakery">F&B Artisan Bakery</option>
+                        <option value="waiter_fastfood">F&B Burger Joint</option>
+                        <option value="waiter_japanese">F&B Sushi Bar</option>
+                        <option value="waiter_thai">F&B Thai Kitchen</option>
+                        <option value="waiter_bar">F&B Sports Bar</option>
+                        <option value="waiter_catering">F&B Catering Service</option>
                         <option value="waiter_babipangang">Babi Pangang Karo</option>
                         <option value="waiter_halal">Warung Makan Halal</option>
                     </optgroup>
                     <optgroup label="Stok">
                         <option value="stok_restaurant">F&B Demo Restaurant</option>
-                        <option value="stok_cafe">EBP Coffee House</option>
-                        <option value="stok_bakery">EBP Artisan Bakery</option>
-                        <option value="stok_fastfood">EBP Burger Joint</option>
-                        <option value="stok_japanese">EBP Sushi Bar</option>
-                        <option value="stok_thai">EBP Thai Kitchen</option>
-                        <option value="stok_bar">EBP Sports Bar</option>
-                        <option value="stok_catering">EBP Catering Service</option>
+                        <option value="stok_cafe">F&B Coffee House</option>
+                        <option value="stok_bakery">F&B Artisan Bakery</option>
+                        <option value="stok_fastfood">F&B Burger Joint</option>
+                        <option value="stok_japanese">F&B Sushi Bar</option>
+                        <option value="stok_thai">F&B Thai Kitchen</option>
+                        <option value="stok_bar">F&B Sports Bar</option>
+                        <option value="stok_catering">F&B Catering Service</option>
                         <option value="stok_babipangang">Babi Pangang Karo</option>
                         <option value="stok_halal">Warung Makan Halal</option>
                     </optgroup>
@@ -302,68 +348,68 @@
         const devUsers = {
             // Level 100 - Administrator
             admin_restaurant: { username: 'admin_restaurant', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_RESTAURANT', tenant_name: 'F&B Demo Restaurant' },
-            admin_cafe: { username: 'admin_cafe', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'EBP Coffee House' },
-            admin_bakery: { username: 'admin_bakery', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'EBP Artisan Bakery' },
-            admin_fastfood: { username: 'admin_fastfood', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'EBP Burger Joint' },
-            admin_japanese: { username: 'admin_japanese', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'EBP Sushi Bar' },
-            admin_thai: { username: 'admin_thai', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'EBP Thai Kitchen' },
-            admin_bar: { username: 'admin_bar', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'EBP Sports Bar' },
-            admin_catering: { username: 'admin_catering', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'EBP Catering Service' },
+            admin_cafe: { username: 'admin_cafe', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'F&B Coffee House' },
+            admin_bakery: { username: 'admin_bakery', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'F&B Artisan Bakery' },
+            admin_fastfood: { username: 'admin_fastfood', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'F&B Burger Joint' },
+            admin_japanese: { username: 'admin_japanese', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'F&B Sushi Bar' },
+            admin_thai: { username: 'admin_thai', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'F&B Thai Kitchen' },
+            admin_bar: { username: 'admin_bar', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'F&B Sports Bar' },
+            admin_catering: { username: 'admin_catering', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'F&B Catering Service' },
             admin_babipangang: { username: 'admin_babipangang', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_BABI_PANGANG', tenant_name: 'Babi Pangang Karo' },
             admin_halal: { username: 'admin_halal', password: 'Admin123', role: 'Administrator', level: 100, type: 'tenant', tenant: 'EBP_HALAL_FOOD', tenant_name: 'Warung Makan Halal' },
             // Level 80 - Manager
             manager_restaurant: { username: 'manager_restaurant', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_RESTAURANT', tenant_name: 'F&B Demo Restaurant' },
-            manager_cafe: { username: 'manager_cafe', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'EBP Coffee House' },
-            manager_bakery: { username: 'manager_bakery', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'EBP Artisan Bakery' },
-            manager_fastfood: { username: 'manager_fastfood', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'EBP Burger Joint' },
-            manager_japanese: { username: 'manager_japanese', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'EBP Sushi Bar' },
-            manager_thai: { username: 'manager_thai', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'EBP Thai Kitchen' },
-            manager_bar: { username: 'manager_bar', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'EBP Sports Bar' },
-            manager_catering: { username: 'manager_catering', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'EBP Catering Service' },
+            manager_cafe: { username: 'manager_cafe', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'F&B Coffee House' },
+            manager_bakery: { username: 'manager_bakery', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'F&B Artisan Bakery' },
+            manager_fastfood: { username: 'manager_fastfood', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'F&B Burger Joint' },
+            manager_japanese: { username: 'manager_japanese', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'F&B Sushi Bar' },
+            manager_thai: { username: 'manager_thai', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'F&B Thai Kitchen' },
+            manager_bar: { username: 'manager_bar', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'F&B Sports Bar' },
+            manager_catering: { username: 'manager_catering', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'F&B Catering Service' },
             manager_babipangang: { username: 'manager_babipangang', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_BABI_PANGANG', tenant_name: 'Babi Pangang Karo' },
             manager_halal: { username: 'manager_halal', password: 'Manager123', role: 'Manager', level: 80, type: 'tenant', tenant: 'EBP_HALAL_FOOD', tenant_name: 'Warung Makan Halal' },
             // Level 50 - Kasir
             kasir_restaurant: { username: 'kasir_restaurant', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_RESTAURANT', tenant_name: 'F&B Demo Restaurant' },
-            kasir_cafe: { username: 'kasir_cafe', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'EBP Coffee House' },
-            kasir_bakery: { username: 'kasir_bakery', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'EBP Artisan Bakery' },
-            kasir_fastfood: { username: 'kasir_fastfood', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'EBP Burger Joint' },
-            kasir_japanese: { username: 'kasir_japanese', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'EBP Sushi Bar' },
-            kasir_thai: { username: 'kasir_thai', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'EBP Thai Kitchen' },
-            kasir_bar: { username: 'kasir_bar', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'EBP Sports Bar' },
-            kasir_catering: { username: 'kasir_catering', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'EBP Catering Service' },
+            kasir_cafe: { username: 'kasir_cafe', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'F&B Coffee House' },
+            kasir_bakery: { username: 'kasir_bakery', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'F&B Artisan Bakery' },
+            kasir_fastfood: { username: 'kasir_fastfood', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'F&B Burger Joint' },
+            kasir_japanese: { username: 'kasir_japanese', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'F&B Sushi Bar' },
+            kasir_thai: { username: 'kasir_thai', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'F&B Thai Kitchen' },
+            kasir_bar: { username: 'kasir_bar', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'F&B Sports Bar' },
+            kasir_catering: { username: 'kasir_catering', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'F&B Catering Service' },
             kasir_babipangang: { username: 'kasir_babipangang', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_BABI_PANGANG', tenant_name: 'Babi Pangang Karo' },
             kasir_halal: { username: 'kasir_halal', password: 'Kasir123', role: 'Kasir', level: 50, type: 'tenant', tenant: 'EBP_HALAL_FOOD', tenant_name: 'Warung Makan Halal' },
             // Level 40 - Koki
             koki_restaurant: { username: 'koki_restaurant', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_RESTAURANT', tenant_name: 'F&B Demo Restaurant' },
-            koki_cafe: { username: 'koki_cafe', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'EBP Coffee House' },
-            koki_bakery: { username: 'koki_bakery', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'EBP Artisan Bakery' },
-            koki_fastfood: { username: 'koki_fastfood', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'EBP Burger Joint' },
-            koki_japanese: { username: 'koki_japanese', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'EBP Sushi Bar' },
-            koki_thai: { username: 'koki_thai', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'EBP Thai Kitchen' },
-            koki_bar: { username: 'koki_bar', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'EBP Sports Bar' },
-            koki_catering: { username: 'koki_catering', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'EBP Catering Service' },
+            koki_cafe: { username: 'koki_cafe', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'F&B Coffee House' },
+            koki_bakery: { username: 'koki_bakery', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'F&B Artisan Bakery' },
+            koki_fastfood: { username: 'koki_fastfood', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'F&B Burger Joint' },
+            koki_japanese: { username: 'koki_japanese', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'F&B Sushi Bar' },
+            koki_thai: { username: 'koki_thai', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'F&B Thai Kitchen' },
+            koki_bar: { username: 'koki_bar', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'F&B Sports Bar' },
+            koki_catering: { username: 'koki_catering', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'F&B Catering Service' },
             koki_babipangang: { username: 'koki_babipangang', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_BABI_PANGANG', tenant_name: 'Babi Pangang Karo' },
             koki_halal: { username: 'koki_halal', password: 'Koki123', role: 'Koki', level: 40, type: 'tenant', tenant: 'EBP_HALAL_FOOD', tenant_name: 'Warung Makan Halal' },
             // Level 30 - Waiter
             waiter_restaurant: { username: 'waiter_restaurant', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_RESTAURANT', tenant_name: 'F&B Demo Restaurant' },
-            waiter_cafe: { username: 'waiter_cafe', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'EBP Coffee House' },
-            waiter_bakery: { username: 'waiter_bakery', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'EBP Artisan Bakery' },
-            waiter_fastfood: { username: 'waiter_fastfood', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'EBP Burger Joint' },
-            waiter_japanese: { username: 'waiter_japanese', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'EBP Sushi Bar' },
-            waiter_thai: { username: 'waiter_thai', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'EBP Thai Kitchen' },
-            waiter_bar: { username: 'waiter_bar', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'EBP Sports Bar' },
-            waiter_catering: { username: 'waiter_catering', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'EBP Catering Service' },
+            waiter_cafe: { username: 'waiter_cafe', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'F&B Coffee House' },
+            waiter_bakery: { username: 'waiter_bakery', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'F&B Artisan Bakery' },
+            waiter_fastfood: { username: 'waiter_fastfood', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'F&B Burger Joint' },
+            waiter_japanese: { username: 'waiter_japanese', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'F&B Sushi Bar' },
+            waiter_thai: { username: 'waiter_thai', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'F&B Thai Kitchen' },
+            waiter_bar: { username: 'waiter_bar', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'F&B Sports Bar' },
+            waiter_catering: { username: 'waiter_catering', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'F&B Catering Service' },
             waiter_babipangang: { username: 'waiter_babipangang', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_BABI_PANGANG', tenant_name: 'Babi Pangang Karo' },
             waiter_halal: { username: 'waiter_halal', password: 'Waiter123', role: 'Waiter', level: 30, type: 'tenant', tenant: 'EBP_HALAL_FOOD', tenant_name: 'Warung Makan Halal' },
             // Level 20 - Stok
             stok_restaurant: { username: 'stok_restaurant', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_RESTAURANT', tenant_name: 'F&B Demo Restaurant' },
-            stok_cafe: { username: 'stok_cafe', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'EBP Coffee House' },
-            stok_bakery: { username: 'stok_bakery', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'EBP Artisan Bakery' },
-            stok_fastfood: { username: 'stok_fastfood', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'EBP Burger Joint' },
-            stok_japanese: { username: 'stok_japanese', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'EBP Sushi Bar' },
-            stok_thai: { username: 'stok_thai', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'EBP Thai Kitchen' },
-            stok_bar: { username: 'stok_bar', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'EBP Sports Bar' },
-            stok_catering: { username: 'stok_catering', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'EBP Catering Service' },
+            stok_cafe: { username: 'stok_cafe', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_CAFE', tenant_name: 'F&B Coffee House' },
+            stok_bakery: { username: 'stok_bakery', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_BAKERY', tenant_name: 'F&B Artisan Bakery' },
+            stok_fastfood: { username: 'stok_fastfood', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_FASTFOOD', tenant_name: 'F&B Burger Joint' },
+            stok_japanese: { username: 'stok_japanese', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_JAPANESE', tenant_name: 'F&B Sushi Bar' },
+            stok_thai: { username: 'stok_thai', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_THAI', tenant_name: 'F&B Thai Kitchen' },
+            stok_bar: { username: 'stok_bar', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_BAR', tenant_name: 'F&B Sports Bar' },
+            stok_catering: { username: 'stok_catering', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_CATERING', tenant_name: 'F&B Catering Service' },
             stok_babipangang: { username: 'stok_babipangang', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_BABI_PANGANG', tenant_name: 'Babi Pangang Karo' },
             stok_halal: { username: 'stok_halal', password: 'Stok123', role: 'Stok', level: 20, type: 'tenant', tenant: 'EBP_HALAL_FOOD', tenant_name: 'Warung Makan Halal' },
             // Consumer Roles

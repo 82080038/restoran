@@ -33,7 +33,7 @@ This document provides a comprehensive analysis of the ebp-restaurant-backend re
 | Attribute          | Value                                    |
 | ------------------ | ---------------------------------------- |
 | Repository         | ebp-restaurant-backend                   |
-| Product Name       | Restaurant ERP                           |
+| Product Name       | F&B Management System                           |
 | Category           | Product                                  |
 | Business Domain    | Hospitality                              |
 | Target Platform    | EBP                                      |

@@ -2,15 +2,15 @@
  * OfflineManager - Client-side offline data management
  * 
  * Handles offline data storage using IndexedDB, sync queue management,
- * and conflict resolution for RESTAURANT_ERP
+ * and conflict resolution for FNB Management System
  * 
- * @package EBP\Frontend\Offline
+ * @package FNB\Frontend\Offline
  * @version 1.0.0
  */
 
 class OfflineManager {
     constructor() {
-        this.dbName = 'EBP_Restaurant_Offline';
+        this.dbName = 'FNB_Management_Offline';
         this.dbVersion = 1;
         this.db = null;
         this.isOnline = navigator.onLine;

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This research addresses the challenge of launching RESTAURANT_ERP when the application is new with few users and limited feature utilization. The goal is to develop strategies for rapid user acquisition, network effects, and handling sudden growth surges.
+This research addresses the challenge of launching F&B Management System when the application is new with few users and limited feature utilization. The goal is to develop strategies for rapid user acquisition, network effects, and handling sudden growth surges.
 
 ## The Cold Start Problem
 
@@ -439,7 +439,7 @@ This research addresses the challenge of launching RESTAURANT_ERP when the appli
 9. **Retention is more important than acquisition**: Focus on retention over acquisition
 10. **Patience is required**: Building a successful platform takes time
 
-## Application to RESTAURANT_ERP
+## Application to F&B Management System
 
 ### Immediate Actions (0-3 months)
 1. **Select launch market**: Choose Jakarta as initial launch market
@@ -464,4 +464,4 @@ This research addresses the challenge of launching RESTAURANT_ERP when the appli
 
 ## Conclusion
 
-Launching a new restaurant ERP platform is challenging due to the cold start problem and network effects. A successful launch requires geographic focus, simple onboarding, beta program validation, referral programs, and preparation for growth surges. By following a phased approach and focusing on retention over acquisition, RESTAURANT_ERP can achieve sustainable growth.
+Launching a new F&B management platform is challenging due to the cold start problem and network effects. A successful launch requires geographic focus, simple onboarding, beta program validation, referral programs, and preparation for growth surges. By following a phased approach and focusing on retention over acquisition, F&B Management System can achieve sustainable growth.

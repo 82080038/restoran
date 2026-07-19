@@ -189,7 +189,7 @@ RESTAURANT MODULE
     ↓
 ```
 
-Restaurant ERP Platform
+F&B Management System Platform
 
 ```
 
@@ -201,7 +201,7 @@ Restaurant ERP Platform
 
 ```
 
-Restaurant ERP
+F&B Management System
 
 ├── POS Module
 

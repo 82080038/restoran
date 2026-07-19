@@ -1,6 +1,6 @@
 <?php
 /**
- * Entry point for Restaurant ERP
+ * Entry point for F&B Management System
  * Routes all requests through the backend routing system
  */
 

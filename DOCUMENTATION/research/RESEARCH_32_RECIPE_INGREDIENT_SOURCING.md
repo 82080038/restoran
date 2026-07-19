@@ -2,12 +2,12 @@
 
 ## Overview
 
-This research examines how restaurant ERP systems should manage recipes and ingredients, specifically distinguishing between items that are self-produced, outsourced, or sourced from suppliers. The goal is to ensure RESTAURANT_ERP can handle all sourcing models flexibly.
+This research examines how F&B management systems should manage recipes and ingredients, specifically distinguishing between items that are self-produced, outsourced, or sourced from suppliers. The goal is to ensure F&B Management System can handle all sourcing models flexibly.
 
 ## Current Application Analysis
 
 ### Existing Implementation
-The RESTAURANT_ERP backend already includes:
+The F&B Management System backend already includes:
 - **MenuRecipe Model** (`modules/Menu/Models/MenuRecipe.php`): Basic recipe management with yield quantity, ingredients linking to inventory items, and cost calculation
 - **Recipe Model** (`modules/Menu/Models/Recipe.php`): Simple DTO with recipe_code, yield_quantity, instructions
 - **MenuItem Model** (`modules/Menu/Models/MenuItem.php`): Menu items with dietary flags (vegetarian, vegan, gluten_free, spicy), preparation time, and station assignment
@@ -105,7 +105,7 @@ The RESTAURANT_ERP backend already includes:
 - Cost allocation by sourcing method
 - Supplier performance comparison
 
-## Implementation Requirements for RESTAURANT_ERP
+## Implementation Requirements for F&B Management System
 
 ### Database Schema Enhancements
 
@@ -400,7 +400,7 @@ Cost Per Unit = Total Cost / Yield Quantity
 7. **Supplier relationships impact costs**: Contract pricing and volume discounts significantly affect margins
 8. **Production costs are often overlooked**: Labor, equipment, and overhead costs are frequently underestimated
 
-## Application to RESTAURANT_ERP
+## Application to F&B Management System
 
 ### Immediate Actions Required
 1. **Database schema updates**: Add sourcing classification fields and new tables
@@ -418,4 +418,4 @@ Cost Per Unit = Total Cost / Yield Quantity
 
 ## Conclusion
 
-Recipe and ingredient sourcing management is a complex but critical aspect of restaurant operations. RESTAURANT_ERP must support all sourcing models with comprehensive cost tracking, traceability, and compliance management. The proposed implementation provides a flexible framework that can accommodate restaurants of all sizes and types, from home-based operations to international chains.
+Recipe and ingredient sourcing management is a complex but critical aspect of restaurant operations. F&B Management System must support all sourcing models with comprehensive cost tracking, traceability, and compliance management. The proposed implementation provides a flexible framework that can accommodate restaurants of all sizes and types, from home-based operations to international chains.

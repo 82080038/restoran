@@ -2,7 +2,7 @@
 
 ## Research-Based Industry Standards
 
-### Small Scale Restaurant ERP Features
+### Small Scale F&B Management System Features
 **Essential for single-location operations:**
 - Basic POS & Order Management
 - Simple Inventory Tracking
@@ -13,7 +13,7 @@
 - Customer Management
 - Payment Processing
 
-### Medium Scale Restaurant ERP Features
+### Medium Scale F&B Management System Features
 **Required for multi-location regional chains:**
 - Multi-branch Management
 - Central Kitchen Management
@@ -26,7 +26,7 @@
 - Customer Loyalty Program
 - Basic Analytics & Reporting
 
-### International/Enterprise Scale Restaurant ERP Features
+### International/Enterprise Scale F&B Management System Features
 **Required for global chains:**
 - Multi-currency & Multi-language Support
 - Centralized Procurement

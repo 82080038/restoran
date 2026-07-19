@@ -4,7 +4,7 @@
 This document describes the implementation of the advanced pricing system for handling complex pricing scenarios including combo pricing and weight-based pricing.
 
 ## Problem Statement
-The restaurant ERP needs to handle complex pricing scenarios:
+The F&B Management System needs to handle complex pricing scenarios:
 - **Combo Pricing**: Daging panggang (Rp 30.000) + Nasi (Rp 10.000) = Rp 35.000 (not Rp 40.000)
 - **Weight-Based Pricing**: Daging panggang per kilo Rp 250.000
 - **Mixed Pricing**: Different prices for different configurations
