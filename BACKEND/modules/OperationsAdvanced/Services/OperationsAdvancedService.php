@@ -40,7 +40,7 @@ class OperationsAdvancedService
 
     public function get86Items($tenantId, $branchId)
     {
-        $sql = "SELECT i86.*, p.name as product_name FROM item_86_status i86
+        $sql = "SELECT i86.*, p.product_name FROM item_86_status i86
                 LEFT JOIN products p ON i86.product_id = p.product_id
                 WHERE i86.tenant_id = :tenant_id AND i86.is_86ed = 1";
         $params = [':tenant_id' => $tenantId];
@@ -324,7 +324,7 @@ class OperationsAdvancedService
         $col = $columnMap[$tag] ?? null;
         if (!$col) return [];
 
-        $sql = "SELECT at.*, p.name as product_name FROM allergen_tracking at
+        $sql = "SELECT at.*, p.product_name FROM allergen_tracking at
                 LEFT JOIN products p ON at.product_id = p.product_id
                 WHERE at.tenant_id = :tenant_id AND at.$col = 1";
         $stmt = $this->pdo->prepare($sql);

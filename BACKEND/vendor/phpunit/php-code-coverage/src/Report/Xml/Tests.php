@@ -9,36 +9,42 @@
  */
 namespace SebastianBergmann\CodeCoverage\Report\Xml;
 
-use function sprintf;
-use SebastianBergmann\CodeCoverage\CodeCoverage;
-use XMLWriter;
+use DOMElement;
 
 /**
  * @internal This class is not covered by the backward compatibility promise for phpunit/php-code-coverage
- *
- * @phpstan-import-type TestType from CodeCoverage
  */
-final readonly class Tests
+final class Tests
 {
-    private readonly XMLWriter $xmlWriter;
+    private $contextNode;
+    private $codeMap = [
+        -1 => 'UNKNOWN',    // PHPUnit_Runner_BaseTestRunner::STATUS_UNKNOWN
+        0  => 'PASSED',     // PHPUnit_Runner_BaseTestRunner::STATUS_PASSED
+        1  => 'SKIPPED',    // PHPUnit_Runner_BaseTestRunner::STATUS_SKIPPED
+        2  => 'INCOMPLETE', // PHPUnit_Runner_BaseTestRunner::STATUS_INCOMPLETE
+        3  => 'FAILURE',    // PHPUnit_Runner_BaseTestRunner::STATUS_FAILURE
+        4  => 'ERROR',      // PHPUnit_Runner_BaseTestRunner::STATUS_ERROR
+        5  => 'RISKY',      // PHPUnit_Runner_BaseTestRunner::STATUS_RISKY
+        6  => 'WARNING',     // PHPUnit_Runner_BaseTestRunner::STATUS_WARNING
+    ];
 
-    public function __construct(XMLWriter $xmlWriter)
+    public function __construct(DOMElement $context)
     {
-        $this->xmlWriter = $xmlWriter;
+        $this->contextNode = $context;
     }
 
-    /**
-     * @param TestType $result
-     */
     public function addTest(string $test, array $result): void
     {
-        $this->xmlWriter->startElement('test');
+        $node = $this->contextNode->appendChild(
+            $this->contextNode->ownerDocument->createElementNS(
+                'https://schema.phpunit.de/coverage/1.0',
+                'test'
+            )
+        );
 
-        $this->xmlWriter->writeAttribute('name', $test);
-        $this->xmlWriter->writeAttribute('size', $result['size']);
-        $this->xmlWriter->writeAttribute('status', $result['status']);
-        $this->xmlWriter->writeAttribute('time', sprintf('%F', $result['time']));
-
-        $this->xmlWriter->endElement();
+        $node->setAttribute('name', $test);
+        $node->setAttribute('size', $result['size']);
+        $node->setAttribute('result', (string) $result['status']);
+        $node->setAttribute('status', $this->codeMap[(int) $result['status']]);
     }
 }

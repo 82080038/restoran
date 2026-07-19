@@ -9,32 +9,79 @@
  */
 namespace SebastianBergmann\CodeCoverage\Report\Xml;
 
-use XMLWriter;
+use DOMDocument;
+use DOMElement;
 
 /**
  * @internal This class is not covered by the backward compatibility promise for phpunit/php-code-coverage
  */
 class File
 {
-    protected XMLWriter $xmlWriter;
+    /**
+     * @var DOMDocument
+     */
+    private $dom;
 
-    public function __construct(XMLWriter $xmlWriter)
-    {
-        $this->xmlWriter = $xmlWriter;
-    }
+    /**
+     * @var DOMElement
+     */
+    private $contextNode;
 
-    public function getWriter(): XMLWriter
+    public function __construct(DOMElement $context)
     {
-        return $this->xmlWriter;
+        $this->dom         = $context->ownerDocument;
+        $this->contextNode = $context;
     }
 
     public function totals(): Totals
     {
-        return new Totals($this->xmlWriter);
+        $totalsContainer = $this->contextNode->firstChild;
+
+        if (!$totalsContainer) {
+            $totalsContainer = $this->contextNode->appendChild(
+                $this->dom->createElementNS(
+                    'https://schema.phpunit.de/coverage/1.0',
+                    'totals'
+                )
+            );
+        }
+
+        return new Totals($totalsContainer);
     }
 
     public function lineCoverage(string $line): Coverage
     {
-        return new Coverage($this->xmlWriter, $line);
+        $coverage = $this->contextNode->getElementsByTagNameNS(
+            'https://schema.phpunit.de/coverage/1.0',
+            'coverage'
+        )->item(0);
+
+        if (!$coverage) {
+            $coverage = $this->contextNode->appendChild(
+                $this->dom->createElementNS(
+                    'https://schema.phpunit.de/coverage/1.0',
+                    'coverage'
+                )
+            );
+        }
+
+        $lineNode = $coverage->appendChild(
+            $this->dom->createElementNS(
+                'https://schema.phpunit.de/coverage/1.0',
+                'line'
+            )
+        );
+
+        return new Coverage($lineNode, $line);
+    }
+
+    protected function contextNode(): DOMElement
+    {
+        return $this->contextNode;
+    }
+
+    protected function dom(): DOMDocument
+    {
+        return $this->dom;
     }
 }

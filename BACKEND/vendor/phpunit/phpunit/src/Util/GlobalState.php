@@ -11,9 +11,9 @@ namespace PHPUnit\Util;
 
 use const PHP_MAJOR_VERSION;
 use const PHP_MINOR_VERSION;
+use function array_keys;
 use function array_reverse;
 use function array_shift;
-use function assert;
 use function defined;
 use function get_defined_constants;
 use function get_included_files;
@@ -25,24 +25,21 @@ use function is_scalar;
 use function preg_match;
 use function serialize;
 use function sprintf;
-use function str_ends_with;
-use function str_starts_with;
+use function strpos;
 use function strtr;
+use function substr;
 use function var_export;
 use Closure;
-use Throwable;
 
 /**
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
- *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class GlobalState
+final class GlobalState
 {
     /**
-     * @var non-empty-list<non-empty-string>
+     * @var string[]
      */
-    private const array SUPER_GLOBAL_ARRAYS = [
+    private const SUPER_GLOBAL_ARRAYS = [
         '_ENV',
         '_POST',
         '_GET',
@@ -53,27 +50,9 @@ final readonly class GlobalState
     ];
 
     /**
-     * Keys in $_SERVER that are populated by the SAPI in the child process
-     * and must therefore not be preserved from the parent process.
-     *
-     * @var non-empty-list<non-empty-string>
+     * @psalm-var array<string, array<string, true>>
      */
-    private const array SAPI_SERVER_KEYS = [
-        'PHP_SELF',
-        'SCRIPT_NAME',
-        'SCRIPT_FILENAME',
-        'PATH_TRANSLATED',
-        'DOCUMENT_ROOT',
-        'REQUEST_TIME',
-        'REQUEST_TIME_FLOAT',
-        'argv',
-        'argc',
-    ];
-
-    /**
-     * @var non-empty-array<non-empty-string, non-empty-array<non-empty-string, true>>
-     */
-    private const array DEPRECATED_INI_SETTINGS = [
+    private const DEPRECATED_INI_SETTINGS = [
         '7.3' => [
             'iconv.input_encoding'       => true,
             'iconv.output_encoding'      => true,
@@ -188,7 +167,7 @@ final readonly class GlobalState
     }
 
     /**
-     * @param list<string> $files
+     * @param string[] $files
      *
      * @throws Exception
      */
@@ -199,35 +178,29 @@ final readonly class GlobalState
         $result      = '';
 
         if (defined('__PHPUNIT_PHAR__')) {
-            // @codeCoverageIgnoreStart
             $prefix = 'phar://' . __PHPUNIT_PHAR__ . '/';
-            // @codeCoverageIgnoreEnd
         }
 
         // Do not process bootstrap script
         array_shift($files);
 
         // If bootstrap script was a Composer bin proxy, skip the second entry as well
-        if (str_ends_with(strtr($files[0], '\\', '/'), '/phpunit/phpunit/phpunit')) {
-            // @codeCoverageIgnoreStart
+        if (substr(strtr($files[0], '\\', '/'), -24) === '/phpunit/phpunit/phpunit') {
             array_shift($files);
-            // @codeCoverageIgnoreEnd
         }
 
         foreach (array_reverse($files) as $file) {
-            if (isset($GLOBALS['__PHPUNIT_ISOLATION_EXCLUDE_LIST']) &&
-                is_array($GLOBALS['__PHPUNIT_ISOLATION_EXCLUDE_LIST']) &&
-                $GLOBALS['__PHPUNIT_ISOLATION_EXCLUDE_LIST'] !== [] &&
+            if (!empty($GLOBALS['__PHPUNIT_ISOLATION_EXCLUDE_LIST']) &&
                 in_array($file, $GLOBALS['__PHPUNIT_ISOLATION_EXCLUDE_LIST'], true)) {
                 continue;
             }
 
-            if ($prefix !== false && str_starts_with($file, $prefix)) {
+            if ($prefix !== false && strpos($file, $prefix) === 0) {
                 continue;
             }
 
             // Skip virtual file system protocols
-            if (preg_match('/^(vfs|phpvfs[a-z0-9]+):/', $file) > 0) {
+            if (preg_match('/^(vfs|phpvfs[a-z0-9]+):/', $file)) {
                 continue;
             }
 
@@ -243,11 +216,7 @@ final readonly class GlobalState
     {
         $result = '';
 
-        $iniSettings = ini_get_all(null, false);
-
-        assert($iniSettings !== false);
-
-        foreach ($iniSettings as $key => $value) {
+        foreach (ini_get_all(null, false) as $key => $value) {
             if (self::isIniSettingDeprecated($key)) {
                 continue;
             }
@@ -281,36 +250,23 @@ final readonly class GlobalState
         return $result;
     }
 
-    public static function exportGlobals(): GlobalStateResult
+    public static function getGlobalsAsString(): string
     {
-        $result         = '';
-        $skippedGlobals = [];
+        $result = '';
 
         foreach (self::SUPER_GLOBAL_ARRAYS as $superGlobalArray) {
             if (isset($GLOBALS[$superGlobalArray]) && is_array($GLOBALS[$superGlobalArray])) {
-                foreach ($GLOBALS[$superGlobalArray] as $key => $value) {
-                    if ($superGlobalArray === '_SERVER' && in_array($key, self::SAPI_SERVER_KEYS, true)) {
+                foreach (array_keys($GLOBALS[$superGlobalArray]) as $key) {
+                    if ($GLOBALS[$superGlobalArray][$key] instanceof Closure) {
                         continue;
                     }
 
-                    $name = sprintf('$GLOBALS[\'%s\'][\'%s\']', $superGlobalArray, $key);
-
-                    if ($value instanceof Closure) {
-                        $skippedGlobals[] = ['name' => $name, 'reason' => 'is a Closure'];
-
-                        continue;
-                    }
-
-                    try {
-                        $result .= sprintf(
-                            '$GLOBALS[\'%s\'][\'%s\'] = %s;' . "\n",
-                            $superGlobalArray,
-                            $key,
-                            self::exportVariable($GLOBALS[$superGlobalArray][$key]),
-                        );
-                    } catch (Throwable) {
-                        $skippedGlobals[] = ['name' => $name, 'reason' => 'is not serializable'];
-                    }
+                    $result .= sprintf(
+                        '$GLOBALS[\'%s\'][\'%s\'] = %s;' . "\n",
+                        $superGlobalArray,
+                        $key,
+                        self::exportVariable($GLOBALS[$superGlobalArray][$key]),
+                    );
                 }
             }
         }
@@ -318,34 +274,20 @@ final readonly class GlobalState
         $excludeList   = self::SUPER_GLOBAL_ARRAYS;
         $excludeList[] = 'GLOBALS';
 
-        foreach ($GLOBALS as $key => $value) {
-            if (in_array($key, $excludeList, true)) {
-                continue;
-            }
-
-            $name = sprintf('$GLOBALS[\'%s\']', $key);
-
-            if ($value instanceof Closure) {
-                $skippedGlobals[] = ['name' => $name, 'reason' => 'is a Closure'];
-
-                continue;
-            }
-
-            try {
+        foreach (array_keys($GLOBALS) as $key) {
+            if (!$GLOBALS[$key] instanceof Closure && !in_array($key, $excludeList, true)) {
                 $result .= sprintf(
                     '$GLOBALS[\'%s\'] = %s;' . "\n",
                     $key,
-                    self::exportVariable($value),
+                    self::exportVariable($GLOBALS[$key]),
                 );
-            } catch (Throwable) {
-                $skippedGlobals[] = ['name' => $name, 'reason' => 'is not serializable'];
             }
         }
 
-        return new GlobalStateResult($result, $skippedGlobals);
+        return $result;
     }
 
-    private static function exportVariable(mixed $variable): string
+    private static function exportVariable($variable): string
     {
         if (is_scalar($variable) || $variable === null ||
             (is_array($variable) && self::arrayOnlyContainsScalars($variable))) {
@@ -355,9 +297,6 @@ final readonly class GlobalState
         return 'unserialize(' . var_export(serialize($variable), true) . ')';
     }
 
-    /**
-     * @param array<mixed> $array
-     */
     private static function arrayOnlyContainsScalars(array $array): bool
     {
         $result = true;

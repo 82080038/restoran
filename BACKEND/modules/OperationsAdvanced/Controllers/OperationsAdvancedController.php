@@ -211,7 +211,7 @@ class OperationsAdvancedController
             $request = (new \AuthMiddleware())->handle($request);
             $productId = $request['params']['product_id'] ?? $request['query']['product_id'] ?? null;
             $result = $this->service->getAllergenInfo($request['tenant_id'], $productId);
-            return Response::success($result, 'Allergen info retrieved');
+            return Response::success($result ?: [], 'Allergen info retrieved');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
     }
 

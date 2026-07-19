@@ -9,19 +9,20 @@
  */
 namespace SebastianBergmann\Type;
 
-use function class_exists;
-use function interface_exists;
 use function is_subclass_of;
 use function strcasecmp;
-use ReflectionClass;
 
-/**
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for this library
- */
 final class ObjectType extends Type
 {
-    private TypeName $className;
-    private bool $allowsNull;
+    /**
+     * @var TypeName
+     */
+    private $className;
+
+    /**
+     * @var bool
+     */
+    private $allowsNull;
 
     public function __construct(TypeName $className, bool $allowsNull)
     {
@@ -36,14 +37,11 @@ final class ObjectType extends Type
         }
 
         if ($other instanceof self) {
-            $thisName  = $this->canonicalClassName($this->className->qualifiedName());
-            $otherName = $this->canonicalClassName($other->className->qualifiedName());
-
-            if (strcasecmp($thisName, $otherName) === 0) {
+            if (0 === strcasecmp($this->className->qualifiedName(), $other->className->qualifiedName())) {
                 return true;
             }
 
-            if (is_subclass_of($otherName, $thisName, true)) {
+            if (is_subclass_of($other->className->qualifiedName(), $this->className->qualifiedName(), true)) {
                 return true;
             }
         }
@@ -51,9 +49,6 @@ final class ObjectType extends Type
         return false;
     }
 
-    /**
-     * @return non-empty-string
-     */
     public function name(): string
     {
         return $this->className->qualifiedName();
@@ -69,22 +64,11 @@ final class ObjectType extends Type
         return $this->className;
     }
 
+    /**
+     * @psalm-assert-if-true ObjectType $this
+     */
     public function isObject(): bool
     {
         return true;
-    }
-
-    /**
-     * @param non-empty-string $name
-     *
-     * @return non-empty-string
-     */
-    private function canonicalClassName(string $name): string
-    {
-        if (class_exists($name) || interface_exists($name)) {
-            return (new ReflectionClass($name))->getName();
-        }
-
-        return $name;
     }
 }

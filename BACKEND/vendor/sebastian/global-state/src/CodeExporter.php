@@ -16,6 +16,9 @@ use function serialize;
 use function sprintf;
 use function var_export;
 
+/**
+ * Exports parts of a Snapshot as PHP code.
+ */
 final class CodeExporter
 {
     public function constants(Snapshot $snapshot): string
@@ -24,10 +27,10 @@ final class CodeExporter
 
         foreach ($snapshot->constants() as $name => $value) {
             $result .= sprintf(
-                'if (!defined(%s)) define(%s, %s);' . "\n",
-                $this->exportVariable($name),
-                $this->exportVariable($name),
-                $this->exportVariable($value),
+                'if (!defined(\'%s\')) define(\'%s\', %s);' . "\n",
+                $name,
+                $name,
+                $this->exportVariable($value)
             );
         }
 
@@ -53,7 +56,7 @@ EOT;
             $result .= sprintf(
                 '$GLOBALS[%s] = %s;' . PHP_EOL,
                 $this->exportVariable($name),
-                $this->exportVariable($value),
+                $this->exportVariable($value)
             );
         }
 
@@ -68,14 +71,14 @@ EOT;
             $result .= sprintf(
                 '@ini_set(%s, %s);' . "\n",
                 $this->exportVariable($key),
-                $this->exportVariable($value),
+                $this->exportVariable($value)
             );
         }
 
         return $result;
     }
 
-    private function exportVariable(mixed $variable): string
+    private function exportVariable($variable): string
     {
         if (is_scalar($variable) || null === $variable ||
             (is_array($variable) && $this->arrayOnlyContainsScalars($variable))) {
@@ -85,9 +88,6 @@ EOT;
         return 'unserialize(' . var_export(serialize($variable), true) . ')';
     }
 
-    /**
-     * @param array<mixed> $array
-     */
     private function arrayOnlyContainsScalars(array $array): bool
     {
         $result = true;

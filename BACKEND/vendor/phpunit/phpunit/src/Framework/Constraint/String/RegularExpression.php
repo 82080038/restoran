@@ -9,17 +9,18 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
-use function preg_last_error_msg;
 use function preg_match;
 use function sprintf;
-use PHPUnit\Framework\Exception as FrameworkException;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final class RegularExpression extends Constraint
+class RegularExpression extends Constraint
 {
-    private readonly string $pattern;
+    /**
+     * @var string
+     */
+    private $pattern;
 
     public function __construct(string $pattern)
     {
@@ -41,21 +42,10 @@ final class RegularExpression extends Constraint
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
      *
-     * @throws FrameworkException
+     * @param mixed $other value or object to evaluate
      */
-    protected function matches(mixed $other): bool
+    protected function matches($other): bool
     {
-        $matches = @preg_match($this->pattern, $other);
-
-        if ($matches === false) {
-            throw new FrameworkException(
-                sprintf(
-                    'Regular expression cannot be matched: %s',
-                    preg_last_error_msg(),
-                ),
-            );
-        }
-
-        return $matches > 0;
+        return preg_match($this->pattern, $other) > 0;
     }
 }

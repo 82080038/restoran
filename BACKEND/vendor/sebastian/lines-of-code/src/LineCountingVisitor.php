@@ -11,7 +11,6 @@ namespace SebastianBergmann\LinesOfCode;
 
 use function array_merge;
 use function array_unique;
-use function assert;
 use function count;
 use PhpParser\Comment;
 use PhpParser\Node;
@@ -21,62 +20,49 @@ use PhpParser\NodeVisitorAbstract;
 final class LineCountingVisitor extends NodeVisitorAbstract
 {
     /**
-     * @var non-negative-int
+     * @var int
      */
-    private readonly int $linesOfCode;
+    private $linesOfCode;
 
     /**
      * @var Comment[]
      */
-    private array $comments = [];
+    private $comments = [];
 
     /**
      * @var int[]
      */
-    private array $linesWithStatements = [];
+    private $linesWithStatements = [];
 
-    /**
-     * @param non-negative-int $linesOfCode
-     */
     public function __construct(int $linesOfCode)
     {
         $this->linesOfCode = $linesOfCode;
     }
 
-    public function enterNode(Node $node): null
+    public function enterNode(Node $node): void
     {
         $this->comments = array_merge($this->comments, $node->getComments());
 
         if (!$node instanceof Expr) {
-            return null;
+            return;
         }
 
         $this->linesWithStatements[] = $node->getStartLine();
-
-        return null;
     }
 
     public function result(): LinesOfCode
     {
-        $commentLines = [];
+        $commentLinesOfCode = 0;
 
         foreach ($this->comments() as $comment) {
-            for ($line = $comment->getStartLine(); $line <= $comment->getEndLine(); $line++) {
-                $commentLines[$line] = true;
-            }
+            $commentLinesOfCode += ($comment->getEndLine() - $comment->getStartLine() + 1);
         }
-
-        $commentLinesOfCode    = count($commentLines);
-        $nonCommentLinesOfCode = $this->linesOfCode - $commentLinesOfCode;
-        $logicalLinesOfCode    = count(array_unique($this->linesWithStatements));
-
-        assert($nonCommentLinesOfCode >= 0);
 
         return new LinesOfCode(
             $this->linesOfCode,
             $commentLinesOfCode,
-            $nonCommentLinesOfCode,
-            $logicalLinesOfCode,
+            $this->linesOfCode - $commentLinesOfCode,
+            count(array_unique($this->linesWithStatements))
         );
     }
 

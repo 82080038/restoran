@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const API_BASE = 'http://localhost/restoran/api/v1';
+const API_BASE = 'http://localhost/restauran/api/v1';
 
 // Helper: Login and get JWT token
 async function getAuthToken(): Promise<string> {
@@ -94,18 +94,18 @@ test.describe('Tier 1-4 API Endpoint Tests', () => {
   testEndpoint('GET /venue/memberships', '/venue/memberships');
   testEndpoint('GET /venue/occupancy', '/venue/occupancy');
   testEndpoint('GET /venue/holds', '/venue/holds');
-  testEndpoint('GET /operations/predictions', '/operations/predictions');
+  testEndpoint('GET /operations/predictions', '/operations/predictions?date_from=2026-01-01&date_to=2026-12-31');
   testEndpoint('GET /operations/throttling/check', '/operations/throttling/check');
   testEndpoint('GET /operations/booking-sync/status', '/operations/booking-sync/status');
-  testEndpoint('GET /operations/production-plans', '/operations/production-plans');
-  testEndpoint('GET /operations/service-speed/report', '/operations/service-speed/report');
+  testEndpoint('GET /operations/production-plans', '/operations/production-plans?date=2026-07-19');
+  testEndpoint('GET /operations/service-speed/report', '/operations/service-speed/report?date_from=2026-01-01&date_to=2026-12-31');
 
   // ==================== TIER 4 ====================
   testEndpoint('GET /misc/coat-check', '/misc/coat-check');
   testEndpoint('GET /misc/karaoke-scores/high', '/misc/karaoke-scores/high');
   testEndpoint('GET /misc/equipment', '/misc/equipment');
   testEndpoint('GET /misc/wines', '/misc/wines');
-  testEndpoint('GET /misc/waiter-button/stats', '/misc/waiter-button/stats');
+  testEndpoint('GET /misc/waiter-button/stats', '/misc/waiter-button/stats?date_from=2026-01-01&date_to=2026-12-31');
 
   // ==================== Auth Test ====================
   test('Endpoints without auth return 401 or error', async () => {

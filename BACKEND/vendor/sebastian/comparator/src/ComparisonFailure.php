@@ -14,74 +14,103 @@ use SebastianBergmann\Diff\Differ;
 use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 
 /**
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for sebastian/comparator
+ * Thrown when an assertion for string equality failed.
  */
-final class ComparisonFailure extends RuntimeException
+class ComparisonFailure extends RuntimeException
 {
-    private mixed $expected;
-    private mixed $actual;
-    private string $expectedAsString;
-    private string $actualAsString;
+    /**
+     * Expected value of the retrieval which does not match $actual.
+     *
+     * @var mixed
+     */
+    protected $expected;
 
-    public function __construct(mixed $expected, mixed $actual, string $expectedAsString, string $actualAsString, string $message = '')
+    /**
+     * Actually retrieved value which does not match $expected.
+     *
+     * @var mixed
+     */
+    protected $actual;
+
+    /**
+     * The string representation of the expected value.
+     *
+     * @var string
+     */
+    protected $expectedAsString;
+
+    /**
+     * The string representation of the actual value.
+     *
+     * @var string
+     */
+    protected $actualAsString;
+
+    /**
+     * @var bool
+     */
+    protected $identical;
+
+    /**
+     * Optional message which is placed in front of the first line
+     * returned by toString().
+     *
+     * @var string
+     */
+    protected $message;
+
+    /**
+     * Initialises with the expected value and the actual value.
+     *
+     * @param mixed  $expected         expected value retrieved
+     * @param mixed  $actual           actual value retrieved
+     * @param string $expectedAsString
+     * @param string $actualAsString
+     * @param bool   $identical
+     * @param string $message          a string which is prefixed on all returned lines
+     *                                 in the difference output
+     */
+    public function __construct($expected, $actual, $expectedAsString, $actualAsString, $identical = false, $message = '')
     {
-        parent::__construct($message);
-
         $this->expected         = $expected;
         $this->actual           = $actual;
         $this->expectedAsString = $expectedAsString;
         $this->actualAsString   = $actualAsString;
+        $this->message          = $message;
     }
 
-    /**
-     * @return array{expected: mixed, actual: mixed, expectedAsString: string, actualAsString: string, message: string}
-     */
-    public function __serialize(): array
-    {
-        return [
-            'expected'         => $this->expected,
-            'actual'           => $this->actual,
-            'expectedAsString' => $this->expectedAsString,
-            'actualAsString'   => $this->actualAsString,
-            'message'          => $this->message,
-        ];
-    }
-
-    /**
-     * @param array{expected: mixed, actual: mixed, expectedAsString: string, actualAsString: string, message: string} $data
-     */
-    public function __unserialize(array $data): void
-    {
-        $this->expected         = $data['expected'];
-        $this->actual           = $data['actual'];
-        $this->expectedAsString = $data['expectedAsString'];
-        $this->actualAsString   = $data['actualAsString'];
-        $this->message          = $data['message'];
-    }
-
-    public function getActual(): mixed
+    public function getActual()
     {
         return $this->actual;
     }
 
-    public function getExpected(): mixed
+    public function getExpected()
     {
         return $this->expected;
     }
 
-    public function getActualAsString(): string
+    /**
+     * @return string
+     */
+    public function getActualAsString()
     {
         return $this->actualAsString;
     }
 
-    public function getExpectedAsString(): string
+    /**
+     * @return string
+     */
+    public function getExpectedAsString()
     {
         return $this->expectedAsString;
     }
 
-    public function getDiff(): string
+    /**
+     * @return string
+     */
+    public function getDiff()
     {
-        if ($this->actualAsString === '' && $this->expectedAsString === '') {
+        if (!$this->actualAsString && !$this->expectedAsString) {
             return '';
         }
 
@@ -90,8 +119,11 @@ final class ComparisonFailure extends RuntimeException
         return $differ->diff($this->expectedAsString, $this->actualAsString);
     }
 
-    public function toString(): string
+    /**
+     * @return string
+     */
+    public function toString()
     {
-        return $this->getMessage() . $this->getDiff();
+        return $this->message . $this->getDiff();
     }
 }

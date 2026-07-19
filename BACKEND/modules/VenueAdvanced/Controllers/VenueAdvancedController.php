@@ -131,7 +131,7 @@ class VenueAdvancedController
         try {
             $request = (new \AuthMiddleware())->handle($request);
             $result = $this->service->getOccupancy($request['tenant_id'], $request['branch_id'] ?? null);
-            return Response::success($result, 'Occupancy retrieved');
+            return Response::success($result ?: [], 'Occupancy retrieved');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
     }
 
