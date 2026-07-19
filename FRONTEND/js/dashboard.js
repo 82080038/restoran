@@ -257,7 +257,8 @@ class Dashboard {
             reservations: 'Reservations',
             customers: 'Customers',
             reports: 'Reports',
-            settings: 'Settings'
+            settings: 'Settings',
+            'free-payment': 'Free Payment'
         };
         document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
 
@@ -293,6 +294,17 @@ class Dashboard {
             case 'customers':
                 await this.loadCustomersPage();
                 break;
+            case 'free-payment':
+                await this.loadFreePaymentPage();
+                break;
+        }
+    }
+
+    async loadFreePaymentPage() {
+        const container = document.getElementById('freePaymentContainer');
+        if (container && window.freePaymentManager) {
+            container.innerHTML = freePaymentManager.render();
+            freePaymentManager.loadTransferProofs();
         }
     }
 

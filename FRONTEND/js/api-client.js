@@ -1222,6 +1222,120 @@ class APIClient {
         });
     }
 
+    // === FREE PAYMENT (Zero-fee methods) ===
+
+    // -- Transfer Proof --
+    async uploadTransferProof(formData) {
+        const url = `${this.baseURL}/free-payment/transfer-proof/upload`;
+        const headers = {};
+        if (this.token) headers['Authorization'] = `Bearer ${this.token}`;
+        const resp = await fetch(url, { method: 'POST', headers, body: formData });
+        return resp.json();
+    }
+
+    async getTransferProofs(params = {}) {
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/free-payment/transfer-proof${queryString ? '?' + queryString : ''}`, {
+            method: 'GET', skipCache: true
+        });
+    }
+
+    async verifyTransferProof(proofId, action, rejectionReason = null) {
+        const body = { action };
+        if (rejectionReason) body.rejection_reason = rejectionReason;
+        return this.request(`/free-payment/transfer-proof/${proofId}/verify`, {
+            method: 'POST', body: JSON.stringify(body), skipCache: true
+        });
+    }
+
+    // -- QRIS Static --
+    async getQrisConfig(branchId = null) {
+        const params = {};
+        if (branchId) params.branch_id = branchId;
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/free-payment/qris${queryString ? '?' + queryString : ''}`, {
+            method: 'GET', skipCache: true
+        });
+    }
+
+    async saveQrisConfig(configData) {
+        return this.request('/free-payment/qris', {
+            method: 'POST', body: JSON.stringify(configData), skipCache: true
+        });
+    }
+
+    async generateQrisPayment(amount, orderId = null) {
+        const params = { amount };
+        if (orderId) params.order_id = orderId;
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/free-payment/qris/generate?${queryString}`, {
+            method: 'GET', skipCache: true
+        });
+    }
+
+    async confirmQrisPayment(paymentId, referenceNumber = null) {
+        const body = { payment_id: paymentId };
+        if (referenceNumber) body.reference_number = referenceNumber;
+        return this.request('/free-payment/qris/confirm', {
+            method: 'POST', body: JSON.stringify(body), skipCache: true
+        });
+    }
+
+    // -- Internal Wallet --
+    async getWallet(customerId) {
+        return this.request(`/free-payment/wallet?customer_id=${customerId}`, {
+            method: 'GET', skipCache: true
+        });
+    }
+
+    async requestWalletTopup(topupData, proofFile = null) {
+        if (proofFile) {
+            const url = `${this.baseURL}/free-payment/wallet/topup`;
+            const formData = new FormData();
+            Object.keys(topupData).forEach(k => formData.append(k, topupData[k]));
+            formData.append('file', proofFile);
+            const headers = {};
+            if (this.token) headers['Authorization'] = `Bearer ${this.token}`;
+            const resp = await fetch(url, { method: 'POST', headers, body: formData });
+            return resp.json();
+        }
+        return this.request('/free-payment/wallet/topup', {
+            method: 'POST', body: JSON.stringify(topupData), skipCache: true
+        });
+    }
+
+    async verifyWalletTopup(topupId, action, rejectionReason = null) {
+        const body = { action };
+        if (rejectionReason) body.rejection_reason = rejectionReason;
+        return this.request(`/free-payment/wallet/topup/${topupId}/verify`, {
+            method: 'POST', body: JSON.stringify(body), skipCache: true
+        });
+    }
+
+    async payWithWallet(customerId, orderId, amount) {
+        return this.request('/free-payment/wallet/pay', {
+            method: 'POST',
+            body: JSON.stringify({ customer_id: customerId, order_id: orderId, amount }),
+            skipCache: true
+        });
+    }
+
+    async getWalletTransactions(customerId, params = {}) {
+        params.customer_id = customerId;
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/free-payment/wallet/transactions?${queryString}`, {
+            method: 'GET', skipCache: true
+        });
+    }
+
+    async getTopupRequests(status = 'pending', params = {}) {
+        params.status = status;
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/free-payment/wallet/topups?${queryString}`, {
+            method: 'GET', skipCache: true
+        });
+    }
+
     // SSE Notification Stream
     createNotificationStream() {
         const url = `${this.baseURL}/notifications/stream`;

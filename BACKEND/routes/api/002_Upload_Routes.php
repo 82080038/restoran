@@ -7,6 +7,15 @@ $router->addRoute('POST', '/api/v1/upload/image', function($request) use ($uploa
 $router->addRoute('DELETE', '/api/v1/upload/image', function($request) use ($uploadController) {
     return $uploadController->deleteImage($request);
 });
+$router->addRoute('POST', '/api/v1/upload/images', function($request) use ($uploadController) {
+    return $uploadController->uploadMultiple($request);
+});
+$router->addRoute('POST', '/api/v1/upload/product-image', function($request) use ($uploadController) {
+    return $uploadController->uploadProductImage($request);
+});
+$router->addRoute('GET', '/api/v1/upload/images', function($request) use ($uploadController) {
+    return $uploadController->listImages($request);
+});
 
 // Menu Routes (with authentication and permission check)
 $router->addRoute('GET', '/api/v1/menu/categories', withAuthAndPermission(

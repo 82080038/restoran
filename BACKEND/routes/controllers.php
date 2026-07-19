@@ -470,6 +470,11 @@ if (!class_exists('LoyaltyController')) {
     require_once __DIR__ . '/../modules/Loyalty/Controllers/LoyaltyController.php';
 }
 
+// QR Ordering Module
+if (!class_exists('QROrderingController')) {
+    require_once __DIR__ . '/../modules/QROrdering/Controllers/QROrderingController.php';
+}
+
 // Delivery Integration Module
 if (!class_exists('DeliveryIntegrationController')) {
     require_once __DIR__ . '/../modules/Integration/Controllers/DeliveryIntegrationController.php';

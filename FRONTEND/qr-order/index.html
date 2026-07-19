@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QR Order - EBP Restaurant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; margin: 0; padding: 0; }
+        .qr-header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .qr-header h4 { margin: 0; font-weight: 600; }
+        .qr-header .table-info { font-size: 14px; opacity: 0.9; margin-top: 4px; }
+        .category-tabs { display: flex; overflow-x: auto; background: white; padding: 10px; gap: 8px; position: sticky; top: 72px; z-index: 99; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        .category-tab { padding: 8px 16px; border-radius: 20px; background: #f0f0f0; color: #333; font-size: 14px; white-space: nowrap; cursor: pointer; border: none; transition: all 0.2s; }
+        .category-tab.active { background: #667eea; color: white; }
+        .menu-item { background: white; border-radius: 12px; margin: 10px; padding: 12px; display: flex; gap: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+        .menu-item img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #f0f0f0; }
+        .menu-item .item-info { flex-grow: 1; }
+        .menu-item .item-name { font-weight: 600; font-size: 15px; color: #2c3e50; margin-bottom: 2px; }
+        .menu-item .item-desc { font-size: 12px; color: #7f8c8d; margin-bottom: 6px; line-height: 1.3; }
+        .menu-item .item-price { font-weight: 700; color: #27ae60; font-size: 16px; }
+        .menu-item .item-actions { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+        .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: none; background: #667eea; color: white; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .qty-btn:disabled { background: #ccc; }
+        .qty-display { min-width: 24px; text-align: center; font-weight: 600; }
+        .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 12px 20px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; z-index: 100; transform: translateY(100%); transition: transform 0.3s; }
+        .cart-bar.show { transform: translateY(0); }
+        .cart-bar .cart-info { font-size: 14px; }
+        .cart-bar .cart-total { font-weight: 700; color: #27ae60; font-size: 18px; }
+        .cart-bar .cart-btn { background: #667eea; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .cart-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; }
+        .cart-modal.show { display: flex; align-items: flex-end; }
+        .cart-modal-content { background: white; width: 100%; max-height: 80vh; border-radius: 16px 16px 0 0; overflow-y: auto; padding: 20px; }
+        .cart-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .order-success { text-align: center; padding: 40px 20px; }
+        .order-success .success-icon { font-size: 60px; color: #27ae60; margin-bottom: 20px; }
+        .order-status-badge { padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-preparing { background: #cce5ff; color: #004085; }
+        .status-ready { background: #d4edda; color: #155724; }
+        .status-served { background: #e2e3e5; color: #383d41; }
+        .loading-spinner { text-align: center; padding: 40px; color: #999; }
+        .error-page { text-align: center; padding: 60px 20px; color: #e74c3c; }
+        .form-input { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; margin-bottom: 12px; }
+        .btn-primary { background: #667eea; border: none; }
+        .btn-primary:hover { background: #5568d3; }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <!-- Loading State -->
+    <div id="loading" class="loading-spinner">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-3">Loading menu...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error" class="error-page" style="display:none">
+        <i class="fas fa-exclamation-circle" style="font-size:48px"></i>
+        <h4 class="mt-3" id="error-title">Something went wrong</h4>
+        <p id="error-message"></p>
+    </div>
+
+    <!-- Menu View -->
+    <div id="menu-view" style="display:none">
+        <div class="qr-header">
+            <h4 id="restaurant-name">Restaurant</h4>
+            <div class="table-info"><i class="fas fa-utensils"></i> <span id="table-info">Table - </span></div>
+        </div>
+
+        <div class="category-tabs" id="category-tabs"></div>
+        <div id="menu-list"></div>
+
+        <div class="cart-bar" id="cart-bar">
+            <div class="cart-info">
+                <div><span id="cart-count">0</span> items</div>
+                <div class="cart-total" id="cart-total">Rp 0</div>
+            </div>
+            <button class="cart-btn" onclick="showCart()">View Cart</button>
+        </div>
+
+        <!-- Cart Modal -->
+        <div class="cart-modal" id="cart-modal">
+            <div class="cart-modal-content">
+                <div class="cart-modal-header">
+                    <h5><i class="fas fa-shopping-cart"></i> Your Order</h5>
+                    <button type="button" class="btn-close" onclick="hideCart()"></button>
+                </div>
+                <div id="cart-items"></div>
+                <div class="mt-3">
+                    <input type="text" class="form-input" id="customer-name" placeholder="Your name (optional)">
+                    <input type="tel" class="form-input" id="customer-phone" placeholder="Phone number (optional)">
+                    <textarea class="form-input" id="order-notes" placeholder="Special requests (optional)" rows="2"></textarea>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div>
+                        <strong>Total:</strong>
+                        <span class="cart-total" id="cart-total-modal">Rp 0</span>
+                    </div>
+                    <button class="btn btn-primary px-4" onclick="placeOrder()">
+                        <i class="fas fa-paper-plane"></i> Place Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Success View -->
+    <div id="success-view" style="display:none">
+        <div class="order-success">
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h3>Order Placed!</h3>
+            <p>Order #: <strong id="success-order-number"></strong></p>
+            <p id="success-total"></p>
+            <div class="mt-3">
+                <span class="order-status-badge status-pending" id="success-status">Pending</span>
+            </div>
+            <p class="mt-3 text-muted">Your order has been sent to the kitchen. We'll notify you when it's ready!</p>
+            <button class="btn btn-primary mt-3" onclick="trackOrder()">
+                <i class="fas fa-sync"></i> Track Order
+            </button>
+        </div>
+    </div>
+
+    <!-- Order Tracking View -->
+    <div id="tracking-view" style="display:none">
+        <div class="qr-header">
+            <h4>Order Status</h4>
+        </div>
+        <div class="p-3">
+            <div class="menu-item" style="display:block">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 id="track-order-number"></h5>
+                    <span class="order-status-badge" id="track-status"></span>
+                </div>
+                <div id="track-items"></div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <strong>Total:</strong>
+                    <strong id="track-total" style="color:#27ae60"></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_BASE = window.location.origin + '/restoran/BACKEND/public/api/v1';
+    const urlParams = new URLSearchParams(window.location.search);
+    const qrId = urlParams.get('qr') || '';
+    const tableId = urlParams.get('table') || '';
+    const tenantId = urlParams.get('tenant') || '1';
+
+    let menuData = null;
+    let cart = {};
+    let sessionToken = null;
+
+    // Format currency
+    function formatRupiah(amount) {
+        return 'Rp ' + new Intl.NumberFormat('id-ID').format(amount);
+    }
+
+    // Load menu on page load
+    async function init() {
+        if (!qrId) {
+            showError('Invalid QR Code', 'No QR code identifier found. Please scan the QR code again.');
+            return;
+        }
+
+        try {
+            const resp = await fetch(`${API_BASE}/qr-ordering/menu?qr=${qrId}`);
+            const data = await resp.json();
+
+            if (!data.success) {
+                showError('Menu Unavailable', data.message || 'Failed to load menu');
+                return;
+            }
+
+            menuData = data.data;
+            renderMenu();
+        } catch (err) {
+            showError('Connection Error', 'Unable to connect to the server. Please check your internet connection.');
+        }
+    }
+
+    function renderMenu() {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('menu-view').style.display = 'block';
+
+        // Set header
+        document.getElementById('restaurant-name').textContent = menuData.restaurant?.tenant_name || 'Restaurant';
+        document.getElementById('table-info').textContent = `Table ${menuData.qr_info.table_number || '-'}`;
+
+        // Render category tabs
+        const tabsContainer = document.getElementById('category-tabs');
+        tabsContainer.innerHTML = '';
+        menuData.menu.forEach((cat, idx) => {
+            const tab = document.createElement('button');
+            tab.className = 'category-tab' + (idx === 0 ? ' active' : '');
+            tab.textContent = cat.category_name;
+            tab.onclick = () => {
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(cat.category_id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+            };
+            tabsContainer.appendChild(tab);
+        });
+
+        // Render menu items
+        const menuList = document.getElementById('menu-list');
+        menuList.innerHTML = '';
+        menuData.menu.forEach(cat => {
+            const catSection = document.createElement('div');
+            catSection.id = cat.category_id;
+            catSection.innerHTML = `<h6 style="padding:15px 15px 5px;margin:0;color:#2c3e50">${cat.category_name}</h6>`;
+            menuList.appendChild(catSection);
+
+            cat.products.forEach(product => {
+                const item = document.createElement('div');
+                item.className = 'menu-item';
+                const img = product.image_url
+                    ? `<img src="${product.image_url}" alt="${product.product_name}">`
+                    : `<div style="width:80px;height:80px;border-radius:8px;background:#f0f0f0;display:flex;align-items:center;justify-content:center"><i class="fas fa-utensils" style="color:#ccc;font-size:24px"></i></div>`;
+
+                item.innerHTML = `
+                    ${img}
+                    <div class="item-info">
+                        <div class="item-name">${product.product_name}</div>
+                        <div class="item-desc">${product.description || ''}</div>
+                        <div class="item-price">${formatRupiah(product.price)}</div>
+                        <div class="item-actions">
+                            <button class="qty-btn" onclick="updateQty(${product.product_id}, -1)" id="minus-${product.product_id}" disabled>-</button>
+                            <span class="qty-display" id="qty-${product.product_id}">0</span>
+                            <button class="qty-btn" onclick="updateQty(${product.product_id}, 1)">+</button>
+                        </div>
+                    </div>
+                `;
+                menuList.appendChild(item);
+            });
+        });
+    }
+
+    function updateQty(productId, delta) {
+        const currentQty = cart[productId] || 0;
+        const newQty = Math.max(0, currentQty + delta);
+        cart[productId] = newQty;
+
+        document.getElementById(`qty-${productId}`).textContent = newQty;
+        document.getElementById(`minus-${productId}`).disabled = newQty === 0;
+
+        updateCartBar();
+    }
+
+    function updateCartBar() {
+        let count = 0;
+        let total = 0;
+
+        Object.entries(cart).forEach(([productId, qty]) => {
+            if (qty > 0) {
+                count += qty;
+                const product = findProduct(parseInt(productId));
+                if (product) total += product.price * qty;
+            }
+        });
+
+        const bar = document.getElementById('cart-bar');
+        if (count > 0) {
+            bar.classList.add('show');
+            document.getElementById('cart-count').textContent = count;
+            document.getElementById('cart-total').textContent = formatRupiah(total);
+        } else {
+            bar.classList.remove('show');
+        }
+    }
+
+    function findProduct(productId) {
+        for (const cat of menuData.menu) {
+            const product = cat.products.find(p => p.product_id == productId);
+            if (product) return product;
+        }
+        return null;
+    }
+
+    function showCart() {
+        const cartItems = document.getElementById('cart-items');
+        cartItems.innerHTML = '';
+        let total = 0;
+
+        Object.entries(cart).forEach(([productId, qty]) => {
+            if (qty > 0) {
+                const product = findProduct(parseInt(productId));
+                if (product) {
+                    const subtotal = product.price * qty;
+                    total += subtotal;
+                    cartItems.innerHTML += `
+                        <div class="cart-item">
+                            <div>
+                                <div style="font-weight:600">${product.product_name}</div>
+                                <div style="font-size:12px;color:#999">${formatRupiah(product.price)} x ${qty}</div>
+                            </div>
+                            <div style="font-weight:600;color:#27ae60">${formatRupiah(subtotal)}</div>
+                        </div>
+                    `;
+                }
+            }
+        });
+
+        document.getElementById('cart-total-modal').textContent = formatRupiah(total);
+        document.getElementById('cart-modal').classList.add('show');
+    }
+
+    function hideCart() {
+        document.getElementById('cart-modal').classList.remove('show');
+    }
+
+    async function placeOrder() {
+        const items = [];
+        Object.entries(cart).forEach(([productId, qty]) => {
+            if (qty > 0) {
+                items.push({ product_id: parseInt(productId), quantity: qty });
+            }
+        });
+
+        if (items.length === 0) return;
+
+        const body = {
+            qr_id: qrId,
+            table_id: parseInt(tableId),
+            tenant_id: parseInt(tenantId),
+            items: items,
+            customer_name: document.getElementById('customer-name').value || 'QR Guest',
+            customer_phone: document.getElementById('customer-phone').value || null,
+            notes: document.getElementById('order-notes').value || '',
+            order_type: 'dine_in'
+        };
+
+        try {
+            const resp = await fetch(`${API_BASE}/qr-ordering/order`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await resp.json();
+
+            if (data.success) {
+                sessionToken = data.data.session_token;
+                document.getElementById('menu-view').style.display = 'none';
+                document.getElementById('success-view').style.display = 'block';
+                document.getElementById('success-order-number').textContent = data.data.order_number;
+                document.getElementById('success-total').textContent = formatRupiah(data.data.total_amount);
+            } else {
+                alert(data.message || 'Failed to place order');
+            }
+        } catch (err) {
+            alert('Connection error. Please try again.');
+        }
+    }
+
+    async function trackOrder() {
+        if (!sessionToken) return;
+
+        try {
+            const resp = await fetch(`${API_BASE}/qr-ordering/order/status?session_token=${sessionToken}`);
+            const data = await resp.json();
+
+            if (data.success) {
+                const order = data.data.order;
+                document.getElementById('success-view').style.display = 'none';
+                document.getElementById('tracking-view').style.display = 'block';
+
+                document.getElementById('track-order-number').textContent = `#${order.order_number}`;
+
+                const statusBadge = document.getElementById('track-status');
+                statusBadge.textContent = order.status.charAt(0).toUpperCase() + order.status.slice(1);
+                statusBadge.className = 'order-status-badge status-' + order.status;
+
+                const itemsHtml = order.items.map(item => `
+                    <div class="cart-item">
+                        <div>
+                            <div style="font-weight:600">${item.product_name}</div>
+                            <div style="font-size:12px;color:#999">${formatRupiah(item.unit_price)} x ${item.quantity}</div>
+                        </div>
+                        <div style="font-weight:600">${formatRupiah(item.subtotal)}</div>
+                    </div>
+                `).join('');
+                document.getElementById('track-items').innerHTML = itemsHtml;
+                document.getElementById('track-total').textContent = formatRupiah(order.total_amount);
+            }
+        } catch (err) {
+            alert('Failed to track order');
+        }
+    }
+
+    function showError(title, message) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error-title').textContent = title;
+        document.getElementById('error-message').textContent = message;
+    }
+
+    // Start
+    init();
+</script>
+</body>
+</html>

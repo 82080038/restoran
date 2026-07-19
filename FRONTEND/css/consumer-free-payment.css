@@ -1,0 +1,474 @@
+/* Consumer Free Payment UI */
+
+/* Wallet Card */
+.cfp-wallet-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    padding: 20px;
+    color: white;
+    margin: 15px 0;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.cfp-wallet-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.cfp-wallet-icon {
+    font-size: 2rem;
+}
+
+.cfp-wallet-title h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.cfp-wallet-number {
+    margin: 2px 0 0 0;
+    font-size: 0.75rem;
+    opacity: 0.8;
+}
+
+.cfp-wallet-balance {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+.cfp-balance-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 0.9rem;
+}
+
+.cfp-balance-row strong {
+    font-size: 1.1rem;
+}
+
+.cfp-available {
+    color: #4eff9f;
+}
+
+.cfp-wallet-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.cfp-wallet-recent h4 {
+    margin: 0 0 8px 0;
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+/* Transaction Items */
+.cfp-txn-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cfp-txn-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.cfp-txn-type {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.cfp-txn-date {
+    font-size: 0.7rem;
+    opacity: 0.7;
+}
+
+.cfp-txn-amount {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.cfp-txn-amount.credit {
+    color: #4eff9f;
+}
+
+.cfp-txn-amount.debit {
+    color: #ff9f4e;
+}
+
+/* Buttons */
+.cfp-btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.cfp-btn-topup {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    flex: 1;
+    justify-content: center;
+}
+
+.cfp-btn-topup:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.cfp-btn-history {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    flex: 1;
+    justify-content: center;
+}
+
+.cfp-btn-history:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.cfp-btn-submit {
+    background: #0d6efd;
+    color: white;
+    width: 100%;
+    justify-content: center;
+    padding: 12px;
+    font-size: 0.9rem;
+}
+
+.cfp-btn-submit:hover {
+    background: #0b5ed7;
+}
+
+/* Modal */
+.cfp-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 15px;
+}
+
+.cfp-modal {
+    background: white;
+    border-radius: 16px;
+    max-width: 450px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    color: #333;
+}
+
+.cfp-qris-modal {
+    max-width: 380px;
+}
+
+.cfp-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.cfp-modal-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.cfp-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    line-height: 1;
+}
+
+.cfp-modal-close:hover {
+    color: #333;
+}
+
+.cfp-modal-body {
+    padding: 20px;
+}
+
+/* Bank Info */
+.cfp-bank-info {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 12px;
+    margin: 10px 0 20px 0;
+}
+
+.cfp-bank-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 0.85rem;
+}
+
+.cfp-bank-row span {
+    color: #666;
+}
+
+.cfp-bank-row strong {
+    color: #333;
+}
+
+.cfp-help-text {
+    font-size: 0.8rem;
+    color: #888;
+    margin: 5px 0;
+}
+
+/* Forms */
+.cfp-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.cfp-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cfp-form-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #555;
+}
+
+.cfp-input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.cfp-input:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.1);
+}
+
+.cfp-file-input {
+    padding: 8px;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    font-size: 0.8rem;
+}
+
+/* QRIS Display */
+.cfp-qris-body {
+    text-align: center;
+}
+
+.cfp-qris-merchant {
+    margin-bottom: 10px;
+}
+
+.cfp-qris-merchant p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.cfp-qris-amount-display {
+    margin: 15px 0;
+}
+
+.cfp-qris-amount-display span {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.cfp-qris-amount-display strong {
+    font-size: 1.8rem;
+    color: #0d6efd;
+}
+
+.cfp-qris-code {
+    margin: 15px 0;
+}
+
+.cfp-qr-placeholder {
+    background: #f8f9fa;
+    border: 2px dashed #ddd;
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+}
+
+.cfp-qr-placeholder p {
+    margin: 5px 0;
+    font-size: 2rem;
+}
+
+.cfp-qr-help {
+    font-size: 0.75rem !important;
+    color: #888;
+    margin: 5px 0;
+}
+
+.cfp-qris-string {
+    margin: 15px 0;
+    text-align: left;
+}
+
+.cfp-qris-string label {
+    font-size: 0.75rem;
+    color: #888;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.cfp-qris-string textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-family: monospace;
+    resize: none;
+}
+
+.cfp-qris-info {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.cfp-qris-info-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    padding: 2px 0;
+}
+
+.cfp-qris-info-row span {
+    color: #666;
+}
+
+/* Payment Method Selector */
+.cfp-payment-methods {
+    padding: 15px;
+}
+
+.cfp-payment-methods h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.cfp-method-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cfp-method-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cfp-method-card:hover {
+    border-color: #0d6efd;
+    box-shadow: 0 2px 8px rgba(13, 110, 253, 0.1);
+}
+
+.cfp-method-icon {
+    font-size: 1.8rem;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f4ff;
+    border-radius: 10px;
+}
+
+.cfp-method-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.cfp-method-info strong {
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.cfp-method-info span {
+    font-size: 0.75rem;
+    color: #888;
+}
+
+.cfp-method-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 10px;
+    background: #d4edda;
+    color: #155724;
+    text-transform: uppercase;
+}
+
+.cfp-empty {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+}
+
+.cfp-wallet-error {
+    text-align: center;
+    color: #dc3545;
+    padding: 20px;
+    background: #f8d7da;
+    border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .cfp-wallet-actions {
+        flex-direction: column;
+    }
+
+    .cfp-modal {
+        border-radius: 12px;
+    }
+
+    .cfp-method-card {
+        padding: 12px;
+    }
+}
