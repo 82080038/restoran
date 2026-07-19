@@ -321,6 +321,7 @@ require_once __DIR__ . '/api/120_Operations_Advanced_Routes.php';
 require_once __DIR__ . '/api/121_Venue_Advanced_Routes.php';
 require_once __DIR__ . '/api/122_Tier3_Operations_Routes.php';
 require_once __DIR__ . '/api/123_Misc_Features_Routes.php';
+require_once __DIR__ . '/api/124_Gap_Features_Routes.php';
 
 // Dispatch the request
 $router->dispatch();
