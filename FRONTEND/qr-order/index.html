@@ -68,7 +68,7 @@
     <!-- Menu View -->
     <div id="menu-view" style="display:none">
         <div class="qr-header">
-            <h4 id="restaurant-name">Restaurant</h4>
+            <h4 id="restaurant-name">F&B Outlet</h4>
             <div class="table-info"><i class="fas fa-utensils"></i> <span id="table-info">Table - </span></div>
         </div>
 
@@ -192,7 +192,7 @@
         document.getElementById('menu-view').style.display = 'block';
 
         // Set header
-        document.getElementById('restaurant-name').textContent = menuData.restaurant?.tenant_name || 'Restaurant';
+        document.getElementById('restaurant-name').textContent = menuData.restaurant?.tenant_name || 'F&B Outlet';
         document.getElementById('table-info').textContent = `Table ${menuData.qr_info.table_number || '-'}`;
 
         // Render category tabs

@@ -56,7 +56,7 @@ class AuthManager {
             // Ignore logout API errors
         }
         this.clearAuthData();
-        window.location.href = '/index.html';
+        window.location.href = '../index.html';
     }
 
     setAuthData(token, user) {
@@ -283,7 +283,7 @@ class AuthManager {
 
     requireAuth() {
         if (!this.isAuthenticated()) {
-            window.location.href = 'login.html';
+            window.location.href = '../login.html';
             return false;
         }
         return true;
@@ -296,7 +296,7 @@ class AuthManager {
         
         if (!this.hasPermission(permission)) {
             alert('You do not have permission to access this page.');
-            window.location.href = 'login.html';
+            window.location.href = '../login.html';
             return false;
         }
         
@@ -310,7 +310,7 @@ class AuthManager {
         
         if (this.getUserRole() !== role && !this.isPlatformOwner()) {
             alert('You do not have the required role to access this page.');
-            window.location.href = 'login.html';
+            window.location.href = '../login.html';
             return false;
         }
         
@@ -332,7 +332,7 @@ class AuthManager {
         
         if (levelHierarchy[userLevel] < levelHierarchy[level]) {
             alert('You do not have the required access level to access this page.');
-            window.location.href = 'login.html';
+            window.location.href = '../login.html';
             return false;
         }
         

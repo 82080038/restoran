@@ -1,0 +1,78 @@
+/* Advanced Features Pages Styling */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 14px;
+}
+
+.data-table thead th {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #334155;
+}
+
+.data-table tbody td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.data-table tbody tr:hover {
+    background: #e0e7ff;
+}
+
+.no-data {
+    color: #64748b;
+    font-style: italic;
+    padding: 16px;
+    text-align: center;
+}
+
+.advanced-features-page h3 {
+    color: #1e293b;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 20px 0 8px 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.advanced-features-page h3:first-child {
+    margin-top: 0;
+}
+
+.advanced-features-page .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.advanced-features-page .stat-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    border-left: 4px solid #6366f1;
+}
+
+.advanced-features-page .stat-label {
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+}
+
+.advanced-features-page .stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 4px 0 0 0;
+}

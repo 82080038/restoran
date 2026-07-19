@@ -53,8 +53,7 @@ class Dashboard {
     }
 
     redirectToLogin() {
-        const currentPath = window.location.pathname;
-        window.location.href = 'login.html';
+        window.location.href = '../login.html';
     }
 
     loadUserInfo() {
@@ -258,7 +257,25 @@ class Dashboard {
             customers: 'Customers',
             reports: 'Reports',
             settings: 'Settings',
-            'free-payment': 'Free Payment'
+            'free-payment': 'Free Payment',
+            reconciliation: 'POS Reconciliation',
+            'beverage-variance': 'Beverage Variance',
+            'batch-expiry': 'Batch & Expiry',
+            settlements: 'Settlements',
+            profitability: 'Event Profitability',
+            proposals: 'Event Proposals',
+            karaoke: 'Karaoke',
+            'beach-club': 'Beach Club',
+            'sports-bar': 'Sports Bar',
+            'ops-advanced': 'Operations Advanced',
+            'dynamic-pricing': 'Dynamic Pricing',
+            membership: 'Membership',
+            occupancy: 'Occupancy',
+            predictions: 'AI Predictions',
+            'production-plans': 'Production Plans',
+            'coat-check': 'Coat Check',
+            equipment: 'Equipment',
+            wine: 'Wine List'
         };
         document.getElementById('pageTitle').textContent = titles[page] || 'Dashboard';
 
@@ -297,6 +314,74 @@ class Dashboard {
             case 'free-payment':
                 await this.loadFreePaymentPage();
                 break;
+            case 'reconciliation':
+                await this.loadAdvancedPage('reconciliation', 'reconciliationContainer', 'loadReconciliationPage');
+                break;
+            case 'beverage-variance':
+                await this.loadAdvancedPage('beverage-variance', 'beverageVarianceContainer', 'loadBeverageVariancePage');
+                break;
+            case 'batch-expiry':
+                await this.loadAdvancedPage('batch-expiry', 'batchExpiryContainer', 'loadBatchExpiryPage');
+                break;
+            case 'settlements':
+                await this.loadAdvancedPage('settlements', 'settlementsContainer', 'loadSettlementPage');
+                break;
+            case 'profitability':
+                await this.loadAdvancedPage('profitability', 'profitabilityContainer', 'loadProfitabilityPage');
+                break;
+            case 'proposals':
+                await this.loadAdvancedPage('proposals', 'proposalsContainer', 'loadProposalsPage');
+                break;
+            case 'karaoke':
+                await this.loadAdvancedPage('karaoke', 'karaokeContainer', 'loadKaraokePage');
+                break;
+            case 'beach-club':
+                await this.loadAdvancedPage('beach-club', 'beachClubContainer', 'loadBeachClubPage');
+                break;
+            case 'sports-bar':
+                await this.loadAdvancedPage('sports-bar', 'sportsBarContainer', 'loadSportsBarPage');
+                break;
+            case 'ops-advanced':
+                await this.loadAdvancedPage('ops-advanced', 'opsAdvancedContainer', 'loadOpsAdvancedPage');
+                break;
+            case 'dynamic-pricing':
+                await this.loadAdvancedPage('dynamic-pricing', 'dynamicPricingContainer', 'loadDynamicPricingPage');
+                break;
+            case 'membership':
+                await this.loadAdvancedPage('membership', 'membershipContainer', 'loadMembershipPage');
+                break;
+            case 'occupancy':
+                await this.loadAdvancedPage('occupancy', 'occupancyContainer', 'loadOccupancyPage');
+                break;
+            case 'predictions':
+                await this.loadAdvancedPage('predictions', 'predictionsContainer', 'loadPredictionsPage');
+                break;
+            case 'production-plans':
+                await this.loadAdvancedPage('production-plans', 'productionPlansContainer', 'loadProductionPlansPage');
+                break;
+            case 'coat-check':
+                await this.loadAdvancedPage('coat-check', 'coatCheckContainer', 'loadCoatCheckPage');
+                break;
+            case 'equipment':
+                await this.loadAdvancedPage('equipment', 'equipmentContainer', 'loadEquipmentPage');
+                break;
+            case 'wine':
+                await this.loadAdvancedPage('wine', 'wineContainer', 'loadWinePage');
+                break;
+        }
+    }
+
+    async loadAdvancedPage(page, containerId, method) {
+        const container = document.getElementById(containerId);
+        if (container && window.advancedFeaturesManager && typeof window.advancedFeaturesManager[method] === 'function') {
+            container.innerHTML = '<p class="no-data">Loading...</p>';
+            try {
+                const html = await window.advancedFeaturesManager[method]();
+                container.innerHTML = html;
+            } catch (e) {
+                container.innerHTML = '<p class="no-data">Error loading data</p>';
+                console.error('Advanced page error:', e);
+            }
         }
     }
 

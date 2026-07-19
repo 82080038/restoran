@@ -18,7 +18,8 @@ INSERT IGNORE INTO tenants (tenant_id, tenant_code, tenant_name, business_type, 
 (9, 'EBP_AIRP', 'EBP Airport Restaurant', 'AIRPORT', 'ACTIVE'),
 (10, 'EBP_MALL', 'EBP Mall Food Court', 'MALL', 'ACTIVE'),
 (11, 'EBP_TRUCK', 'EBP Food Truck', 'FOOD_TRUCK', 'ACTIVE'),
-(12, 'EBP_STALL', 'EBP Stall Kiosk', 'STALL_KIOSK', 'ACTIVE');
+(12, 'EBP_STALL', 'EBP Stall Kiosk', 'STALL_KIOSK', 'ACTIVE'),
+(13, 'EBP_DISCO', 'EBP Neon Nightclub', 'DISCOTHEQUE', 'ACTIVE');
 
 -- Companies
 INSERT IGNORE INTO companies (company_id, tenant_id, company_code, company_name, status) VALUES
@@ -33,7 +34,8 @@ INSERT IGNORE INTO companies (company_id, tenant_id, company_code, company_name,
 (9, 9, 'EBP_AIRP_CO', 'EBP Airport Company', 'ACTIVE'),
 (10, 10, 'EBP_MALL_CO', 'EBP Mall Company', 'ACTIVE'),
 (11, 11, 'EBP_TRUCK_CO', 'EBP Food Truck Company', 'ACTIVE'),
-(12, 12, 'EBP_STALL_CO', 'EBP Stall Company', 'ACTIVE');
+(12, 12, 'EBP_STALL_CO', 'EBP Stall Company', 'ACTIVE'),
+(13, 13, 'EBP_DISCO_CO', 'EBP Neon Nightclub Company', 'ACTIVE');
 
 -- Branches
 INSERT IGNORE INTO branches (branch_id, tenant_id, company_id, branch_code, branch_name, address, phone, status) VALUES
@@ -48,7 +50,8 @@ INSERT IGNORE INTO branches (branch_id, tenant_id, company_id, branch_code, bran
 (9, 9, 9, 'AIRP001', 'EBP Airport Restaurant', 'Soekarno-Hatta Airport', '+62 21 9012 3456', 'ACTIVE'),
 (10, 10, 10, 'MALL001', 'EBP Mall Food Court', 'Grand Indonesia Mall', '+62 21 0123 4567', 'ACTIVE'),
 (11, 11, 11, 'TRUCK001', 'EBP Food Truck Jakarta', 'Mobile Location', '+62 21 1234 5678', 'ACTIVE'),
-(12, 12, 12, 'STALL001', 'EBP Stall Kiosk Jakarta', 'FX Sudirman Mall', '+62 21 2345 6789', 'ACTIVE');
+(12, 12, 12, 'STALL001', 'EBP Stall Kiosk Jakarta', 'FX Sudirman Mall', '+62 21 2345 6789', 'ACTIVE'),
+(13, 13, 13, 'DISCO001', 'EBP Neon Nightclub Jakarta', 'Jl. SCBD Lot 14', '+62 21 5555 9999', 'ACTIVE');
 
 -- ========================================================
 -- FLOORS - Multi-Floor Support
@@ -580,6 +583,112 @@ INSERT IGNORE INTO employees (employee_id, tenant_id, branch_id, employee_code, 
 (2, 1, 1, 'EMP002', 'Dedi', 'Kurniawan', 'dedi@ebp.restaurant', '08222222222', 'Head Chef', 'Kitchen', '2025-02-01', 'ACTIVE'),
 (3, 1, 1, 'EMP003', 'Siti', 'Aminah', 'siti@ebp.restaurant', '08333333333', 'Cashier', 'Front Office', '2025-03-10', 'ACTIVE');
 
+-- ========================================================
+-- NIGHTCLUB / DISCOTHEQUE SEED DATA (Tenant 13)
+-- ========================================================
+
+-- Floors for Discotheque (3 floors: entrance/bar, dance floor, VIP)
+INSERT IGNORE INTO floors (floor_id, tenant_id, branch_id, floor_code, floor_name, floor_level, floor_type, sort_order, status) VALUES
+(18, 13, 13, 'FL1', 'Ground Floor - Bar & Lounge', 1, 'DINING', 1, 'ACTIVE'),
+(19, 13, 13, 'FL2', 'Main Dance Floor', 2, 'DINING', 2, 'ACTIVE'),
+(20, 13, 13, 'FL3', 'VIP Booth Floor', 3, 'DINING', 3, 'ACTIVE');
+
+-- Zones for Discotheque
+INSERT IGNORE INTO zones (zone_id, tenant_id, branch_id, floor_id, zone_code, zone_name, zone_type, service_type, capacity, sort_order, status) VALUES
+(24, 13, 13, 18, 'BAR', 'Main Bar Area', 'BAR', 'TABLE_SERVICE', 50, 1, 'ACTIVE'),
+(25, 13, 13, 18, 'LOUNGE', 'Lounge Area', 'DINING', 'TABLE_SERVICE', 40, 2, 'ACTIVE'),
+(26, 13, 13, 19, 'DANCE', 'Dance Floor', 'DINING', 'SELF_SERVICE', 200, 1, 'ACTIVE'),
+(27, 13, 13, 20, 'VIP1', 'VIP Booth 1', 'PRIVATE', 'TABLE_SERVICE', 12, 1, 'ACTIVE'),
+(28, 13, 13, 20, 'VIP2', 'VIP Booth 2', 'PRIVATE', 'TABLE_SERVICE', 12, 2, 'ACTIVE'),
+(29, 13, 13, 20, 'VIP3', 'VIP Booth 3', 'PRIVATE', 'TABLE_SERVICE', 8, 3, 'ACTIVE');
+
+-- Nightclub Events
+INSERT IGNORE INTO nightclub_events (event_id, tenant_id, branch_id, event_name, description, event_date, start_time, end_time, theme, dj_name, dj_genre, capacity, status, is_active) VALUES
+(1, 13, 13, 'Neon Friday Night', 'Weekly Friday night party with top DJs', CURDATE() + INTERVAL 2 - DAYOFWEEK(CURDATE()) DAY, '22:00:00', '04:00:00', 'Neon Glow', 'DJ Blast', 'EDM', 300, 'SCHEDULED', 1),
+(2, 13, 13, 'Saturday Bash', 'Saturday night with special guest DJ', CURDATE() + INTERVAL 6 - DAYOFWEEK(CURDATE()) DAY, '22:00:00', '04:00:00', 'Retro Night', 'DJ Mixmaster', 'House', 300, 'SCHEDULED', 1),
+(3, 13, 13, 'Ladies Night Wednesday', 'Ladies get free entry before midnight', CURDATE() + INTERVAL 3 - DAYOFWEEK(CURDATE()) DAY, '21:00:00', '03:00:00', 'Ladies Night', 'DJ Sparkle', 'Pop/Top 40', 200, 'SCHEDULED', 1);
+
+-- Entrance Fees
+INSERT IGNORE INTO nightclub_entrance_fees (fee_id, tenant_id, branch_id, event_id, fee_name, fee_type, price, applicable_days, start_time, end_time, min_age, gender_restriction, includes_drink, is_active) VALUES
+(1, 13, 13, 1, 'Standard Entry', 'COVER_CHARGE', 150000.00, '5', '22:00:00', '04:00:00', 21, NULL, 0, 1),
+(2, 13, 13, 1, 'Early Bird (Before 11PM)', 'COVER_CHARGE', 100000.00, '5', '22:00:00', '23:00:00', 21, NULL, 1, 1),
+(3, 13, 13, 2, 'Standard Entry', 'COVER_CHARGE', 200000.00, '6', '22:00:00', '04:00:00', 21, NULL, 0, 1),
+(4, 13, 13, 3, 'Ladies Free Entry', 'COVER_CHARGE', 0.00, '3', '21:00:00', '00:00:00', 21, 'FEMALE', 0, 1),
+(5, 13, 13, 3, 'Gentlemen Entry', 'COVER_CHARGE', 100000.00, '3', '21:00:00', '03:00:00', 21, 'MALE', 0, 1);
+
+-- Guest List
+INSERT IGNORE INTO nightclub_guest_lists (guest_list_id, tenant_id, branch_id, event_id, guest_name, phone, party_size, entry_type, discount_percentage, added_by, notes) VALUES
+(1, 13, 13, 1, 'Rudi Hartono', '081234500001', 3, 'FREE_ENTRY', 100, 'Manager', 'VIP customer'),
+(2, 13, 13, 1, 'Sara Dewi', '081234500002', 2, 'DISCOUNT_ENTRY', 50, 'Manager', 'Birthday celebration'),
+(3, 13, 13, 2, 'Budi Gunawan', '081234500003', 5, 'FREE_ENTRY', 100, 'Owner', 'Business partner');
+
+-- Bottle Service Reservations
+INSERT IGNORE INTO nightclub_bottle_service (bottle_service_id, tenant_id, branch_id, event_id, table_id, zone_id, customer_name, phone, party_size, package_name, bottle_type, bottle_quantity, unit_price, minimum_spend, total_amount, reservation_date, reservation_time, status, payment_status) VALUES
+(1, 13, 13, 1, NULL, 27, 'Andi Wijaya', '081234500004', 6, 'VIP Gold Package', 'Johnnie Walker Gold', 2, 2500000.00, 5000000.00, 5000000.00, CURDATE() + INTERVAL 2 - DAYOFWEEK(CURDATE()) DAY, '23:00:00', 'CONFIRMED', 'PAID'),
+(2, 13, 13, 2, NULL, 28, 'Maya Putri', '081234500005', 4, 'VIP Silver Package', 'Grey Goose', 1, 3000000.00, 3000000.00, 3000000.00, CURDATE() + INTERVAL 6 - DAYOFWEEK(CURDATE()) DAY, '23:30:00', 'PENDING', 'PENDING');
+
+-- Table Reservations (VIP Booth)
+INSERT IGNORE INTO nightclub_table_reservations (reservation_id, tenant_id, branch_id, event_id, table_id, zone_id, customer_name, phone, email, party_size, reservation_date, arrival_time, minimum_spend, table_type, status, notes) VALUES
+(1, 13, 13, 1, NULL, 27, 'Andi Wijaya', '081234500004', 'andi@example.com', 6, CURDATE() + INTERVAL 2 - DAYOFWEEK(CURDATE()) DAY, '23:00:00', 5000000.00, 'VIP_BOOTH', 'CONFIRMED', 'Birthday celebration'),
+(2, 13, 13, 2, NULL, 29, 'Chandra Tan', '081234500006', 'chandra@example.com', 8, CURDATE() + INTERVAL 6 - DAYOFWEEK(CURDATE()) DAY, '22:30:00', 8000000.00, 'VIP_BOOTH', 'PENDING', 'Corporate event'),
+(3, 13, 13, 3, NULL, 24, 'Lisa Maria', '081234500007', 'lisa@example.com', 4, CURDATE() + INTERVAL 3 - DAYOFWEEK(CURDATE()) DAY, '21:30:00', 1500000.00, 'BAR_TABLE', 'CONFIRMED', NULL);
+-- ========================================================
+-- CHART OF ACCOUNTS FOR DISCOTHEQUE (Tenant 13)
+-- ========================================================
+INSERT IGNORE INTO chart_of_accounts (tenant_id, account_code, account_name, account_type, is_active) VALUES
+-- ASSETS
+(13, '1000', 'Cash on Hand', 'ASSET', 1),
+(13, '1010', 'Cash Register', 'ASSET', 1),
+(13, '1020', 'Bank Account', 'ASSET', 1),
+(13, '1100', 'Inventory - Beverages', 'ASSET', 1),
+(13, '1110', 'Inventory - Bar Supplies', 'ASSET', 1),
+(13, '1200', 'Sound & Lighting Equipment', 'ASSET', 1),
+(13, '1210', 'Furniture & Fixtures', 'ASSET', 1),
+(13, '1300', 'Accounts Receivable', 'ASSET', 1),
+(13, '1400', 'Prepaid Expenses', 'ASSET', 1),
+-- LIABILITIES
+(13, '2000', 'Accounts Payable', 'LIABILITY', 1),
+(13, '2010', 'Accrued DJ Fees', 'LIABILITY', 1),
+(13, '2020', 'Accrued Staff Wages', 'LIABILITY', 1),
+(13, '2100', 'Customer Deposits (Bottle Service)', 'LIABILITY', 1),
+(13, '2200', 'Tax Payable', 'LIABILITY', 1),
+(13, '2300', 'Service Charge Payable', 'LIABILITY', 1),
+-- EQUITY
+(13, '3000', 'Owner''s Equity', 'EQUITY', 1),
+(13, '3100', 'Retained Earnings', 'EQUITY', 1),
+(13, '3200', 'Current Year Profit/Loss', 'EQUITY', 1),
+-- REVENUE
+(13, '4000', 'Entrance Fee Revenue', 'REVENUE', 1),
+(13, '4010', 'Early Bird Ticket Revenue', 'REVENUE', 1),
+(13, '4100', 'Bottle Service Revenue', 'REVENUE', 1),
+(13, '4110', 'VIP Booth Revenue', 'REVENUE', 1),
+(13, '4200', 'Bar Revenue (Drinks)', 'REVENUE', 1),
+(13, '4210', 'Food Revenue', 'REVENUE', 1),
+(13, '4300', 'Table Reservation Revenue', 'REVENUE', 1),
+(13, '4400', 'Guest List Revenue (Discounted)', 'REVENUE', 1),
+(13, '4500', 'Event Ticket Revenue', 'REVENUE', 1),
+(13, '4600', 'Coat Check Revenue', 'REVENUE', 1),
+(13, '4700', 'Other Revenue', 'REVENUE', 1),
+-- EXPENSE
+(13, '5000', 'COGS - Beverages', 'EXPENSE', 1),
+(13, '5010', 'COGS - Food', 'EXPENSE', 1),
+(13, '5020', 'COGS - Bar Supplies', 'EXPENSE', 1),
+(13, '5100', 'DJ Fees & Entertainment', 'EXPENSE', 1),
+(13, '5110', 'Live Performance Fees', 'EXPENSE', 1),
+(13, '5200', 'Security Staff Wages', 'EXPENSE', 1),
+(13, '5210', 'Bar Staff Wages', 'EXPENSE', 1),
+(13, '5220', 'Waitstaff Wages', 'EXPENSE', 1),
+(13, '5230', 'Management Salaries', 'EXPENSE', 1),
+(13, '5300', 'Marketing & Promotion', 'EXPENSE', 1),
+(13, '5310', 'Social Media Advertising', 'EXPENSE', 1),
+(13, '5400', 'Rent', 'EXPENSE', 1),
+(13, '5410', 'Utilities (Electricity, Water)', 'EXPENSE', 1),
+(13, '5420', 'Sound & Lighting Maintenance', 'EXPENSE', 1),
+(13, '5500', 'Insurance', 'EXPENSE', 1),
+(13, '5600', 'Licenses & Permits', 'EXPENSE', 1),
+(13, '5700', 'Cleaning & Sanitation', 'EXPENSE', 1),
+(13, '5800', 'Depreciation - Equipment', 'EXPENSE', 1),
+(13, '5900', 'Miscellaneous Expenses', 'EXPENSE', 1);
 SET FOREIGN_KEY_CHECKS = 1;
 
 SELECT 'Seed data inserted successfully!' AS Status;

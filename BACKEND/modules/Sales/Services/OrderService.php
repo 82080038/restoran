@@ -330,9 +330,14 @@ public function createOrder($data, $userId, $tenantId, $branchId)
         */
 
 
-        // Skip accounting engine for Phase 1 (requires accounting tables)
-        // $accountingEngine = new AccountingEngine($this->db);
-        // $accountingEngine->createSalesJournal($orderId, $total, $branchId);
+        // Enable accounting engine integration (auto-post sales journal)
+        try {
+            $accountingEngine = new AccountingEngine($this->db);
+            $accountingEngine->createSalesJournal($orderId, $total, $branchId);
+        } catch (\Exception $e) {
+            // Accounting integration failed - log but don't block order creation
+            error_log('AccountingEngine failed for order ' . $orderId . ': ' . $e->getMessage());
+        }
 
 
 

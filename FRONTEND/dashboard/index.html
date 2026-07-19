@@ -11,6 +11,31 @@
     <link rel="stylesheet" href="../css/notifications.css">
     <link rel="stylesheet" href="../css/i18n-feedback.css">
     <link rel="stylesheet" href="../css/free-payment.css">
+    <link rel="stylesheet" href="../css/advanced-features.css">
+<style>
+.special-badge {
+    position: absolute;
+    top: 8px;
+    right: -28px;
+    transform: rotate(45deg);
+    background: linear-gradient(135deg, #ff006e, #fb5607);
+    color: #fff;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 4px 36px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(255,0,110,0.5);
+    z-index: 100;
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    animation: specialPulse 2s ease-in-out infinite;
+}
+@keyframes specialPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 2px 8px rgba(255,0,110,0.5); }
+    50% { opacity: 0.85; box-shadow: 0 2px 16px rgba(255,0,110,0.8); }
+}
+</style>
 </head>
 
 <body>
@@ -56,6 +81,63 @@
                 </a>
                 <a href="#" class="nav-item" data-page="free-payment">
                     <span class="icon">&#128179;</span> Free Payment
+                </a>
+                <a href="#" class="nav-item" data-page="nightclub">
+                    <span class="icon">&#129318;</span> Nightclub
+                </a>
+                <a href="#" class="nav-item" data-page="reconciliation">
+                    <span class="icon">&#128179;</span> POS Reconciliation
+                </a>
+                <a href="#" class="nav-item" data-page="beverage-variance">
+                    <span class="icon">&#127863;</span> Beverage Variance
+                </a>
+                <a href="#" class="nav-item" data-page="batch-expiry">
+                    <span class="icon">&#9203;</span> Batch & Expiry
+                </a>
+                <a href="#" class="nav-item" data-page="settlements">
+                    <span class="icon">&#127908;</span> Settlements
+                </a>
+                <a href="#" class="nav-item" data-page="profitability">
+                    <span class="icon">&#128176;</span> Event Profitability
+                </a>
+                <a href="#" class="nav-item" data-page="proposals">
+                    <span class="icon">&#128203;</span> Event Proposals
+                </a>
+                <a href="#" class="nav-item" data-page="karaoke">
+                    <span class="icon">&#127908;</span> Karaoke
+                </a>
+                <a href="#" class="nav-item" data-page="beach-club">
+                    <span class="icon">&#127774;</span> Beach Club
+                </a>
+                <a href="#" class="nav-item" data-page="sports-bar">
+                    <span class="icon">&#127939;</span> Sports Bar
+                </a>
+                <a href="#" class="nav-item" data-page="ops-advanced">
+                    <span class="icon">&#128737;</span> Ops Advanced
+                </a>
+                <a href="#" class="nav-item" data-page="dynamic-pricing">
+                    <span class="icon">&#128200;</span> Dynamic Pricing
+                </a>
+                <a href="#" class="nav-item" data-page="membership">
+                    <span class="icon">&#127873;</span> Membership
+                </a>
+                <a href="#" class="nav-item" data-page="occupancy">
+                    <span class="icon">&#128201;</span> Occupancy
+                </a>
+                <a href="#" class="nav-item" data-page="predictions">
+                    <span class="icon">&#129504;</span> AI Predictions
+                </a>
+                <a href="#" class="nav-item" data-page="production-plans">
+                    <span class="icon">&#128295;</span> Production Plans
+                </a>
+                <a href="#" class="nav-item" data-page="coat-check">
+                    <span class="icon">&#129509;</span> Coat Check
+                </a>
+                <a href="#" class="nav-item" data-page="equipment">
+                    <span class="icon">&#128295;</span> Equipment
+                </a>
+                <a href="#" class="nav-item" data-page="wine">
+                    <span class="icon">&#127863;</span> Wine List
                 </a>
                 <a href="#" class="nav-item" data-page="reports">
                     <span class="icon">📈</span> Reports
@@ -525,10 +607,94 @@
                         </div>
                     </div>
                 </div>
+                <!-- Nightclub Page -->
+                <div class="page" id="nightclubPage">
+                    <div class="page-header" style="position: relative; overflow: hidden;"><div class="special-badge">Special</div>
+                        <h3>Nightclub Management</h3>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" id="ncNewEventBtn">New Event</button>
+                        </div>
+                    </div>
+                    <div class="stats-grid" id="ncStatsGrid">
+                        <div class="stat-card">
+                            <div class="stat-icon">ðŸ“…</div>
+                            <div class="stat-info">
+                                <h4 id="ncTotalEvents">0</h4>
+                                <p>Total Events</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">ðŸŽŸï¸</div>
+                            <div class="stat-info">
+                                <h4 id="ncTotalTickets">0</h4>
+                                <p>Tickets Sold</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">ðŸ“</div>
+                            <div class="stat-info">
+                                <h4 id="ncTotalGuests">0</h4>
+                                <p>Guest List</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">ðŸ¾</div>
+                            <div class="stat-info">
+                                <h4 id="ncTotalBottle">0</h4>
+                                <p>Bottle Service</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <h4>Upcoming Events</h4>
+                        <div id="ncEventsList" class="reports-grid">
+                            <p class="text-muted">Loading events...</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <h4>Recent Guest List</h4>
+                        <div id="ncGuestList" class="reports-grid">
+                            <p class="text-muted">Loading guest list...</p>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <h4>Table Reservations (VIP Booth)</h4>
+                        <div id="ncTableReservations" class="reports-grid">
+                            <p class="text-muted">Loading reservations...</p>
+                        </div>
+                    </div>
+                </div>
                 <!-- Free Payment Page -->
                 <div class="page" id="freePaymentPage">
                     <div id="freePaymentContainer"></div>
+                    <div style="margin-top: 20px;">
+                        <h4>Revenue Report</h4>
+                        <div id="ncRevenueReport">
+                            <p class="text-muted">Loading revenue report...</p>
+                        </div>
+                    </div>
+
                 </div>
+
+                <!-- Advanced Features Pages -->
+                <div class="page advanced-features-page" id="reconciliationPage"><div id="reconciliationContainer"></div></div>
+                <div class="page advanced-features-page" id="beverage-variancePage"><div id="beverageVarianceContainer"></div></div>
+                <div class="page advanced-features-page" id="batch-expiryPage"><div id="batchExpiryContainer"></div></div>
+                <div class="page advanced-features-page" id="settlementsPage"><div id="settlementsContainer"></div></div>
+                <div class="page advanced-features-page" id="profitabilityPage"><div id="profitabilityContainer"></div></div>
+                <div class="page advanced-features-page" id="proposalsPage"><div id="proposalsContainer"></div></div>
+                <div class="page advanced-features-page" id="karaokePage"><div id="karaokeContainer"></div></div>
+                <div class="page advanced-features-page" id="beach-clubPage"><div id="beachClubContainer"></div></div>
+                <div class="page advanced-features-page" id="sports-barPage"><div id="sportsBarContainer"></div></div>
+                <div class="page advanced-features-page" id="ops-advancedPage"><div id="opsAdvancedContainer"></div></div>
+                <div class="page advanced-features-page" id="dynamic-pricingPage"><div id="dynamicPricingContainer"></div></div>
+                <div class="page advanced-features-page" id="membershipPage"><div id="membershipContainer"></div></div>
+                <div class="page advanced-features-page" id="occupancyPage"><div id="occupancyContainer"></div></div>
+                <div class="page advanced-features-page" id="predictionsPage"><div id="predictionsContainer"></div></div>
+                <div class="page advanced-features-page" id="production-plansPage"><div id="productionPlansContainer"></div></div>
+                <div class="page advanced-features-page" id="coat-checkPage"><div id="coatCheckContainer"></div></div>
+                <div class="page advanced-features-page" id="equipmentPage"><div id="equipmentContainer"></div></div>
+                <div class="page advanced-features-page" id="winePage"><div id="wineContainer"></div></div>
             </div>
         </main>
     </div>
@@ -547,6 +713,8 @@
     <script src="../js/free-payment-manager.js"></script>
     <script src="../js/i18n-manager.js"></script>
     <script src="../js/feedback-widget.js"></script>
+    <script src="../js/nightclub-manager.js"></script>
+    <script src="../js/advanced-features.js"></script>
 </body>
 
 </html>

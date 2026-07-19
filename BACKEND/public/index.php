@@ -68,9 +68,12 @@ if ($requestUri === '' || $requestUri[0] !== '/') {
 // Override REQUEST_URI so Router and other code see the stripped path
 $_SERVER['REQUEST_URI'] = $requestUri;
 
+// Define frontend source directory
+$frontendDir = __DIR__ . '/../../FRONTEND';
+
 // Serve index.html for root path
 if ($requestUri === '/' || $requestUri === '/index.html') {
-    require_once __DIR__ . '/index.html';
+    require_once $frontendDir . '/index.html';
     exit;
 }
 
@@ -86,7 +89,16 @@ foreach ($appDirs as $dir) {
 }
 
 if (!$isAppDir && preg_match('/\.(html|css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf)$/', $requestUri)) {
+    // Try BACKEND/public first (for map.html etc.)
     $filePath = __DIR__ . DIRECTORY_SEPARATOR . ltrim($requestUri, '/');
+    if (file_exists($filePath) && !is_dir($filePath)) {
+        $mimeType = mime_content_type($filePath);
+        header("Content-Type: $mimeType");
+        readfile($filePath);
+        exit;
+    }
+    // Try FRONTEND directory
+    $filePath = $frontendDir . DIRECTORY_SEPARATOR . ltrim($requestUri, '/');
     if (file_exists($filePath) && !is_dir($filePath)) {
         $mimeType = mime_content_type($filePath);
         header("Content-Type: $mimeType");
@@ -97,7 +109,7 @@ if (!$isAppDir && preg_match('/\.(html|css|js|png|jpg|jpeg|gif|svg|ico|woff|woff
 
 // Serve frontend static files (CSS, JS, images)
 if (strpos($requestUri, '/frontend/') === 0) {
-    $filePath = __DIR__ . ltrim($requestUri, '/');
+    $filePath = $frontendDir . substr($requestUri, strlen('/frontend'));
     if (file_exists($filePath) && !is_dir($filePath)) {
         $mimeType = mime_content_type($filePath);
         header("Content-Type: $mimeType");
@@ -109,15 +121,15 @@ if (strpos($requestUri, '/frontend/') === 0) {
 // Serve frontend consumer app
 if (strpos($requestUri, '/consumer') === 0 || strpos($requestUri, '/frontend/consumer') === 0) {
     $basePathLen = strpos($requestUri, '/frontend/consumer') === 0 ? strlen('/frontend/consumer') : strlen('/consumer');
-    $filePath = __DIR__ . '/consumer' . substr($requestUri, $basePathLen);
+    $subPath = substr($requestUri, $basePathLen);
+    $filePath = $frontendDir . '/consumer' . $subPath;
     if (file_exists($filePath) && !is_dir($filePath)) {
         $mimeType = mime_content_type($filePath);
         header("Content-Type: $mimeType");
         readfile($filePath);
         exit;
     } else {
-        // Default to index.html for SPA routing
-        require_once __DIR__ . '/consumer/index.html';
+        require_once $frontendDir . '/consumer/index.html';
         exit;
     }
 }
@@ -125,15 +137,15 @@ if (strpos($requestUri, '/consumer') === 0 || strpos($requestUri, '/frontend/con
 // Serve frontend dashboard app
 if (strpos($requestUri, '/dashboard') === 0 || strpos($requestUri, '/frontend/dashboard') === 0) {
     $basePathLen = strpos($requestUri, '/frontend/dashboard') === 0 ? strlen('/frontend/dashboard') : strlen('/dashboard');
-    $filePath = __DIR__ . '/dashboard' . substr($requestUri, $basePathLen);
+    $subPath = substr($requestUri, $basePathLen);
+    $filePath = $frontendDir . '/dashboard' . $subPath;
     if (file_exists($filePath) && !is_dir($filePath)) {
         $mimeType = mime_content_type($filePath);
         header("Content-Type: $mimeType");
         readfile($filePath);
         exit;
     } else {
-        // Default to index.html for SPA routing
-        require_once __DIR__ . '/dashboard/index.html';
+        require_once $frontendDir . '/dashboard/index.html';
         exit;
     }
 }
@@ -141,15 +153,15 @@ if (strpos($requestUri, '/dashboard') === 0 || strpos($requestUri, '/frontend/da
 // Serve frontend kiosk app
 if (strpos($requestUri, '/kiosk') === 0 || strpos($requestUri, '/frontend/kiosk') === 0) {
     $basePathLen = strpos($requestUri, '/frontend/kiosk') === 0 ? strlen('/frontend/kiosk') : strlen('/kiosk');
-    $filePath = __DIR__ . '/kiosk' . substr($requestUri, $basePathLen);
+    $subPath = substr($requestUri, $basePathLen);
+    $filePath = $frontendDir . '/kiosk' . $subPath;
     if (file_exists($filePath) && !is_dir($filePath)) {
         $mimeType = mime_content_type($filePath);
         header("Content-Type: $mimeType");
         readfile($filePath);
         exit;
     } else {
-        // Default to index.html for SPA routing
-        require_once __DIR__ . '/kiosk/index.html';
+        require_once $frontendDir . '/kiosk/index.html';
         exit;
     }
 }
@@ -157,15 +169,15 @@ if (strpos($requestUri, '/kiosk') === 0 || strpos($requestUri, '/frontend/kiosk'
 // Serve frontend mobile app
 if (strpos($requestUri, '/mobile') === 0 || strpos($requestUri, '/frontend/mobile') === 0) {
     $basePathLen = strpos($requestUri, '/frontend/mobile') === 0 ? strlen('/frontend/mobile') : strlen('/mobile');
-    $filePath = __DIR__ . '/mobile' . substr($requestUri, $basePathLen);
+    $subPath = substr($requestUri, $basePathLen);
+    $filePath = $frontendDir . '/mobile' . $subPath;
     if (file_exists($filePath) && !is_dir($filePath)) {
         $mimeType = mime_content_type($filePath);
         header("Content-Type: $mimeType");
         readfile($filePath);
         exit;
     } else {
-        // Default to index.html for SPA routing
-        require_once __DIR__ . '/mobile/index.html';
+        require_once $frontendDir . '/mobile/index.html';
         exit;
     }
 }
@@ -184,6 +196,14 @@ if (strpos($requestUri, '/api') === 0) {
         exit;
     }
 } else {
+    // Try serving other FRONTEND pages (login.html, landing.html, reset-password.html, etc.)
+    $filePath = $frontendDir . $requestUri;
+    if (file_exists($filePath) && !is_dir($filePath)) {
+        $mimeType = mime_content_type($filePath);
+        header("Content-Type: $mimeType");
+        readfile($filePath);
+        exit;
+    }
     // Return 404 for non-API, non-root paths
     http_response_code(404);
     echo json_encode(['success' => false, 'message' => 'Route not found', 'errors' => []]);

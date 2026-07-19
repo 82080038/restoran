@@ -59,12 +59,20 @@ test.describe('RESTAURANT ERP System Tests', () => {
   });
 
   test('API endpoints are accessible', async ({ request }) => {
-    // Test authentication endpoint
-    const authResponse = await request.get('http://localhost/restoran/BACKEND/public/api/v1/auth/health');
-    expect(authResponse.ok()).toBeTruthy();
+    // Test login endpoint (POST)
+    const loginResponse = await request.post('http://localhost/restoran/api/v1/auth/login', {
+      data: { username: 'admin', password: 'admin123' },
+      headers: { 'Content-Type': 'application/json' }
+    });
+    expect(loginResponse.ok()).toBeTruthy();
+    const loginData = await loginResponse.json();
+    const token = loginData.data?.access_token || loginData.token;
+    expect(token).toBeTruthy();
     
-    // Test menu endpoint
-    const menuResponse = await request.get('http://localhost/restoran/BACKEND/public/api/v1/menu/items?tenant_id=1');
-    expect(menuResponse.ok()).toBeTruthy();
+    // Test an authenticated endpoint
+    const miscResponse = await request.get('http://localhost/restoran/api/v1/misc/coat-check', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    expect(miscResponse.ok()).toBeTruthy();
   });
 });

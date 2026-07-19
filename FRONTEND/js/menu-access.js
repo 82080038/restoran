@@ -15,7 +15,12 @@ const MENU_ACCESS = {
             'overview', 'enterprise', 'tenant', 'users', 'settings',
             'reports', 'accounting', 'hr', 'crm', 'ai', 'integration',
             'quality', 'supplychain', 'sustainability', 'location',
-            'maintenance', 'whatsapp'
+            'maintenance', 'whatsapp',
+            'reconciliation', 'beverage-variance', 'batch-expiry', 'settlements',
+            'profitability', 'proposals', 'karaoke', 'beach-club', 'sports-bar',
+            'ops-advanced', 'dynamic-pricing', 'membership', 'occupancy',
+            'predictions', 'production-plans', 'coat-check', 'equipment', 'wine',
+            'nightclub', 'free-payment'
         ]
     },
     TENANT_OWNER: {
@@ -24,7 +29,12 @@ const MENU_ACCESS = {
             'overview', 'menu', 'tables', 'orders', 'inventory', 'kitchen',
             'users', 'settings', 'accounting', 'reservation', 'crm', 'reports',
             'hr', 'delivery', 'ai', 'integration', 'quality', 'supplychain',
-            'sustainability', 'location', 'maintenance', 'whatsapp', 'loyalty'
+            'sustainability', 'location', 'maintenance', 'whatsapp', 'loyalty',
+            'reconciliation', 'beverage-variance', 'batch-expiry', 'settlements',
+            'profitability', 'proposals', 'karaoke', 'beach-club', 'sports-bar',
+            'ops-advanced', 'dynamic-pricing', 'membership', 'occupancy',
+            'predictions', 'production-plans', 'coat-check', 'equipment', 'wine',
+            'nightclub', 'free-payment'
         ]
     },
     TENANT_MEMBER: {
@@ -34,7 +44,12 @@ const MENU_ACCESS = {
                 'overview', 'menu', 'tables', 'orders', 'inventory', 'kitchen',
                 'users', 'settings', 'accounting', 'reservation', 'crm', 'reports',
                 'hr', 'delivery', 'ai', 'integration', 'quality', 'supplychain',
-                'sustainability', 'location', 'maintenance', 'whatsapp', 'loyalty'
+                'sustainability', 'location', 'maintenance', 'whatsapp', 'loyalty',
+                'reconciliation', 'beverage-variance', 'batch-expiry', 'settlements',
+                'profitability', 'proposals', 'karaoke', 'beach-club', 'sports-bar',
+                'ops-advanced', 'dynamic-pricing', 'membership', 'occupancy',
+                'predictions', 'production-plans', 'coat-check', 'equipment', 'wine',
+                'nightclub', 'free-payment'
             ]
         },
         'Restaurant Manager': {

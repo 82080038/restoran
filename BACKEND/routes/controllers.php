@@ -520,6 +520,91 @@ if (!class_exists('NotificationController')) {
     require_once __DIR__ . '/../modules/Notification/Controllers/NotificationController.php';
 }
 
+// Nightclub / Discotheque Module
+if (!class_exists('NightclubController')) {
+    require_once __DIR__ . '/../modules/Nightclub/Controllers/NightclubController.php';
+}
+
+// Entertainment Module (Karaoke Bar, Beach Club, Live Music Venue)
+if (!class_exists('EntertainmentController')) {
+    require_once __DIR__ . '/../modules/Entertainment/Controllers/EntertainmentController.php';
+}
+
+// POS-to-Bank Reconciliation Module
+if (!class_exists('POSBankReconciliationController')) {
+    require_once __DIR__ . '/../modules/POSBankReconciliation/Controllers/POSBankReconciliationController.php';
+}
+
+// Beverage Variance Module
+if (!class_exists('BeverageVarianceController')) {
+    require_once __DIR__ . '/../modules/BeverageVariance/Controllers/BeverageVarianceController.php';
+}
+
+// Recipe Depletion Module
+if (!class_exists('RecipeDepletionController')) {
+    require_once __DIR__ . '/../modules/RecipeDepletion/Controllers/RecipeDepletionController.php';
+}
+
+// Batch & Expiry Module
+if (!class_exists('BatchExpiryController')) {
+    require_once __DIR__ . '/../modules/BatchExpiry/Controllers/BatchExpiryController.php';
+}
+
+// Settlement Module (Live Music Venue)
+if (!class_exists('SettlementController')) {
+    require_once __DIR__ . '/../modules/Settlement/Controllers/SettlementController.php';
+}
+
+// Event Profitability Module
+if (!class_exists('EventProfitabilityController')) {
+    require_once __DIR__ . '/../modules/EventProfitability/Controllers/EventProfitabilityController.php';
+}
+
+// Event Proposal & BEO Module (Catering)
+if (!class_exists('EventProposalController')) {
+    require_once __DIR__ . '/../modules/EventProposal/Controllers/EventProposalController.php';
+}
+
+// Nightclub Advanced Module (Table Deposits, Bottle Service, Promoters)
+if (!class_exists('NightclubAdvancedController')) {
+    require_once __DIR__ . '/../modules/NightclubAdvanced/Controllers/NightclubAdvancedController.php';
+}
+
+// Karaoke Advanced Module (Song Catalog, Requests, In-Room F&B)
+if (!class_exists('KaraokeAdvancedController')) {
+    require_once __DIR__ . '/../modules/KaraokeAdvanced/Controllers/KaraokeAdvancedController.php';
+}
+
+// Beach Club Advanced Module (Seat Map, Weather/Rain Check)
+if (!class_exists('BeachClubAdvancedController')) {
+    require_once __DIR__ . '/../modules/BeachClubAdvanced/Controllers/BeachClubAdvancedController.php';
+}
+
+// Sports Bar Advanced Module (Pre-Auth Bar Tab)
+if (!class_exists('SportsBarAdvancedController')) {
+    require_once __DIR__ . '/../modules/SportsBarAdvanced/Controllers/SportsBarAdvancedController.php';
+}
+
+// Operations Advanced Module (86-ing, Custom Orders, Delivery Routing, Lead Pipeline, Allergens)
+if (!class_exists('OperationsAdvancedController')) {
+    require_once __DIR__ . '/../modules/OperationsAdvanced/Controllers/OperationsAdvancedController.php';
+}
+
+// Venue Advanced Module (Dynamic Pricing, Membership, QR Scan, Occupancy, Holds, Comp List)
+if (!class_exists('VenueAdvancedController')) {
+    require_once __DIR__ . '/../modules/VenueAdvanced/Controllers/VenueAdvancedController.php';
+}
+
+// Tier 3 Operations Module (AI Prediction, Throttling, Auto PO, Production Planning, Service Speed)
+if (!class_exists('Tier3OperationsController')) {
+    require_once __DIR__ . '/../modules/OperationsAdvanced/Controllers/Tier3OperationsController.php';
+}
+
+// Misc Features Module (Tier 4: Coat Check, Karaoke Score, Equipment, Radius Clause, Group Booking, Wine, Waiter Button, Entertainer)
+if (!class_exists('MiscFeaturesController')) {
+    require_once __DIR__ . '/../modules/MiscFeatures/Controllers/MiscFeaturesController.php';
+}
+
 // Create global aliases for namespaced controllers so short names used below work
 foreach (get_declared_classes() as $class) {
     $parts = explode('\\', $class);
