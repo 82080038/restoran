@@ -100,7 +100,7 @@ class TenantService {
     }
 
     public function getAllTenants() {
-        $pdo = $this->db->connect();
+        $pdo = $this->db;
         
         try {
             $stmt = $pdo->query("SELECT * FROM tenants WHERE status = 'ACTIVE'");
@@ -121,7 +121,7 @@ class TenantService {
     }
 
     public function getTenantById($tenantId) {
-        $pdo = $this->db->connect();
+        $pdo = $this->db;
         
         try {
             $stmt = $pdo->prepare("SELECT * FROM tenants WHERE tenant_id = ?");
@@ -150,7 +150,7 @@ class TenantService {
     }
 
     public function configureTenant($userId, $data) {
-        $pdo = $this->db->connect();
+        $pdo = $this->db;
         
         try {
             // Get tenant_id from user

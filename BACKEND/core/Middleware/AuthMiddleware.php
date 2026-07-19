@@ -31,11 +31,16 @@ class AuthMiddleware
     {
         $headers = getallheaders();
 
-        if (!isset($headers['Authorization'])) {
-            throw new \Exception("Authorization header missing", 401);
+        $token = null;
+        if (isset($headers['Authorization'])) {
+            $token = str_replace('Bearer ', '', $headers['Authorization']);
+        } elseif (isset($_GET['token']) && !empty($_GET['token'])) {
+            $token = $_GET['token'];
         }
 
-        $token = str_replace('Bearer ', '', $headers['Authorization']);
+        if (!$token) {
+            throw new \Exception("Authorization header missing", 401);
+        }
 
         $payload = $this->jwt->decode($token);
 

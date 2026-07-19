@@ -87,9 +87,9 @@ class ComboService
     {
         try {
             $sql = "SELECT mc.*, 
-                   (SELECT GROUP_CONCAT(CONCAT(m.menu_name, ' (', mci.quantity, ')') SEPARATOR ', ')
+                   (SELECT GROUP_CONCAT(CONCAT(p.product_name, ' (', mci.quantity, ')') SEPARATOR ', ')
                     FROM menu_combo_items mci
-                    JOIN products m ON mci.menu_id = m.product_id
+                    JOIN products p ON mci.menu_id = p.product_id
                     WHERE mci.combo_id = mc.combo_id) as items_summary
                    FROM menu_combos mc
                    WHERE mc.tenant_id = :tenant_id";

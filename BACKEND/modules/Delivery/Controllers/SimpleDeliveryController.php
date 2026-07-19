@@ -10,11 +10,11 @@ class SimpleDeliveryController
     {
         $db = db();
 
-        $sql = "SELECT d.delivery_id, d.order_id, d.customer_name, d.delivery_address, d.phone, 
-                d.delivery_time, d.delivery_fee, d.status, d.driver_name
+        $sql = "SELECT d.delivery_id, d.order_id, d.customer_name, d.delivery_address, d.customer_phone AS phone, 
+                d.delivered_at AS delivery_time, d.delivery_fee, d.delivery_status AS status, d.driver_name
                 FROM deliveries d
-                WHERE d.status IN ('PENDING', 'IN_TRANSIT')
-                ORDER BY d.delivery_time ASC
+                WHERE d.delivery_status IN ('pending', 'preparing', 'picked_up', 'on_the_way')
+                ORDER BY d.created_at ASC
                 LIMIT 50";
 
         $stmt = $db->prepare($sql);

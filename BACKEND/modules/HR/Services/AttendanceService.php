@@ -28,7 +28,7 @@ class AttendanceService
 
         // Check if already checked in today
         $sql = "SELECT attendance_id FROM attendance 
-                WHERE employee_id = ? AND attendance_date = ?";
+                WHERE employee_id = ? AND work_date = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$employeeId, $attendanceDate]);
         $existing = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -37,7 +37,7 @@ class AttendanceService
             return ['success' => false, 'message' => 'Already checked in today'];
         }
 
-        $sql = "INSERT INTO attendance (tenant_id, branch_id, employee_id, attendance_date, check_in_time, status)
+        $sql = "INSERT INTO attendance (tenant_id, branch_id, employee_id, work_date, check_in_time, status)
                 VALUES (?, ?, ?, ?, ?, 'PRESENT')";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$tenantId, $branchId, $employeeId, $attendanceDate, $checkInTime]);
@@ -54,7 +54,7 @@ class AttendanceService
         $checkOutTime = $checkOutTime ?? date('H:i:s');
 
         $sql = "SELECT attendance_id, check_in_time FROM attendance 
-                WHERE employee_id = ? AND attendance_date = ?";
+                WHERE employee_id = ? AND work_date = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$employeeId, $attendanceDate]);
         $attendance = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -87,7 +87,7 @@ class AttendanceService
      */
     public function getAttendance($tenantId, $branchId, $employeeId = null, $startDate = null, $endDate = null)
     {
-        $sql = "SELECT a.*, e.employee_name, e.employee_code 
+        $sql = "SELECT a.*, CONCAT(e.first_name, ' ', e.last_name) AS employee_name, e.employee_code 
                 FROM attendance a
                 JOIN employees e ON a.employee_id = e.employee_id
                 WHERE a.tenant_id = ? AND a.branch_id = ?";
@@ -99,16 +99,16 @@ class AttendanceService
         }
 
         if ($startDate) {
-            $sql .= " AND a.attendance_date >= ?";
+            $sql .= " AND a.work_date >= ?";
             $params[] = $startDate;
         }
 
         if ($endDate) {
-            $sql .= " AND a.attendance_date <= ?";
+            $sql .= " AND a.work_date <= ?";
             $params[] = $endDate;
         }
 
-        $sql .= " ORDER BY a.attendance_date DESC, a.check_in_time DESC";
+        $sql .= " ORDER BY a.work_date DESC, a.check_in_time DESC";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);
@@ -125,7 +125,7 @@ class AttendanceService
 
         $sql = "UPDATE attendance 
                 SET break_start_time = ?
-                WHERE employee_id = ? AND attendance_date = ?";
+                WHERE employee_id = ? AND work_date = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$breakStartTime, $employeeId, $attendanceDate]);
 
@@ -142,7 +142,7 @@ class AttendanceService
 
         $sql = "UPDATE attendance 
                 SET break_end_time = ?
-                WHERE employee_id = ? AND attendance_date = ?";
+                WHERE employee_id = ? AND work_date = ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$breakEndTime, $employeeId, $attendanceDate]);
 
@@ -164,7 +164,7 @@ class AttendanceService
                     SUM(overtime_hours) as total_overtime_hours
                 FROM attendance
                 WHERE tenant_id = ? AND branch_id = ?
-                AND attendance_date BETWEEN ? AND ?";
+                AND work_date BETWEEN ? AND ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$tenantId, $branchId, $startDate, $endDate]);
         return $stmt->fetch(PDO::FETCH_ASSOC);

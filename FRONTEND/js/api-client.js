@@ -348,14 +348,14 @@ class APIClient {
             window.screenSizeDetector.getApiParams('products') : {};
         const mergedParams = { ...screenSizeParams, ...params };
         const queryString = new URLSearchParams(mergedParams).toString();
-        return this.request(`/products${queryString ? '?' + queryString : ''}`, {
+        return this.request(`/menu/products${queryString ? '?' + queryString : ''}`, {
             method: 'GET'
         });
     }
 
     // Categories
     async getCategories() {
-        return this.request('/categories', {
+        return this.request('/menu/categories', {
             method: 'GET'
         });
     }
@@ -1480,7 +1480,8 @@ class APIClient {
 
     // SSE Notification Stream
     createNotificationStream() {
-        const url = `${this.baseURL}/notifications/stream`;
+        const token = localStorage.getItem('authToken') || '';
+        const url = `${this.baseURL}/notifications/stream?token=${encodeURIComponent(token)}`;
         const eventSource = new EventSource(url, { withCredentials: false });
         return eventSource;
     }

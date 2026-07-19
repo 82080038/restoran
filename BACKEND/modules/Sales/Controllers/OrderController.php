@@ -104,7 +104,7 @@ class OrderController
         $result = $this->service->updateOrder($orderId, $data, $user['user_id'], $user['tenant_id']);
 
         if ($result['success']) {
-            Response::success($result['message']);
+            Response::success($result['data'] ?? [], $result['message']);
         } else {
             Response::error($result['message']);
         }

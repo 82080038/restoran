@@ -44,11 +44,12 @@ class OfflineIndicator {
     async checkStatus() {
         try {
             // Try to fetch from the API to check connectivity
+            const token = localStorage.getItem('authToken');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = 'Bearer ' + token;
             const response = await fetch('/api/v1/offline/status', {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: headers,
                 cache: 'no-cache'
             });
 

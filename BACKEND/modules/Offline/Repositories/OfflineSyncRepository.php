@@ -57,12 +57,12 @@ class OfflineSyncRepository
     public function getSyncStatus($tenantId, $branchId)
     {
         $sql = "SELECT 
-                    COUNT(CASE WHEN status = 'PENDING' THEN 1 END) as pending_count,
-                    COUNT(CASE WHEN status = 'SYNCED' THEN 1 END) as synced_count,
-                    COUNT(CASE WHEN status = 'FAILED' THEN 1 END) as failed_count,
-                    COUNT(CASE WHEN status = 'CONFLICT' THEN 1 END) as conflict_count
+                    COUNT(CASE WHEN status = 'pending' THEN 1 END) as pending_count,
+                    COUNT(CASE WHEN status = 'synced' THEN 1 END) as synced_count,
+                    COUNT(CASE WHEN status = 'failed' THEN 1 END) as failed_count,
+                    COUNT(CASE WHEN status = 'conflict' THEN 1 END) as conflict_count
                 FROM offline_sync_queue 
-                WHERE tenant_id = ? AND branch_id = ?";
+                WHERE tenant_id = ? AND (branch_id = ? OR branch_id IS NULL)";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$tenantId, $branchId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -70,7 +70,7 @@ class OfflineSyncRepository
 
     public function getConflicts($tenantId, $branchId)
     {
-        $sql = "SELECT * FROM offline_sync_queue WHERE tenant_id = ? AND branch_id = ? AND status = 'CONFLICT' ORDER BY created_at DESC";
+        $sql = "SELECT * FROM offline_sync_queue WHERE tenant_id = ? AND (branch_id = ? OR branch_id IS NULL) AND status = 'conflict' ORDER BY created_at DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$tenantId, $branchId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

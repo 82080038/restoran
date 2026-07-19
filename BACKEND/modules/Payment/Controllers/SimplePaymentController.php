@@ -27,10 +27,10 @@ class SimplePaymentController
             $limit = (int)($request['query']['limit'] ?? 20);
             $offset = ($page - 1) * $limit;
 
-            $sql = "SELECT p.*, o.order_number, o.order_type
+            $sql = "SELECT p.*, o.order_number, o.order_type, o.tenant_id as order_tenant_id
                     FROM payments p
                     LEFT JOIN orders o ON p.order_id = o.order_id
-                    WHERE p.tenant_id = ?";
+                    WHERE COALESCE(p.tenant_id, o.tenant_id) = ?";
             $params = [$tenantId];
 
             if ($status) {
@@ -42,7 +42,7 @@ class SimplePaymentController
                 $params[] = $method;
             }
 
-            $countSql = "SELECT COUNT(*) as total FROM payments p WHERE p.tenant_id = ?";
+            $countSql = "SELECT COUNT(*) as total FROM payments p LEFT JOIN orders o ON p.order_id = o.order_id WHERE COALESCE(p.tenant_id, o.tenant_id) = ?";
             $countParams = [$tenantId];
             if ($status) {
                 $countSql .= " AND p.payment_status = ?";
@@ -75,7 +75,7 @@ class SimplePaymentController
                 ]
             ], 'Payments retrieved successfully');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve payments: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -93,7 +93,7 @@ class SimplePaymentController
                 SELECT p.*, o.order_number, o.order_type, o.total_amount
                 FROM payments p
                 LEFT JOIN orders o ON p.order_id = o.order_id
-                WHERE p.payment_id = ? AND p.tenant_id = ?
+                WHERE p.payment_id = ? AND COALESCE(p.tenant_id, o.tenant_id) = ?
             ");
             $stmt->execute([$paymentId, $tenantId]);
             $payment = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -104,7 +104,7 @@ class SimplePaymentController
 
             return Response::success($payment, 'Payment retrieved successfully');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve payment: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -143,7 +143,7 @@ class SimplePaymentController
                 'payment_status' => 'pending'
             ], 'Payment created successfully');
         } catch (\Exception $e) {
-            return Response::error('Failed to create payment: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -158,7 +158,7 @@ class SimplePaymentController
             $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
 
-            $stmt = $pdo->prepare("SELECT * FROM payments WHERE payment_id = ? AND tenant_id = ?");
+            $stmt = $pdo->prepare("SELECT p.*, COALESCE(p.tenant_id, o.tenant_id) as tenant_id FROM payments p LEFT JOIN orders o ON p.order_id = o.order_id WHERE p.payment_id = ? AND COALESCE(p.tenant_id, o.tenant_id) = ?");
             $stmt->execute([$paymentId, $tenantId]);
             $payment = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -190,7 +190,7 @@ class SimplePaymentController
                 'gateway_transaction_id' => $gatewayTxnId
             ], 'Payment processed successfully');
         } catch (\Exception $e) {
-            return Response::error('Failed to process payment: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -213,7 +213,7 @@ class SimplePaymentController
 
             return Response::success($methods, 'Payment methods retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve payment methods: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -228,7 +228,7 @@ class SimplePaymentController
             $branchId = $request['branch_id'] ?? null;
             $date = $request['query']['date'] ?? date('Y-m-d');
 
-            $whereClause = "WHERE p.tenant_id = ? AND DATE(p.completed_at) = ? AND p.payment_status = 'completed'";
+            $whereClause = "LEFT JOIN orders o ON p.order_id = o.order_id WHERE COALESCE(p.tenant_id, o.tenant_id) = ? AND DATE(p.completed_at) = ? AND p.payment_status = 'completed'";
             $params = [$tenantId, $date];
 
             if ($branchId) {
@@ -242,6 +242,7 @@ class SimplePaymentController
                 FROM payments p
                 $whereClause
             ");
+            // Note: whereClause already includes JOIN
             $stmt->execute($params);
             $totals = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -329,7 +330,7 @@ class SimplePaymentController
                 'cash_drawers' => $cashDrawers
             ], 'Z-Report generated successfully');
         } catch (\Exception $e) {
-            return Response::error('Failed to generate Z-Report: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -351,15 +352,15 @@ class SimplePaymentController
                     SUM(CASE WHEN payment_status = 'pending' THEN amount ELSE 0 END) as total_pending,
                     SUM(CASE WHEN payment_status = 'failed' THEN 1 ELSE 0 END) as total_failed,
                     AVG(CASE WHEN payment_status = 'completed' THEN amount ELSE NULL END) as avg_payment
-                FROM payments
-                WHERE tenant_id = ? AND DATE(created_at) BETWEEN ? AND ?
+                FROM payments p LEFT JOIN orders o ON p.order_id = o.order_id
+                WHERE COALESCE(p.tenant_id, o.tenant_id) = ? AND DATE(p.created_at) BETWEEN ? AND ?
             ");
             $stmt->execute([$tenantId, $dateFrom, $dateTo]);
             $stats = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             return Response::success($stats, 'Payment statistics retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve statistics: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 

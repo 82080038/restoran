@@ -176,7 +176,7 @@ class SoloOperatorMode {
 
         try {
             // Load products
-            const response = await fetch(`${Config.api.baseURL}/products`);
+            const response = await fetch(`${Config.api.baseURL}/menu/products`);
             const data = await response.json();
 
             if (data.success && data.products) {

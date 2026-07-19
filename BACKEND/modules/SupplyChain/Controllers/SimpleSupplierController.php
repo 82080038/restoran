@@ -10,9 +10,10 @@ class SimpleSupplierController
     {
         $db = db();
 
-        $sql = "SELECT s.supplier_id, s.supplier_name, s.contact_person, s.phone, s.email, s.address, s.status
+        $sql = "SELECT s.supplier_id, s.name AS supplier_name, s.contact_person, s.phone, s.email, s.address, s.is_active AS status
                 FROM suppliers s
-                ORDER BY s.supplier_name ASC
+                WHERE s.deleted_at IS NULL
+                ORDER BY s.name ASC
                 LIMIT 50";
 
         $stmt = $db->prepare($sql);

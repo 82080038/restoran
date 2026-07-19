@@ -73,7 +73,7 @@ class BillSplitController
                 'group_count' => count($groups),
             ], 'Table groups retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -152,7 +152,7 @@ class BillSplitController
                 'group_color' => $color,
             ], 'Group created');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -202,7 +202,7 @@ class BillSplitController
 
             return Response::success(['group_id' => (int)$groupId], 'Group updated');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -246,7 +246,7 @@ class BillSplitController
                 'table_status' => $activeCount === 0 ? 'CLEANING' : 'OCCUPIED',
             ], 'Group closed');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -311,7 +311,7 @@ class BillSplitController
                 'total_price' => $totalPrice,
             ], 'Item assigned to bill');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -334,7 +334,7 @@ class BillSplitController
 
             return Response::success(['bill_id' => (int)$billId], 'Item removed from bill');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -363,7 +363,7 @@ class BillSplitController
 
             return Response::success($bill, 'Bill retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -419,7 +419,7 @@ class BillSplitController
             ], 'Bills merged successfully');
         } catch (\Exception $e) {
             if ($pdo->inTransaction()) $pdo->rollBack();
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -522,7 +522,7 @@ class BillSplitController
             }
         } catch (\Exception $e) {
             if ($pdo->inTransaction()) $pdo->rollBack();
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -560,7 +560,7 @@ class BillSplitController
                 'unpaid_bills_remaining' => $unpaidCount,
             ], 'Bill marked as paid');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -635,7 +635,7 @@ class BillSplitController
                 ],
             ], 'Table bill summary retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 

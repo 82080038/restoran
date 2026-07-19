@@ -11,7 +11,7 @@ class Transaction
 
     private $db;
 
-    public function __construct(?PDO $db = null)
+    public function __construct(?\PDO $db = null)
     {
         $this->db = $db ?? Database::getInstance()->connect();
     }

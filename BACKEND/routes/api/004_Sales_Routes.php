@@ -14,6 +14,14 @@ $router->addRoute('GET', '/api/v1/orders', withAuthAndPermission(
     $permissionMiddleware,
     $authMiddleware
 ));
+$router->addRoute('GET', '/api/v1/orders/history', withAuthAndPermission(
+    function($request) use ($orderController) {
+        return $orderController->getAll($request);
+    },
+    'ORDER_VIEW',
+    $permissionMiddleware,
+    $authMiddleware
+));
 $router->addRoute('GET', '/api/v1/orders/recent', withAuthAndPermission(
     function($request) use ($orderController) {
         // Support limit and sort parameters

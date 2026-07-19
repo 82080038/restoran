@@ -34,7 +34,7 @@ class SimpleFeedbackController
             $limit = (int)($request['query']['limit'] ?? 20);
             $offset = ($page - 1) * $limit;
 
-            $sql = "SELECT r.*, c.customer_name, c.customer_email,
+            $sql = "SELECT r.*, c.name AS customer_name, c.email AS customer_email,
                            rr.response_text, rr.responded_at, rr.responded_by
                     FROM reviews r
                     LEFT JOIN customers c ON r.customer_id = c.customer_id
@@ -72,7 +72,7 @@ class SimpleFeedbackController
 
             return Response::paginated($reviews, $total, $page, $limit, 'Reviews retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve reviews: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -89,7 +89,7 @@ class SimpleFeedbackController
             $tenantId = $payload['tenant_id'] ?? 1;
 
             $stmt = $pdo->prepare("
-                SELECT r.*, c.customer_name, c.customer_email
+                SELECT r.*, c.name AS customer_name, c.email AS customer_email
                 FROM reviews r
                 LEFT JOIN customers c ON r.customer_id = c.customer_id
                 WHERE r.review_id = ? AND r.tenant_id = ?
@@ -108,7 +108,7 @@ class SimpleFeedbackController
 
             return Response::success($review, 'Review retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve review: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -163,7 +163,7 @@ class SimpleFeedbackController
                 'rating' => $rating
             ], 'Review submitted successfully');
         } catch (\Exception $e) {
-            return Response::error('Failed to create review: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -195,7 +195,7 @@ class SimpleFeedbackController
 
             return Response::success(['review_id' => (int)$reviewId, 'status' => $status], 'Review status updated');
         } catch (\Exception $e) {
-            return Response::error('Failed to update status: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -258,7 +258,7 @@ class SimpleFeedbackController
             $limit = (int)($request['query']['limit'] ?? 20);
             $offset = ($page - 1) * $limit;
 
-            $sql = "SELECT f.*, c.customer_name
+            $sql = "SELECT f.*, c.name AS customer_name
                     FROM feedback f
                     LEFT JOIN customers c ON f.customer_id = c.customer_id
                     WHERE f.tenant_id = ?";
@@ -284,7 +284,7 @@ class SimpleFeedbackController
 
             return Response::paginated($feedback, $total, $page, $limit, 'Feedback retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve feedback: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -299,31 +299,26 @@ class SimpleFeedbackController
             $body = $request['body'] ?? [];
 
             $tenantId = $body['tenant_id'] ?? 1;
+            $branchId = $body['branch_id'] ?? 1;
             $customerId = $body['customer_id'] ?? null;
-            $type = $body['feedback_type'] ?? 'suggestion';
-            $subject = $body['subject'] ?? '';
-            $message = $body['message'] ?? '';
-            $priority = $body['priority'] ?? 'normal';
+            $type = $body['feedback_type'] ?? $body['type'] ?? 'GENERAL';
+            $comment = $body['comment'] ?? $body['message'] ?? '';
+            $rating = $body['rating'] ?? null;
 
-            if (empty($subject) || empty($message)) {
-                return Response::error('subject and message are required', 400);
-            }
-
-            $validTypes = ['complaint', 'suggestion', 'compliment', 'question', 'bug_report'];
-            if (!in_array($type, $validTypes)) {
-                return Response::error('Invalid feedback_type', 400);
+            if (empty($comment)) {
+                return Response::error('comment or message is required', 400);
             }
 
             $stmt = $pdo->prepare("
-                INSERT INTO feedback (tenant_id, customer_id, feedback_type, subject, message, priority, status, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, 'new', NOW())
+                INSERT INTO feedback (tenant_id, branch_id, customer_id, feedback_type, rating, comment, status)
+                VALUES (?, ?, ?, ?, ?, ?, 'NEW')
             ");
-            $stmt->execute([$tenantId, $customerId, $type, $subject, $message, $priority]);
+            $stmt->execute([$tenantId, $branchId, $customerId, $type, $rating, $comment]);
             $feedbackId = $pdo->lastInsertId();
 
             return Response::success(['feedback_id' => (int)$feedbackId], 'Feedback submitted successfully');
         } catch (\Exception $e) {
-            return Response::error('Failed to create feedback: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -341,9 +336,10 @@ class SimpleFeedbackController
             $body = $request['body'] ?? [];
             $status = $body['status'] ?? '';
 
-            $validStatuses = ['new', 'in_progress', 'resolved', 'closed', 'archived'];
+            $validStatuses = ['new', 'in_progress', 'resolved', 'closed', 'archived', 'open', 'pending'];
+            $status = strtolower($status);
             if (!in_array($status, $validStatuses)) {
-                return Response::error('Invalid status', 400);
+                return Response::error('Invalid status. Valid: ' . implode(', ', $validStatuses), 400);
             }
 
             $stmt = $pdo->prepare("UPDATE feedback SET status = ?, updated_at = NOW() WHERE feedback_id = ? AND tenant_id = ?");
@@ -355,7 +351,7 @@ class SimpleFeedbackController
 
             return Response::success(['feedback_id' => (int)$feedbackId, 'status' => $status], 'Feedback status updated');
         } catch (\Exception $e) {
-            return Response::error('Failed to update status: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -428,7 +424,7 @@ class SimpleFeedbackController
                 ]
             ], 'Feedback statistics retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve statistics: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -449,7 +445,7 @@ class SimpleFeedbackController
 
             return Response::success($categories, 'Review categories retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve categories: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 }

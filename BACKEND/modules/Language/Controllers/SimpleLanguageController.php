@@ -32,7 +32,7 @@ class SimpleLanguageController
 
             return Response::success($languages, 'Languages retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve languages: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -77,7 +77,7 @@ class SimpleLanguageController
                 'count' => count($translations)
             ], 'Translations retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve translations: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -110,7 +110,7 @@ class SimpleLanguageController
 
             return Response::success($preference, 'Language preference retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve preference: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -206,7 +206,7 @@ class SimpleLanguageController
 
             return Response::paginated($translations, $total, $page, $limit, 'Translations retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve translations: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -295,7 +295,7 @@ class SimpleLanguageController
 
             return Response::success($contexts, 'Translation contexts retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed to retrieve contexts: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 }

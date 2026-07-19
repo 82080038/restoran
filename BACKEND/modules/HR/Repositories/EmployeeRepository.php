@@ -35,7 +35,7 @@ class EmployeeRepository
 
     public function createAttendance($data)
     {
-        $sql = "INSERT INTO attendance (tenant_id, branch_id, employee_id, attendance_date, check_in_time, check_out_time, work_hours, status, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO attendance (tenant_id, branch_id, employee_id, work_date, check_in_time, check_out_time, work_hours, status, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             $data['tenant_id'],
@@ -103,7 +103,7 @@ class EmployeeRepository
 
     public function getAttendanceByEmployee($employeeId, $periodStart, $periodEnd)
     {
-        $sql = "SELECT * FROM attendance WHERE employee_id = ? AND attendance_date BETWEEN ? AND ?";
+        $sql = "SELECT * FROM attendance WHERE employee_id = ? AND work_date BETWEEN ? AND ?";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$employeeId, $periodStart, $periodEnd]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

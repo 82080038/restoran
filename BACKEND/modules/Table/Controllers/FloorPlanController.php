@@ -30,7 +30,7 @@ class FloorPlanController
             $tenantId = $payload['tenant_id'] ?? 1;
             $branchId = $request['query']['branch_id'] ?? null;
 
-            $sql = "SELECT * FROM floors WHERE tenant_id = ? AND status = 'active'";
+            $sql = "SELECT * FROM floors WHERE tenant_id = ? AND LOWER(status) = 'active'";
             $params = [$tenantId];
             if ($branchId) { $sql .= " AND branch_id = ?"; $params[] = $branchId; }
             $sql .= " ORDER BY sort_order ASC, floor_level ASC";
@@ -41,7 +41,7 @@ class FloorPlanController
 
             return Response::success($floors, 'Floors retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -81,7 +81,7 @@ class FloorPlanController
 
             return Response::success(['floor_id' => (int)$pdo->lastInsertId()], 'Floor created');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -121,7 +121,7 @@ class FloorPlanController
 
             return Response::success(['floor_id' => (int)$floorId], 'Floor updated');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -145,7 +145,7 @@ class FloorPlanController
 
             return Response::success([], 'Floor deleted');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -173,7 +173,7 @@ class FloorPlanController
 
             return Response::success($zones, 'Zones retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -216,7 +216,7 @@ class FloorPlanController
 
             return Response::success(['zone_id' => (int)$pdo->lastInsertId()], 'Zone created');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -256,7 +256,7 @@ class FloorPlanController
 
             return Response::success(['zone_id' => (int)$zoneId], 'Zone updated');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -280,7 +280,7 @@ class FloorPlanController
 
             return Response::success([], 'Zone deleted');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -330,7 +330,7 @@ class FloorPlanController
 
             return Response::success($tables, 'Tables retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -383,7 +383,7 @@ class FloorPlanController
 
             return Response::success(['table_id' => $tableId], 'Table created');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -427,7 +427,7 @@ class FloorPlanController
 
             return Response::success(['table_id' => (int)$tableId], 'Table updated');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -455,7 +455,7 @@ class FloorPlanController
 
             return Response::success(['table_id' => (int)$tableId], 'Position updated');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -478,7 +478,7 @@ class FloorPlanController
 
             return Response::success([], 'Table deleted');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -499,7 +499,7 @@ class FloorPlanController
             }
 
             // Get floor
-            $stmt = $pdo->prepare("SELECT * FROM floors WHERE floor_id = ? AND tenant_id = ? AND status = 'active'");
+            $stmt = $pdo->prepare("SELECT * FROM floors WHERE floor_id = ? AND tenant_id = ? AND LOWER(status) = 'active'");
             $stmt->execute([$floorId, $tenantId]);
             $floor = $stmt->fetch(\PDO::FETCH_ASSOC);
 
@@ -508,7 +508,7 @@ class FloorPlanController
             }
 
             // Get zones
-            $stmt = $pdo->prepare("SELECT * FROM zones WHERE floor_id = ? AND tenant_id = ? AND status = 'active' ORDER BY sort_order");
+            $stmt = $pdo->prepare("SELECT * FROM zones WHERE floor_id = ? AND tenant_id = ? AND LOWER(status) = 'active' ORDER BY sort_order");
             $stmt->execute([$floorId, $tenantId]);
             $zones = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -539,7 +539,7 @@ class FloorPlanController
                 'tables' => $tables,
             ], 'Floor plan layout retrieved');
         } catch (\Exception $e) {
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 
@@ -620,7 +620,7 @@ class FloorPlanController
             return Response::success(['floor_id' => (int)$floorId], 'Floor plan layout saved');
         } catch (\Exception $e) {
             if ($pdo->inTransaction()) $pdo->rollBack();
-            return Response::error('Failed: ' . $e->getMessage());
+            return Response::error('Failed: ' . $e->getMessage(), (int)($e->getCode() ?: 400));
         }
     }
 

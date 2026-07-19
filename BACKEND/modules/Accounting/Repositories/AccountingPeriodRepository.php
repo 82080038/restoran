@@ -72,7 +72,7 @@ class AccountingPeriodRepository
     public function getCurrentPeriod($tenantId, $branchId)
     {
         $currentDate = date('Y-m-d');
-        $sql = "SELECT * FROM accounting_periods WHERE tenant_id = ? AND branch_id = ? AND start_date <= ? AND end_date >= ? AND status = 'OPEN' AND deleted_at IS NULL ORDER BY start_date DESC LIMIT 1";
+        $sql = "SELECT * FROM accounting_periods WHERE tenant_id = ? AND (branch_id = ? OR branch_id IS NULL) AND start_date <= ? AND end_date >= ? AND status = 'OPEN' AND deleted_at IS NULL ORDER BY start_date DESC LIMIT 1";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$tenantId, $branchId, $currentDate, $currentDate]);
         return $stmt->fetch(PDO::FETCH_ASSOC);

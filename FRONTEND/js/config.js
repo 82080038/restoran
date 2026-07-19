@@ -14,6 +14,10 @@ function detectApiBaseURL() {
     if (window.API_BASE_URL) return window.API_BASE_URL;
 
     var path = window.location.pathname;
+    // If path starts with /FRONTEND/ (case-insensitive), API is at root /api/v1
+    if (path.match(/^\/FRONTEND\//i)) {
+        return '/api/v1';
+    }
     // Match common base paths like /restoran/, /EBP/, /myapp/ etc.
     // Frontend pages are served from <base>/FRONTEND/ or <base>/consumer/ etc.
     var match = path.match(/^(\/[^/]+)\/(FRONTEND|api|consumer|dashboard|kiosk|mobile|index|login|reset-password|bill-split|floor-plan|floor-status|qr-order)/);

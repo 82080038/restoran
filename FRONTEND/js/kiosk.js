@@ -85,7 +85,7 @@ class KioskApp {
 
     async loadMenu() {
         try {
-            const response = await window.apiClient.getProducts();
+            const response = await window.apiClient.getKioskMenu(this.tenantId, this.branchId);
             if (response && response.success) {
                 this.menu = response.data || [];
                 this.extractCategories();

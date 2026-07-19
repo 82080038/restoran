@@ -10,9 +10,10 @@ class SimpleEmployeeController
     {
         $db = db();
 
-        $sql = "SELECT e.employee_id, e.employee_name, e.position, e.phone, e.email, e.salary, e.start_date, e.status
+        $sql = "SELECT e.employee_id, CONCAT(e.first_name, ' ', e.last_name) AS employee_name, e.position, e.phone, e.email, e.salary, e.hire_date AS start_date, e.status
                 FROM employees e
-                ORDER BY e.employee_name ASC
+                WHERE e.deleted_at IS NULL
+                ORDER BY e.first_name ASC
                 LIMIT 50";
 
         $stmt = $db->prepare($sql);
