@@ -258,7 +258,7 @@ class BudgetService
         if (!class_exists('Audit')) {
             require_once __DIR__ . '/../../../core/Audit.php';
         }
-        $audit = new Audit();
+        $audit = Audit::getInstance();
         
         $audit->log(
             $tenantId,

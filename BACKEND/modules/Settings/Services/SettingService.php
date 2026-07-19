@@ -16,7 +16,7 @@ class SettingService
     {
         $this->settingRepository = new SettingRepository();
         $this->transaction = new Transaction();
-        $this->audit = new \App\Core\Audit();
+        $this->audit = \App\Core\Audit::getInstance();
     }
 
     public function getAllSettings(int $tenantId): array

@@ -16,7 +16,7 @@ class KitchenService
     {
         $this->kitchenRepository = new KitchenRepository();
         $this->transaction = new Transaction();
-        $this->audit = new \App\Core\Audit();
+        $this->audit = \App\Core\Audit::getInstance();
     }
 
     public function getAllKitchenOrders(int $tenantId, ?int $branchId = null): array

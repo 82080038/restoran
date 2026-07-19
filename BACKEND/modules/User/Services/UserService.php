@@ -16,7 +16,7 @@ class UserService
     {
         $this->userRepository = new UserRepository();
         $this->transaction = new Transaction();
-        $this->audit = new \App\Core\Audit();
+        $this->audit = \App\Core\Audit::getInstance();
     }
 
     public function getAllUsers(int $tenantId, ?int $branchId = null): array

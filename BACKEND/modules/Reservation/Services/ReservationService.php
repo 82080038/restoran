@@ -16,7 +16,7 @@ class ReservationService
     {
         $this->reservationRepository = new ReservationRepository();
         $this->transaction = new Transaction();
-        $this->audit = new \App\Core\Audit();
+        $this->audit = \App\Core\Audit::getInstance();
     }
 
     public function getAllReservations(int $tenantId, ?int $branchId = null): array

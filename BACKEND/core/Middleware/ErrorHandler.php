@@ -53,7 +53,11 @@ class ErrorHandler
         // Return error response if in API context
         if (self::isApiRequest()) {
             // Use exception code if it's a valid HTTP status code, otherwise default to 500
-            $statusCode = ($exception->getCode() >= 400 && $exception->getCode() < 600) ? $exception->getCode() : 500;
+            $code = $exception->getCode();
+            if (!is_numeric($code)) {
+                $code = 500;
+            }
+            $statusCode = ($code >= 400 && $code < 600) ? (int)$code : 500;
             
             // Hide trace in production
             $debug = getenv('APP_DEBUG') === 'true';

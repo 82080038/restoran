@@ -16,7 +16,7 @@ class TableService
     {
         $this->tableRepository = new TableRepository();
         $this->transaction = new Transaction();
-        $this->audit = new \App\Core\Audit();
+        $this->audit = \App\Core\Audit::getInstance();
     }
 
     public function getAllTables(int $tenantId, ?int $branchId = null): array

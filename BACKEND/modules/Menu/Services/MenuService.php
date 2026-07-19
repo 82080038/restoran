@@ -31,7 +31,7 @@ class MenuService
         $this->productRepository = new ProductRepository();
         $this->recipeRepository = new RecipeRepository();
         $this->transaction = new Transaction();
-        $this->audit = new \App\Core\Audit();
+        $this->audit = \App\Core\Audit::getInstance();
     }
 
     // Category Methods

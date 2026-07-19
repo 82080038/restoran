@@ -16,7 +16,7 @@ class InventoryService
     {
         $this->inventoryRepository = new InventoryRepository();
         $this->transaction = new Transaction();
-        $this->audit = new \App\Core\Audit();
+        $this->audit = \App\Core\Audit::getInstance();
     }
 
     public function getAllInventory(int $tenantId, ?int $branchId = null): array

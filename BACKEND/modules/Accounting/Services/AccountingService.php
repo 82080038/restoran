@@ -19,7 +19,7 @@ class AccountingService
     {
         $this->db = db();
         $this->repository = new AccountingRepository($this->db);
-        // $this->audit = new Audit();
+        // $this->audit = Audit::getInstance();
     }
 
     public function createJournalEntry($data, $tenantId, $branchId, $userId)

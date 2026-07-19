@@ -13,7 +13,7 @@ class QualityControlService
     public function __construct()
     {
         $this->db = Database::getInstance();
-        $this->audit = new Audit();
+        $this->audit = Audit::getInstance();
     }
 
     /**
