@@ -470,6 +470,26 @@ if (!class_exists('LoyaltyController')) {
     require_once __DIR__ . '/../modules/Loyalty/Controllers/LoyaltyController.php';
 }
 
+// Delivery Integration Module
+if (!class_exists('DeliveryIntegrationController')) {
+    require_once __DIR__ . '/../modules/Integration/Controllers/DeliveryIntegrationController.php';
+}
+
+// Simple Payment Module (compatible with current router pattern)
+if (!class_exists('SimplePaymentController')) {
+    require_once __DIR__ . '/../modules/Payment/Controllers/SimplePaymentController.php';
+}
+
+// Free Payment Module (zero-fee: transfer proof, QRIS static, wallet)
+if (!class_exists('FreePaymentController')) {
+    require_once __DIR__ . '/../modules/Payment/Controllers/FreePaymentController.php';
+}
+
+// Notification Module (SSE + REST)
+if (!class_exists('NotificationController')) {
+    require_once __DIR__ . '/../modules/Notification/Controllers/NotificationController.php';
+}
+
 // Create global aliases for namespaced controllers so short names used below work
 foreach (get_declared_classes() as $class) {
     $parts = explode('\\', $class);

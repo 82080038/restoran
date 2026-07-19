@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../../../core/Response.php';
 require_once __DIR__ . '/../../../core/Database.php';
+require_once __DIR__ . '/../../../core/JWT.php';
 
 class ConsumerController
 {
@@ -206,12 +207,15 @@ class ConsumerController
                 return Response::error('Invalid password', 401);
             }
 
-            // Generate JWT token (simplified - should use proper JWT library)
-            $token = base64_encode(json_encode([
+            // Generate JWT token
+            $jwt = new \JWT();
+            $token = $jwt->encode([
                 'user_id' => $user['user_id'],
                 'email' => $user['email'],
-                'exp' => time() + 3600
-            ]));
+                'username' => $user['username'],
+                'level' => 'CONSUMER',
+                'exp' => time() + (int)(getenv('JWT_EXPIRATION') ?: 3600)
+            ]);
 
             // Remove password from response
             unset($user['password']);
@@ -298,11 +302,14 @@ class ConsumerController
             }
 
             // Generate JWT token
-            $token = base64_encode(json_encode([
+            $jwt = new \JWT();
+            $token = $jwt->encode([
                 'user_id' => $user['user_id'],
                 'phone' => $phone,
-                'exp' => time() + 3600
-            ]));
+                'username' => $user['username'],
+                'level' => 'CONSUMER',
+                'exp' => time() + (int)(getenv('JWT_EXPIRATION') ?: 3600)
+            ]);
 
             return Response::success([
                 'user' => $user,
@@ -310,6 +317,70 @@ class ConsumerController
             ], 'Login successful');
         } catch (\Exception $e) {
             return Response::error('OTP verification failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Consumer registration
+     */
+    public function register(array $request)
+    {
+        try {
+            $pdo = $this->db->connect();
+            $body = $request['body'] ?? [];
+            $username = $body['username'] ?? '';
+            $email = $body['email'] ?? '';
+            $phone = $body['phone'] ?? '';
+            $password = $body['password'] ?? '';
+            $fullName = $body['full_name'] ?? '';
+
+            if (empty($email) || empty($password)) {
+                return Response::error('Email and password are required', 400);
+            }
+
+            if (strlen($password) < 6) {
+                return Response::error('Password must be at least 6 characters', 400);
+            }
+
+            // Check if email already exists
+            $stmt = $pdo->prepare("SELECT user_id FROM users WHERE email = ? AND status = 'ACTIVE'");
+            $stmt->execute([$email]);
+            if ($stmt->fetch(\PDO::FETCH_ASSOC)) {
+                return Response::error('Email already registered', 409);
+            }
+
+            $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+            $username = $username ?: $email;
+
+            $stmt = $pdo->prepare("
+                INSERT INTO users (username, email, phone, full_name, password, status, created_at)
+                VALUES (?, ?, ?, ?, ?, 'ACTIVE', NOW())
+            ");
+            $stmt->execute([$username, $email, $phone, $fullName, $hashedPassword]);
+            $userId = $pdo->lastInsertId();
+
+            // Generate JWT token
+            $jwt = new \JWT();
+            $token = $jwt->encode([
+                'user_id' => $userId,
+                'email' => $email,
+                'username' => $username,
+                'level' => 'CONSUMER',
+                'exp' => time() + (int)(getenv('JWT_EXPIRATION') ?: 3600)
+            ]);
+
+            return Response::success([
+                'user' => [
+                    'user_id' => $userId,
+                    'username' => $username,
+                    'email' => $email,
+                    'full_name' => $fullName
+                ],
+                'access_token' => $token
+            ], 'Registration successful');
+        } catch (\Exception $e) {
+            error_log('Registration error: ' . $e->getMessage());
+            return Response::error('Registration failed: ' . $e->getMessage());
         }
     }
 

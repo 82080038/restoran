@@ -33,8 +33,11 @@ class AuthManager {
             const response = await window.apiClient.login(username, password);
             
             if (response.success) {
-                this.setAuthData(response.token, response.user);
-                return { success: true, user: response.user };
+                // API returns { success: true, data: { access_token, user } }
+                const token = response.data.access_token;
+                const user = response.data.user;
+                this.setAuthData(token, user);
+                return { success: true, user: user };
             } else {
                 return { success: false, message: response.message };
             }
@@ -44,7 +47,14 @@ class AuthManager {
         }
     }
 
-    logout() {
+    async logout() {
+        try {
+            if (this.token) {
+                await window.apiClient.logout();
+            }
+        } catch (e) {
+            // Ignore logout API errors
+        }
         this.clearAuthData();
         window.location.href = '/index.html';
     }
@@ -203,10 +213,16 @@ class AuthManager {
 
     async refreshToken() {
         try {
-            // Implement token refresh logic if backend supports it
-            // For now, just logout if token is expired
-            console.log('Token refresh needed - implementing logout');
-            this.logout();
+            const response = await window.apiClient.refreshToken();
+            if (response.success) {
+                const token = response.data.access_token;
+                const user = response.data.user;
+                this.setAuthData(token, user);
+                console.log('Token refreshed successfully');
+            } else {
+                console.error('Token refresh failed:', response.message);
+                this.logout();
+            }
         } catch (error) {
             console.error('Token refresh failed:', error);
             this.logout();

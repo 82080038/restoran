@@ -129,6 +129,10 @@ $kitchenPerformanceController = new LazyController(KitchenPerformanceController:
 $customerAdvancedController = new LazyController(CustomerAdvancedController::class);
 $costCenterController = new LazyController(CostCenterController::class);
 $whatsappController = new LazyController(WhatsAppController::class);
+$simplePaymentController = new LazyController(SimplePaymentController::class);
+$freePaymentController = new LazyController(FreePaymentController::class);
+$notificationController = new LazyController(NotificationController::class);
+$deliveryIntegrationController = new LazyController(DeliveryIntegrationController::class);
 $taxCalculationController = new LazyController(TaxCalculationController::class);
 $purchasePlanningController = new LazyController(PurchasePlanningController::class);
 $supplierPerformanceController = new LazyController(SupplierPerformanceController::class);
@@ -269,6 +273,7 @@ require_once __DIR__ . '/api/098_Custom_Module_Routes.php';
 require_once __DIR__ . '/api/099_Custom_Permission_Routes.php';
 require_once __DIR__ . '/api/100_Facility_Routes.php';
 require_once __DIR__ . '/api/101_Advanced_Operations_Routes.php';
+require_once __DIR__ . '/api/102_Free_Payment_Routes.php';
 
 // Dispatch the request
 $router->dispatch();

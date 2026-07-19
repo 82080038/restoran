@@ -1,5 +1,10 @@
 <?php
 
+// Consumer registration
+$router->addRoute('POST', '/api/v1/consumer/auth/register', function($request) use ($consumerController) {
+    return $consumerController->register($request);
+});
+
 // Consumer Auth Routes
 $router->addRoute('POST', '/api/v1/consumer/auth/login', function($request) use ($consumerController) {
     return $consumerController->login($request);

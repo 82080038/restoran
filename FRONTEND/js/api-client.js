@@ -215,10 +215,24 @@ class APIClient {
     }
 
     // Auth
-    async login(email, password) {
+    async login(username, password) {
         return this.request('/auth/login', {
             method: 'POST',
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ username, password })
+        });
+    }
+
+    async refreshToken() {
+        return this.request('/auth/refresh', {
+            method: 'POST',
+            skipCache: true
+        });
+    }
+
+    async logout() {
+        return this.request('/auth/logout', {
+            method: 'POST',
+            skipCache: true
         });
     }
 
@@ -1136,6 +1150,83 @@ class APIClient {
         return this.request('/ai/predictive-analytics', {
             method: 'GET'
         });
+    }
+
+    // Payments
+    async getPayments(params = {}) {
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/payments${queryString ? '?' + queryString : ''}`, {
+            method: 'GET'
+        });
+    }
+
+    async getPayment(paymentId) {
+        return this.request(`/payments/${paymentId}`, {
+            method: 'GET'
+        });
+    }
+
+    async createPayment(paymentData) {
+        return this.request('/payments', {
+            method: 'POST',
+            body: JSON.stringify(paymentData)
+        });
+    }
+
+    async processPayment(paymentId, data = {}) {
+        return this.request(`/payments/${paymentId}/process`, {
+            method: 'POST',
+            body: JSON.stringify(data)
+        });
+    }
+
+    async getPaymentMethods() {
+        return this.request('/payments/methods', {
+            method: 'GET'
+        });
+    }
+
+    async getPaymentStatistics(params = {}) {
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/payments/statistics${queryString ? '?' + queryString : ''}`, {
+            method: 'GET'
+        });
+    }
+
+    // Z-Report
+    async getZReport(params = {}) {
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/reports/z-report${queryString ? '?' + queryString : ''}`, {
+            method: 'GET'
+        });
+    }
+
+    // Notifications
+    async getNotifications(params = {}) {
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/notifications${queryString ? '?' + queryString : ''}`, {
+            method: 'GET'
+        });
+    }
+
+    async getUnreadNotificationCount() {
+        return this.request('/notifications/unread-count', {
+            method: 'GET'
+        });
+    }
+
+    async markNotificationAsRead(notificationId) {
+        return this.request(`/notifications/${notificationId}/read`, {
+            method: 'POST',
+            skipCache: true
+        });
+    }
+
+    // SSE Notification Stream
+    createNotificationStream() {
+        const url = `${this.baseURL}/notifications/stream`;
+        const eventSource = new EventSource(url, { withCredentials: false });
+        return eventSource;
     }
 }
 

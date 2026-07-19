@@ -2,7 +2,48 @@
 
 // Auth Routes
 $router->addRoute('POST', '/api/v1/auth/login', function($request) use ($authController) {
+    // Rate limit: 10 login attempts per minute per IP
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $rateLimit = new \App\Core\RateLimitMiddleware();
+    if (!$rateLimit->check('login_' . $ip, 10, 60)) {
+        return \App\Core\Response::error('Too many login attempts. Please try again later.', 429);
+    }
     return $authController->login($request);
+});
+
+// Token refresh (requires valid token)
+$router->addRoute('POST', '/api/v1/auth/refresh', function($request) use ($authController) {
+    return $authController->refresh($request);
+});
+
+// Logout (requires valid token for audit logging)
+$router->addRoute('POST', '/api/v1/auth/logout', function($request) use ($authController) {
+    return $authController->logout($request);
+});
+
+// Change password (requires valid token)
+$router->addRoute('POST', '/api/v1/auth/change-password', function($request) use ($authController) {
+    return $authController->changePassword($request);
+});
+
+// Get current user info (requires valid token)
+$router->addRoute('GET', '/api/v1/auth/me', function($request) {
+    try {
+        $payload = AuthMiddleware::handle($request);
+        Response::success([
+            'user' => [
+                'id' => $payload['user_id'],
+                'username' => $payload['username'],
+                'tenant_id' => $payload['tenant_id'],
+                'branch_id' => $payload['branch_id'],
+                'role' => $payload['role'],
+                'level' => $payload['level'],
+                'is_platform_owner' => (bool) $payload['is_platform_owner']
+            ]
+        ], 'User info retrieved');
+    } catch (\Throwable $e) {
+        Response::error('Authentication required', 401);
+    }
 });
 
 // Public Menu Routes (without authentication)

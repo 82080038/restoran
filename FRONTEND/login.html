@@ -205,15 +205,19 @@
                 
                 const data = await response.json();
                 
-                if (response.ok) {
-                    // Store token
-                    localStorage.setItem(Config.auth.tokenKey, data.token);
-                    localStorage.setItem(Config.auth.userKey, JSON.stringify(data.user));
-                    if (data.tenantId) {
-                        localStorage.setItem(Config.auth.tenantIdKey, data.tenantId);
+                if (response.ok && data.success) {
+                    // API returns { success: true, data: { access_token, user } }
+                    const token = data.data.access_token;
+                    const user = data.data.user;
+                    
+                    // Store token and user info
+                    localStorage.setItem(Config.auth.tokenKey, token);
+                    localStorage.setItem(Config.auth.userKey, JSON.stringify(user));
+                    if (user.tenant_id) {
+                        localStorage.setItem(Config.auth.tenantIdKey, user.tenant_id);
                     }
-                    if (data.branchId) {
-                        localStorage.setItem(Config.auth.branchIdKey, data.branchId);
+                    if (user.branch_id) {
+                        localStorage.setItem(Config.auth.branchIdKey, user.branch_id);
                     }
                     
                     // Redirect to dashboard

@@ -160,6 +160,14 @@ class PaymentService
                 // Validate voucher
                 return ['success' => true, 'transaction_id' => 'VOUCHER-' . time()];
             
+            case 'qris':
+                // QRIS static - requires manual confirmation by kasir
+                return ['success' => true, 'transaction_id' => 'QRIS-' . time()];
+            
+            case 'wallet':
+                // Internal wallet - processed by FreePaymentController
+                return ['success' => true, 'transaction_id' => 'WALLET-' . time()];
+            
             default:
                 return ['success' => false, 'message' => 'Unknown payment method'];
         }
