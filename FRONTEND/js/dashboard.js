@@ -53,7 +53,8 @@ class Dashboard {
     }
 
     redirectToLogin() {
-        window.location.href = '../login.html';
+        var base = Config.api.baseURL.replace(/\/api\/v1$/, '');
+        window.location.href = base + '/login.html';
     }
 
     loadUserInfo() {
@@ -696,7 +697,8 @@ class Dashboard {
 
     logout() {
         window.apiClient.clearAuth();
-        window.location.href = '/index.html';
+        var base = Config.api.baseURL.replace(/\/api\/v1$/, '');
+        window.location.href = base + '/index.html';
     }
 
     formatPrice(price) {

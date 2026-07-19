@@ -1,4 +1,5 @@
 RewriteEngine On
+RewriteBase /restoran/
 
 # Redirect everything to index.php unless it's a real file/directory
 RewriteCond %{REQUEST_FILENAME} !-f

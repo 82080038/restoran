@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const API_BASE = 'http://localhost/restauran/api/v1';
+const API_BASE = 'http://localhost/restoran/api/v1';
 
 // Helper: Login and get JWT token
 async function getAuthToken(): Promise<string> {

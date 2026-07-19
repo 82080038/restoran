@@ -2,7 +2,7 @@
 
 ## 1. Executive Summary
 
-Project `/opt/lampp/htdocs/restauran` (RESTAURANT_ERP) contains a PHP/MySQL backend, HTML/JS/CSS frontend, Playwright/PHPUnit tests, and extensive documentation. The repository is functional but carries a large amount of generated artifacts, obsolete manual test harnesses, and duplicated configuration that inflate the working tree and slow CI/package operations.
+Project `/opt/lampp/htdocs/restoran` (RESTAURANT_ERP) contains a PHP/MySQL backend, HTML/JS/CSS frontend, Playwright/PHPUnit tests, and extensive documentation. The repository is functional but carries a large amount of generated artifacts, obsolete manual test harnesses, and duplicated configuration that inflate the working tree and slow CI/package operations.
 
 Key facts from the audit:
 
@@ -83,7 +83,7 @@ Both are ignored by Git. If Composer/PHPUnit are installed globally, they can be
 
 ## 4. Cleanup Commands
 
-Run from `/opt/lampp/htdocs/restauran`.
+Run from `/opt/lampp/htdocs/restoran`.
 
 ```bash
 # 1. Remove generated artifacts from working tree (ignored, no git rm needed)
@@ -242,7 +242,7 @@ When launching with `npx playwright test --headed`, ensure the dev server is run
 git status --short
 
 # Run smoke tests (ensure Apache/MySQL are running)
-cd /opt/lampp/htdocs/restauran/BACKEND
+cd /opt/lampp/htdocs/restoran/BACKEND
 /opt/lampp/bin/php vendor/phpunit/phpunit/phpunit --testsuite "Smoke Tests"
 npx playwright test --project chromium --headed
 ```

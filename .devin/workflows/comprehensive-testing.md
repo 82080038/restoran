@@ -33,7 +33,7 @@ Execute a full test pass covering API smoke tests, UI/UX flows, and role-based n
 1. **Start the backend dev server (optional — Apache via XAMPP also works)**
 
 ```bash
-cd /opt/lampp/htdocs/restauran/BACKEND
+cd /opt/lampp/htdocs/restoran/BACKEND
 /opt/lampp/bin/php -S localhost:8000 -t public
 ```
 
@@ -42,21 +42,21 @@ Alternatively, use XAMPP Apache: `http://localhost/restoran/api/v1/...`
 2. **Run PHPUnit smoke tests**
 
 ```bash
-cd /opt/lampp/htdocs/restauran/BACKEND
+cd /opt/lampp/htdocs/restoran/BACKEND
 /opt/lampp/bin/php vendor/phpunit/phpunit/phpunit --testsuite "Smoke Tests"
 ```
 
 3. **Run Playwright tests (root E2E specs)**
 
 ```bash
-cd /opt/lampp/htdocs/restauran
+cd /opt/lampp/htdocs/restoran
 npx playwright test --config playwright.config.ts
 ```
 
 4. **Run Playwright tests (BACKEND specs, headed mode)**
 
 ```bash
-cd /opt/lampp/htdocs/restauran/BACKEND
+cd /opt/lampp/htdocs/restoran/BACKEND
 npx playwright test --project chromium --headed
 ```
 

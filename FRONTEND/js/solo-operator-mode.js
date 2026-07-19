@@ -21,7 +21,7 @@ class SoloOperatorMode {
     async initialize() {
         // Get current user
         if (window.authManager) {
-            this.currentUser = window.authManager.getCurrentUser();
+            this.currentUser = window.authManager.getUser();
         }
         
         if (this.currentUser && window.multiRoleSupport) {
@@ -176,7 +176,7 @@ class SoloOperatorMode {
 
         try {
             // Load products
-            const response = await fetch(`${API_BASE_URL}/products`);
+            const response = await fetch(`${Config.api.baseURL}/products`);
             const data = await response.json();
 
             if (data.success && data.products) {
@@ -342,7 +342,7 @@ class SoloOperatorMode {
         if (!container) return;
 
         try {
-            const response = await fetch(`${API_BASE_URL}/kitchen/orders`);
+            const response = await fetch(`${Config.api.baseURL}/kitchen/orders`);
             const data = await response.json();
 
             if (data.success && data.orders) {
@@ -420,7 +420,7 @@ class SoloOperatorMode {
         if (!container) return;
 
         try {
-            const response = await fetch(`${API_BASE_URL}/tables`);
+            const response = await fetch(`${Config.api.baseURL}/tables`);
             const data = await response.json();
 
             if (data.success && data.tables) {
@@ -476,7 +476,7 @@ class SoloOperatorMode {
         if (!container) return;
 
         try {
-            const response = await fetch(`${API_BASE_URL}/orders/recent?limit=5`);
+            const response = await fetch(`${Config.api.baseURL}/orders/recent?limit=5`);
             const data = await response.json();
 
             if (data.success && data.orders) {
@@ -523,7 +523,7 @@ class SoloOperatorMode {
      */
     async updateOrderStatus(orderId, newStatus) {
         try {
-            const response = await fetch(`${API_BASE_URL}/orders/${orderId}/status`, {
+            const response = await fetch(`${Config.api.baseURL}/orders/${orderId}/status`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

@@ -255,7 +255,7 @@
     </div>
 </div>
 <script>
-const API_BASE = window.location.origin + '/restoran/BACKEND/public/api/v1';
+const API_BASE = Config.api.baseURL;
 document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
     e.preventDefault();
     document.getElementById('forgotModal').style.display = 'flex';

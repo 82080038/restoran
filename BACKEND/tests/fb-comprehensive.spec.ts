@@ -13,7 +13,7 @@ test.describe('Restaurant ERP - Comprehensive F&B Features & Roles Testing', () 
 
   test.beforeEach(async ({ page }) => {
     // Navigate to application
-    await page.goto('http://localhost/restauran/');
+    await page.goto('http://localhost/restoran/');
     await page.waitForLoadState('networkidle');
   });
 
@@ -25,7 +25,7 @@ test.describe('Restaurant ERP - Comprehensive F&B Features & Roles Testing', () 
       console.log(`Testing login for ${user.role} (${user.username})`);
 
       // Navigate to application
-      await page.goto('http://localhost/restauran/');
+      await page.goto('http://localhost/restoran/');
       await page.waitForLoadState('networkidle');
 
       // Click login button on landing page
@@ -81,7 +81,7 @@ test.describe('Restaurant ERP - Comprehensive F&B Features & Roles Testing', () 
     });
 
     test('1.2 Invalid credentials', async ({ page }) => {
-      await page.goto('http://localhost/restauran/');
+      await page.goto('http://localhost/restoran/');
       await page.waitForLoadState('networkidle');
 
       // Click login button
@@ -111,7 +111,7 @@ test.describe('Restaurant ERP - Comprehensive F&B Features & Roles Testing', () 
   // Phase 2: Menu Management Testing
   test.describe('Phase 2: Menu Management', () => {
     test('2.1 View menu categories', async ({ page }) => {
-      await page.goto('http://localhost/restauran/');
+      await page.goto('http://localhost/restoran/');
       await page.waitForLoadState('networkidle');
 
       // Login first
@@ -169,7 +169,7 @@ test.describe('Restaurant ERP - Comprehensive F&B Features & Roles Testing', () 
     });
 
     test('2.2 View menu products', async ({ page }) => {
-      await page.goto('http://localhost/restauran/');
+      await page.goto('http://localhost/restoran/');
       await page.waitForLoadState('networkidle');
 
       // Login first
@@ -203,7 +203,7 @@ test.describe('Restaurant ERP - Comprehensive F&B Features & Roles Testing', () 
   // Phase 3: Order Management Testing
   test.describe('Phase 3: Order Management', () => {
     test('3.1 View orders', async ({ page }) => {
-      await page.goto('http://localhost/restauran/');
+      await page.goto('http://localhost/restoran/');
       await page.waitForLoadState('networkidle');
 
       // Login first
@@ -239,7 +239,7 @@ test.describe('Restaurant ERP - Comprehensive F&B Features & Roles Testing', () 
   // Phase 4: Table Management Testing
   test.describe('Phase 4: Table Management', () => {
     test('4.1 View tables', async ({ page }) => {
-      await page.goto('http://localhost/restauran/');
+      await page.goto('http://localhost/restoran/');
       await page.waitForLoadState('networkidle');
 
       // Login first
@@ -336,7 +336,7 @@ test.describe('Restaurant ERP - Comprehensive F&B Features & Roles Testing', () 
   test.describe('Phase 11: UI Responsiveness', () => {
     test('11.1 Mobile view', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.goto('http://localhost/restauran/');
+      await page.goto('http://localhost/restoran/');
       await page.waitForLoadState('networkidle');
 
       const mobileMenu = page.locator('#mobileMenu');
@@ -346,7 +346,7 @@ test.describe('Restaurant ERP - Comprehensive F&B Features & Roles Testing', () 
 
     test('11.2 Tablet view', async ({ page }) => {
       await page.setViewportSize({ width: 768, height: 1024 });
-      await page.goto('http://localhost/restauran/');
+      await page.goto('http://localhost/restoran/');
       await page.waitForLoadState('networkidle');
 
       const content = page.locator('.container');
@@ -356,7 +356,7 @@ test.describe('Restaurant ERP - Comprehensive F&B Features & Roles Testing', () 
 
     test('11.3 Desktop view', async ({ page }) => {
       await page.setViewportSize({ width: 1920, height: 1080 });
-      await page.goto('http://localhost/restauran/');
+      await page.goto('http://localhost/restoran/');
       await page.waitForLoadState('networkidle');
 
       const sidebar = page.locator('#sidebar');
@@ -376,7 +376,7 @@ test.describe('Restaurant ERP - Comprehensive F&B Features & Roles Testing', () 
         }
       });
 
-      await page.goto('http://localhost/restauran/');
+      await page.goto('http://localhost/restoran/');
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(3000);
 
@@ -395,7 +395,7 @@ test.describe('Restaurant ERP - Comprehensive F&B Features & Roles Testing', () 
         failedRequests.push(request.url());
       });
 
-      await page.goto('http://localhost/restauran/');
+      await page.goto('http://localhost/restoran/');
       await page.waitForLoadState('networkidle');
       await page.waitForTimeout(3000);
 

@@ -8,8 +8,8 @@ Complete implementation of multi-role support and solo operator mode for small b
 ### Frontend Components Created
 
 #### 1. Multi-Role Support (`multi-role-support.js`)
-**File:** `/opt/lampp/htdocs/restauran/FRONTEND/js/multi-role-support.js`
-**CSS:** `/opt/lampp/htdocs/restauran/FRONTEND/css/multi-role-support.css`
+**File:** `/opt/lampp/htdocs/restoran/FRONTEND/js/multi-role-support.js`
+**CSS:** `/opt/lampp/htdocs/restoran/FRONTEND/css/multi-role-support.css`
 
 **Features:**
 - Load user roles from backend
@@ -28,8 +28,8 @@ multiRoleSupport.hasMultipleRoles();
 ```
 
 #### 2. Solo Operator Mode (`solo-operator-mode.js`)
-**File:** `/opt/lampp/htdocs/restauran/FRONTEND/js/solo-operator-mode.js`
-**CSS:** `/opt/lampp/htdocs/restauran/FRONTEND/css/solo-operator-mode.css`
+**File:** `/opt/lampp/htdocs/restoran/FRONTEND/js/solo-operator-mode.js`
+**CSS:** `/opt/lampp/htdocs/restoran/FRONTEND/css/solo-operator-mode.css`
 
 **Features:**
 - Unified view with 4 components:
@@ -52,7 +52,7 @@ soloOperatorMode.toggleSoloMode();
 ### Backend API Endpoints Created
 
 #### SimpleUserController Enhancements
-**File:** `/opt/lampp/htdocs/restauran/BACKEND/modules/User/Controllers/SimpleUserController.php`
+**File:** `/opt/lampp/htdocs/restoran/BACKEND/modules/User/Controllers/SimpleUserController.php`
 
 **New Endpoints:**
 
@@ -119,7 +119,7 @@ soloOperatorMode.toggleSoloMode();
 
 ### Dashboard Integration
 
-**File Updated:** `/opt/lampp/htdocs/restauran/FRONTEND/dashboard/index.html`
+**File Updated:** `/opt/lampp/htdocs/restoran/FRONTEND/dashboard/index.html`
 
 **Changes:**
 1. Added CSS files:
@@ -155,7 +155,7 @@ The components are automatically loaded when dashboard is accessed. No additiona
 
 Update `API_BASE_URL` in `FRONTEND/js/config.js` if needed:
 ```javascript
-const API_BASE_URL = 'http://localhost/restauran/BACKEND';
+const API_BASE_URL = 'http://localhost/restoran/BACKEND';
 ```
 
 ## Usage Guide

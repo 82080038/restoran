@@ -31,7 +31,7 @@ class ModifierSelector {
      */
     async loadAvailableModifiers() {
         try {
-            const response = await fetch(`${API_BASE_URL}/products/${this.productId}/modifiers`);
+            const response = await fetch(`${Config.api.baseURL}/products/${this.productId}/modifiers`);
             const data = await response.json();
             this.modifierGroups = data.groups || [];
             this.availableModifiers = data.modifiers || [];

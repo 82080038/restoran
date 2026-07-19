@@ -238,7 +238,7 @@ If any phase fails:
 
 **Version**: 2.0  
 **Last Updated**: 2026-07-19  
-**Environment**: Linux XAMPP (`/opt/lampp/`), PHP at `/opt/lampp/bin/php`, project at `/opt/lampp/htdocs/restauran`
+**Environment**: Linux XAMPP (`/opt/lampp/`), PHP at `/opt/lampp/bin/php`, project at `/opt/lampp/htdocs/restoran`
 
 ---
 

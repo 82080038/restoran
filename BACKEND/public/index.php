@@ -21,7 +21,7 @@ $requestUri = parse_url($requestUri, PHP_URL_PATH);
 // Detect and strip base path for Apache Alias setups
 // The app routes always start with /, /frontend/, /api/, /consumer/, /dashboard/, /kiosk/, /mobile/
 // Find where the actual route starts in the URI
-$routePatterns = ['/restoran/', '/frontend/', '/api/', '/consumer/', '/dashboard/', '/kiosk/', '/mobile/', '/index.html', '/index.php'];
+$routePatterns = ['/restoran/', '/frontend/', '/api/', '/consumer/', '/dashboard/', '/kiosk/', '/mobile/'];
 $basePath = '';
 foreach ($routePatterns as $pattern) {
     $pos = strpos($requestUri, $pattern);
@@ -39,18 +39,32 @@ if (!$basePath && preg_match('/\.(css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf
 }
 // If URI is just a base path with optional trailing slash, it's the root
 if (!$basePath) {
-    // Check if this looks like a root request (not matching any known route)
+    // Check if this looks like a base path like /EBP/restaurant or /EBP/restaurant/
+    // Only match single-level paths with no file extension and no subdirectory
     if ($requestUri !== '/' && strpos($requestUri, '/frontend/') === false && strpos($requestUri, '/api/') === false) {
-        // Could be a base path like /EBP/restaurant or /EBP/restaurant/
-        $basePath = rtrim($requestUri, '/');
+        // Must not contain a file extension or nested path
+        // e.g. /restoran/ is ok, /js/config.js is NOT a base path
+        $trimmed = trim($requestUri, '/');
+        $parts = explode('/', $trimmed);
+        if (count($parts) === 1 && !preg_match('/\.(html|php|css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf)$/', $parts[0])) {
+            // Exclude known app directories
+            $isAppDir = in_array('/' . $parts[0] . '/', ['/consumer/', '/dashboard/', '/kiosk/', '/mobile/']);
+            if (!$isAppDir) {
+                $basePath = rtrim($requestUri, '/');
+            }
+        }
     }
 }
 
 // Special handling for API routes - ensure base path is stripped correctly
-if (strpos($requestUri, '/api') !== false && !$basePath) {
+// Only match /api/ (with trailing slash) or /api at end, not filenames like /api-client.js
+if (!$basePath && (strpos($requestUri, '/api/') !== false || preg_match('/\/api$/', $requestUri))) {
     // If we have /api in the URI but no base path was detected,
     // it might be that the pattern matching failed. Try again.
-    $pos = strpos($requestUri, '/api');
+    $pos = strpos($requestUri, '/api/');
+    if ($pos === false) {
+        $pos = strrpos($requestUri, '/api');
+    }
     if ($pos > 0) {
         $basePath = substr($requestUri, 0, $pos);
     }

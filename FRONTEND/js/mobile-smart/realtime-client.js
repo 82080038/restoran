@@ -5,8 +5,9 @@
  */
 class RealtimeClient {
     constructor(config = {}) {
-        this.wsUrl = config.wsUrl || 'ws://localhost:8000/ws';
-        this.sseUrl = config.sseUrl || 'http://localhost:8000/api/v1/realtime/events';
+        var apiBase = (typeof Config !== 'undefined' ? Config.api.baseURL : '/api/v1');
+        this.wsUrl = config.wsUrl || (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws';
+        this.sseUrl = config.sseUrl || apiBase + '/realtime/events';
         this.ws = null;
         this.eventSource = null;
         this.channels = new Set();
@@ -305,9 +306,10 @@ class RealtimeManager {
 
     init() {
         // Initialize real-time client
+        var apiBase = (typeof Config !== 'undefined' ? Config.api.baseURL : '/api/v1');
         this.client = new RealtimeClient({
-            wsUrl: window.config?.wsUrl || 'ws://localhost:8000/ws',
-            sseUrl: window.config?.sseUrl || 'http://localhost:8000/api/v1/realtime/events',
+            wsUrl: window.config?.wsUrl || (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.host + '/ws',
+            sseUrl: window.config?.sseUrl || apiBase + '/realtime/events',
             useSSE: false // Use WebSocket by default
         });
 

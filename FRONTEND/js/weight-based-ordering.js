@@ -42,7 +42,7 @@ class WeightBasedOrdering {
      */
     async loadAvailableItems() {
         try {
-            const response = await fetch(`${API_BASE_URL}/inventory/available-items/${this.currentProduct.product_id}`);
+            const response = await fetch(`${Config.api.baseURL}/inventory/available-items/${this.currentProduct.product_id}`);
             const data = await response.json();
             this.availableItems = data.items || [];
         } catch (error) {

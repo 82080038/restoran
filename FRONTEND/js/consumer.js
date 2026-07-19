@@ -163,7 +163,7 @@ class ConsumerApp {
 
     async loadFeaturedRestaurants() {
         try {
-            const response = await apiClient.get('/api/v1/consumer/restaurants/featured');
+            const response = await apiClient.get('/consumer/restaurants/featured');
             const restaurants = response.data;
             this.renderFeaturedRestaurants(restaurants);
         } catch (error) {
@@ -175,7 +175,7 @@ class ConsumerApp {
     async loadNearbyRestaurants() {
         try {
             const location = await this.getCurrentLocation();
-            const response = await apiClient.get('/api/v1/consumer/restaurants/nearby', {
+            const response = await apiClient.get('/consumer/restaurants/nearby', {
                 params: { lat: location.lat, lng: location.lng }
             });
             const restaurants = response.data;
@@ -188,7 +188,7 @@ class ConsumerApp {
 
     async loadCuisines() {
         try {
-            const response = await apiClient.get('/api/v1/consumer/cuisines');
+            const response = await apiClient.get('/consumer/cuisines');
             const cuisines = response.data;
             this.renderCuisines(cuisines);
         } catch (error) {
@@ -251,7 +251,7 @@ class ConsumerApp {
 
     async loadRestaurantDetails(restaurantId) {
         try {
-            const response = await apiClient.get(`/api/v1/consumer/restaurants/${restaurantId}`);
+            const response = await apiClient.get(`/consumer/restaurants/${restaurantId}`);
             const restaurant = response.data;
             this.renderRestaurantDetails(restaurant);
         } catch (error) {
@@ -444,7 +444,7 @@ class ConsumerApp {
 
     async loadRestaurantsForReservation() {
         try {
-            const response = await apiClient.get('/api/v1/consumer/restaurants');
+            const response = await apiClient.get('/consumer/restaurants');
             const restaurants = response.data;
             const select = document.getElementById('reservationRestaurant');
             select.innerHTML = restaurants.map(r =>
@@ -466,7 +466,7 @@ class ConsumerApp {
         };
 
         try {
-            await apiClient.post('/api/v1/consumer/reservations', reservation);
+            await apiClient.post('/consumer/reservations', reservation);
             this.closeModal('reservationModal');
             this.loadReservations();
             this.showNotification('Reservation created successfully!');
@@ -480,7 +480,7 @@ class ConsumerApp {
         if (!this.currentUser) return;
 
         try {
-            const response = await apiClient.get('/api/v1/consumer/reservations');
+            const response = await apiClient.get('/consumer/reservations');
             const reservations = response.data;
             this.renderReservations(reservations);
         } catch (error) {
@@ -505,7 +505,7 @@ class ConsumerApp {
         if (!this.currentUser) return;
 
         try {
-            const response = await apiClient.get('/api/v1/consumer/orders');
+            const response = await apiClient.get('/consumer/orders');
             const orders = response.data;
             this.renderOrders(orders);
         } catch (error) {
@@ -530,7 +530,7 @@ class ConsumerApp {
         if (!this.currentUser) return;
 
         try {
-            const response = await apiClient.get('/api/v1/consumer/favorites');
+            const response = await apiClient.get('/consumer/favorites');
             const favorites = response.data;
             this.renderFavorites(favorites);
         } catch (error) {
@@ -559,7 +559,7 @@ class ConsumerApp {
         if (!this.currentUser) return;
 
         try {
-            const response = await apiClient.get('/api/v1/consumer/loyalty');
+            const response = await apiClient.get('/consumer/loyalty');
             const loyalty = response.data;
             this.renderLoyalty(loyalty);
         } catch (error) {
@@ -595,7 +595,7 @@ class ConsumerApp {
 
     async redeemReward(rewardId) {
         try {
-            await apiClient.post('/api/v1/consumer/loyalty/redeem', { rewardId });
+            await apiClient.post('/consumer/loyalty/redeem', { rewardId });
             this.loadLoyalty();
             this.showNotification('Reward redeemed successfully!');
         } catch (error) {
@@ -606,7 +606,7 @@ class ConsumerApp {
 
     async loadFAQ() {
         try {
-            const response = await apiClient.get('/api/v1/consumer/faq');
+            const response = await apiClient.get('/consumer/faq');
             const faqs = response.data;
             this.renderFAQ(faqs);
         } catch (error) {
@@ -646,7 +646,7 @@ class ConsumerApp {
         };
 
         try {
-            await apiClient.post('/api/v1/consumer/reviews', review);
+            await apiClient.post('/consumer/reviews', review);
             this.closeModal('reviewModal');
             this.showNotification('Review submitted successfully!');
         } catch (error) {
@@ -663,7 +663,7 @@ class ConsumerApp {
         };
 
         try {
-            const response = await apiClient.post('/api/v1/consumer/auth/login', credentials);
+            const response = await apiClient.post('/consumer/auth/login', credentials);
             this.currentUser = response.data.user;
             
             // Store user data with role information
@@ -748,7 +748,7 @@ class ConsumerApp {
 
         try {
             // Call backend to send OTP
-            const response = await apiClient.post('/api/v1/consumer/auth/send-otp', {
+            const response = await apiClient.post('/consumer/auth/send-otp', {
                 phone: fullPhone
             });
 
@@ -794,7 +794,7 @@ class ConsumerApp {
         }
 
         try {
-            const response = await apiClient.post('/api/v1/consumer/auth/verify-otp', {
+            const response = await apiClient.post('/consumer/auth/verify-otp', {
                 phone: this.tempPhone,
                 otp: otp
             });
@@ -823,7 +823,7 @@ class ConsumerApp {
     async handleResendOtp(e) {
         e.preventDefault();
         try {
-            await apiClient.post('/api/consumer/auth/send-otp', {
+            await apiClient.post('/consumer/auth/send-otp', {
                 phone: this.tempPhone
             });
             this.showNotification('OTP resent successfully!');

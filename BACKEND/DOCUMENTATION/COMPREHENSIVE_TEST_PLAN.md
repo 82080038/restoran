@@ -322,7 +322,7 @@
 # 5. Test Execution Results
 
 **Test Date:** 2026-07-04
-**Test Environment:** http://localhost/restauran/
+**Test Environment:** http://localhost/restoran/
 **Test Runner:** Playwright (Headed Browser)
 
 ## 5.1 Authentication Results
@@ -426,7 +426,7 @@
 **UI-001 Details (RESOLVED):**
 - **Issue:** UI login form submits but dashboard does not appear after successful authentication
 - **Root Cause:** API_BASE path was incorrect in frontend JavaScript
-- **Fix Applied:** Updated `index.html` API_BASE from '/api/v1' to '/restauran/api/v1' and updated index.php to include backend directly
+- **Fix Applied:** Updated `index.html` API_BASE from '/api/v1' to '/restoran/api/v1' and updated index.php to include backend directly
 - **Result:** Login successful, dashboard appears after authentication
 - **Status:** ✅ RESOLVED
 

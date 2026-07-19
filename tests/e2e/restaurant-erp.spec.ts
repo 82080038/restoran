@@ -7,7 +7,7 @@ test.describe('RESTAURANT ERP System Tests', () => {
   });
 
   test('Dashboard loads correctly', async ({ page }) => {
-    await page.goto('http://localhost/restauran/FRONTEND/dashboard/index.html');
+    await page.goto('http://localhost/restoran/FRONTEND/dashboard/index.html');
     
     // Wait for page to load
     await page.waitForLoadState('networkidle');
@@ -34,7 +34,7 @@ test.describe('RESTAURANT ERP System Tests', () => {
   });
 
   test('Consumer app loads correctly', async ({ page }) => {
-    await page.goto('http://localhost/restauran/FRONTEND/consumer/index.html');
+    await page.goto('http://localhost/restoran/FRONTEND/consumer/index.html');
     
     await page.waitForLoadState('networkidle');
     
@@ -60,7 +60,7 @@ test.describe('RESTAURANT ERP System Tests', () => {
 
   test('API endpoints are accessible', async ({ request }) => {
     // Test login endpoint (POST)
-    const loginResponse = await request.post('http://localhost/restauran/api/v1/auth/login', {
+    const loginResponse = await request.post('http://localhost/restoran/api/v1/auth/login', {
       data: { username: 'admin', password: 'admin123' },
       headers: { 'Content-Type': 'application/json' }
     });
@@ -70,7 +70,7 @@ test.describe('RESTAURANT ERP System Tests', () => {
     expect(token).toBeTruthy();
     
     // Test an authenticated endpoint
-    const miscResponse = await request.get('http://localhost/restauran/api/v1/misc/coat-check', {
+    const miscResponse = await request.get('http://localhost/restoran/api/v1/misc/coat-check', {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     expect(miscResponse.ok()).toBeTruthy();

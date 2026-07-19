@@ -11,7 +11,7 @@ Remove generated artifacts, stale log files, and obsolete manual test harnesses 
 ## Prerequisites
 
 - Bash shell (Linux)
-- Repository at `/opt/lampp/htdocs/restauran`
+- Repository at `/opt/lampp/htdocs/restoran`
 - Git available
 
 ## Steps
@@ -22,7 +22,7 @@ Remove generated artifacts, stale log files, and obsolete manual test harnesses 
 2. **Remove ignored/generated artifacts (no git rm needed)**
 
 ```bash
-cd /opt/lampp/htdocs/restauran
+cd /opt/lampp/htdocs/restoran
 rm -rf BACKEND/test-results BACKEND/playwright-report BACKEND/screenshots
 rm -f BACKEND/.phpunit.result.cache BACKEND/public/.htaccess.backup BACKEND/package-lock.json BACKEND/logs/app.log
 ```
@@ -36,7 +36,7 @@ rm -f BACKEND/composer.phar BACKEND/phpunit-9.6.phar
 4. **Remove obsolete tracked files (git rm)**
 
 ```bash
-cd /opt/lampp/htdocs/restauran
+cd /opt/lampp/htdocs/restoran
 obsolete_files=(
   'BACKEND/tests/consumer-direct-sim.php' 'BACKEND/tests/consumer-direct-test.php' 'BACKEND/tests/consumer-full-test.php' 'BACKEND/tests/consumer-manual-test.php' 'BACKEND/tests/consumer-sim.php' 'BACKEND/tests/consumer-simple-test.php' 'BACKEND/tests/consumer-step-test.php' 'BACKEND/tests/consumer-test.php'
   'BACKEND/tests/test-featured.php' 'BACKEND/tests/test-login.php'

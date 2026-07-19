@@ -33,7 +33,7 @@ class InventoryItemSelector {
      */
     async loadAvailableItems() {
         try {
-            const response = await fetch(`${API_BASE_URL}/inventory/items/available/${this.inventoryId}/${this.branchId}`);
+            const response = await fetch(`${Config.api.baseURL}/inventory/items/available/${this.inventoryId}/${this.branchId}`);
             const data = await response.json();
             this.availableItems = data.items || [];
         } catch (error) {

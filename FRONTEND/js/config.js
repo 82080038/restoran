@@ -5,10 +5,29 @@
  * In production, these should be loaded from environment-specific config files.
  */
 
+/**
+ * Auto-detect API base URL from current page path.
+ * Works for both Apache (e.g. /restoran/api/v1) and PHP dev server (e.g. /api/v1).
+ */
+function detectApiBaseURL() {
+    // If explicitly set via window.API_BASE_URL, use it
+    if (window.API_BASE_URL) return window.API_BASE_URL;
+
+    var path = window.location.pathname;
+    // Match common base paths like /restoran/, /EBP/, /myapp/ etc.
+    // Frontend pages are served from <base>/FRONTEND/ or <base>/consumer/ etc.
+    var match = path.match(/^(\/[^/]+)\/(FRONTEND|api|consumer|dashboard|kiosk|mobile|index|login|reset-password|bill-split|floor-plan|floor-status|qr-order)/);
+    if (match) {
+        return match[1] + '/api/v1';
+    }
+    // Default: API is at root
+    return '/api/v1';
+}
+
 const Config = {
     // API Configuration
     api: {
-        baseURL: window.API_BASE_URL || '/api/v1',
+        baseURL: detectApiBaseURL(),
         timeout: 30000, // 30 seconds
         retryAttempts: 3
     },

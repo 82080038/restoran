@@ -8,7 +8,7 @@ This knowledge file is used by the `playwright-headed-browser` agent (and any AI
 - Backend entry: `BACKEND/public/index.php` (routes `/api/v1/*`).
 - Frontend apps: `FRONTEND/login.html`, `FRONTEND/dashboard/index.html`, `FRONTEND/consumer/index.html`, `FRONTEND/kiosk/index.html`, `FRONTEND/mobile/index.html`.
 - PHP binary: `/opt/lampp/bin/php`
-- Project root: `/opt/lampp/htdocs/restauran`
+- Project root: `/opt/lampp/htdocs/restoran`
 
 ## URLs
 
@@ -124,21 +124,21 @@ const logoutBtn = page.locator('a#logoutBtn');
 
 - `BACKEND/playwright.config.ts` runs tests against `http://localhost:8000` with `testDir: './tests'`, project-level `headless: false` (headed).
 - Root `playwright.config.ts` runs `tests/e2e` against `http://localhost/restoran/api/v1` with `headless: true`.
-- Launch backend dev server with: `cd /opt/lampp/htdocs/restauran/BACKEND && /opt/lampp/bin/php -S localhost:8000 -t public`.
+- Launch backend dev server with: `cd /opt/lampp/htdocs/restoran/BACKEND && /opt/lampp/bin/php -S localhost:8000 -t public`.
 - Or use XAMPP Apache directly: API at `http://localhost/restoran/api/v1/...`.
 
 ## Commands
 
 ```bash
 # Backend tests (headed)
-cd /opt/lampp/htdocs/restauran/BACKEND
+cd /opt/lampp/htdocs/restoran/BACKEND
 npx playwright test --project chromium --headed
 
 # Root E2E spec
-cd /opt/lampp/htdocs/restauran
+cd /opt/lampp/htdocs/restoran
 npx playwright test --config playwright.config.ts
 
 # PHPUnit smoke
-cd /opt/lampp/htdocs/restauran/BACKEND
+cd /opt/lampp/htdocs/restoran/BACKEND
 /opt/lampp/bin/php vendor/phpunit/phpunit/phpunit --testsuite "Smoke Tests"
 ```

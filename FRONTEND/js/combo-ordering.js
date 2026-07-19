@@ -35,7 +35,7 @@ class ComboOrdering {
      */
     async loadAvailableCombos() {
         try {
-            const response = await fetch(`${API_BASE_URL}/sales/combos`);
+            const response = await fetch(`${Config.api.baseURL}/sales/combos`);
             const data = await response.json();
             this.availableCombos = data.data || [];
         } catch (error) {
@@ -241,7 +241,7 @@ class ComboOrdering {
                 quantities[item.menu_id] = item.quantity;
             });
             
-            const response = await fetch(`${API_BASE_URL}/sales/combos/calculate-price`, {
+            const response = await fetch(`${Config.api.baseURL}/sales/combos/calculate-price`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

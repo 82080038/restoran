@@ -145,7 +145,8 @@ class APIClient {
                     // Handle 401 Unauthorized - token expired
                     if (response.status === 401) {
                         this.clearAuth();
-                        window.location.href = 'login.html';
+                        var base = Config.api.baseURL.replace(/\/api\/v1$/, '');
+                        window.location.href = base + '/login.html';
                         throw new Error('Session expired. Please login again.');
                     }
                     
@@ -212,6 +213,39 @@ class APIClient {
         }
         
         throw lastError;
+    }
+
+    // Generic HTTP method helpers
+    async get(endpoint, options = {}) {
+        return this.request(endpoint, { ...options, method: 'GET' });
+    }
+
+    async post(endpoint, body, options = {}) {
+        return this.request(endpoint, {
+            ...options,
+            method: 'POST',
+            body: typeof body === 'string' ? body : JSON.stringify(body)
+        });
+    }
+
+    async put(endpoint, body, options = {}) {
+        return this.request(endpoint, {
+            ...options,
+            method: 'PUT',
+            body: typeof body === 'string' ? body : JSON.stringify(body)
+        });
+    }
+
+    async patch(endpoint, body, options = {}) {
+        return this.request(endpoint, {
+            ...options,
+            method: 'PATCH',
+            body: typeof body === 'string' ? body : JSON.stringify(body)
+        });
+    }
+
+    async delete(endpoint, options = {}) {
+        return this.request(endpoint, { ...options, method: 'DELETE' });
     }
 
     // Auth

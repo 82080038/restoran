@@ -30,7 +30,7 @@ This document provides a comprehensive analysis of all business scenarios and fe
 - **Product Variants:** `product_prices` table supports multiple price types
 
 **Implementation Location:**
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/Menu/Services/ComboService.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/Menu/Services/ComboService.php`
 - Database: `menu_combos`, `menu_combo_groups`, `menu_combo_items` tables
 
 ---
@@ -62,7 +62,7 @@ This document provides a comprehensive analysis of all business scenarios and fe
 - Payment repository with comprehensive query methods
 
 **Implementation Location:**
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/Payment/Repositories/PaymentRepository.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/Payment/Repositories/PaymentRepository.php`
 - Database: `payments` table with change_amount field
 
 ---
@@ -93,7 +93,7 @@ This document provides a comprehensive analysis of all business scenarios and fe
 - Location-based service configuration
 
 **Implementation Location:**
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/CRM/Repositories/CustomerPricingRepository.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/CRM/Repositories/CustomerPricingRepository.php`
 - Database: `customers`, `customer_pricing`, `orders` tables
 
 ---
@@ -126,7 +126,7 @@ This document provides a comprehensive analysis of all business scenarios and fe
 - Damage and expired types specifically handle breakage scenarios
 
 **Implementation Location:**
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/Inventory/Services/StockAdjustmentService.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/Inventory/Services/StockAdjustmentService.php`
 - Database: `stock_adjustments`, `stock_adjustment_items` tables
 
 ---
@@ -145,7 +145,7 @@ This document provides a comprehensive analysis of all business scenarios and fe
 - Automatic stock deduction on production batch creation
 
 **Implementation Location:**
-- `/opt/lampp/htdocs/restauran/BACKEND/core/Engines/RecipeEngine.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/core/Engines/RecipeEngine.php`
 - Database: `recipes`, `recipe_ingredients`, `production_batches` tables
 
 ---
@@ -161,7 +161,7 @@ This document provides a comprehensive analysis of all business scenarios and fe
 - Predictive maintenance capabilities
 
 **Implementation Location:**
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/Maintenance/Services/MaintenanceService.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/Maintenance/Services/MaintenanceService.php`
 - Database: `assets`, `maintenance_schedules`, `work_orders` tables
 
 ---
@@ -181,7 +181,7 @@ This document provides a comprehensive analysis of all business scenarios and fe
 - Real-time dashboard data
 
 **Implementation Location:**
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/Report/Services/ReportService.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/Report/Services/ReportService.php`
 - Database: All reporting tables with tenant/branch filtering
 
 ---
@@ -214,7 +214,7 @@ This document provides a comprehensive analysis of all business scenarios and fe
 - Customer dietary preferences tracking
 
 **Implementation Location:**
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/CRM/Repositories/CustomerPricingRepository.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/CRM/Repositories/CustomerPricingRepository.php`
 - Database: `customer_pricing`, `customer_dietary_preferences` tables
 
 ---
@@ -234,8 +234,8 @@ This document provides a comprehensive analysis of all business scenarios and fe
 - Compliance checking (overtime violations)
 
 **Implementation Location:**
-- `/opt/lampp/htdocs/restauran/BACKEND/core/Engines/SchedulingEngine.php`
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/StaffScheduling/Services/StaffSchedulingService.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/core/Engines/SchedulingEngine.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/StaffScheduling/Services/StaffSchedulingService.php`
 - Database: `shifts`, `schedules`, `employee_availability` tables
 
 ---
@@ -303,7 +303,7 @@ This document provides a comprehensive analysis of all business scenarios and fe
 - Customer preference tracking
 
 **Implementation Location:**
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/Menu/Services/AllergenDietaryService.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/Menu/Services/AllergenDietaryService.php`
 - Database: `product_allergens`, `allergen_types`, `dietary_restrictions`, `customer_dietary_preferences` tables
 
 ---
@@ -322,7 +322,7 @@ This document provides a comprehensive analysis of all business scenarios and fe
 - Support for order modifications at various stages
 
 **Implementation Location:**
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/Order/Services/OrderService.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/Order/Services/OrderService.php`
 - Database: `orders`, `order_items`, `order_status_history` tables
 
 ---
@@ -344,9 +344,9 @@ This document provides a comprehensive analysis of all business scenarios and fe
 - Mobile and kiosk specific endpoints
 
 **Implementation Location:**
-- `/opt/lampp/htdocs/restauran/BACKEND/DOCUMENTATION/API_DOCUMENTATION.md`
-- `/opt/lampp/htdocs/restauran/BACKEND/routes/api.php`
-- Frontend: `/opt/lampp/htdocs/restauran/FRONTEND/js/api-client.js`
+- `/opt/lampp/htdocs/restoran/BACKEND/DOCUMENTATION/API_DOCUMENTATION.md`
+- `/opt/lampp/htdocs/restoran/BACKEND/routes/api.php`
+- Frontend: `/opt/lampp/htdocs/restoran/FRONTEND/js/api-client.js`
 
 ---
 
@@ -451,3 +451,113 @@ After syncing from GitHub, the following previously-missing features are now imp
 
 **Total new route files:** 27  
 **All route files now properly included in `api.php`.**
+
+---
+
+## Playwright Headed Browser Testing Report
+
+**Date:** 2026-07-19  
+**Test Runner:** Playwright 1.61.1 — Headed mode (Chromium)  
+**Environment:** XAMPP Linux 8.2.12, PHP 8.2.12, MySQL 8.x, DISPLAY=:0  
+
+### Test Execution Summary
+
+| Metric | Value |
+|--------|-------|
+| Total tests | 37 |
+| Passed | 37 |
+| Failed | 0 |
+| Duration | ~11.9s |
+| Workers | 2 |
+| Browser | Chromium (headed) |
+
+### Test Breakdown
+
+#### 1. UI/E2E Tests (`restaurant-erp.spec.ts`) — 3 tests
+
+| Test | Status | Duration |
+|------|--------|----------|
+| Dashboard loads correctly | ✅ Passed | 3.2s |
+| Consumer app loads correctly | ✅ Passed | 1.9s |
+| API endpoints are accessible (login + misc/coat-check) | ✅ Passed | 748ms |
+
+- **Console errors:** 0
+- **Screenshots:** `test-results/dashboard-load.png`, `test-results/consumer-app-load.png`
+
+#### 2. Tier 1-4 API Tests (`tier1-4-api.spec.ts`) — 34 tests
+
+**Tier 1 (8 tests):**
+
+| Endpoint | Status |
+|----------|--------|
+| GET /pos-reconciliation/deposits | ✅ |
+| GET /beverage-variance/bar-counts | ✅ |
+| GET /recipe-depletion/logs | ✅ |
+| GET /batch-expiry/batches | ✅ |
+| GET /batch-expiry/dashboard | ✅ |
+| GET /settlements/deals | ✅ |
+| GET /event-profitability | ✅ |
+| GET /event-proposals | ✅ |
+
+**Tier 2 (11 tests):**
+
+| Endpoint | Status |
+|----------|--------|
+| GET /nightclub-advanced/table-deposits | ✅ |
+| GET /nightclub-advanced/bottle-inventory | ✅ |
+| GET /nightclub-advanced/promoters | ✅ |
+| GET /karaoke-advanced/songs | ✅ |
+| GET /beach-club/seat-map | ✅ |
+| GET /beach-club/rain-checks | ✅ |
+| GET /sports-bar/tabs | ✅ |
+| GET /operations/86-items | ✅ |
+| GET /operations/custom-orders | ✅ |
+| GET /operations/delivery-routes | ✅ |
+| GET /operations/leads | ✅ |
+
+**Tier 3 (9 tests):**
+
+| Endpoint | Status |
+|----------|--------|
+| GET /venue/dynamic-pricing/rules | ✅ |
+| GET /venue/memberships | ✅ |
+| GET /venue/occupancy | ✅ |
+| GET /venue/holds | ✅ |
+| GET /operations/predictions | ✅ |
+| GET /operations/throttling/check | ✅ |
+| GET /operations/booking-sync/status | ✅ |
+| GET /operations/production-plans | ✅ |
+| GET /operations/service-speed/report | ✅ |
+
+**Tier 4 (5 tests):**
+
+| Endpoint | Status |
+|----------|--------|
+| GET /misc/coat-check | ✅ |
+| GET /misc/karaoke-scores/high | ✅ |
+| GET /misc/equipment | ✅ |
+| GET /misc/wines | ✅ |
+| GET /misc/waiter-button/stats | ✅ |
+
+**Auth Test (1 test):**
+
+| Test | Status |
+|------|--------|
+| Endpoints without auth return 401 or error | ✅ |
+
+### Verification Results
+
+- **Console errors:** 0
+- **Network failures:** 0
+- **All assertions:** Green
+- **HTML report:** `playwright-report/index.html`
+
+### Fix Applied During Testing
+
+- Added `RewriteBase /restoran/` to `.htaccess` for proper Apache mod_rewrite routing under XAMPP subdirectory.
+
+### Command Used
+
+```bash
+DISPLAY=:0 npx playwright test --config playwright.config.ts --headed --project chromium --reporter=list
+```

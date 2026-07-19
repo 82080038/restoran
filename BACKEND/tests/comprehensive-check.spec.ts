@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Restaurant ERP - Comprehensive Check', () => {
   test('Load main page and check for errors', async ({ page }) => {
     // Navigate to the application using full URL
-    await page.goto('http://localhost/restauran/');
+    await page.goto('http://localhost/restoran/');
 
     // Wait for page to load
     await page.waitForLoadState('networkidle');
@@ -68,7 +68,7 @@ test.describe('Restaurant ERP - Comprehensive Check', () => {
     // Skipping for now due to PHP syntax error in routes/api.php
     // TODO: Fix the "Unmatched '}'" error in api.php
 
-    const response = await page.request.post('http://localhost/restauran/BACKEND/public/api/v1/auth/login', {
+    const response = await page.request.post('http://localhost/restoran/BACKEND/public/api/v1/auth/login', {
       data: {
         username: 'admin',
         password: 'password'

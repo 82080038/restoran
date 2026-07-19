@@ -43,8 +43,8 @@ This document details the implementation of the medium and low priority enhancem
 - `getProductPrice($productId, $condition = 'REGULAR')` - Enhanced with condition-specific pricing logic
 
 **Files Modified:**
-- `/opt/lampp/htdocs/restauran/BACKEND/migrations/036_enhance_product_condition_pricing.php`
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/Menu/Services/ComboService.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/migrations/036_enhance_product_condition_pricing.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/Menu/Services/ComboService.php`
 
 ---
 
@@ -83,8 +83,8 @@ This document details the implementation of the medium and low priority enhancem
 - `deleteWorkflowConfig($configId, $tenantId)` - Delete configuration
 
 **Files Created:**
-- `/opt/lampp/htdocs/restauran/BACKEND/migrations/037_add_display_workflow_configuration.php`
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/Settings/Services/DisplayWorkflowService.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/migrations/037_add_display_workflow_configuration.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/Settings/Services/DisplayWorkflowService.php`
 
 ---
 
@@ -107,8 +107,8 @@ This document details the implementation of the medium and low priority enhancem
 - `setComplimentary($tenantId, $branchId, $customerId, $productId, $reason, $code)` - Set item as complimentary
 
 **Files Modified:**
-- `/opt/lampp/htdocs/restauran/BACKEND/migrations/038_add_complimentary_flag.php`
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/CRM/Repositories/CustomerPricingRepository.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/migrations/038_add_complimentary_flag.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/CRM/Repositories/CustomerPricingRepository.php`
 
 ---
 
@@ -130,7 +130,7 @@ This document details the implementation of the medium and low priority enhancem
 - `getAIInsights($tenantId, $branchId, $dateFrom, $dateTo)` - Generate comprehensive AI insights
 
 **Files Modified:**
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/Report/Services/ReportService.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/Report/Services/ReportService.php`
 
 ---
 
@@ -155,7 +155,7 @@ This document details the implementation of the medium and low priority enhancem
 - `syncHealthCheck($restaurantId, $deviceId)` - Health check with recommendations
 
 **Files Modified:**
-- `/opt/lampp/htdocs/restauran/BACKEND/modules/Offline/Services/OfflineService.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/modules/Offline/Services/OfflineService.php`
 
 ---
 
@@ -185,7 +185,7 @@ This document details the implementation of the medium and low priority enhancem
 - `getConversionSummary($amount, $fromCurrency, $tenantId)` - Get conversion summary
 
 **Files Created:**
-- `/opt/lampp/htdocs/restauran/BACKEND/core/Services/CurrencyService.php`
+- `/opt/lampp/htdocs/restoran/BACKEND/core/Services/CurrencyService.php`
 
 ---
 

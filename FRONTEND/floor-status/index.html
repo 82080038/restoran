@@ -217,8 +217,9 @@
         <span>Auto-refresh 10s</span>
     </div>
 
+    <script src="../js/config.js"></script>
     <script>
-        const API_BASE = window.location.origin + '/restoran/BACKEND/public/api/v1';
+        const API_BASE = Config.api.baseURL;
         let token = localStorage.getItem('authToken') || '';
         let currentFloorId = null;
         let floorData = null;

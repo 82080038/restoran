@@ -27,7 +27,7 @@ class I18nManager {
      */
     async loadLanguages() {
         try {
-            const apiBase = window.API_BASE_URL || '/api/v1';
+            const apiBase = Config.api.baseURL;
             const resp = await fetch(`${apiBase}/languages`);
             const data = await resp.json();
             if (data.success) {
@@ -49,7 +49,7 @@ class I18nManager {
         if (this.translations[lang]) return;
 
         try {
-            const apiBase = window.API_BASE_URL || '/api/v1';
+            const apiBase = Config.api.baseURL;
             const resp = await fetch(`${apiBase}/languages/${lang}/translations`);
             const data = await resp.json();
             if (data.success) {
@@ -63,7 +63,7 @@ class I18nManager {
         // Load fallback if different
         if (lang !== this.fallbackLang && !this.translations[this.fallbackLang]) {
             try {
-                const apiBase = window.API_BASE_URL || '/api/v1';
+                const apiBase = Config.api.baseURL;
                 const resp = await fetch(`${apiBase}/languages/${this.fallbackLang}/translations`);
                 const data = await resp.json();
                 if (data.success) {
@@ -134,7 +134,7 @@ class I18nManager {
         const token = localStorage.getItem('authToken');
         if (token) {
             try {
-                const apiBase = window.API_BASE_URL || '/api/v1';
+                const apiBase = Config.api.baseURL;
                 await fetch(`${apiBase}/languages/preference`, {
                     method: 'POST',
                     headers: {

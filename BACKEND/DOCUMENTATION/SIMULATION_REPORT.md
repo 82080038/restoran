@@ -187,7 +187,7 @@ All 7 user roles were tested for appropriate access control:
    - **Status**: ✅ Resolved
 
 2. **API Base Path Incorrect**
-   - **Issue**: API_BASE set to `/restauran/api/v1` instead of `/api/v1`
+   - **Issue**: API_BASE set to `/restoran/api/v1` instead of `/api/v1`
    - **Fix**: Updated API_BASE in index.html
    - **Status**: ✅ Resolved
 

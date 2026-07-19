@@ -148,7 +148,7 @@ class FeedbackWidget {
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
-        const apiBase = window.API_BASE_URL || '/api/v1';
+        const apiBase = Config.api.baseURL;
         const body = {
             feedback_type: this.selectedType,
             subject: subject,

@@ -12,10 +12,10 @@ const testUsers = [
 
 // UI interfaces to test
 const uiInterfaces = [
-  { name: 'Consumer App', path: 'http://localhost/restauran/FRONTEND/consumer/index.html' },
-  { name: 'Dashboard', path: 'http://localhost/restauran/FRONTEND/dashboard/index.html' },
-  { name: 'Kiosk', path: 'http://localhost/restauran/FRONTEND/kiosk/index.html' },
-  { name: 'Mobile', path: 'http://localhost/restauran/FRONTEND/mobile/index.html' },
+  { name: 'Consumer App', path: 'http://localhost/restoran/FRONTEND/consumer/index.html' },
+  { name: 'Dashboard', path: 'http://localhost/restoran/FRONTEND/dashboard/index.html' },
+  { name: 'Kiosk', path: 'http://localhost/restoran/FRONTEND/kiosk/index.html' },
+  { name: 'Mobile', path: 'http://localhost/restoran/FRONTEND/mobile/index.html' },
 ];
 
 test.describe('RESTAURANT_ERP - Comprehensive Browser Simulation', () => {

@@ -20,7 +20,7 @@ class MultiRoleSupport {
     async initialize() {
         // Get current user from auth manager
         if (window.authManager) {
-            this.currentUser = window.authManager.getCurrentUser();
+            this.currentUser = window.authManager.getUser();
         }
         
         if (this.currentUser) {
@@ -35,7 +35,7 @@ class MultiRoleSupport {
      */
     async loadUserRoles() {
         try {
-            const response = await fetch(`${API_BASE_URL}/users/${this.currentUser.user_id}/roles`);
+            const response = await fetch(`${Config.api.baseURL}/users/${this.currentUser.user_id}/roles`);
             const data = await response.json();
             
             if (data.success && data.roles) {
@@ -109,7 +109,7 @@ class MultiRoleSupport {
      */
     async switchRole(newRole) {
         try {
-            const response = await fetch(`${API_BASE_URL}/auth/switch-role`, {
+            const response = await fetch(`${Config.api.baseURL}/auth/switch-role`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
