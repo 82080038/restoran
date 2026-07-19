@@ -11,9 +11,10 @@ This workflow implements a systematic AI-driven development cycle for RESTAURANT
 ## Prerequisites
 
 - RESTAURANT_ERP project loaded in IDE
+- XAMPP (LAMPP) running on Linux: `sudo /opt/lampp/lampp start`
 - Prompting system initialized in `DOCUMENTATION/prompting/` directory
 - Access to project context files
-- Database connection available
+- Database connection available (MySQL via XAMPP at `/opt/lampp/var/mysql/mysql.sock`)
 
 ## Workflow Steps
 
@@ -235,8 +236,9 @@ If any phase fails:
 
 ---
 
-**Version**: 1.0  
-**Last Updated**: 2026-07-05
+**Version**: 2.0  
+**Last Updated**: 2026-07-19  
+**Environment**: Linux XAMPP (`/opt/lampp/`), PHP at `/opt/lampp/bin/php`, project at `/opt/lampp/htdocs/restauran`
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## 1. Executive Summary
 
-Project `c:\xampp\htdocs\restoran` (RESTAURANT_ERP) contains a PHP/MySQL backend, HTML/JS/CSS frontend, Playwright/PHPUnit tests, and extensive documentation. The repository is functional but carries a large amount of generated artifacts, obsolete manual test harnesses, and duplicated configuration that inflate the working tree and slow CI/package operations.
+Project `/opt/lampp/htdocs/restauran` (RESTAURANT_ERP) contains a PHP/MySQL backend, HTML/JS/CSS frontend, Playwright/PHPUnit tests, and extensive documentation. The repository is functional but carries a large amount of generated artifacts, obsolete manual test harnesses, and duplicated configuration that inflate the working tree and slow CI/package operations.
 
 Key facts from the audit:
 
@@ -83,26 +83,27 @@ Both are ignored by Git. If Composer/PHPUnit are installed globally, they can be
 
 ## 4. Cleanup Commands
 
-Run from `c:\xampp\htdocs\restoran`.
+Run from `/opt/lampp/htdocs/restauran`.
 
-```powershell
+```bash
 # 1. Remove generated artifacts from working tree (ignored, no git rm needed)
-Remove-Item -Recurse -Force -ErrorAction SilentlyContinue BACKEND/test-results, BACKEND/playwright-report, BACKEND/screenshots, BACKEND/.phpunit.result.cache, BACKEND/public/.htaccess.backup, BACKEND/package-lock.json, BACKEND/logs/app.log
+rm -rf BACKEND/test-results BACKEND/playwright-report BACKEND/screenshots
+rm -f BACKEND/.phpunit.result.cache BACKEND/public/.htaccess.backup BACKEND/package-lock.json BACKEND/logs/app.log
 
 # 2. Remove optional tool binaries if global composer/phpunit are available
-Remove-Item -Force -ErrorAction SilentlyContinue BACKEND/composer.phar, BACKEND/phpunit-9.6.phar
+rm -f BACKEND/composer.phar BACKEND/phpunit-9.6.phar
 
 # 3. Remove obsolete tracked files (git rm)
-$obsolete = @(
-  'BACKEND/tests/consumer-direct-sim.php','BACKEND/tests/consumer-direct-test.php','BACKEND/tests/consumer-full-test.php','BACKEND/tests/consumer-manual-test.php','BACKEND/tests/consumer-sim.php','BACKEND/tests/consumer-simple-test.php','BACKEND/tests/consumer-step-test.php','BACKEND/tests/consumer-test.php',
-  'BACKEND/tests/test-featured.php','BACKEND/tests/test-login.php',
-  'BACKEND/tests/run-consumer-tests.sh','BACKEND/tests/test-phase1-modules.sh','BACKEND/tests/test-role-api.sh',
-  'BACKEND/tests/test-role-based-ui.html','BACKEND/tests/test-role-ui-manual.md',
-  'BACKEND/tests/PRODUCTION_SIMULATION_REPORT_2026-07-05.md','BACKEND/tests/REAL_ACTIVITY_SIMULATION_REPORT_2026-07-05.md','BACKEND/tests/SIMULATION_REPORT_2026-07-05.md','BACKEND/tests/TEST_REPORT_2026-07-05.md',
-  'BACKEND/tests/production-simulation.php','BACKEND/tests/production-simulation-reports/daily-data.csv','BACKEND/tests/production-simulation-reports/production-simulation-data.json','BACKEND/tests/production-simulation-reports/production-simulation-report.html','BACKEND/tests/production-simulation-reports/production-simulation-summary.txt'
+obsolete_files=(
+  'BACKEND/tests/consumer-direct-sim.php' 'BACKEND/tests/consumer-direct-test.php' 'BACKEND/tests/consumer-full-test.php' 'BACKEND/tests/consumer-manual-test.php' 'BACKEND/tests/consumer-sim.php' 'BACKEND/tests/consumer-simple-test.php' 'BACKEND/tests/consumer-step-test.php' 'BACKEND/tests/consumer-test.php'
+  'BACKEND/tests/test-featured.php' 'BACKEND/tests/test-login.php'
+  'BACKEND/tests/run-consumer-tests.sh' 'BACKEND/tests/test-phase1-modules.sh' 'BACKEND/tests/test-role-api.sh'
+  'BACKEND/tests/test-role-based-ui.html' 'BACKEND/tests/test-role-ui-manual.md'
+  'BACKEND/tests/PRODUCTION_SIMULATION_REPORT_2026-07-05.md' 'BACKEND/tests/REAL_ACTIVITY_SIMULATION_REPORT_2026-07-05.md' 'BACKEND/tests/SIMULATION_REPORT_2026-07-05.md' 'BACKEND/tests/TEST_REPORT_2026-07-05.md'
+  'BACKEND/tests/production-simulation.php' 'BACKEND/tests/production-simulation-reports/daily-data.csv' 'BACKEND/tests/production-simulation-reports/production-simulation-data.json' 'BACKEND/tests/production-simulation-reports/production-simulation-report.html' 'BACKEND/tests/production-simulation-reports/production-simulation-summary.txt'
 )
-foreach ($f in $obsolete) { git rm --cached $f -q }
-Remove-Item -Recurse -Force -ErrorAction SilentlyContinue BACKEND/tests/production-simulation-reports
+for f in "${obsolete_files[@]}"; do git rm --cached "$f" -q; done
+rm -rf BACKEND/tests/production-simulation-reports
 ```
 
 ## 5. Playwright-Headed-Browser Testing Knowledge
@@ -236,16 +237,17 @@ When launching with `npx playwright test --headed`, ensure the dev server is run
 
 ## 7. Verification After Cleanup
 
-```powershell
+```bash
 # Check working tree status
 git status --short
 
 # Run smoke tests (ensure Apache/MySQL are running)
-cd BACKEND
-C:\xampp\php\php.exe vendor\phpunit\phpunit\phpunit --testsuite "Smoke Tests"
+cd /opt/lampp/htdocs/restauran/BACKEND
+/opt/lampp/bin/php vendor/phpunit/phpunit/phpunit --testsuite "Smoke Tests"
 npx playwright test --project chromium --headed
 ```
 
 ---
-**Last updated**: 2026-07-16
+**Last updated**: 2026-07-19
+**Environment**: Linux XAMPP (`/opt/lampp/`)
 **Audit scope**: Full repository structure, dependency footprint, generated artifacts, and test harness inventory.

@@ -4,7 +4,11 @@
   "description": "**The Restaurant ERP You Can Trust**",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx playwright test --config playwright.config.ts",
+    "test:headed": "npx playwright test --config playwright.config.ts --headed",
+    "test:backend": "cd BACKEND && npx playwright test --project chromium --headed",
+    "test:phpunit": "cd BACKEND && /opt/lampp/bin/php vendor/phpunit/phpunit/phpunit --testsuite \"Smoke Tests\"",
+    "test:all": "npm test && npm run test:backend && npm run test:phpunit"
   },
   "repository": {
     "type": "git",

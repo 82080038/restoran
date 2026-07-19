@@ -10,9 +10,10 @@ Execute a full test pass covering API smoke tests, UI/UX flows, and role-based n
 
 ## Prerequisites
 
-- XAMPP Apache and MySQL running.
+- XAMPP (LAMPP) Apache and MySQL running (`sudo /opt/lampp/lampp start`).
 - Database imported (`DATABASE/EBP_RESTAURANT_CAFE_MYSQL_SCHEMA.sql` + `DATABASE/SEED_DATA.sql`).
 - `BACKEND/.env` configured.
+- Root `node_modules` installed (run `npm install` in project root if missing).
 - `BACKEND/node_modules` installed (run `npm install` in `BACKEND` if missing).
 
 ## Test Users
@@ -29,32 +30,34 @@ Execute a full test pass covering API smoke tests, UI/UX flows, and role-based n
 
 ## Steps
 
-1. **Start the backend dev server**
+1. **Start the backend dev server (optional — Apache via XAMPP also works)**
 
-```powershell
-cd BACKEND
-C:\xampp\php\php.exe -S localhost:8000 -t public
+```bash
+cd /opt/lampp/htdocs/restauran/BACKEND
+/opt/lampp/bin/php -S localhost:8000 -t public
 ```
+
+Alternatively, use XAMPP Apache: `http://localhost/restoran/api/v1/...`
 
 2. **Run PHPUnit smoke tests**
 
-```powershell
-cd BACKEND
-C:\xampp\php\php.exe vendor\phpunit\phpunit\phpunit --testsuite "Smoke Tests"
+```bash
+cd /opt/lampp/htdocs/restauran/BACKEND
+/opt/lampp/bin/php vendor/phpunit/phpunit/phpunit --testsuite "Smoke Tests"
 ```
 
-3. **Run Playwright tests in headed mode**
+3. **Run Playwright tests (root E2E specs)**
 
-```powershell
-cd BACKEND
-npx playwright test --project chromium --headed
-```
-
-To run only the root E2E spec:
-
-```powershell
-cd c:\xampp\htdocs\restoran
+```bash
+cd /opt/lampp/htdocs/restauran
 npx playwright test --config playwright.config.ts
+```
+
+4. **Run Playwright tests (BACKEND specs, headed mode)**
+
+```bash
+cd /opt/lampp/htdocs/restauran/BACKEND
+npx playwright test --project chromium --headed
 ```
 
 ## Scenarios to Cover
@@ -67,6 +70,7 @@ npx playwright test --config playwright.config.ts
 6. **Mobile/Waiter** — navigate `orders`, `tables`, `reservations`.
 7. **API smoke** — `/auth/health`, `/auth/login`, `/settings`, `/menu/*`, `/tables/*`, `/reservations`, `/inventory`, `/kitchen/orders`, `/reports/sales`.
 8. **Authorization** — missing/invalid token returns `401`.
+9. **Tier 1-4 endpoints** — run `tests/e2e/tier1-4-api.spec.ts` for POS reconciliation, beverage variance, recipe depletion, batch expiry, settlements, event profitability, BEO proposals, nightclub advanced, karaoke advanced, beach club, sports bar, operations, venue, and misc features.
 
 ## Verification
 
@@ -76,5 +80,6 @@ npx playwright test --config playwright.config.ts
 
 ## Reports
 
-- Playwright HTML report: `BACKEND/playwright-report/index.html` (after run).
+- Playwright HTML report: `BACKEND/playwright-report/index.html` (after BACKEND run).
+- Root Playwright HTML report: `playwright-report/index.html` (after root run).
 - PHPUnit coverage: `BACKEND/coverage/index.html` (run with `--coverage-html coverage`).

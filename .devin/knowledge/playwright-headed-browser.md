@@ -4,9 +4,11 @@
 
 This knowledge file is used by the `playwright-headed-browser` agent (and any AI test runner) for comprehensive E2E/API testing of RESTAURANT_ERP.
 
-- Stack: PHP 8.x backend (XAMPP), MySQL 8.x, vanilla HTML/JS/CSS frontend, Playwright 1.61.1, PHPUnit 9.6.
+- Stack: PHP 8.x backend (XAMPP/LAMPP on Linux), MySQL 8.x, vanilla HTML/JS/CSS frontend, Playwright 1.61.1, PHPUnit 9.6.
 - Backend entry: `BACKEND/public/index.php` (routes `/api/v1/*`).
 - Frontend apps: `FRONTEND/login.html`, `FRONTEND/dashboard/index.html`, `FRONTEND/consumer/index.html`, `FRONTEND/kiosk/index.html`, `FRONTEND/mobile/index.html`.
+- PHP binary: `/opt/lampp/bin/php`
+- Project root: `/opt/lampp/htdocs/restauran`
 
 ## URLs
 
@@ -120,23 +122,23 @@ const logoutBtn = page.locator('a#logoutBtn');
 
 ## Configuration Notes
 
-- `BACKEND/playwright.config.ts` runs tests against `http://localhost:8000` with `testDir: './tests'`.
-- Root `playwright.config.ts` runs `tests/e2e` against `http://localhost/restoran/BACKEND/public/api/v1`.
-- Both configs use `headless: false`; headed mode is required for UI interaction tests.
-- Launch backend dev server with: `cd BACKEND && C:\xampp\php\php.exe -S localhost:8000 -t public`.
+- `BACKEND/playwright.config.ts` runs tests against `http://localhost:8000` with `testDir: './tests'`, project-level `headless: false` (headed).
+- Root `playwright.config.ts` runs `tests/e2e` against `http://localhost/restoran/api/v1` with `headless: true`.
+- Launch backend dev server with: `cd /opt/lampp/htdocs/restauran/BACKEND && /opt/lampp/bin/php -S localhost:8000 -t public`.
+- Or use XAMPP Apache directly: API at `http://localhost/restoran/api/v1/...`.
 
 ## Commands
 
-```powershell
+```bash
 # Backend tests (headed)
-cd BACKEND
+cd /opt/lampp/htdocs/restauran/BACKEND
 npx playwright test --project chromium --headed
 
 # Root E2E spec
-cd c:\xampp\htdocs\restoran
+cd /opt/lampp/htdocs/restauran
 npx playwright test --config playwright.config.ts
 
 # PHPUnit smoke
-cd BACKEND
-C:\xampp\php\php.exe vendor\phpunit\phpunit\phpunit --testsuite "Smoke Tests"
+cd /opt/lampp/htdocs/restauran/BACKEND
+/opt/lampp/bin/php vendor/phpunit/phpunit/phpunit --testsuite "Smoke Tests"
 ```
