@@ -5,6 +5,13 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 class AuthController
 {
+    private \App\Modules\Auth\Services\AuthService $authService;
+
+    public function __construct()
+    {
+        $this->authService = new \App\Modules\Auth\Services\AuthService();
+    }
+
     private function getExpiration(): int
     {
         $envExp = getenv('JWT_EXPIRATION');
@@ -28,61 +35,15 @@ class AuthController
             Response::error("Username and password are required", 400);
         }
 
-        $db = new Database();
-        $pdo = $db->connect();
+        $result = $this->authService->login($input['username'], $input['password']);
 
-        $sql = "
-            SELECT u.user_id, u.username, u.password, u.tenant_id, u.branch_id, u.is_platform_owner, r.role_name
-            FROM users u
-            INNER JOIN user_roles ur ON u.user_id = ur.user_id
-            INNER JOIN roles r ON ur.role_id = r.role_id
-            WHERE u.username = ? AND u.status = 'ACTIVE'
-        ";
-
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$input['username']]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$user || !password_verify($input['password'], $user['password'])) {
-            $logger = Logger::getInstance();
-            $logger->error("Login failed", [
-                'username' => $input['username'] ?? 'not provided',
-                'user_found' => !empty($user),
-                'password_verify' => !empty($user) ? password_verify($input['password'], $user['password']) : 'N/A'
-            ]);
-            Response::error("Invalid credentials");
+        if (!$result['success']) {
+            Response::error($result['message'], 401);
         }
 
-        $jwt = new JWT();
-        $level = $user['is_platform_owner'] ? 'PLATFORM_OWNER' : ($user['role_name'] === 'Administrator' ? 'TENANT_OWNER' : 'TENANT_MEMBER');
-
-        $payload = [
-            'user_id' => $user['user_id'],
-            'username' => $user['username'],
-            'tenant_id' => $user['tenant_id'],
-            'branch_id' => $user['branch_id'],
-            'role' => $user['role_name'],
-            'level' => $level,
-            'is_platform_owner' => $user['is_platform_owner'],
-            'exp' => $this->getExpiration()
-        ];
-
-        $token = $jwt->encode($payload);
-
-        // Update last login timestamp
-        $pdo->prepare("UPDATE users SET last_login = NOW() WHERE user_id = ?")->execute([$user['user_id']]);
-
         Response::success([
-            'access_token' => $token,
-            'user' => [
-                'id' => $user['user_id'],
-                'username' => $user['username'],
-                'tenant_id' => $user['tenant_id'],
-                'branch_id' => $user['branch_id'],
-                'role' => $user['role_name'],
-                'level' => $level,
-                'is_platform_owner' => (bool) $user['is_platform_owner']
-            ]
+            'access_token' => $result['token'],
+            'user' => $result['user']
         ], 'Login successful');
     }
 

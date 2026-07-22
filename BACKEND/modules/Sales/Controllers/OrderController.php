@@ -16,15 +16,13 @@ class OrderController
         $this->service = new OrderService();
     }
 
-    public function create()
+    public function create(array $request = [])
     {
         try {
             $authMiddleware = new AuthMiddleware();
             $user = $authMiddleware->authenticate();
 
-            // $permissionMiddleware = new PermissionMiddleware();
-
-            $input = json_decode(file_get_contents("php://input"), true);
+            $input = $request['body'] ?? json_decode(file_get_contents('php://input'), true);
 
             if (!$input) {
                 Response::error(Messages::VALIDATION_INVALID);
@@ -57,7 +55,7 @@ class OrderController
     public function getAll($request)
     {
         // Permission checking is now handled in routes
-        $params = $request['query'] ?? [];
+        $params = array_merge($request, $request['query'] ?? []);
         $limit = $params['limit'] ?? 50;
         $sort = $params['sort'] ?? 'created_at';
         $order = $params['order'] ?? 'DESC';
@@ -80,12 +78,12 @@ class OrderController
         $authMiddleware = new AuthMiddleware();
         $user = $authMiddleware->authenticate();
 
-        $orderId = $request['params']['id'] ?? null;
+        $orderId = $request['id'] ?? $request['params']['id'] ?? null;
 
         $result = $this->service->getOrder($orderId, $user['tenant_id']);
 
         if ($result['success']) {
-            Response::success(Messages::SUCCESS_RETRIEVED, $result['data']);
+            Response::success($result['data'], Messages::SUCCESS_RETRIEVED);
         } else {
             Response::error($result['message']);
         }
@@ -98,7 +96,7 @@ class OrderController
 
         // $permissionMiddleware = new PermissionMiddleware();
 
-        $orderId = $request['params']['id'] ?? null;
+        $orderId = $request['id'] ?? $request['params']['id'] ?? null;
         $data = $request['body'] ?? [];
 
         $result = $this->service->updateOrder($orderId, $data, $user['user_id'], $user['tenant_id']);
@@ -117,12 +115,12 @@ class OrderController
 
         // $permissionMiddleware = new PermissionMiddleware();
 
-        $orderId = $request['params']['id'] ?? null;
+        $orderId = $request['id'] ?? $request['params']['id'] ?? null;
 
         $result = $this->service->closeOrder($orderId, $user['user_id'], $user['tenant_id']);
 
         if ($result['success']) {
-            Response::success($result['message']);
+            Response::success([], $result['message']);
         } else {
             Response::error($result['message']);
         }
@@ -135,14 +133,14 @@ class OrderController
 
         // $permissionMiddleware = new PermissionMiddleware();
 
-        $orderId = $request['params']['id'] ?? null;
+        $orderId = $request['id'] ?? $request['params']['id'] ?? null;
         $data = $request['body'] ?? [];
         $reason = $data['reason'] ?? '';
 
         $result = $this->service->holdOrder($orderId, $reason, $user['user_id'], $user['tenant_id']);
 
         if ($result['success']) {
-            Response::success($result['message']);
+            Response::success([], $result['message']);
         } else {
             Response::error($result['message']);
         }
@@ -155,12 +153,12 @@ class OrderController
 
         // $permissionMiddleware = new PermissionMiddleware();
 
-        $orderId = $request['params']['id'] ?? null;
+        $orderId = $request['id'] ?? $request['params']['id'] ?? null;
 
         $result = $this->service->recallOrder($orderId, $user['user_id'], $user['tenant_id']);
 
         if ($result['success']) {
-            Response::success($result['message']);
+            Response::success([], $result['message']);
         } else {
             Response::error($result['message']);
         }
@@ -173,14 +171,14 @@ class OrderController
 
         // $permissionMiddleware = new PermissionMiddleware();
 
-        $orderId = $request['params']['id'] ?? null;
+        $orderId = $request['id'] ?? $request['params']['id'] ?? null;
         $data = $request['body'] ?? [];
         $isPriority = $data['is_priority'] ?? false;
 
         $result = $this->service->setPriorityOrder($orderId, $isPriority, $user['user_id'], $user['tenant_id']);
 
         if ($result['success']) {
-            Response::success($result['message']);
+            Response::success([], $result['message']);
         } else {
             Response::error($result['message']);
         }
@@ -193,7 +191,7 @@ class OrderController
 
         // $permissionMiddleware = new PermissionMiddleware();
 
-        $orderId = $request['params']['id'] ?? null;
+        $orderId = $request['id'] ?? $request['params']['id'] ?? null;
         $data = $request['body'] ?? [];
         $splitType = $data['split_type'] ?? 'CUSTOM';
         $totalSplits = $data['total_splits'] ?? 1;
@@ -202,7 +200,7 @@ class OrderController
         $result = $this->service->splitBill($orderId, $splitType, $totalSplits, $splitData, $user['user_id'], $user['tenant_id']);
 
         if ($result['success']) {
-            Response::success($result['message'], ['split_bill_id' => $result['split_bill_id']]);
+            Response::success(['split_bill_id' => $result['split_bill_id']], $result['message']);
         } else {
             Response::error($result['message']);
         }
@@ -215,7 +213,7 @@ class OrderController
 
         // $permissionMiddleware = new PermissionMiddleware();
 
-        $orderId = $request['params']['id'] ?? null;
+        $orderId = $request['id'] ?? $request['params']['id'] ?? null;
         $data = $request['body'] ?? [];
         $paymentMethod = $data['payment_method'] ?? 'CASH';
         $amount = $data['amount'] ?? 0;
@@ -224,7 +222,7 @@ class OrderController
         $result = $this->service->addPayment($orderId, $paymentMethod, $amount, $referenceNumber, $user['user_id'], $user['tenant_id']);
 
         if ($result['success']) {
-            Response::success($result['message'], ['payment_id' => $result['payment_id']]);
+            Response::success(['payment_id' => $result['payment_id']], $result['message']);
         } else {
             Response::error($result['message']);
         }

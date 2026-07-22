@@ -111,6 +111,13 @@ class AuthRepository
         return $stmt->execute(['user_id' => $userId, 'role_id' => $roleId]);
     }
 
+    public function recordLogin(int $userId): bool
+    {
+        $statement = $this->db->prepare('UPDATE users SET last_login = NOW() WHERE user_id = :user_id');
+
+        return $statement->execute(['user_id' => $userId]);
+    }
+
     /**
      * Update user
      */
@@ -175,7 +182,7 @@ class AuthRepository
     public function getAllUsers($tenantId, $limit = 100, $offset = 0)
     {
         $sql = "SELECT u.user_id, u.username, u.full_name, u.email, u.phone, u.status,
-                       r.role_name, r.role_level
+                       r.role_name
                 FROM users u
                 INNER JOIN user_roles ur ON u.user_id = ur.user_id
                 INNER JOIN roles r ON ur.role_id = r.role_id

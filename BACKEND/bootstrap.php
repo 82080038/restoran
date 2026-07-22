@@ -11,6 +11,12 @@
 require_once __DIR__ . '/core/Response.php';
 require_once __DIR__ . '/core/JWT.php';
 require_once __DIR__ . '/core/Database.php';
+require_once __DIR__ . '/core/BaseController.php';
+require_once __DIR__ . '/core/BaseRepository.php';
+require_once __DIR__ . '/core/BaseService.php';
+require_once __DIR__ . '/core/Pagination.php';
+require_once __DIR__ . '/core/ValidationException.php';
+require_once __DIR__ . '/core/Validator.php';
 require_once __DIR__ . '/core/Middleware/AuthMiddleware.php';
 
 // Load environment variables from .env file
@@ -53,6 +59,7 @@ require_once __DIR__ . '/core/Middleware/TenantMiddleware.php';
 require_once __DIR__ . '/core/Middleware/ErrorHandler.php';
 require_once __DIR__ . '/core/Middleware/ValidationMiddleware.php';
 require_once __DIR__ . '/core/Middleware/RateLimitMiddleware.php';
+require_once __DIR__ . '/core/Middleware/AuditMiddleware.php';
 
 // Load all Engines
 require_once __DIR__ . '/core/Engines/StockEngine.php';

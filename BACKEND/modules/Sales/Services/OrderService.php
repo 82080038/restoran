@@ -15,8 +15,6 @@ if (!class_exists('ComboService')) {
     require_once __DIR__ . '/ComboService.php';
 }
 
-use PDO;
-
 class OrderService
 {
 
@@ -168,6 +166,7 @@ public function createOrder($data, $userId, $tenantId, $branchId)
 
 
     $total=0;
+    $availabilityService = new \App\Modules\OperationsAdvanced\Services\OperationsAdvancedService();
 
 
 
@@ -175,6 +174,12 @@ public function createOrder($data, $userId, $tenantId, $branchId)
         $data['items']
         as $item
     ){
+        if (!empty($item['product_id']) && $availabilityService->isItem86ed($tenantId, $branchId, $item['product_id'])) {
+            return [
+                'success' => false,
+                'message' => 'One or more selected items are currently unavailable'
+            ];
+        }
 
         // Handle combo pricing
         if (isset($item['combo_id'])) {

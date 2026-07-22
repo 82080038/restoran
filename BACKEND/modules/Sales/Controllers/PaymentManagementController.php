@@ -29,7 +29,7 @@ class PaymentManagementController
         $result = $this->service->createCreditNote($data, $user['tenant_id']);
 
         if ($result['success']) {
-            Response::success($result['message'], ['credit_note_id' => $result['credit_note_id']]);
+            Response::success(['credit_note_id' => $result['credit_note_id']], $result['message']);
         } else {
             Response::error($result['message']);
         }
@@ -47,7 +47,7 @@ class PaymentManagementController
         $result = $this->service->createVoucher($data, $user['tenant_id']);
 
         if ($result['success']) {
-            Response::success($result['message'], ['voucher_id' => $result['voucher_id']]);
+            Response::success(['voucher_id' => $result['voucher_id']], $result['message']);
         } else {
             Response::error($result['message']);
         }
@@ -78,13 +78,13 @@ class PaymentManagementController
 
         // $permissionMiddleware = new PermissionMiddleware();
 
-        $drawerId = $request['params']['id'] ?? null;
+        $drawerId = $request['id'] ?? $request['params']['id'] ?? null;
         $data = $request['body'] ?? [];
 
         $result = $this->service->openCashDrawer($drawerId, $data['opening_balance'] ?? 0, $user['user_id'], $user['tenant_id']);
 
         if ($result['success']) {
-            Response::success($result['message']);
+            Response::success([], $result['message']);
         } else {
             Response::error($result['message']);
         }
@@ -97,7 +97,7 @@ class PaymentManagementController
 
         // $permissionMiddleware = new PermissionMiddleware();
 
-        $drawerId = $request['params']['id'] ?? null;
+        $drawerId = $request['id'] ?? $request['params']['id'] ?? null;
         $data = $request['body'] ?? [];
 
         $result = $this->service->closeCashDrawer($drawerId, $data['expected_amount'] ?? 0, $data['actual_amount'] ?? 0, $user['user_id'], $user['tenant_id']);

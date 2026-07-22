@@ -202,20 +202,37 @@ class DeliveryIntegrationController
                 return Response::error("Unsupported platform", 400);
             }
 
-            // Verify webhook signature (in production)
-            $signature = $request['headers']['X-Platform-Signature'] ?? '';
-            // TODO: Verify signature with platform secret
+            $merchantId = $body['merchant_id'] ?? '';
+            if ($merchantId === '') {
+                return Response::error('merchant_id is required', 400);
+            }
+
+            $pdo = $this->db->connect();
+            $statement = $pdo->prepare('SELECT tenant_id, api_secret FROM delivery_platform_integrations WHERE platform_name = ? AND merchant_id = ? AND is_active = 1');
+            $statement->execute([$platform, $merchantId]);
+            $integration = $statement->fetch(\PDO::FETCH_ASSOC);
+            if (!$integration || empty($integration['api_secret'])) {
+                return Response::error('Webhook integration is not configured', 401);
+            }
+
+            $signature = $request['headers']['X-Platform-Signature'] ?? $request['headers']['x-platform-signature'] ?? '';
+            $rawBody = $request['raw_body'] ?? json_encode($body, JSON_UNESCAPED_SLASHES);
+            $expectedSignature = hash_hmac('sha256', $rawBody, $integration['api_secret']);
+            if ($signature === '' || !hash_equals($expectedSignature, $signature)) {
+                return Response::error('Invalid webhook signature', 401);
+            }
 
             $eventType = $body['event_type'] ?? '';
             $orderData = $body['order_data'] ?? [];
+            $tenantId = (int) $integration['tenant_id'];
 
             switch ($eventType) {
                 case 'order.created':
-                    return $this->handleNewOrder($platform, $orderData);
+                    return $this->handleNewOrder($platform, $orderData, $tenantId);
                 case 'order.updated':
-                    return $this->handleOrderUpdate($platform, $orderData);
+                    return $this->handleOrderUpdate($platform, $orderData, $tenantId);
                 case 'order.cancelled':
-                    return $this->handleOrderCancellation($platform, $orderData);
+                    return $this->handleOrderCancellation($platform, $orderData, $tenantId);
                 default:
                     return Response::error("Unknown event type: {$eventType}", 400);
             }
@@ -227,12 +244,11 @@ class DeliveryIntegrationController
     /**
      * Handle new order from delivery platform
      */
-    private function handleNewOrder($platform, $orderData)
+    private function handleNewOrder($platform, $orderData, int $tenantId)
     {
         $pdo = $this->db->connect();
 
         // Map platform order to internal order
-        $tenantId = $orderData['tenant_id'] ?? 1;
         $platformOrderId = $orderData['platform_order_id'] ?? '';
         $customerName = $orderData['customer_name'] ?? 'Delivery Customer';
         $customerPhone = $orderData['customer_phone'] ?? '';
@@ -298,7 +314,7 @@ class DeliveryIntegrationController
     /**
      * Handle order update from delivery platform
      */
-    private function handleOrderUpdate($platform, $orderData)
+    private function handleOrderUpdate($platform, $orderData, int $tenantId)
     {
         $pdo = $this->db->connect();
         $platformOrderId = $orderData['platform_order_id'] ?? '';
@@ -306,9 +322,9 @@ class DeliveryIntegrationController
 
         $stmt = $pdo->prepare("
             UPDATE orders SET status = ?, updated_at = NOW()
-            WHERE platform_order_id = ? AND platform_name = ?
+            WHERE tenant_id = ? AND platform_order_id = ? AND platform_name = ?
         ");
-        $stmt->execute([$newStatus, $platformOrderId, $platform]);
+        $stmt->execute([$newStatus, $tenantId, $platformOrderId, $platform]);
 
         return Response::success([], 'Order updated successfully');
     }
@@ -316,7 +332,7 @@ class DeliveryIntegrationController
     /**
      * Handle order cancellation from delivery platform
      */
-    private function handleOrderCancellation($platform, $orderData)
+    private function handleOrderCancellation($platform, $orderData, int $tenantId)
     {
         $pdo = $this->db->connect();
         $platformOrderId = $orderData['platform_order_id'] ?? '';
@@ -324,9 +340,9 @@ class DeliveryIntegrationController
 
         $stmt = $pdo->prepare("
             UPDATE orders SET status = 'cancelled', notes = CONCAT(notes, ' [Cancelled: ', ?, ']'), updated_at = NOW()
-            WHERE platform_order_id = ? AND platform_name = ?
+            WHERE tenant_id = ? AND platform_order_id = ? AND platform_name = ?
         ");
-        $stmt->execute([$reason, $platformOrderId, $platform]);
+        $stmt->execute([$reason, $tenantId, $platformOrderId, $platform]);
 
         return Response::success([], 'Order cancelled successfully');
     }

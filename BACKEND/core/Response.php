@@ -32,8 +32,9 @@ class Response
         }
         
         http_response_code($statusCode);
-        header("Content-Type: application/json");
-        echo json_encode($data);
+        header('Content-Type: application/json; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
         exit;
     }
 
@@ -44,12 +45,20 @@ class Response
      * @param string $message Success message
      * @return never
      */
-    public static function success(array $data = [], string $message = 'Success'): never
+    public static function success(mixed $data = [], mixed $message = 'Success'): never
     {
+        if (is_string($data)) {
+            $responseData = is_array($message) ? $message : [];
+            $responseMessage = $data;
+        } else {
+            $responseData = is_array($data) ? $data : ['value' => $data];
+            $responseMessage = is_string($message) ? $message : 'Success';
+        }
+
         self::json([
-            "success" => true,
-            "message" => $message,
-            "data" => $data
+            'success' => true,
+            'message' => $responseMessage,
+            'data' => $responseData
         ], 200);
     }
 

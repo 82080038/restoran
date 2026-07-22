@@ -475,8 +475,20 @@ class FreePaymentController
             $amount = (float)($request['query']['amount'] ?? 0);
             $orderId = $request['query']['order_id'] ?? null;
 
-            if ($amount <= 0) {
-                return Response::error('amount is required and must be > 0', 400);
+            if ($amount <= 0 || !$orderId) {
+                return Response::error('order_id and amount greater than zero are required', 400);
+            }
+
+            $stmt = $pdo->prepare("SELECT o.total_amount, COALESCE(SUM(CASE WHEN p.payment_status = 'completed' THEN p.amount ELSE 0 END), 0) AS paid_amount FROM orders o LEFT JOIN payments p ON p.order_id = o.order_id WHERE o.order_id = ? AND o.tenant_id = ? GROUP BY o.order_id, o.total_amount");
+            $stmt->execute([$orderId, $tenantId]);
+            $order = $stmt->fetch(\PDO::FETCH_ASSOC);
+            if (!$order) {
+                return Response::notFound('Order not found');
+            }
+
+            $outstandingAmount = (float) $order['total_amount'] - (float) $order['paid_amount'];
+            if ($amount > $outstandingAmount + 0.01) {
+                return Response::error('Payment amount exceeds the outstanding order balance', 400);
             }
 
             // Get QRIS config
@@ -524,6 +536,7 @@ class FreePaymentController
                 'qr_image_path' => $config['qr_image_path'],
                 'amount' => $amount,
                 'order_id' => $orderId,
+                'outstanding_amount' => round($outstandingAmount, 2),
                 'mdr_rate' => $mdrRate,
                 'mdr_fee' => round($mdrFee, 2),
                 'net_amount' => round($netAmount, 2),

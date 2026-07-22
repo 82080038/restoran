@@ -46,6 +46,10 @@ class ErrorHandler
 
     public static function handleException($exception)
     {
+        if ($exception instanceof ValidationException) {
+            Response::validationError($exception->errors());
+        }
+
         self::$logger->exception($exception, [
             'exception_type' => get_class($exception)
         ]);
@@ -64,7 +68,7 @@ class ErrorHandler
             $context = $debug ? ['trace' => $exception->getTraceAsString()] : [];
             
             Response::error(
-                $exception->getMessage(),
+                $debug ? $exception->getMessage() : 'Internal server error',
                 $statusCode,
                 $context
             );

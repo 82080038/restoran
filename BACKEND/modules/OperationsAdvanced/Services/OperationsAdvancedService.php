@@ -18,6 +18,10 @@ class OperationsAdvancedService
 
     public function set86Status($tenantId, $branchId, $productId, $reason, $userId, $expectedRestockDate = null)
     {
+        if (!$this->productBelongsToTenant((int) $tenantId, (int) $productId)) {
+            return ['success' => false, 'message' => 'Product not found'];
+        }
+
         $sql = "INSERT INTO item_86_status (tenant_id, branch_id, product_id, is_86ed, reason, 86ed_by, 86ed_at, expected_restock_date)
                 VALUES (:tenant_id, :branch_id, :product_id, 1, :reason, :user, NOW(), :restock)
                 ON DUPLICATE KEY UPDATE is_86ed = 1, reason = :reason2, 86ed_by = :user2, 86ed_at = NOW(), expected_restock_date = :restock2";
@@ -32,10 +36,24 @@ class OperationsAdvancedService
 
     public function restockItem($tenantId, $branchId, $productId, $userId)
     {
+        if (!$this->productBelongsToTenant((int) $tenantId, (int) $productId)) {
+            return ['success' => false, 'message' => 'Product not found'];
+        }
+
         $sql = "UPDATE item_86_status SET is_86ed = 0, restocked_by = :user, restocked_at = NOW(), reason = NULL WHERE tenant_id = :tenant_id AND branch_id = :branch_id AND product_id = :product_id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':tenant_id' => $tenantId, ':branch_id' => $branchId, ':product_id' => $productId, ':user' => $userId]);
-        return ['success' => true];
+        return $stmt->rowCount() === 1
+            ? ['success' => true]
+            : ['success' => false, 'message' => 'Item is not marked 86-ed'];
+    }
+
+    private function productBelongsToTenant(int $tenantId, int $productId): bool
+    {
+        $statement = $this->pdo->prepare('SELECT 1 FROM products WHERE product_id = :product_id AND tenant_id = :tenant_id');
+        $statement->execute([':product_id' => $productId, ':tenant_id' => $tenantId]);
+
+        return (bool) $statement->fetchColumn();
     }
 
     public function get86Items($tenantId, $branchId)

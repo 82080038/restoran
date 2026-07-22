@@ -18,20 +18,29 @@ function withAuthAndPermission($handler, $permission, $permissionMiddleware, $au
         try {
             // Apply auth middleware
             $request = $authMiddleware->handle($request);
+            $request = \App\Core\TenantMiddleware::handle($request);
+            $request = \App\Core\AuditMiddleware::handle($request);
 
             // Apply permission middleware
             $userId = $request['user_id'] ?? null;
             $isPlatformOwner = $request['is_platform_owner'] ?? false;
             $isTenantOwner = $request['is_tenant_owner'] ?? false;
 
-            if ($userId && !$permissionMiddleware->check($userId, $permission, $isPlatformOwner, $isTenantOwner)) {
+            if (!$userId) {
+                return Response::unauthorized();
+            }
+
+            if (!$permissionMiddleware->check($userId, $permission, $isPlatformOwner, $isTenantOwner)) {
                 return Response::error("You don't have permission to access this resource", 403);
             }
 
             // Call the actual handler
             return $handler($request);
         } catch (\Throwable $e) {
-            return Response::error($e->getMessage(), (int) ($e->getCode() ?: 401));
+            $statusCode = (int) $e->getCode();
+            $statusCode = $statusCode >= 400 && $statusCode < 600 ? $statusCode : 500;
+            $message = getenv('APP_DEBUG') === 'true' ? $e->getMessage() : 'Internal server error';
+            return Response::error($message, $statusCode);
         }
     };
 }
@@ -42,11 +51,16 @@ function withAuth($handler, $authMiddleware) {
         try {
             // Apply auth middleware
             $request = $authMiddleware->handle($request);
+            $request = \App\Core\TenantMiddleware::handle($request);
+            $request = \App\Core\AuditMiddleware::handle($request);
             
             // Call the actual handler
             return $handler($request);
         } catch (\Throwable $e) {
-            return Response::error($e->getMessage(), (int) ($e->getCode() ?: 401));
+            $statusCode = (int) $e->getCode();
+            $statusCode = $statusCode >= 400 && $statusCode < 600 ? $statusCode : 500;
+            $message = getenv('APP_DEBUG') === 'true' ? $e->getMessage() : 'Internal server error';
+            return Response::error($message, $statusCode);
         }
     };
 }

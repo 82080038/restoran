@@ -19,9 +19,9 @@ class TableService
         $this->audit = \App\Core\Audit::getInstance();
     }
 
-    public function getAllTables(int $tenantId, ?int $branchId = null): array
+    public function getAllTables(int $tenantId, ?int $branchId = null, ?int $limit = null): array
     {
-        $tables = $this->tableRepository->findAll($tenantId, $branchId);
+        $tables = $this->tableRepository->findAll($tenantId, $branchId, $limit);
         return array_map(function($t) { return $t->toArray(); }, $tables);
     }
 

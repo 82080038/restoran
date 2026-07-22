@@ -55,10 +55,10 @@ class OfflineSyncService
                 $result = $this->processSyncOperation($operation);
                 
                 if ($result['success']) {
-                    $this->repository->updateSyncStatus($operation['sync_id'], 'SYNCED', null);
+                    $this->repository->updateSyncStatus($operation['sync_id'], $tenantId, $branchId, 'SYNCED', null);
                     $syncedCount++;
                 } else {
-                    $this->repository->updateSyncStatus($operation['sync_id'], 'FAILED', $result['message']);
+                    $this->repository->updateSyncStatus($operation['sync_id'], $tenantId, $branchId, 'FAILED', $result['message']);
                     $failedCount++;
                 }
             }
@@ -78,10 +78,10 @@ class OfflineSyncService
         }
     }
 
-    public function resolveConflict($syncId, $resolution, $resolvedData = null)
+    public function resolveConflict($syncId, $tenantId, $branchId, $resolution, $resolvedData = null)
     {
         try {
-            $operation = $this->repository->getSyncOperation($syncId);
+            $operation = $this->repository->getSyncOperation($syncId, $tenantId, $branchId);
             
             if (!$operation) {
                 return [
@@ -94,16 +94,16 @@ class OfflineSyncService
                 // Force sync local data to server
                 $result = $this->processSyncOperation($operation);
                 if ($result['success']) {
-                    $this->repository->updateSyncStatus($syncId, 'SYNCED', null);
+                    $this->repository->updateSyncStatus($syncId, $tenantId, $branchId, 'SYNCED', null);
                 }
             } elseif ($resolution === 'KEEP_SERVER') {
                 // Discard local changes, keep server data
-                $this->repository->updateSyncStatus($syncId, 'DISCARDED', 'Kept server version');
+                $this->repository->updateSyncStatus($syncId, $tenantId, $branchId, 'DISCARDED', 'Kept server version');
             } elseif ($resolution === 'MERGE') {
                 // Merge data
                 $result = $this->processSyncOperation($operation, $resolvedData);
                 if ($result['success']) {
-                    $this->repository->updateSyncStatus($syncId, 'SYNCED', null);
+                    $this->repository->updateSyncStatus($syncId, $tenantId, $branchId, 'SYNCED', null);
                 }
             }
 
@@ -161,6 +161,9 @@ class OfflineSyncService
     private function processSyncOperation($operation, $overrideData = null)
     {
         $entityData = $overrideData ? $overrideData : json_decode($operation['entity_data'], true);
+        $entityData['tenant_id'] = $operation['tenant_id'];
+        $entityData['branch_id'] = $operation['branch_id'];
+        $entityData['user_id'] = $operation['user_id'];
         
         switch ($operation['entity_type']) {
             case 'ORDER':

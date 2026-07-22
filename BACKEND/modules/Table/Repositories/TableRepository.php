@@ -4,8 +4,6 @@ if (!class_exists('Table')) {
     require_once __DIR__ . '/../Models/Table.php';
 }
 
-use PDO;
-
 class TableRepository
 {
     private $db;
@@ -15,7 +13,7 @@ class TableRepository
         $this->db = db();
     }
 
-    public function findAll(int $tenantId, ?int $branchId = null): array
+    public function findAll(int $tenantId, ?int $branchId = null, ?int $limit = null): array
     {
         $sql = "
             SELECT * FROM tables 
@@ -29,7 +27,10 @@ class TableRepository
             $params['branch_id'] = $branchId;
         }
         
-        $sql .= " ORDER BY area ASC, table_number ASC";
+        $sql .= ' ORDER BY area ASC, table_number ASC';
+        if ($limit !== null) {
+            $sql .= ' LIMIT ' . min(max($limit, 1), 100);
+        }
         
         $stmt = $this->db->prepare($sql);
         $stmt->execute($params);

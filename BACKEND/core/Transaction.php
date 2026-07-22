@@ -23,16 +23,25 @@ class Transaction
 
     public static function begin(): void
     {
-        self::getInstance()->db->beginTransaction();
+        $db = self::getInstance()->db;
+        if (!$db->inTransaction()) {
+            $db->beginTransaction();
+        }
     }
 
     public static function commit(): void
     {
-        self::getInstance()->db->commit();
+        $db = self::getInstance()->db;
+        if ($db->inTransaction()) {
+            $db->commit();
+        }
     }
 
     public static function rollback(): void
     {
-        self::getInstance()->db->rollBack();
+        $db = self::getInstance()->db;
+        if ($db->inTransaction()) {
+            $db->rollBack();
+        }
     }
 }

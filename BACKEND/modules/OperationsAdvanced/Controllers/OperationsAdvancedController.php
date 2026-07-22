@@ -30,12 +30,14 @@ class OperationsAdvancedController
         try {
             $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
-            if (empty($data['product_id'])) return Response::error('product_id is required', 400);
+            $branchId = $request['branch_id'] ?? $data['branch_id'] ?? null;
+            if (empty($data['product_id']) || empty($branchId)) return Response::error('product_id and branch_id are required', 400);
             $result = $this->service->set86Status(
-                $request['tenant_id'], $request['branch_id'] ?? null,
+                $request['tenant_id'], $branchId,
                 $data['product_id'], $data['reason'] ?? '', $request['user_id'] ?? null,
                 $data['expected_restock_date'] ?? null
             );
+            if (!$result['success']) return Response::error($result['message'], 404);
             return Response::success($result, 'Item 86-ed successfully');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
     }
@@ -44,8 +46,11 @@ class OperationsAdvancedController
     {
         try {
             $request = (new \AuthMiddleware())->handle($request);
-            $productId = $request['params']['product_id'] ?? $request['body']['product_id'] ?? null;
-            $result = $this->service->restockItem($request['tenant_id'], $request['branch_id'] ?? null, $productId, $request['user_id'] ?? null);
+            $productId = $request['product_id'] ?? $request['params']['product_id'] ?? $request['body']['product_id'] ?? null;
+            $branchId = $request['branch_id'] ?? $request['body']['branch_id'] ?? null;
+            if (empty($productId) || empty($branchId)) return Response::error('product_id and branch_id are required', 400);
+            $result = $this->service->restockItem($request['tenant_id'], $branchId, $productId, $request['user_id'] ?? null);
+            if (!$result['success']) return Response::error($result['message'], 404);
             return Response::success($result, 'Item restocked');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
     }

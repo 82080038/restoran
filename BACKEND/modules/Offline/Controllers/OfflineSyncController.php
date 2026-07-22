@@ -23,6 +23,10 @@ class OfflineSyncController
         $user = $authMiddleware->authenticate();
 
         $data = $request['body'] ?? [];
+        if (empty($data['operation_type']) || empty($data['entity_type']) || !is_array($data['entity_data'] ?? null)) {
+            Response::error('operation_type, entity_type, and entity_data are required', 400);
+            return;
+        }
 
         $result = $this->service->queueOperation($user['tenant_id'], $user['branch_id'], $user['user_id'], $data['operation_type'], $data['entity_type'], $data['entity_data']);
 
@@ -52,7 +56,7 @@ class OfflineSyncController
         $authMiddleware = new AuthMiddleware();
         $user = $authMiddleware->authenticate();
 
-        $syncId = $request['params']['id'] ?? null;
+        $syncId = $request['id'] ?? $request['params']['id'] ?? null;
         $resolution = $request['body']['resolution'] ?? null;
         $resolvedData = $request['body']['resolved_data'] ?? null;
 
@@ -61,7 +65,7 @@ class OfflineSyncController
             return;
         }
 
-        $result = $this->service->resolveConflict($syncId, $resolution, $resolvedData);
+        $result = $this->service->resolveConflict($syncId, $user['tenant_id'], $user['branch_id'], $resolution, $resolvedData);
 
         if ($result['success']) {
             Response::success($result['message']);

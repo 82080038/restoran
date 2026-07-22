@@ -74,20 +74,43 @@ class POSBankReconciliationService
         return ['deposit_id' => $depositId, 'status' => $status, 'cash_variance' => $cashVariance, 'total_variance' => $totalVariance];
     }
 
-    public function matchDeposit($depositId, $matchedBy)
+    public function matchDeposit(int $depositId, int $tenantId, int $matchedBy): array
     {
-        $sql = "UPDATE pos_bank_deposits SET status = 'MATCHED', matched_by = :matched_by, matched_at = NOW() WHERE deposit_id = :deposit_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':deposit_id' => $depositId, ':matched_by' => $matchedBy]);
+        $statement = $this->pdo->prepare('SELECT cash_variance, total_variance, status FROM pos_bank_deposits WHERE deposit_id = :deposit_id AND tenant_id = :tenant_id');
+        $statement->execute([':deposit_id' => $depositId, ':tenant_id' => $tenantId]);
+        $deposit = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if (!$deposit) {
+            return ['success' => false, 'message' => 'Deposit not found'];
+        }
+
+        if (abs((float) $deposit['cash_variance']) >= 0.01 || abs((float) $deposit['total_variance']) >= 0.01) {
+            return ['success' => false, 'message' => 'A deposit with a variance cannot be matched'];
+        }
+
+        $statement = $this->pdo->prepare("UPDATE pos_bank_deposits SET status = 'MATCHED', matched_by = :matched_by, matched_at = NOW() WHERE deposit_id = :deposit_id AND tenant_id = :tenant_id AND status IN ('PENDING', 'MATCHED')");
+        $statement->execute([':deposit_id' => $depositId, ':tenant_id' => $tenantId, ':matched_by' => $matchedBy]);
+
         return ['success' => true];
     }
 
-    public function resolveDeposit($depositId, $notes, $resolvedBy)
+    public function resolveDeposit(int $depositId, int $tenantId, string $notes, int $resolvedBy): array
     {
-        $sql = "UPDATE pos_bank_deposits SET status = 'RESOLVED', matched_by = :matched_by, matched_at = NOW(), notes = CONCAT(IFNULL(notes,''), :notes) WHERE deposit_id = :deposit_id";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':deposit_id' => $depositId, ':matched_by' => $resolvedBy, ':notes' => "\n[Resolved] " . $notes]);
-        return ['success' => true];
+        if (trim($notes) === '') {
+            return ['success' => false, 'message' => 'Resolution notes are required'];
+        }
+
+        $statement = $this->pdo->prepare("UPDATE pos_bank_deposits SET status = 'RESOLVED', matched_by = :matched_by, matched_at = NOW(), notes = CONCAT(IFNULL(notes, ''), :notes) WHERE deposit_id = :deposit_id AND tenant_id = :tenant_id AND status IN ('PENDING', 'VARIANCE')");
+        $statement->execute([
+            ':deposit_id' => $depositId,
+            ':tenant_id' => $tenantId,
+            ':matched_by' => $resolvedBy,
+            ':notes' => "\n[Resolved] " . trim($notes),
+        ]);
+
+        return $statement->rowCount() === 1
+            ? ['success' => true]
+            : ['success' => false, 'message' => 'Deposit not found or cannot be resolved'];
     }
 
     public function getVarianceReport($tenantId, $branchId, $dateFrom, $dateTo)
@@ -181,6 +204,17 @@ class POSBankReconciliationService
 
     public function createEODCloseout($data)
     {
+        $statement = $this->pdo->prepare("SELECT closeout_id FROM eod_closeouts WHERE tenant_id = :tenant_id AND branch_id = :branch_id AND closeout_date = :closeout_date AND status = 'OPEN'");
+        $statement->execute([
+            ':tenant_id' => $data['tenant_id'],
+            ':branch_id' => $data['branch_id'],
+            ':closeout_date' => $data['closeout_date'],
+        ]);
+        $existingCloseout = $statement->fetch(PDO::FETCH_ASSOC);
+        if ($existingCloseout) {
+            return ['success' => false, 'message' => 'An open closeout already exists for this branch and date'];
+        }
+
         $sql = "INSERT INTO eod_closeouts (tenant_id, branch_id, closeout_date, opened_by, opening_cash, status)
                 VALUES (:tenant_id, :branch_id, :closeout_date, :opened_by, :opening_cash, 'OPEN')";
         $stmt = $this->pdo->prepare($sql);
@@ -191,10 +225,10 @@ class POSBankReconciliationService
             ':opened_by' => $data['opened_by'],
             ':opening_cash' => $data['opening_cash'] ?? 0,
         ]);
-        return ['closeout_id' => $this->pdo->lastInsertId()];
+        return ['success' => true, 'closeout_id' => $this->pdo->lastInsertId()];
     }
 
-    public function closeEODCloseout($closeoutId, $data)
+    public function closeEODCloseout(int $closeoutId, int $tenantId, array $data): array
     {
         $expectedCash = ($data['opening_cash'] ?? 0) + ($data['cash_in'] ?? 0) - ($data['cash_out'] ?? 0);
         $cashVariance = ($data['counted_cash'] ?? 0) - $expectedCash;
@@ -214,10 +248,11 @@ class POSBankReconciliationService
                     payment_breakdown = :payment_breakdown,
                     status = :status,
                     notes = :notes
-                WHERE closeout_id = :closeout_id";
+                WHERE closeout_id = :closeout_id AND tenant_id = :tenant_id AND status = 'OPEN'";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             ':closeout_id' => $closeoutId,
+            ':tenant_id' => $tenantId,
             ':closed_by' => $data['closed_by'],
             ':cash_in' => $data['cash_in'] ?? 0,
             ':cash_out' => $data['cash_out'] ?? 0,
@@ -231,7 +266,9 @@ class POSBankReconciliationService
             ':status' => $status,
             ':notes' => $data['notes'] ?? null,
         ]);
-        return ['closeout_id' => $closeoutId, 'status' => $status, 'cash_variance' => $cashVariance];
+        return $stmt->rowCount() === 1
+            ? ['success' => true, 'closeout_id' => $closeoutId, 'status' => $status, 'cash_variance' => $cashVariance]
+            : ['success' => false, 'message' => 'Open closeout not found'];
     }
 
     public function getEODCloseouts($tenantId, $branchId, $dateFrom = null, $dateTo = null)

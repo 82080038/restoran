@@ -62,8 +62,8 @@ class AuthService
         // Generate token
         $token = $this->jwt->encode($payload);
         
-        // Log successful login
-        Audit::log($user['tenant_id'], $user['user_id'], 'AUTH_LOGIN', "User logged in: {$username}");
+        $this->repository->recordLogin((int) $user['user_id']);
+        Audit::log($user['tenant_id'], $user['user_id'], 'AUTH', 'LOGIN', $user['user_id'], 'users');
         
         return [
             'success' => true,
@@ -100,7 +100,7 @@ class AuthService
             // Verify user still exists and is active
             $user = $this->repository->findById($payload['user_id'], $payload['tenant_id']);
             
-            if (!$user || $user['status'] !== 'ACTIVE') {
+            if (!is_array($user) || ($user['status'] ?? null) !== 'ACTIVE') {
                 return [
                     'success' => false,
                     'message' => 'User not found or inactive'
@@ -132,6 +132,7 @@ class AuthService
         try {
             // Check if username already exists
             if ($this->repository->usernameExists($data['username'])) {
+                Transaction::rollback();
                 return [
                     'success' => false,
                     'message' => 'Username already exists'

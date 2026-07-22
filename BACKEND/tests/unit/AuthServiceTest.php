@@ -76,10 +76,10 @@ class AuthServiceTest extends TestCase
     public function testCreateUserSuccess()
     {
         $userData = [
-            'username' => 'test_user_' . time(),
+            'username' => 'test_user_' . uniqid('', true),
             'password' => 'test123',
             'full_name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'test_' . uniqid('', true) . '@example.com',
             'phone' => '1234567890',
             'status' => 'ACTIVE'
         ];
@@ -100,7 +100,7 @@ class AuthServiceTest extends TestCase
             'username' => 'admin', // Already exists
             'password' => 'test123',
             'full_name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'test_' . uniqid('', true) . '@example.com',
             'status' => 'ACTIVE'
         ];
         
@@ -114,10 +114,10 @@ class AuthServiceTest extends TestCase
     {
         // Create a test user first
         $userData = [
-            'username' => 'test_user_' . time(),
+            'username' => 'test_user_' . uniqid('', true),
             'password' => 'test123',
             'full_name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'test_' . uniqid('', true) . '@example.com',
             'status' => 'ACTIVE'
         ];
         
@@ -126,7 +126,7 @@ class AuthServiceTest extends TestCase
         
         $updateData = [
             'full_name' => 'Updated Test User',
-            'email' => 'updated@example.com'
+            'email' => 'updated_' . uniqid('', true) . '@example.com'
         ];
         
         $result = $this->service->updateUser($userId, $updateData, $this->testTenantId, $this->testUserId);
@@ -141,10 +141,10 @@ class AuthServiceTest extends TestCase
     public function testUpdateUserWithPassword()
     {
         $userData = [
-            'username' => 'test_user_' . time(),
+            'username' => 'test_user_' . uniqid('', true),
             'password' => 'test123',
             'full_name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'test_' . uniqid('', true) . '@example.com',
             'status' => 'ACTIVE'
         ];
         
@@ -167,10 +167,10 @@ class AuthServiceTest extends TestCase
     public function testDeleteUserSuccess()
     {
         $userData = [
-            'username' => 'test_user_' . time(),
+            'username' => 'test_user_' . uniqid('', true),
             'password' => 'test123',
             'full_name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'test_' . uniqid('', true) . '@example.com',
             'status' => 'ACTIVE'
         ];
         

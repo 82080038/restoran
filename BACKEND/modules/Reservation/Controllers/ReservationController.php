@@ -32,8 +32,9 @@ class ReservationController
     {
         // Permission checking is now handled in routes
         $tenantId = $request['tenant_id'] ?? 1;
-        $branchId = $request['branch_id'] ?? 1;
-        $date = $request['date'] ?? date('Y-m-d');
+        $query = $request['query'] ?? [];
+        $branchId = $request['branch_id'] ?? $query['branch_id'] ?? null;
+        $date = $request['date'] ?? $query['date'] ?? date('Y-m-d');
 
         $reservations = $this->reservationService->getReservationsByDate($tenantId, $branchId, $date);
 
@@ -44,7 +45,7 @@ class ReservationController
     {
         // Permission checking is now handled in routes
         $tenantId = $request['tenant_id'] ?? 1;
-        $reservationId = $request['reservation_id'] ?? 0;
+        $reservationId = $request['reservation_id'] ?? $request['id'] ?? 0;
 
         $reservation = $this->reservationService->getReservation($tenantId, $reservationId);
 
@@ -59,12 +60,16 @@ class ReservationController
     {
         // Permission checking is now handled in routes
         $tenantId = $request['tenant_id'] ?? 1;
-        $branchId = $request['branch_id'] ?? 1;
-        $date = $request['date'] ?? '';
-        $time = $request['time'] ?? '';
-        $partySize = $request['party_size'] ?? 0;
+        $query = $request['query'] ?? [];
+        $branchId = $request['branch_id'] ?? $query['branch_id'] ?? null;
+        $date = $request['date'] ?? $query['date'] ?? '';
+        $time = $request['time'] ?? $query['time'] ?? '';
+        $partySize = $request['party_size'] ?? $query['party_size'] ?? 0;
 
         // Validation
+        if (empty($branchId)) {
+            return Response::error(Messages::RESERVATION_BRANCH_REQUIRED, 400);
+        }
         if (empty($date)) {
             return Response::error(Messages::RESERVATION_DATE_REQUIRED, 400);
         }
@@ -116,7 +121,7 @@ class ReservationController
     {
         // Permission checking is now handled in routes
         $tenantId = $request['tenant_id'] ?? 1;
-        $reservationId = $request['reservation_id'] ?? 0;
+        $reservationId = $request['reservation_id'] ?? $request['id'] ?? 0;
         $data = $request['body'] ?? [];
 
         // Validation
@@ -140,7 +145,7 @@ class ReservationController
     {
         // Permission checking is now handled in routes
         $tenantId = $request['tenant_id'] ?? 1;
-        $reservationId = $request['reservation_id'] ?? 0;
+        $reservationId = $request['reservation_id'] ?? $request['id'] ?? 0;
         $status = $request['body']['status'] ?? '';
 
         // Validation
@@ -169,7 +174,7 @@ class ReservationController
     {
         // Permission checking is now handled in routes
         $tenantId = $request['tenant_id'] ?? 1;
-        $reservationId = $request['reservation_id'] ?? 0;
+        $reservationId = $request['reservation_id'] ?? $request['id'] ?? 0;
 
         // Validation
         if (empty($reservationId)) {

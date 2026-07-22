@@ -29,7 +29,7 @@ class TableController
         $screenSize = \ScreenSizeHelper::getScreenSize($headers, $request);
         
         // Get pagination with screen size defaults
-        $pagination = \ScreenSizeHelper::getPaginationParams($request, $screenSize, 'tables');
+        $pagination = \ScreenSizeHelper::getPaginationParams(array_merge($request, $request['query'] ?? []), $screenSize, 'tables');
         $limit = $pagination['limit'];
         
         $tables = $this->tableService->getAllTables($tenantId, $branchId, $limit);
@@ -54,7 +54,7 @@ class TableController
     {
         // Permission checking is now handled in routes
         $tenantId = $request['tenant_id'] ?? 1;
-        $tableId = $request['table_id'] ?? 0;
+        $tableId = $request['table_id'] ?? $request['id'] ?? 0;
 
         $table = $this->tableService->getTable($tenantId, $tableId);
 
@@ -92,7 +92,7 @@ class TableController
     {
         // Permission checking is now handled in routes
         $tenantId = $request['tenant_id'] ?? 1;
-        $tableId = $request['table_id'] ?? 0;
+        $tableId = $request['table_id'] ?? $request['id'] ?? 0;
         $data = $request['body'] ?? [];
 
         // Validation
@@ -113,7 +113,7 @@ class TableController
     {
         // Permission checking is now handled in routes
         $tenantId = $request['tenant_id'] ?? 1;
-        $tableId = $request['table_id'] ?? 0;
+        $tableId = $request['table_id'] ?? $request['id'] ?? 0;
         $status = $request['body']['status'] ?? '';
 
         // Validation
@@ -142,7 +142,7 @@ class TableController
     {
         // Permission checking is now handled in routes
         $tenantId = $request['tenant_id'] ?? 1;
-        $tableId = $request['table_id'] ?? 0;
+        $tableId = $request['table_id'] ?? $request['id'] ?? 0;
 
         // Validation
         if (empty($tableId)) {

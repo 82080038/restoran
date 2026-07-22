@@ -9,25 +9,53 @@ class Router
 
     /** @var array<array{method: string, path: string, handler: callable}> */
     private array $routes = [];
+    private array $groupStack = [];
 
-    public function addRoute(string $method, string $path, callable $handler): void
+    public function addRoute(string $method, string $path, callable $handler, array $middleware = []): void
     {
         $this->routes[] = [
             'method' => $method,
-            'path' => $path,
-            'handler' => $handler
+            'path' => $this->currentPrefix() . $path,
+            'handler' => $handler,
+            'middleware' => array_merge($this->currentMiddleware(), $middleware)
         ];
     }
 
-    public function add(string $method, string $path, callable $handler): void
+    public function group(string $prefix, array $middleware, callable $routes): void
     {
-        $this->addRoute($method, $path, $handler);
+        $this->groupStack[] = ['prefix' => rtrim($prefix, '/'), 'middleware' => $middleware];
+        $routes($this);
+        array_pop($this->groupStack);
+    }
+
+    private function currentPrefix(): string
+    {
+        return implode('', array_column($this->groupStack, 'prefix'));
+    }
+
+    private function currentMiddleware(): array
+    {
+        return array_merge([], ...array_column($this->groupStack, 'middleware'));
+    }
+
+    private function applyMiddleware(array $request, array $middleware): array
+    {
+        foreach ($middleware as $handler) {
+            $request = $handler($request);
+        }
+
+        return $request;
+    }
+
+    public function add(string $method, string $path, callable $handler, array $middleware = []): void
+    {
+        $this->addRoute($method, $path, $handler, $middleware);
     }
 
     public function dispatch(): void
     {
-        $method = $_SERVER['REQUEST_METHOD'];
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $method = strtoupper($_SERVER['REQUEST_METHOD'] ?? 'GET');
+        $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 
         foreach ($this->routes as $route) {
             if ($route['method'] === $method) {
@@ -40,11 +68,14 @@ class Router
                     array_shift($matches); // Remove full match
                     
                     // Build request array
+                    $rawBody = file_get_contents('php://input');
                     $request = [
                         'method' => $method,
                         'uri' => $uri,
-                        'body' => json_decode(file_get_contents('php://input'), true) ?? [],
-                        'query' => $_GET
+                        'raw_body' => $rawBody,
+                        'body' => json_decode($rawBody, true) ?? [],
+                        'query' => $_GET,
+                        'headers' => function_exists('getallheaders') ? getallheaders() : []
                     ];
                     
                     // Extract parameter names from path
@@ -56,6 +87,7 @@ class Router
                         $request[$name] = $matches[$index] ?? null;
                     }
                     
+                    $request = $this->applyMiddleware($request, $route['middleware'] ?? []);
                     call_user_func($route['handler'], $request);
                     exit;
                 }

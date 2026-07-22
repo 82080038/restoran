@@ -39,18 +39,18 @@ class OfflineSyncRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function updateSyncStatus($syncId, $status, $errorMessage)
+    public function updateSyncStatus($syncId, $tenantId, $branchId, $status, $errorMessage)
     {
-        $sql = "UPDATE offline_sync_queue SET status = ?, error_message = ?, synced_at = CURRENT_TIMESTAMP WHERE sync_id = ?";
+        $sql = "UPDATE offline_sync_queue SET status = ?, error_message = ?, synced_at = CURRENT_TIMESTAMP WHERE sync_id = ? AND tenant_id = ? AND branch_id = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([$status, $errorMessage, $syncId]);
+        $stmt->execute([$status, $errorMessage, $syncId, $tenantId, $branchId]);
     }
 
-    public function getSyncOperation($syncId)
+    public function getSyncOperation($syncId, $tenantId, $branchId)
     {
-        $sql = "SELECT * FROM offline_sync_queue WHERE sync_id = ?";
+        $sql = "SELECT * FROM offline_sync_queue WHERE sync_id = ? AND tenant_id = ? AND branch_id = ?";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([$syncId]);
+        $stmt->execute([$syncId, $tenantId, $branchId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
