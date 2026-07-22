@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class LocationController
+class LocationController extends \App\Core\BaseController
 {
     private $service;
 
@@ -41,9 +41,6 @@ class LocationController
 
     public function checkDeliveryAvailability($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $branchId = $request['params']['id'] ?? null;
         $data = $request['body'] ?? [];
         $latitude = $data['latitude'] ?? null;
@@ -65,9 +62,6 @@ class LocationController
 
     public function updateBranchLocation($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $branchId = $request['params']['id'] ?? null;
@@ -92,9 +86,6 @@ class LocationController
 
     public function getBranchLocation($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $branchId = $request['params']['id'] ?? null;
 
         $result = $this->service->getBranchLocation($branchId, $user['tenant_id']);

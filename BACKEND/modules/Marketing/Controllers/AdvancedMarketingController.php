@@ -5,7 +5,7 @@ namespace App\Modules\Marketing\Controllers;
 use App\Modules\Marketing\Services\AdvancedMarketingService;
 use App\Core\Response;
 
-class AdvancedMarketingController
+class AdvancedMarketingController extends BaseController
 {
     private $service;
 

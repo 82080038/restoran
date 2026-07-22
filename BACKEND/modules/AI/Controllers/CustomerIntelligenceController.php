@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class CustomerIntelligenceController
+class CustomerIntelligenceController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class CustomerIntelligenceController
 
     public function analyzeBehavior($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $dateFrom = $request['params']['start_date'] ?? date('Y-m-01');

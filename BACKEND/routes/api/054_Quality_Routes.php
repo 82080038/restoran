@@ -1,19 +1,19 @@
 <?php
 
 // Quality Routes
-$router->addRoute('POST', '/api/v1/quality/checks', function($request) use ($qualityController) {
+$router->addRoute('POST', '/api/v1/quality/checks', withAuth(function($request) use ($qualityController) {
     return $qualityController->createCheck($request);
-});
-$router->addRoute('GET', '/api/v1/quality/checks', function($request) use ($qualityController) {
+}, $authMiddleware));
+$router->addRoute('GET', '/api/v1/quality/checks', withAuth(function($request) use ($qualityController) {
     return $qualityController->getChecks($request);
-});
-$router->addRoute('POST', '/api/v1/quality/incidents', function($request) use ($qualityController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/quality/incidents', withAuth(function($request) use ($qualityController) {
     return $qualityController->createIncident($request);
-});
-$router->addRoute('GET', '/api/v1/quality/incidents', function($request) use ($qualityController) {
+}, $authMiddleware));
+$router->addRoute('GET', '/api/v1/quality/incidents', withAuth(function($request) use ($qualityController) {
     return $qualityController->getIncidents($request);
-});
-$router->addRoute('POST', '/api/v1/quality/incidents/{id}/resolve', function($request) use ($qualityController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/quality/incidents/{id}/resolve', withAuth(function($request) use ($qualityController) {
     return $qualityController->resolveIncident($request);
-});
+}, $authMiddleware));
 

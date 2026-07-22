@@ -9,7 +9,7 @@ if (!class_exists('InventoryService')) {
 require_once __DIR__ . '/../../../bootstrap.php';
 
 
-class InventoryController
+class InventoryController extends \App\Core\BaseController
 {
     private $inventoryService;
 

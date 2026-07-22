@@ -1,10 +1,10 @@
 <?php
 
 // Kiosk Routes
-$router->addRoute('GET', '/api/v1/kiosk/menu', function($request) use ($kioskController) {
+$router->addRoute('GET', '/api/v1/kiosk/menu', withAuth(function($request) use ($kioskController) {
     return $kioskController->getMenu($request);
-});
-$router->addRoute('POST', '/api/v1/kiosk/orders', function($request) use ($kioskController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/kiosk/orders', withAuth(function($request) use ($kioskController) {
     return $kioskController->createOrder($request);
-});
+}, $authMiddleware));
 

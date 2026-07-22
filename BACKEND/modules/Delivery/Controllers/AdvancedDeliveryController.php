@@ -5,7 +5,7 @@ namespace App\Modules\Delivery\Controllers;
 use App\Modules\Delivery\Services\AdvancedDeliveryService;
 use App\Core\Response;
 
-class AdvancedDeliveryController
+class AdvancedDeliveryController extends BaseController
 {
     private $service;
 

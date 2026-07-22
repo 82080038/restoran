@@ -8,9 +8,7 @@ use App\Core\Response;
 
 
 use App\Modules\Menu\Services\MenuEngineeringReportService;
-use Response;
-
-class MenuEngineeringReportController
+class MenuEngineeringReportController extends BaseController
 {
     private MenuEngineeringReportService $reportService;
 

@@ -7,7 +7,7 @@ if (!class_exists('TenantService')) {
     require_once __DIR__ . '/../Services/TenantService.php';
 }
 
-class TenantController {
+class TenantController extends \App\Core\BaseController {
     private $tenantService;
 
     public function __construct() {

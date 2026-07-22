@@ -328,7 +328,7 @@ class AdvancedDeliveryService
 
             $notificationId = $this->db->lastInsertId();
 
-            // Simulate sending notification (in production, integrate with SMS/Email gateway)
+            // Send notification via gateway (DB-backed with cURL support)
             $this->sendNotification($notificationId);
 
             // Log audit
@@ -349,13 +349,52 @@ class AdvancedDeliveryService
     }
 
     /**
-     * Simulate sending notification (placeholder for actual SMS/Email gateway integration)
+     * Send notification via configured SMS/Email gateway with DB-backed status tracking
      */
     private function sendNotification($notificationId)
     {
-        // Update status to sent
-        $sql = "UPDATE delivery_notifications SET status = 'SENT', sent_at = NOW() WHERE id = ?";
-        $this->db->prepare($sql)->execute([$notificationId]);
+        $pdo = $this->db->connect();
+
+        // Get notification details
+        $stmt = $pdo->prepare("
+            SELECT recipient_type, recipient_contact, message, notification_type
+            FROM delivery_notifications WHERE id = ?
+        ");
+        $stmt->execute([$notificationId]);
+        $notif = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (!$notif) {
+            return;
+        }
+
+        $gatewayUrl = getenv('NOTIFICATION_GATEWAY_URL') ?: null;
+        $sent = false;
+
+        if ($gatewayUrl && function_exists('curl_init')) {
+            // Attempt real gateway call
+            $ch = curl_init($gatewayUrl);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => http_build_query([
+                    'type' => $notif['recipient_type'],
+                    'to' => $notif['recipient_contact'],
+                    'message' => $notif['message'],
+                ]),
+                CURLOPT_TIMEOUT => 10,
+            ]);
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            $sent = $httpCode >= 200 && $httpCode < 300;
+        }
+
+        // Update status in DB
+        $status = $sent ? 'SENT' : 'PENDING';
+        $sql = "UPDATE delivery_notifications SET status = ?, sent_at = " . ($sent ? "NOW()" : "NULL"
+        ) . " WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$status, $notificationId]);
     }
 
     /**

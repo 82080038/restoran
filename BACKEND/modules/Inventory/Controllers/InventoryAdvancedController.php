@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class InventoryAdvancedController
+class InventoryAdvancedController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class InventoryAdvancedController
 
     public function repurposeStock($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class InventoryAdvancedController
 
     public function zeroCostStockIn($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -55,9 +49,6 @@ class InventoryAdvancedController
 
     public function createStockTransfer($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -73,9 +64,6 @@ class InventoryAdvancedController
 
     public function receiveStockTransfer($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $transferId = $request['params']['id'] ?? null;
@@ -96,9 +84,6 @@ class InventoryAdvancedController
 
     public function getStockTransfers($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $status = $request['params']['status'] ?? null;
 
         $result = $this->service->getStockTransfers($user['tenant_id'], $user['branch_id'], $status);
@@ -112,9 +97,6 @@ class InventoryAdvancedController
 
     public function getRepurposingHistory($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $dateFrom = $request['params']['start_date'] ?? null;
         $dateTo = $request['params']['end_date'] ?? null;
 

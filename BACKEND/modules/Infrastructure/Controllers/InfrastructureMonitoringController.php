@@ -5,7 +5,7 @@ namespace App\Modules\Infrastructure\Controllers;
 use App\Modules\Infrastructure\Services\InfrastructureMonitoringService;
 use App\Core\Response;
 
-class InfrastructureMonitoringController
+class InfrastructureMonitoringController extends BaseController
 {
     private $service;
 

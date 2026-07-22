@@ -3,7 +3,7 @@
 use App\Core\Response;
 use App\Core\Database;
 
-class UploadController
+class UploadController extends \App\Core\BaseController
 {
     private $uploadDir;
     private $uploadUrlBase;

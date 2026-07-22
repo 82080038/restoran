@@ -38,7 +38,9 @@ class OfflineDataSnapshot extends BaseModel
         }
         
         $sql = "SELECT * FROM {$this->table} {$where} ORDER BY created_at DESC LIMIT 1";
-        $result = $this->db->query($sql, $params)->fetch();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $result = $stmt->fetch();
         return $result ?: null;
     }
 
@@ -48,7 +50,9 @@ class OfflineDataSnapshot extends BaseModel
     public function findById($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ?";
-        $result = $this->db->query($sql, [$id])->fetch();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+        $result = $stmt->fetch();
         return $result ?: null;
     }
 
@@ -58,6 +62,8 @@ class OfflineDataSnapshot extends BaseModel
     public function getByRestaurant($restaurantId, $limit = 50)
     {
         $sql = "SELECT * FROM {$this->table} WHERE restaurant_id = ? ORDER BY created_at DESC LIMIT ?";
-        return $this->db->query($sql, [$restaurantId, $limit])->fetchAll();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$restaurantId, $limit]);
+        return $stmt->fetchAll();
     }
 }

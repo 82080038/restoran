@@ -9,7 +9,7 @@ if (!class_exists('SettingService')) {
 require_once __DIR__ . '/../../../bootstrap.php';
 
 
-class SettingController
+class SettingController extends \App\Core\BaseController
 {
     private $settingService;
 

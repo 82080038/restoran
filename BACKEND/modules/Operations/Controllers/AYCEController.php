@@ -5,7 +5,7 @@ namespace App\Modules\Operations\Controllers;
 use App\Core\Response;
 use App\Modules\Operations\Services\AYCEService;
 
-class AYCEController
+class AYCEController extends BaseController
 {
     private $ayceService;
 
@@ -17,7 +17,6 @@ class AYCEController
     public function getAYCESessions($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $status = $request['status'] ?? null;
@@ -32,7 +31,6 @@ class AYCEController
     public function getAYCESession($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $sessionId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -49,8 +47,6 @@ class AYCEController
     public function createAYCESession($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-            
             $required = ['tenant_id', 'branch_id', 'order_id', 'table_id'];
             foreach ($required as $field) {
                 if (!isset($request[$field])) {
@@ -68,8 +64,6 @@ class AYCEController
     public function createAYCEReorder($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-            
             $required = ['session_id', 'order_id', 'items', 'total_amount'];
             foreach ($required as $field) {
                 if (!isset($request[$field])) {
@@ -90,7 +84,6 @@ class AYCEController
     public function sendReorderToKitchen($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $reorderId = $request['id'];
             $kdsTicketId = $request['kds_ticket_id'];
 
@@ -104,7 +97,6 @@ class AYCEController
     public function completeReorder($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $reorderId = $request['id'];
 
             $this->ayceService->completeReorder($reorderId);
@@ -117,7 +109,6 @@ class AYCEController
     public function getSessionReorders($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $sessionId = $request['id'];
 
             $reorders = $this->ayceService->getSessionReorders($sessionId);
@@ -130,7 +121,6 @@ class AYCEController
     public function endSession($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $sessionId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -144,8 +134,6 @@ class AYCEController
     public function checkSessionTimeouts($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-            
             $this->ayceService->checkSessionTimeouts();
             return Response::success([], 'Session timeouts checked successfully');
         } catch (\Exception $e) {

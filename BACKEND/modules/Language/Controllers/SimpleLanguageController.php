@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../core/Middleware/AuthMiddleware.php';
  * Simple Language Controller (compatible with current router pattern)
  * Manages multi-language / i18n translations
  */
-class SimpleLanguageController
+class SimpleLanguageController extends \App\Core\BaseController
 {
     private $db;
 
@@ -88,7 +88,6 @@ class SimpleLanguageController
     public function getUserPreference($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
 
             $stmt = $pdo->prepare("
@@ -97,7 +96,7 @@ class SimpleLanguageController
                 INNER JOIN languages l ON ulp.language_id = l.language_id
                 WHERE ulp.user_id = ?
             ");
-            $stmt->execute([$payload['user_id']]);
+            $stmt->execute([$request['user_id']]);
             $preference = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$preference) {
@@ -121,7 +120,6 @@ class SimpleLanguageController
     public function setUserPreference($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $body = $request['body'] ?? [];
             $languageCode = $body['language_code'] ?? '';
@@ -145,7 +143,7 @@ class SimpleLanguageController
                 VALUES (?, ?, NOW())
                 ON DUPLICATE KEY UPDATE language_id = VALUES(language_id), updated_at = NOW()
             ");
-            $stmt->execute([$payload['user_id'], $lang['language_id']]);
+            $stmt->execute([$request['user_id'], $lang['language_id']]);
 
             return Response::success([
                 'language_code' => $languageCode
@@ -162,7 +160,6 @@ class SimpleLanguageController
     public function getAllTranslations($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $code = $request['query']['language_code'] ?? null;
             $context = $request['query']['context'] ?? null;
@@ -217,7 +214,6 @@ class SimpleLanguageController
     public function saveTranslation($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $body = $request['body'] ?? [];
 
@@ -263,7 +259,6 @@ class SimpleLanguageController
     public function deleteTranslation($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $translationId = $request['id'] ?? 0;
 

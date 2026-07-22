@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class ProductVariantController
+class ProductVariantController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class ProductVariantController
 
     public function create($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class ProductVariantController
 
     public function getByProduct($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $productId = $request['params']['id'] ?? null;
 
         $result = $this->service->getVariantsByProduct($productId, $user['tenant_id']);
@@ -53,9 +47,6 @@ class ProductVariantController
 
     public function update($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $variantId = $request['params']['id'] ?? null;
@@ -72,9 +63,6 @@ class ProductVariantController
 
     public function delete($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $variantId = $request['params']['id'] ?? null;

@@ -5,7 +5,7 @@ namespace App\Modules\Compliance\Controllers;
 use App\Modules\Compliance\Services\HACCPService;
 use App\Core\Response;
 
-class HACCPController
+class HACCPController extends BaseController
 {
     private $service;
 

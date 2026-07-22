@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../../core/Response.php';
 require_once __DIR__ . '/../../../core/Database.php';
 require_once __DIR__ . '/../../../core/Middleware/AuthMiddleware.php';
 
-class SimplePaymentController
+class SimplePaymentController extends \App\Core\BaseController
 {
     private $db;
 

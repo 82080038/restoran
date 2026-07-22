@@ -15,7 +15,7 @@ require_once __DIR__ . '/../../../core/Middleware/AuthMiddleware.php';
  *
  * QR codes are generated per-table and can be static (permanent) or dynamic (session-based).
  */
-class QROrderingController
+class QROrderingController extends \App\Core\BaseController
 {
     private $db;
 
@@ -31,13 +31,12 @@ class QROrderingController
     public function generateQRCode($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
 
             $tableId = $body['table_id'] ?? null;
-            $branchId = $body['branch_id'] ?? ($payload['branch_id'] ?? null);
+            $branchId = $body['branch_id'] ?? ($request['branch_id'] ?? null);
             $type = $body['type'] ?? 'static'; // static or dynamic
 
             if (!$tableId) {
@@ -64,7 +63,7 @@ class QROrderingController
                 VALUES (?, ?, ?, ?, ?, ?, 1, ?, NOW())
                 ON DUPLICATE KEY UPDATE qr_url = VALUES(qr_url), updated_at = NOW()
             ");
-            $stmt->execute([$qrId, $tenantId, $branchId, $tableId, $qrUrl, $type, $payload['user_id'] ?? null]);
+            $stmt->execute([$qrId, $tenantId, $branchId, $tableId, $qrUrl, $type, $request['user_id'] ?? null]);
 
             // Generate QR code as SVG (inline, no external library needed)
             $qrSvg = $this->generateQRSvg($qrUrl);
@@ -89,9 +88,8 @@ class QROrderingController
     public function getQRCodes($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $branchId = $request['query']['branch_id'] ?? null;
 
             $sql = "SELECT q.*, rt.table_number, rt.capacity
@@ -123,7 +121,6 @@ class QROrderingController
     public function toggleQRCode($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $qrId = $request['qrId'] ?? '';
             $body = $request['body'] ?? [];
@@ -404,9 +401,8 @@ class QROrderingController
     public function getAnalytics($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $dateFrom = $request['query']['date_from'] ?? date('Y-m-01');
             $dateTo = $request['query']['date_to'] ?? date('Y-m-d');
 

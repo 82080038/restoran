@@ -8,9 +8,7 @@ use App\Core\Response;
 
 
 use App\Modules\Menu\Services\MenuSeasonService;
-use Response;
-
-class MenuSeasonController
+class MenuSeasonController extends BaseController
 {
     private MenuSeasonService $seasonService;
 

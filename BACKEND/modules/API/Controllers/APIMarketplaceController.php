@@ -5,7 +5,7 @@ namespace App\Modules\API\Controllers;
 use App\Modules\API\Services\APIMarketplaceService;
 use App\Core\Response;
 
-class APIMarketplaceController
+class APIMarketplaceController extends BaseController
 {
     private $service;
 

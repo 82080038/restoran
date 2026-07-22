@@ -5,7 +5,7 @@ namespace App\Modules\Franchise\Controllers;
 use App\Modules\Franchise\Services\AdvancedFranchiseService;
 use App\Core\Response;
 
-class AdvancedFranchiseController
+class AdvancedFranchiseController extends BaseController
 {
     private $service;
 

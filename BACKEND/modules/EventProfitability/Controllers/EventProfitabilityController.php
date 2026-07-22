@@ -5,7 +5,7 @@ namespace App\Modules\EventProfitability\Controllers;
 use App\Core\Response;
 use App\Modules\EventProfitability\Services\EventProfitabilityService;
 
-class EventProfitabilityController
+class EventProfitabilityController extends BaseController
 {
     private $service;
 
@@ -17,7 +17,6 @@ class EventProfitabilityController
     public function getProfitabilityList($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $eventType = $request['query']['event_type'] ?? null;
@@ -34,7 +33,6 @@ class EventProfitabilityController
     public function getProfitability($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $profitabilityId = $request['params']['id'] ?? $request['id'] ?? null;
 
             $result = $this->service->getProfitabilityDetail($profitabilityId);
@@ -50,7 +48,6 @@ class EventProfitabilityController
     public function createProfitability($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -69,7 +66,6 @@ class EventProfitabilityController
     public function addCostItem($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $profitabilityId = $request['params']['id'] ?? $request['id'] ?? null;
             $item = $request['body'];
 
@@ -87,7 +83,6 @@ class EventProfitabilityController
     public function finalizeProfitability($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $profitabilityId = $request['params']['id'] ?? $request['id'] ?? null;
 
             $result = $this->service->finalizeProfitability($profitabilityId);
@@ -100,7 +95,6 @@ class EventProfitabilityController
     public function getSummary($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $dateFrom = $request['query']['date_from'] ?? date('Y-m-01');

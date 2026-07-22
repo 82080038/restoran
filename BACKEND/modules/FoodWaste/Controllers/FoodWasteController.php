@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../../core/Response.php';
 /**
  * Food Waste Controller
  */
-class FoodWasteController
+class FoodWasteController extends \App\Core\BaseController
 {
     private $foodWasteService;
 

@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class CreditController
+class CreditController extends \App\Core\BaseController
 {
     private $service;
 
@@ -20,9 +20,6 @@ class CreditController
 
     public function createCredit($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -38,9 +35,6 @@ class CreditController
 
     public function payCredit($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $creditId = $request['params']['id'] ?? null;
@@ -62,9 +56,6 @@ class CreditController
 
     public function getCustomerCredits($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $customerId = $request['params']['customer_id'] ?? null;
 
         if (!$customerId) {
@@ -83,9 +74,6 @@ class CreditController
 
     public function getOverdueCredits($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getOverdueCredits($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {

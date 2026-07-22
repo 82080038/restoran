@@ -7,7 +7,7 @@ if (!class_exists('KioskService')) {
 require_once __DIR__ . '/../../../bootstrap.php';
 
 
-class KioskController
+class KioskController extends \App\Core\BaseController
 {
     private $service;
 

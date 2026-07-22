@@ -6,7 +6,7 @@ if (!class_exists('BudgetService')) {
 // Load EBP Core and Backend Components
 require_once __DIR__ . '/../../../bootstrap.php';
 
-class BudgetController
+class BudgetController extends \App\Core\BaseController
 {
     private $service;
 
@@ -17,9 +17,6 @@ class BudgetController
 
     public function createBudget($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -35,9 +32,6 @@ class BudgetController
 
     public function getBudgets($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $params = $request['query'] ?? [];
@@ -55,9 +49,6 @@ class BudgetController
 
     public function getBudget($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $params = $request['params'] ?? [];
@@ -78,9 +69,6 @@ class BudgetController
 
     public function addBudgetItem($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -96,9 +84,6 @@ class BudgetController
 
     public function approveBudget($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $params = $request['params'] ?? [];
@@ -119,9 +104,6 @@ class BudgetController
 
     public function getBudgetVariance($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $params = $request['params'] ?? [];

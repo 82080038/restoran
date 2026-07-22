@@ -7,7 +7,7 @@ if (!class_exists('HolidayService')) {
     require_once __DIR__ . '/../Services/HolidayService.php';
 }
 
-class HolidayController
+class HolidayController extends \App\Core\BaseController
 {
     private $service;
 
@@ -21,9 +21,6 @@ class HolidayController
      */
     public function create($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'HOLIDAY_MANAGE');
 
@@ -47,9 +44,6 @@ class HolidayController
      */
     public function getHolidays($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $query = $request['query'] ?? [];
         $startDate = $query['start_date'] ?? null;
         $endDate = $query['end_date'] ?? null;
@@ -63,9 +57,6 @@ class HolidayController
      */
     public function update($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'HOLIDAY_MANAGE');
 
@@ -94,9 +85,6 @@ class HolidayController
      */
     public function delete($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'HOLIDAY_MANAGE');
 
@@ -120,9 +108,6 @@ class HolidayController
      */
     public function checkHoliday($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $query = $request['query'] ?? [];
         $date = $query['date'] ?? date('Y-m-d');
 

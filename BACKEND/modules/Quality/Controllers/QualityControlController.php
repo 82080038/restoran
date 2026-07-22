@@ -5,7 +5,7 @@ namespace App\Modules\Quality\Controllers;
 use App\Modules\Quality\Services\QualityControlService;
 use App\Core\Response;
 
-class QualityControlController
+class QualityControlController extends BaseController
 {
     private $service;
 

@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class PredictiveMaintenanceController
+class PredictiveMaintenanceController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class PredictiveMaintenanceController
 
     public function predictNeeds($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $result = $this->service->predictMaintenanceNeeds($user['tenant_id'], $user['branch_id']);

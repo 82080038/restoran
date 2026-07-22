@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class CostCenterController
+class CostCenterController extends \App\Core\BaseController
 {
     private $service;
 
@@ -20,9 +20,6 @@ class CostCenterController
 
     public function createCostCenter($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -38,9 +35,6 @@ class CostCenterController
 
     public function getCostCenters($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getCostCenters($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {
@@ -52,9 +46,6 @@ class CostCenterController
 
     public function getCostCenterReport($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $costCenterId = $request['params']['id'] ?? null;
         $dateFrom = $request['params']['start_date'] ?? null;
         $dateTo = $request['params']['end_date'] ?? null;
@@ -70,9 +61,6 @@ class CostCenterController
 
     public function updateCostCenter($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $costCenterId = $request['params']['id'] ?? null;

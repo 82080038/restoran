@@ -3,7 +3,7 @@
 // Load EBP Core and Backend Components
 require_once __DIR__ . '/../../../bootstrap.php';
 
-class SimpleMenuController
+class SimpleMenuController extends \App\Core\BaseController
 {
     // Simple endpoint to get categories without complex middleware
     public function getCategories($request = null)

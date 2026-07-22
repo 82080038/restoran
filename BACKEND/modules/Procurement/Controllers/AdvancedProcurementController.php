@@ -5,7 +5,7 @@ namespace App\Modules\Procurement\Controllers;
 use App\Modules\Procurement\Services\AdvancedProcurementService;
 use App\Core\Response;
 
-class AdvancedProcurementController
+class AdvancedProcurementController extends BaseController
 {
     private $service;
 

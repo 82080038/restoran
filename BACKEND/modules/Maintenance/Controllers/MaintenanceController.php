@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class MaintenanceController
+class MaintenanceController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class MaintenanceController
 
     public function createAsset($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class MaintenanceController
 
     public function createSchedule($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -55,9 +49,6 @@ class MaintenanceController
 
     public function completeMaintenance($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $scheduleId = $request['params']['id'] ?? null;
@@ -74,9 +65,6 @@ class MaintenanceController
 
     public function getAssets($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getAssets($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {
@@ -88,9 +76,6 @@ class MaintenanceController
 
     public function getSchedules($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getSchedules($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {

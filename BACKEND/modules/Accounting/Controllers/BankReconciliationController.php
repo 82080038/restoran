@@ -6,7 +6,7 @@ if (!class_exists('BankReconciliationService')) {
 // Load EBP Core and Backend Components
 require_once __DIR__ . '/../../../bootstrap.php';
 
-class BankReconciliationController
+class BankReconciliationController extends \App\Core\BaseController
 {
     private $service;
 
@@ -17,9 +17,6 @@ class BankReconciliationController
 
     public function createReconciliation($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -35,9 +32,6 @@ class BankReconciliationController
 
     public function getReconciliations($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $params = $request['query'] ?? [];
@@ -55,9 +49,6 @@ class BankReconciliationController
 
     public function getReconciliation($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $params = $request['params'] ?? [];
@@ -78,9 +69,6 @@ class BankReconciliationController
 
     public function addItem($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -96,9 +84,6 @@ class BankReconciliationController
 
     public function reconcile($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $params = $request['params'] ?? [];
@@ -119,9 +104,6 @@ class BankReconciliationController
 
     public function getBankAccounts($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $result = $this->service->getBankAccounts($user['tenant_id'], $user['branch_id']);
@@ -135,9 +117,6 @@ class BankReconciliationController
 
     public function createBankAccount($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];

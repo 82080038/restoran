@@ -5,7 +5,7 @@ namespace App\Modules\RecipeDepletion\Controllers;
 use App\Core\Response;
 use App\Modules\RecipeDepletion\Services\RecipeDepletionService;
 
-class RecipeDepletionController
+class RecipeDepletionController extends BaseController
 {
     private $service;
 
@@ -17,7 +17,6 @@ class RecipeDepletionController
     public function depleteFromOrder($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $data = $request['body'];
@@ -42,7 +41,6 @@ class RecipeDepletionController
     public function getDepletionLogs($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $dateFrom = $request['query']['date_from'] ?? null;
@@ -59,7 +57,6 @@ class RecipeDepletionController
     public function getDepletionSummary($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $dateFrom = $request['query']['date_from'] ?? date('Y-m-01');
@@ -75,7 +72,6 @@ class RecipeDepletionController
     public function getProductionBatches($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $status = $request['query']['status'] ?? null;
@@ -90,7 +86,6 @@ class RecipeDepletionController
     public function createProductionBatch($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -110,7 +105,6 @@ class RecipeDepletionController
     public function completeProductionBatch($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $batchId = $request['params']['id'] ?? $request['id'] ?? null;
             $data = $request['body'];
 

@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class CustomerController
+class CustomerController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class CustomerController
 
     public function create($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class CustomerController
 
     public function getAll($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $filters = $request['query'] ?? [];
 
         $result = $this->service->getCustomers($user['tenant_id'], $filters);
@@ -53,9 +47,6 @@ class CustomerController
 
     public function update($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $customerId = $request['params']['id'] ?? null;
@@ -72,9 +63,6 @@ class CustomerController
 
     public function addLoyaltyPoints($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $customerId = $request['params']['id'] ?? null;
@@ -97,9 +85,6 @@ class CustomerController
 
     public function recordVisit($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $customerId = $request['params']['id'] ?? null;
         $data = $request['body'] ?? [];
 

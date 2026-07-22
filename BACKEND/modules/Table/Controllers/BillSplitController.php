@@ -14,7 +14,7 @@ require_once __DIR__ . '/../../../core/Middleware/AuthMiddleware.php';
  * - Order items can be assigned to specific groups or split across groups
  * - Bills can be merged back into one
  */
-class BillSplitController
+class BillSplitController extends \App\Core\BaseController
 {
     private $db;
 
@@ -32,10 +32,9 @@ class BillSplitController
     public function getTableGroups($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $tableId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             // Get groups
             $stmt = $pdo->prepare("
@@ -84,10 +83,9 @@ class BillSplitController
     public function createGroup($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $body = $request['body'] ?? [];
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             if (empty($body['table_id'])) {
                 return Response::error('table_id is required', 400);
@@ -144,7 +142,7 @@ class BillSplitController
                 ->execute([$tableId, $tenantId]);
 
             // Log history
-            $this->logHistory($pdo, $tableId, 'CREATE_GROUP', 'Created group ' . ($groupIndex + 1), $payload['user_id'] ?? null);
+            $this->logHistory($pdo, $tableId, 'CREATE_GROUP', 'Created group ' . ($groupIndex + 1), $request['user_id'] ?? null);
 
             return Response::success([
                 'group_id' => $groupId,
@@ -163,7 +161,6 @@ class BillSplitController
     public function updateGroup($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $groupId = $request['id'] ?? 0;
             $body = $request['body'] ?? [];
@@ -213,10 +210,9 @@ class BillSplitController
     public function closeGroup($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $groupId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             // Get table_id before closing
             $stmt = $pdo->prepare("SELECT table_id FROM table_groups WHERE group_id = ?");
@@ -238,7 +234,7 @@ class BillSplitController
                     ->execute([$tableId, $tenantId]);
             }
 
-            $this->logHistory($pdo, $tableId, 'CLOSE_GROUP', "Closed group {$groupId}", $payload['user_id'] ?? null);
+            $this->logHistory($pdo, $tableId, 'CLOSE_GROUP', "Closed group {$groupId}", $request['user_id'] ?? null);
 
             return Response::success([
                 'group_id' => (int)$groupId,
@@ -257,7 +253,6 @@ class BillSplitController
     public function assignItemToBill($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $billId = $request['id'] ?? 0;
             $body = $request['body'] ?? [];
@@ -303,7 +298,7 @@ class BillSplitController
             // Recalculate bill totals
             $this->recalculateBill($pdo, $billId);
 
-            $this->logHistory($pdo, $body['table_id'] ?? 0, 'ASSIGN_ITEM', "Assigned item to bill {$billId}", $payload['user_id'] ?? null);
+            $this->logHistory($pdo, $body['table_id'] ?? 0, 'ASSIGN_ITEM', "Assigned item to bill {$billId}", $request['user_id'] ?? null);
 
             return Response::success([
                 'bill_id' => (int)$billId,
@@ -322,7 +317,6 @@ class BillSplitController
     public function removeItemFromBill($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $billId = $request['id'] ?? 0;
             $itemId = $request['item_id'] ?? 0;
@@ -345,7 +339,6 @@ class BillSplitController
     public function getBill($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $billId = $request['id'] ?? 0;
 
@@ -374,11 +367,10 @@ class BillSplitController
     public function mergeBills($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $body = $request['body'] ?? [];
             $billIds = $body['bill_ids'] ?? [];
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             if (count($billIds) < 2) {
                 return Response::error('At least 2 bills required to merge', 400);
@@ -411,7 +403,7 @@ class BillSplitController
 
             $pdo->commit();
 
-            $this->logHistory($pdo, $targetBill['table_id'], 'MERGE_BILLS', "Merged " . count($billIds) . " bills into {$targetBillId}", $payload['user_id'] ?? null);
+            $this->logHistory($pdo, $targetBill['table_id'], 'MERGE_BILLS', "Merged " . count($billIds) . " bills into {$targetBillId}", $request['user_id'] ?? null);
 
             return Response::success([
                 'merged_bill_id' => $targetBillId,
@@ -430,13 +422,12 @@ class BillSplitController
     public function splitBill($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $billId = $request['id'] ?? 0;
             $body = $request['body'] ?? [];
             $splitCount = (int)($body['split_count'] ?? 2);
             $splitMode = $body['split_mode'] ?? 'equal'; // equal, items, custom
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             if ($splitCount < 2) {
                 return Response::error('Split count must be at least 2', 400);
@@ -508,7 +499,7 @@ class BillSplitController
 
                 $pdo->commit();
 
-                $this->logHistory($pdo, $originalBill['table_id'], 'SPLIT_BILL', "Split bill {$billId} into {$splitCount} bills (equal)", $payload['user_id'] ?? null);
+                $this->logHistory($pdo, $originalBill['table_id'], 'SPLIT_BILL', "Split bill {$billId} into {$splitCount} bills (equal)", $request['user_id'] ?? null);
 
                 return Response::success([
                     'original_bill_id' => (int)$billId,
@@ -533,7 +524,6 @@ class BillSplitController
     public function markBillPaid($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $billId = $request['id'] ?? 0;
             $body = $request['body'] ?? [];
@@ -553,7 +543,7 @@ class BillSplitController
             $stmt->execute([$tableId]);
             $unpaidCount = (int)$stmt->fetchColumn();
 
-            $this->logHistory($pdo, $tableId, 'BILL_PAID', "Bill {$billId} paid via " . ($body['payment_method'] ?? 'cash'), $payload['user_id'] ?? null);
+            $this->logHistory($pdo, $tableId, 'BILL_PAID', "Bill {$billId} paid via " . ($body['payment_method'] ?? 'cash'), $request['user_id'] ?? null);
 
             return Response::success([
                 'bill_id' => (int)$billId,
@@ -571,10 +561,9 @@ class BillSplitController
     public function getTableSummary($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $tableId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             // Get table info
             $stmt = $pdo->prepare("SELECT * FROM tables WHERE table_id = ? AND tenant_id = ? AND deleted_at IS NULL");

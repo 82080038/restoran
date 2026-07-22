@@ -9,7 +9,7 @@ if (!class_exists('TableService')) {
 require_once __DIR__ . '/../../../bootstrap.php';
 
 
-class TableController
+class TableController extends \App\Core\BaseController
 {
     private $tableService;
 

@@ -3,18 +3,14 @@
 namespace App\Modules\Facility\Controllers;
 
 use App\Modules\Facility\Services\FloorService;
-use App\Core\AuthMiddleware;
 use App\Core\Response;
 
-class FloorController
+class FloorController extends BaseController
 {
     private $service;
-    private $authMiddleware;
-
     public function __construct()
     {
         $this->service = new FloorService();
-        $this->authMiddleware = new AuthMiddleware();
     }
 
     /**
@@ -22,9 +18,7 @@ class FloorController
      */
     public function getFloors($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         $branchId = $request['branch_id'] ?? null;
         
         $floors = $this->service->getFloors($tenantId, $branchId);
@@ -37,10 +31,8 @@ class FloorController
      */
     public function getFloor($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $floorId = $request['floor_id'] ?? null;
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         
         if (!$floorId) {
             Response::error('Floor ID is required', 400);
@@ -60,11 +52,9 @@ class FloorController
      */
     public function createFloor($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $data = [
-            'tenant_id' => $user['tenant_id'],
-            'branch_id' => $request['branch_id'] ?? $user['branch_id'],
+            'tenant_id' => $request['tenant_id'],
+            'branch_id' => $request['branch_id'] ?? $request['branch_id'],
             'floor_code' => $request['floor_code'] ?? null,
             'floor_name' => $request['floor_name'] ?? null,
             'floor_level' => $request['floor_level'] ?? 1,
@@ -88,10 +78,8 @@ class FloorController
      */
     public function updateFloor($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $floorId = $request['floor_id'] ?? null;
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         
         if (!$floorId) {
             Response::error('Floor ID is required', 400);
@@ -117,10 +105,8 @@ class FloorController
      */
     public function deleteFloor($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $floorId = $request['floor_id'] ?? null;
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         
         if (!$floorId) {
             Response::error('Floor ID is required', 400);
@@ -136,10 +122,8 @@ class FloorController
      */
     public function getFloorZones($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $floorId = $request['floor_id'] ?? null;
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         
         if (!$floorId) {
             Response::error('Floor ID is required', 400);

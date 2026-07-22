@@ -9,7 +9,7 @@ if (!class_exists('ReportService')) {
 require_once __DIR__ . '/../../../bootstrap.php';
 
 
-class ReportController
+class ReportController extends \App\Core\BaseController
 {
     private $reportService;
 

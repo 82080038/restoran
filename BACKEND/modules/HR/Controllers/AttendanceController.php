@@ -7,7 +7,7 @@ if (!class_exists('AttendanceService')) {
     require_once __DIR__ . '/../Services/AttendanceService.php';
 }
 
-class AttendanceController
+class AttendanceController extends \App\Core\BaseController
 {
     private $service;
 
@@ -21,9 +21,6 @@ class AttendanceController
      */
     public function checkIn($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'ATTENDANCE_MANAGE');
 
@@ -49,9 +46,6 @@ class AttendanceController
      */
     public function checkOut($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'ATTENDANCE_MANAGE');
 
@@ -77,9 +71,6 @@ class AttendanceController
      */
     public function getAttendance($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $query = $request['query'] ?? [];
         $employeeId = $query['employee_id'] ?? null;
         $startDate = $query['start_date'] ?? null;
@@ -94,9 +85,6 @@ class AttendanceController
      */
     public function startBreak($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $data = $request['body'] ?? [];
         $employeeId = $data['employee_id'] ?? $user['user_id'];
 
@@ -118,9 +106,6 @@ class AttendanceController
      */
     public function endBreak($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $data = $request['body'] ?? [];
         $employeeId = $data['employee_id'] ?? $user['user_id'];
 
@@ -142,9 +127,6 @@ class AttendanceController
      */
     public function getSummary($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $query = $request['query'] ?? [];
         $startDate = $query['start_date'] ?? date('Y-m-01');
         $endDate = $query['end_date'] ?? date('Y-m-t');

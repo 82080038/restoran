@@ -8,7 +8,7 @@ use App\Modules\Entertainment\Services\EntertainmentService;
 /**
  * EntertainmentController - Handles Karaoke Bar, Beach Club, and Live Music Venue API
  */
-class EntertainmentController
+class EntertainmentController extends BaseController
 {
     private $service;
 
@@ -22,7 +22,6 @@ class EntertainmentController
     public function getKaraokeRooms($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $roomType = $request['query']['room_type'] ?? null;
             $data = $this->service->getKaraokeRooms($tenantId, $roomType);
@@ -35,7 +34,6 @@ class EntertainmentController
     public function createKaraokeRoom($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $request['body']['tenant_id'] = $request['tenant_id'];
             $id = $this->service->createKaraokeRoom($request['body']);
             return Response::success(['room_id' => $id], 'Karaoke room created');
@@ -47,7 +45,6 @@ class EntertainmentController
     public function getKaraokeReservations($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $date = $request['query']['date'] ?? null;
             $status = $request['query']['status'] ?? null;
@@ -61,7 +58,6 @@ class EntertainmentController
     public function createKaraokeReservation($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $request['body']['tenant_id'] = $request['tenant_id'];
             $id = $this->service->createKaraokeReservation($request['body']);
             return Response::success(['reservation_id' => $id], 'Karaoke reservation created');
@@ -73,7 +69,6 @@ class EntertainmentController
     public function checkInKaraoke($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $reservationId = $request['params']['id'] ?? null;
             $result = $this->service->checkInKaraoke($reservationId, $request['tenant_id']);
             return Response::success(['checked_in' => $result], $result ? 'Checked in' : 'Check-in failed');
@@ -85,7 +80,6 @@ class EntertainmentController
     public function checkOutKaraoke($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $reservationId = $request['params']['id'] ?? null;
             $actualEndTime = $request['body']['actual_end_time'] ?? date('H:i:s');
             $totalBill = $request['body']['total_bill'] ?? 0;
@@ -101,7 +95,6 @@ class EntertainmentController
     public function getBeachCabanas($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $cabanaType = $request['query']['cabana_type'] ?? null;
             $data = $this->service->getBeachCabanas($request['tenant_id'], $cabanaType);
             return Response::success($data, 'Beach cabanas retrieved');
@@ -113,7 +106,6 @@ class EntertainmentController
     public function createBeachCabana($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $request['body']['tenant_id'] = $request['tenant_id'];
             $id = $this->service->createBeachCabana($request['body']);
             return Response::success(['cabana_id' => $id], 'Beach cabana created');
@@ -125,7 +117,6 @@ class EntertainmentController
     public function getBeachReservations($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $date = $request['query']['date'] ?? null;
             $status = $request['query']['status'] ?? null;
             $data = $this->service->getBeachReservations($request['tenant_id'], $date, $status);
@@ -138,7 +129,6 @@ class EntertainmentController
     public function createBeachReservation($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $request['body']['tenant_id'] = $request['tenant_id'];
             $id = $this->service->createBeachReservation($request['body']);
             return Response::success(['reservation_id' => $id], 'Beach club reservation created');
@@ -150,7 +140,6 @@ class EntertainmentController
     public function getBeachEvents($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $status = $request['query']['status'] ?? null;
             $data = $this->service->getBeachEvents($request['tenant_id'], $status);
             return Response::success($data, 'Beach club events retrieved');
@@ -162,7 +151,6 @@ class EntertainmentController
     public function createBeachEvent($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $request['body']['tenant_id'] = $request['tenant_id'];
             $id = $this->service->createBeachEvent($request['body']);
             return Response::success(['event_id' => $id], 'Beach club event created');
@@ -176,7 +164,6 @@ class EntertainmentController
     public function getConcerts($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $status = $request['query']['status'] ?? null;
             $data = $this->service->getConcerts($request['tenant_id'], $status);
             return Response::success($data, 'Concerts retrieved');
@@ -188,7 +175,6 @@ class EntertainmentController
     public function createConcert($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $request['body']['tenant_id'] = $request['tenant_id'];
             $id = $this->service->createConcert($request['body']);
             return Response::success(['concert_id' => $id], 'Concert created');
@@ -200,7 +186,6 @@ class EntertainmentController
     public function getSeatingSections($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $this->service->getSeatingSections($request['tenant_id']);
             return Response::success($data, 'Seating sections retrieved');
         } catch (\Exception $e) {
@@ -211,7 +196,6 @@ class EntertainmentController
     public function createSeatingSection($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $request['body']['tenant_id'] = $request['tenant_id'];
             $id = $this->service->createSeatingSection($request['body']);
             return Response::success(['section_id' => $id], 'Seating section created');
@@ -223,7 +207,6 @@ class EntertainmentController
     public function getConcertTickets($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $concertId = $request['query']['concert_id'] ?? null;
             $data = $this->service->getConcertTickets($request['tenant_id'], $concertId);
             return Response::success($data, 'Concert tickets retrieved');
@@ -235,7 +218,6 @@ class EntertainmentController
     public function createConcertTicket($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $request['body']['tenant_id'] = $request['tenant_id'];
             $result = $this->service->createConcertTicket($request['body']);
             return Response::success($result, 'Concert ticket created');
@@ -247,7 +229,6 @@ class EntertainmentController
     public function checkInConcertTicket($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $ticketId = $request['params']['id'] ?? null;
             $result = $this->service->checkInConcertTicket($ticketId, $request['tenant_id']);
             return Response::success(['checked_in' => $result], $result ? 'Checked in' : 'Check-in failed');
@@ -261,7 +242,6 @@ class EntertainmentController
     public function getDashboardStats($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $businessType = $request['query']['business_type'] ?? 'KARAOKE_BAR';
             $stats = $this->service->getDashboardStats($request['tenant_id'], $businessType);
             return Response::success($stats, 'Dashboard stats retrieved');
@@ -273,7 +253,6 @@ class EntertainmentController
     public function getRevenueReport($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $businessType = $request['query']['business_type'] ?? 'KARAOKE_BAR';
             $startDate = $request['query']['start_date'] ?? null;
             $endDate = $request['query']['end_date'] ?? null;

@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../core/Response.php';
  * 
  * Handles HTTP requests for menu engineering operations
  */
-class MenuEngineeringController
+class MenuEngineeringController extends \App\Core\BaseController
 {
     private $menuEngineeringService;
 

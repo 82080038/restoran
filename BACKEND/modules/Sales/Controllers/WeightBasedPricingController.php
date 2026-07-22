@@ -7,7 +7,7 @@ if (!class_exists('WeightBasedPricingService')) {
     require_once __DIR__ . '/../Services/WeightBasedPricingService.php';
 }
 
-class WeightBasedPricingController
+class WeightBasedPricingController extends \App\Core\BaseController
 {
     private $service;
 
@@ -22,9 +22,6 @@ class WeightBasedPricingController
     public function calculatePrice()
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $input = json_decode(file_get_contents("php://input"), true);
 
             if (!$input) {
@@ -58,9 +55,6 @@ class WeightBasedPricingController
     public function getInventoryItems($request)
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $inventoryId = $request['query']['inventory_id'] ?? null;
 
             if (!$inventoryId) {
@@ -86,9 +80,6 @@ class WeightBasedPricingController
     public function getPricingConfig($request)
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $productId = $request['query']['product_id'] ?? null;
 
             if (!$productId) {
@@ -114,9 +105,6 @@ class WeightBasedPricingController
     public function updatePricingConfig()
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $input = json_decode(file_get_contents("php://input"), true);
 
             if (!$input) {
@@ -150,9 +138,6 @@ class WeightBasedPricingController
     public function reserveItem()
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $input = json_decode(file_get_contents("php://input"), true);
 
             if (!$input) {
@@ -186,9 +171,6 @@ class WeightBasedPricingController
     public function markAsSold()
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $input = json_decode(file_get_contents("php://input"), true);
 
             if (!$input) {

@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../../core/Response.php';
 require_once __DIR__ . '/../../../core/Database.php';
 require_once __DIR__ . '/../../../core/JWT.php';
 
-class ConsumerController
+class ConsumerController extends \App\Core\BaseController
 {
     private $db;
 
@@ -231,27 +231,65 @@ class ConsumerController
     }
 
     /**
-     * Send OTP (placeholder - requires SMS gateway integration)
+     * Send OTP (DB-backed with SMS gateway support)
      */
     public function sendOtp(array $request)
     {
         try {
             $body = $request['body'] ?? [];
             $phone = $body['phone'] ?? '';
+            $purpose = $body['purpose'] ?? 'LOGIN';
 
             // Validate phone number
             if (empty($phone)) {
                 return Response::error('Phone number is required', 400);
             }
 
-            // Generate OTP (for demo, use 123456)
-            $otp = '123456';
+            $pdo = $this->db->connect();
 
-            // In production, integrate with SMS gateway (Twilio, etc.)
-            // For now, just return success
+            // Expire any previous pending OTPs for this phone
+            $stmt = $pdo->prepare("UPDATE otp_verifications SET status = 'expired' WHERE phone = ? AND status = 'pending'");
+            $stmt->execute([$phone]);
+
+            // Generate secure 6-digit OTP
+            $otp = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+            // Store OTP in database (expires in 5 minutes)
+            $stmt = $pdo->prepare("
+                INSERT INTO otp_verifications (phone, otp_code, purpose, status, expires_at)
+                VALUES (?, ?, ?, 'pending', DATE_ADD(NOW(), INTERVAL 5 MINUTE))
+            ");
+            $stmt->execute([$phone, $otp, $purpose]);
+            $otpId = $pdo->lastInsertId();
+
+            // Attempt SMS gateway if configured
+            $smsSent = false;
+            $smsGatewayUrl = getenv('SMS_GATEWAY_URL') ?: null;
+            if ($smsGatewayUrl && function_exists('curl_init')) {
+                $ch = curl_init($smsGatewayUrl);
+                curl_setopt_array($ch, [
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_POST => true,
+                    CURLOPT_POSTFIELDS => http_build_query([
+                        'phone' => $phone,
+                        'message' => 'Your verification code is: ' . $otp . '. Valid for 5 minutes.',
+                    ]),
+                    CURLOPT_TIMEOUT => 10,
+                ]);
+                $response = curl_exec($ch);
+                $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                $smsSent = $httpCode >= 200 && $httpCode < 300;
+            }
+
+            // Log OTP generation
+            error_log("OTP generated for {$phone}: id={$otpId}, sms_sent=" . ($smsSent ? 'yes' : 'no'));
+
             return Response::success([
-                'otp' => $otp, // Only for demo - remove in production
-                'message' => 'OTP sent successfully'
+                'otp_id' => (int)$otpId,
+                'expires_in' => 300,
+                'sms_sent' => $smsSent,
+                'message' => $smsSent ? 'OTP sent via SMS' : 'OTP generated — SMS gateway not configured'
             ], 'OTP sent successfully');
         } catch (\Exception $e) {
             return Response::error('Failed to send OTP: ' . $e->getMessage());
@@ -268,10 +306,45 @@ class ConsumerController
             $phone = $body['phone'] ?? '';
             $otp = $body['otp'] ?? '';
 
-            // For demo, accept 123456
-            if ($otp !== '123456') {
+            // Verify OTP against database
+            $pdo = $this->db->connect();
+            $stmt = $pdo->prepare("
+                SELECT id, otp_code, status, attempts, max_attempts, expires_at
+                FROM otp_verifications
+                WHERE phone = ? AND status = 'pending'
+                ORDER BY created_at DESC LIMIT 1
+            ");
+            $stmt->execute([$phone]);
+            $otpRecord = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+            if (!$otpRecord) {
+                return Response::error('No active OTP found. Please request a new one.', 404);
+            }
+
+            // Check expiry
+            if (strtotime($otpRecord['expires_at']) < time()) {
+                $stmt = $pdo->prepare("UPDATE otp_verifications SET status = 'expired' WHERE id = ?");
+                $stmt->execute([$otpRecord['id']]);
+                return Response::error('OTP has expired. Please request a new one.', 401);
+            }
+
+            // Check attempts
+            if ($otpRecord['attempts'] >= $otpRecord['max_attempts']) {
+                $stmt = $pdo->prepare("UPDATE otp_verifications SET status = 'failed' WHERE id = ?");
+                $stmt->execute([$otpRecord['id']]);
+                return Response::error('Maximum OTP attempts exceeded. Please request a new one.', 401);
+            }
+
+            // Verify OTP code using hash_equals for timing-safe comparison
+            if (!hash_equals($otpRecord['otp_code'], $otp)) {
+                $stmt = $pdo->prepare("UPDATE otp_verifications SET attempts = attempts + 1 WHERE id = ?");
+                $stmt->execute([$otpRecord['id']]);
                 return Response::error('Invalid OTP', 401);
             }
+
+            // Mark OTP as verified
+            $stmt = $pdo->prepare("UPDATE otp_verifications SET status = 'verified', verified_at = NOW() WHERE id = ?");
+            $stmt->execute([$otpRecord['id']]);
 
             // Create or get user by phone
             $pdo = $this->db->connect();

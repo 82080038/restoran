@@ -5,7 +5,7 @@ namespace App\Modules\Settlement\Controllers;
 use App\Core\Response;
 use App\Modules\Settlement\Services\SettlementService;
 
-class SettlementController
+class SettlementController extends BaseController
 {
     private $service;
 
@@ -17,7 +17,6 @@ class SettlementController
     public function getDeals($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $status = $request['query']['status'] ?? null;
@@ -32,7 +31,6 @@ class SettlementController
     public function createDeal($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -51,7 +49,6 @@ class SettlementController
     public function signDeal($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $dealId = $request['params']['id'] ?? $request['id'] ?? null;
 
             $result = $this->service->signDeal($dealId);
@@ -64,7 +61,6 @@ class SettlementController
     public function getSettlements($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $status = $request['query']['status'] ?? null;
@@ -79,7 +75,6 @@ class SettlementController
     public function getSettlement($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $settlementId = $request['params']['id'] ?? $request['id'] ?? null;
 
             $result = $this->service->getSettlementDetail($settlementId);
@@ -95,7 +90,6 @@ class SettlementController
     public function createSettlement($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -114,7 +108,6 @@ class SettlementController
     public function addSettlementItem($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $settlementId = $request['params']['id'] ?? $request['id'] ?? null;
             $item = $request['body'];
 
@@ -132,7 +125,6 @@ class SettlementController
     public function finalizeSettlement($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $settlementId = $request['params']['id'] ?? $request['id'] ?? null;
             $finalizedBy = $request['user_id'] ?? null;
 
@@ -146,7 +138,6 @@ class SettlementController
     public function markSettlementPaid($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $settlementId = $request['params']['id'] ?? $request['id'] ?? null;
 
             $result = $this->service->markSettlementPaid($settlementId);
@@ -159,7 +150,6 @@ class SettlementController
     public function getAdvancingSheet($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $concertId = $request['params']['concert_id'] ?? $request['query']['concert_id'] ?? null;
 
             $result = $this->service->getAdvancingSheet($concertId);
@@ -175,7 +165,6 @@ class SettlementController
     public function createAdvancingSheet($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -194,7 +183,6 @@ class SettlementController
     public function confirmAdvancingSheet($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $sheetId = $request['params']['id'] ?? $request['id'] ?? null;
 
             $result = $this->service->confirmAdvancingSheet($sheetId);

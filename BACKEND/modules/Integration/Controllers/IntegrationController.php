@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class IntegrationController
+class IntegrationController extends \App\Core\BaseController
 {
     private $service;
 
@@ -20,9 +20,6 @@ class IntegrationController
 
     public function saveSettings($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $integrationType = $request['params']['type'] ?? null;
@@ -44,9 +41,6 @@ class IntegrationController
 
     public function getSettings($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $integrationType = $request['params']['type'] ?? null;
 
         if (!$integrationType) {
@@ -65,9 +59,6 @@ class IntegrationController
 
     public function testConnection($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $integrationType = $request['params']['type'] ?? null;
@@ -88,9 +79,6 @@ class IntegrationController
 
     public function syncOrder($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $integrationType = $request['params']['type'] ?? null;
         $externalOrderId = $request['body']['external_order_id'] ?? null;
 
@@ -110,9 +98,6 @@ class IntegrationController
 
     public function getLogs($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $integrationType = $request['params']['type'] ?? null;
         $limit = $request['params']['limit'] ?? 100;
 

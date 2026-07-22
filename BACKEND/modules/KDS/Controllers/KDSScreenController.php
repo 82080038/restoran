@@ -5,7 +5,7 @@ namespace App\Modules\KDS\Controllers;
 use App\Core\Response;
 use App\Modules\KDS\Services\KDSScreenService;
 
-class KDSScreenController
+class KDSScreenController extends BaseController
 {
     private $screenService;
 
@@ -17,7 +17,6 @@ class KDSScreenController
     public function getScreens($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $stationId = $request['station_id'] ?? null;

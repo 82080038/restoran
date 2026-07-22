@@ -14,7 +14,7 @@ require_once __DIR__ . '/../../../core/Middleware/AuthMiddleware.php';
  * - Minimum order requirements
  * - Maximum discount caps
  */
-class HappyHourController
+class HappyHourController extends \App\Core\BaseController
 {
     private $db;
 
@@ -30,9 +30,8 @@ class HappyHourController
     public function getPromotions($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $activeOnly = ($request['query']['active'] ?? 'false') === 'true';
 
             $sql = "SELECT * FROM happy_hour_promotions WHERE tenant_id = ?";
@@ -76,10 +75,9 @@ class HappyHourController
     public function getPromotion($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $promotionId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             $stmt = $pdo->prepare("SELECT * FROM happy_hour_promotions WHERE promotion_id = ? AND tenant_id = ?");
             $stmt->execute([$promotionId, $tenantId]);
@@ -102,9 +100,8 @@ class HappyHourController
     public function createPromotion($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
 
             $name = $body['promotion_name'] ?? '';
@@ -151,7 +148,7 @@ class HappyHourController
                 (int)($body['priority'] ?? 0),
                 $body['start_date'] ?? null,
                 $body['end_date'] ?? null,
-                $payload['user_id'] ?? null
+                $request['user_id'] ?? null
             ]);
 
             $promotionId = $pdo->lastInsertId();
@@ -172,10 +169,9 @@ class HappyHourController
     public function updatePromotion($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $promotionId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
 
             // Verify ownership
@@ -224,10 +220,9 @@ class HappyHourController
     public function deletePromotion($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $promotionId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             $stmt = $pdo->prepare("DELETE FROM happy_hour_promotions WHERE promotion_id = ? AND tenant_id = ?");
             $stmt->execute([$promotionId, $tenantId]);
@@ -249,9 +244,8 @@ class HappyHourController
     public function calculateDiscount($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
 
             $orderAmount = (float)($body['order_amount'] ?? 0);
@@ -334,10 +328,9 @@ class HappyHourController
     public function getPromotionStats($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $promotionId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $dateFrom = $request['query']['date_from'] ?? date('Y-m-01');
             $dateTo = $request['query']['date_to'] ?? date('Y-m-d');
 

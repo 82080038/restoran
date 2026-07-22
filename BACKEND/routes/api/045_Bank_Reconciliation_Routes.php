@@ -1,25 +1,25 @@
 <?php
 
 // Bank Reconciliation Routes
-$router->addRoute('POST', '/api/v1/accounting/bank-reconciliations', function($request) use ($bankReconciliationController) {
+$router->addRoute('POST', '/api/v1/accounting/bank-reconciliations', withAuth(function($request) use ($bankReconciliationController) {
     return $bankReconciliationController->createReconciliation($request);
-});
-$router->addRoute('GET', '/api/v1/accounting/bank-reconciliations', function($request) use ($bankReconciliationController) {
+}, $authMiddleware));
+$router->addRoute('GET', '/api/v1/accounting/bank-reconciliations', withAuth(function($request) use ($bankReconciliationController) {
     return $bankReconciliationController->getReconciliations($request);
-});
-$router->addRoute('GET', '/api/v1/accounting/bank-reconciliations/{id}', function($request) use ($bankReconciliationController) {
+}, $authMiddleware));
+$router->addRoute('GET', '/api/v1/accounting/bank-reconciliations/{id}', withAuth(function($request) use ($bankReconciliationController) {
     return $bankReconciliationController->getReconciliation($request);
-});
-$router->addRoute('POST', '/api/v1/accounting/bank-reconciliations/items', function($request) use ($bankReconciliationController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/accounting/bank-reconciliations/items', withAuth(function($request) use ($bankReconciliationController) {
     return $bankReconciliationController->addItem($request);
-});
-$router->addRoute('POST', '/api/v1/accounting/bank-reconciliations/{id}/reconcile', function($request) use ($bankReconciliationController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/accounting/bank-reconciliations/{id}/reconcile', withAuth(function($request) use ($bankReconciliationController) {
     return $bankReconciliationController->reconcile($request);
-});
-$router->addRoute('GET', '/api/v1/accounting/bank-accounts', function($request) use ($bankReconciliationController) {
+}, $authMiddleware));
+$router->addRoute('GET', '/api/v1/accounting/bank-accounts', withAuth(function($request) use ($bankReconciliationController) {
     return $bankReconciliationController->getBankAccounts($request);
-});
-$router->addRoute('POST', '/api/v1/accounting/bank-accounts', function($request) use ($bankReconciliationController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/accounting/bank-accounts', withAuth(function($request) use ($bankReconciliationController) {
     return $bankReconciliationController->createBankAccount($request);
-});
+}, $authMiddleware));
 

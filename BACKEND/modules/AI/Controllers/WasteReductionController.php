@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class WasteReductionController
+class WasteReductionController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class WasteReductionController
 
     public function recordWaste($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class WasteReductionController
 
     public function getWasteReport($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $dateFrom = $request['params']['start_date'] ?? date('Y-m-01');
         $dateTo = $request['params']['end_date'] ?? date('Y-m-t');
 

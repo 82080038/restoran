@@ -5,7 +5,7 @@ namespace App\Modules\POSBankReconciliation\Controllers;
 use App\Core\Response;
 use App\Modules\POSBankReconciliation\Services\POSBankReconciliationService;
 
-class POSBankReconciliationController
+class POSBankReconciliationController extends BaseController
 {
     private $service;
 
@@ -17,7 +17,6 @@ class POSBankReconciliationController
     public function getDeposits($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $dateFrom = $request['query']['date_from'] ?? null;
@@ -34,7 +33,6 @@ class POSBankReconciliationController
     public function createDeposit($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -53,7 +51,6 @@ class POSBankReconciliationController
     public function matchDeposit($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $depositId = $request['params']['id'] ?? $request['id'] ?? null;
             $matchedBy = $request['user_id'] ?? null;
 
@@ -70,7 +67,6 @@ class POSBankReconciliationController
     public function resolveDeposit($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $depositId = $request['params']['id'] ?? $request['id'] ?? null;
             $notes = $request['body']['notes'] ?? '';
             $resolvedBy = $request['user_id'] ?? null;
@@ -88,7 +84,6 @@ class POSBankReconciliationController
     public function getVarianceReport($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $dateFrom = $request['query']['date_from'] ?? date('Y-m-01');
@@ -104,7 +99,6 @@ class POSBankReconciliationController
     public function addMerchantFee($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -123,7 +117,6 @@ class POSBankReconciliationController
     public function getMerchantFees($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $dateFrom = $request['query']['date_from'] ?? date('Y-m-01');
@@ -139,7 +132,6 @@ class POSBankReconciliationController
     public function createEODCloseout($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -162,7 +154,6 @@ class POSBankReconciliationController
     public function closeEODCloseout($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $closeoutId = $request['params']['id'] ?? $request['id'] ?? null;
             $data = $request['body'];
             $data['closed_by'] = $request['user_id'] ?? null;
@@ -180,7 +171,6 @@ class POSBankReconciliationController
     public function getEODCloseouts($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $dateFrom = $request['query']['date_from'] ?? null;

@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class SmartProcurementController
+class SmartProcurementController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class SmartProcurementController
 
     public function generateRecommendation($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $forecastDays = $request['params']['days'] ?? 30;

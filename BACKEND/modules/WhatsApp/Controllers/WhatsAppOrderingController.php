@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class WhatsAppOrderingController
+class WhatsAppOrderingController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class WhatsAppOrderingController
 
     public function processOrder($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];

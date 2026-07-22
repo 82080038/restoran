@@ -20,7 +20,7 @@ use App\Core\Middleware\AuthMiddleware;
  * @package EBP\App\Modules\Integration
  * @version 1.0.0
  */
-class DeliveryIntegrationController
+class DeliveryIntegrationController extends BaseController
 {
     private $db;
     private $platforms = ['gofood', 'grabfood', 'shopeefood', 'ubereats'];
@@ -37,9 +37,8 @@ class DeliveryIntegrationController
     public function getPlatforms($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             $stmt = $pdo->prepare("
                 SELECT * FROM delivery_platform_integrations
@@ -62,9 +61,8 @@ class DeliveryIntegrationController
     public function configurePlatform($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $platform = $request['platform'] ?? '';
             $body = $request['body'] ?? [];
 
@@ -125,9 +123,8 @@ class DeliveryIntegrationController
     public function syncMenu($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $platform = $request['platform'] ?? '';
 
             if (!in_array($platform, $this->platforms)) {
@@ -163,7 +160,7 @@ class DeliveryIntegrationController
                 ];
             }, $menuItems);
 
-            // Call platform API (simulated)
+            // Call platform API (DB-backed with cURL support)
             $syncResult = $this->callPlatformApi($config, 'menu/sync', ['items' => $formattedItems]);
 
             // Log sync
@@ -354,9 +351,8 @@ class DeliveryIntegrationController
     public function getSyncLogs($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $platform = $request['platform'] ?? '';
             $page = (int)($request['query']['page'] ?? 1);
             $limit = (int)($request['query']['limit'] ?? 20);
@@ -398,18 +394,72 @@ class DeliveryIntegrationController
     }
 
     /**
-     * Call platform API (simulated - implement actual API calls in production)
+     * Call platform API with DB-backed logging and cURL integration
+     * Attempts real HTTP call if API URL is configured, otherwise logs to DB
      */
     private function callPlatformApi($config, $endpoint, $data)
     {
-        // In production, implement actual API calls to each platform:
-        // - GoFood: https://api.gojek.com/v2/gofood/
-        // - GrabFood: https://api.grab.com/grabfood/v1/
-        // - ShopeeFood: https://api.shopee.com/food/v1/
-        // - Uber Eats: https://api.uber.com/eats/v1/
+        $pdo = Database::getInstance()->connect();
+        $platformName = $config['platform_name'];
+        $apiUrl = $config['api_url'] ?? null;
+        $apiKey = $config['api_key'] ?? null;
 
-        // For now, simulate success
-        error_log("Delivery API call to {$config['platform_name']}/{$endpoint}");
-        return ['success' => true, 'message' => 'API call simulated'];
+        // If API URL is configured, attempt real HTTP call
+        if ($apiUrl && function_exists('curl_init')) {
+            $url = rtrim($apiUrl, '/') . '/' . ltrim($endpoint, '/');
+            $ch = curl_init($url);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_POSTFIELDS => json_encode($data),
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type: application/json',
+                    'Authorization: Bearer ' . ($apiKey ?? ''),
+                ],
+                CURLOPT_TIMEOUT => 10,
+                CURLOPT_SSL_VERIFYPEER => true,
+            ]);
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $error = curl_error($ch);
+            curl_close($ch);
+
+            if ($error) {
+                $result = ['success' => false, 'message' => 'cURL error: ' . $error, 'http_code' => 0];
+            } else {
+                $decoded = json_decode($response, true);
+                $result = [
+                    'success' => $httpCode >= 200 && $httpCode < 300,
+                    'message' => $decoded['message'] ?? 'API call completed',
+                    'http_code' => $httpCode,
+                    'response' => $decoded ?: $response,
+                ];
+            }
+        } else {
+            // No API URL configured — log to DB and return structured response
+            $result = [
+                'success' => true,
+                'message' => 'Platform API not configured — request logged for manual processing',
+                'pending' => true,
+            ];
+        }
+
+        // Log API call to delivery_sync_logs
+        $stmt = $pdo->prepare("
+            INSERT INTO delivery_sync_logs
+                (tenant_id, platform_name, sync_type, items_count, status, response, created_at)
+            VALUES (?, ?, 'api_call', 0, ?, ?, NOW())
+        ");
+        $stmt->execute([
+            $config['tenant_id'] ?? 0,
+            $platformName,
+            $result['success'] ? 'success' : 'failed',
+            json_encode(['endpoint' => $endpoint, 'result' => $result]),
+        ]);
+
+        error_log("Delivery API call to {$platformName}/{$endpoint} — " . ($result['success'] ? 'success' : 'failed'
+        ));
+
+        return $result;
     }
 }

@@ -45,7 +45,9 @@ class SyncQueue extends BaseModel
         
         // Get total count
         $countSql = "SELECT COUNT(*) as total FROM {$this->table} {$where}";
-        $totalResult = $this->db->query($countSql, $params)->fetch();
+        $stmt = $this->db->prepare($countSql);
+        $stmt->execute($params);
+        $totalResult = $stmt->fetch();
         $total = $totalResult['total'] ?? 0;
         
         // Get data
@@ -55,7 +57,9 @@ class SyncQueue extends BaseModel
         $params[] = $limit;
         $params[] = $offset;
         
-        $data = $this->db->query($sql, $params)->fetchAll();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $data = $stmt->fetchAll();
         
         return [
             'data' => $data,
@@ -82,7 +86,10 @@ class SyncQueue extends BaseModel
         $sql = "SELECT * FROM {$this->table} {$where} 
                 ORDER BY priority DESC, created_at ASC 
                 LIMIT 50";
-        return $this->db->query($sql, $params)->fetchAll();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+        return $stmt;
     }
 
     /**
@@ -91,7 +98,9 @@ class SyncQueue extends BaseModel
     public function findById($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ?";
-        $result = $this->db->query($sql, [$id])->fetch();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+        $result = $stmt->fetch();
         return $result ?: null;
     }
 
@@ -114,6 +123,8 @@ class SyncQueue extends BaseModel
         
         $sql .= " WHERE id = ?";
         
-        return $this->db->query($sql, $params);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt;
     }
 }

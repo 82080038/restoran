@@ -4,9 +4,21 @@
 require_once __DIR__ . '/../bootstrap.php';
 
 // Set CORS headers
-header('Access-Control-Allow-Origin: *');
+$allowedOrigins = getenv('CORS_ALLOWED_ORIGINS') ?: '*';
+if ($allowedOrigins !== '*') {
+    $originList = array_map('trim', explode(',', $allowedOrigins));
+    $requestOrigin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    if (in_array($requestOrigin, $originList, true)) {
+        header('Access-Control-Allow-Origin: ' . $requestOrigin);
+    } else {
+        header('Access-Control-Allow-Origin: null');
+    }
+} else {
+    header('Access-Control-Allow-Origin: *');
+}
 header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Screen-Width, X-Screen-Height, X-Device-Type, x-screen-size, x-screen-width, x-screen-height, x-device-type');
+header('Access-Control-Allow-Credentials: true');
 
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -225,10 +237,6 @@ if (strpos($requestUri, '/mobile') === 0 || strpos($requestUri, '/frontend/mobil
 if (strpos($requestUri, '/api') === 0) {
     require_once __DIR__ . '/../bootstrap.php';
     require_once __DIR__ . '/../routes/api.php';
-
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Screen-Width, X-Screen-Height, X-Device-Type, x-screen-size, x-screen-width, x-screen-height, x-device-type");
 
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         http_response_code(200);

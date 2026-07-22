@@ -14,7 +14,7 @@ require_once __DIR__ . '/../../../core/Middleware/AuthMiddleware.php';
  *
  * These methods avoid expensive payment gateway fees (Stripe, MidTrans, Xendit).
  */
-class FreePaymentController
+class FreePaymentController extends \App\Core\BaseController
 {
     private $db;
     private $uploadDir;

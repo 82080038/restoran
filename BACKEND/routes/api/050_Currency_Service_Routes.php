@@ -6,14 +6,14 @@ if (!class_exists('ExchangeRateService')) {
 }
 $currencyService = new ExchangeRateService();
 
-$router->addRoute('GET', '/api/v1/accounting/currencies', function($request) use ($currencyService) {
+$router->addRoute('GET', '/api/v1/accounting/currencies', withAuth(function($request) use ($currencyService) {
     $authMiddleware = new AuthMiddleware();
     $user = $authMiddleware->authenticate();
     $currencies = $currencyService->getCurrencies();
     Response::success($currencies, 'Currencies retrieved successfully');
-});
+}, $authMiddleware));
 
-$router->addRoute('POST', '/api/v1/accounting/exchange-rates', function($request) use ($currencyService) {
+$router->addRoute('POST', '/api/v1/accounting/exchange-rates', withAuth(function($request) use ($currencyService) {
     $authMiddleware = new AuthMiddleware();
     $user = $authMiddleware->authenticate();
     $data = $request['body'] ?? [];
@@ -23,21 +23,21 @@ $router->addRoute('POST', '/api/v1/accounting/exchange-rates', function($request
     } else {
         Response::error($result['message']);
     }
-});
+}, $authMiddleware));
 
-$router->addRoute('GET', '/api/v1/accounting/exchange-rates', function($request) use ($currencyService) {
+$router->addRoute('GET', '/api/v1/accounting/exchange-rates', withAuth(function($request) use ($currencyService) {
     $authMiddleware = new AuthMiddleware();
     $user = $authMiddleware->authenticate();
     $fromCurrency = $_GET['from_currency'] ?? null;
     $toCurrency = $_GET['to_currency'] ?? null;
     $rates = $currencyService->getExchangeRates($user['tenant_id'], $fromCurrency, $toCurrency);
     Response::success($rates, 'Exchange rates retrieved successfully');
-});
+}, $authMiddleware));
 
-$router->addRoute('GET', '/api/v1/accounting/exchange-rates/latest', function($request) use ($currencyService) {
+$router->addRoute('GET', '/api/v1/accounting/exchange-rates/latest', withAuth(function($request) use ($currencyService) {
     $authMiddleware = new AuthMiddleware();
     $user = $authMiddleware->authenticate();
     $rates = $currencyService->getLatestExchangeRates($user['tenant_id']);
     Response::success($rates, 'Latest exchange rates retrieved successfully');
-});
+}, $authMiddleware));
 

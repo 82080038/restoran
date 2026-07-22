@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class WhatsAppController
+class WhatsAppController extends \App\Core\BaseController
 {
     private $service;
 
@@ -20,9 +20,6 @@ class WhatsAppController
 
     public function saveSettings($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -38,9 +35,6 @@ class WhatsAppController
 
     public function getSettings($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getSettings($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {
@@ -52,9 +46,6 @@ class WhatsAppController
 
     public function sendMessage($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -70,9 +61,6 @@ class WhatsAppController
 
     public function sendReport($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $reportType = $request['params']['type'] ?? null;
@@ -95,9 +83,6 @@ class WhatsAppController
 
     public function createReportSchedule($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -113,9 +98,6 @@ class WhatsAppController
 
     public function getReportSchedules($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getReportSchedules($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {
@@ -127,9 +109,6 @@ class WhatsAppController
 
     public function getMessageLogs($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $limit = $request['params']['limit'] ?? 50;
 
         $result = $this->service->getMessageLogs($user['tenant_id'], $user['branch_id'], $limit);

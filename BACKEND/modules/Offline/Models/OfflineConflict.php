@@ -39,7 +39,9 @@ class OfflineConflict extends BaseModel
         
         // Get total count
         $countSql = "SELECT COUNT(*) as total FROM {$this->table} {$where}";
-        $totalResult = $this->db->query($countSql, $params)->fetch();
+        $stmt = $this->db->prepare($countSql);
+        $stmt->execute($params);
+        $totalResult = $stmt->fetch();
         $total = $totalResult['total'] ?? 0;
         
         // Get data
@@ -47,7 +49,9 @@ class OfflineConflict extends BaseModel
         $params[] = $limit;
         $params[] = $offset;
         
-        $data = $this->db->query($sql, $params)->fetchAll();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $data = $stmt->fetchAll();
         
         return [
             'data' => $data,
@@ -64,7 +68,9 @@ class OfflineConflict extends BaseModel
     public function findById($id, $restaurantId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? AND restaurant_id = ?";
-        $result = $this->db->query($sql, [$id, $restaurantId])->fetch();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id, $restaurantId]);
+        $result = $stmt->fetch();
         return $result ?: null;
     }
 
@@ -74,7 +80,9 @@ class OfflineConflict extends BaseModel
     public function countUnresolved($restaurantId)
     {
         $sql = "SELECT COUNT(*) as count FROM {$this->table} WHERE restaurant_id = ? AND is_resolved = FALSE";
-        $result = $this->db->query($sql, [$restaurantId])->fetch();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$restaurantId]);
+        $result = $stmt->fetch();
         return $result['count'] ?? 0;
     }
 }

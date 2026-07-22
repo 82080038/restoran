@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class CurrencyController
+class CurrencyController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class CurrencyController
 
     public function addCurrency($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class CurrencyController
 
     public function updateExchangeRate($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $currencyId = $request['params']['id'] ?? null;
@@ -61,9 +55,6 @@ class CurrencyController
 
     public function getCurrencies($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getCurrencies();
 
         if ($result['success']) {
@@ -75,9 +66,6 @@ class CurrencyController
 
     public function convertCurrency($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $amount = $request['params']['amount'] ?? null;
         $fromCurrency = $request['params']['from'] ?? null;
         $toCurrency = $request['params']['to'] ?? null;

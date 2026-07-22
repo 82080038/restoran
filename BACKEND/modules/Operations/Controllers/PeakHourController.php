@@ -5,7 +5,7 @@ namespace App\Modules\Operations\Controllers;
 use App\Core\Response;
 use App\Modules\Operations\Services\PeakHourService;
 
-class PeakHourController
+class PeakHourController extends BaseController
 {
     private $peakHourService;
 
@@ -17,7 +17,6 @@ class PeakHourController
     public function getPeakHourSchedules($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
 
@@ -31,7 +30,6 @@ class PeakHourController
     public function getCurrentPeakHour($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
 
@@ -45,8 +43,6 @@ class PeakHourController
     public function createPeakHourSchedule($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-            
             $required = ['tenant_id', 'branch_id', 'day_of_week', 'start_time', 'end_time'];
             foreach ($required as $field) {
                 if (!isset($request[$field])) {
@@ -64,7 +60,6 @@ class PeakHourController
     public function updatePeakHourSchedule($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $scheduleId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -78,7 +73,6 @@ class PeakHourController
     public function deletePeakHourSchedule($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $scheduleId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -92,7 +86,6 @@ class PeakHourController
     public function isPeakHourNow($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
 

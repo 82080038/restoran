@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../../core/Response.php';
 require_once __DIR__ . '/../../../core/Database.php';
 require_once __DIR__ . '/../../../core/Middleware/AuthMiddleware.php';
 
-class NotificationController
+class NotificationController extends \App\Core\BaseController
 {
     private $db;
 
@@ -20,15 +20,14 @@ class NotificationController
     public function stream($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
         } catch (\Throwable $e) {
             Response::error("Authentication required", 401);
         }
 
-        $tenantId = $payload['tenant_id'] ?? 1;
-        $branchId = $payload['branch_id'] ?? null;
-        $userId = $payload['user_id'] ?? null;
-        $role = $payload['role'] ?? '';
+        $tenantId = $request['tenant_id'] ?? 1;
+        $branchId = $request['branch_id'] ?? null;
+        $userId = $request['user_id'] ?? null;
+        $role = $request['role'] ?? '';
 
         // Set SSE headers
         header('Content-Type: text/event-stream');
@@ -203,9 +202,8 @@ class NotificationController
     public function getNotifications($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $page = (int)($request['query']['page'] ?? 1);
             $limit = (int)($request['query']['limit'] ?? 20);
             $offset = ($page - 1) * $limit;
@@ -238,7 +236,6 @@ class NotificationController
     public function markAsRead($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $notificationId = $request['id'] ?? 0;
 
             $pdo = $this->db->connect();
@@ -247,7 +244,7 @@ class NotificationController
                 VALUES (?, ?, NOW())
                 ON DUPLICATE KEY UPDATE read_at = NOW()
             ");
-            $stmt->execute([$notificationId, $payload['user_id']]);
+            $stmt->execute([$notificationId, $request['user_id']]);
 
             return Response::success([], 'Notification marked as read');
         } catch (\Exception $e) {
@@ -262,9 +259,8 @@ class NotificationController
     public function getUnreadCount($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             // Count recent orders not marked as read
             $stmt = $pdo->prepare("
@@ -274,7 +270,7 @@ class NotificationController
                 WHERE o.tenant_id = ? AND nr.notification_id IS NULL
                 AND o.created_at > DATE_SUB(NOW(), INTERVAL 24 HOUR)
             ");
-            $stmt->execute([$payload['user_id'], $tenantId]);
+            $stmt->execute([$request['user_id'], $tenantId]);
             $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             return Response::success([

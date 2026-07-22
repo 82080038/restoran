@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../../core/Response.php';
 /**
  * Tip Management Controller
  */
-class TipManagementController
+class TipManagementController extends \App\Core\BaseController
 {
     private $tipManagementService;
 

@@ -5,7 +5,7 @@ namespace App\Modules\HR\Controllers;
 use App\Modules\HR\Services\AdvancedHRService;
 use App\Core\Response;
 
-class AdvancedHRController
+class AdvancedHRController extends BaseController
 {
     private $service;
 

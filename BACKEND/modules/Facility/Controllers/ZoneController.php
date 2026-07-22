@@ -3,18 +3,14 @@
 namespace App\Modules\Facility\Controllers;
 
 use App\Modules\Facility\Services\ZoneService;
-use App\Core\AuthMiddleware;
 use App\Core\Response;
 
-class ZoneController
+class ZoneController extends BaseController
 {
     private $service;
-    private $authMiddleware;
-
     public function __construct()
     {
         $this->service = new ZoneService();
-        $this->authMiddleware = new AuthMiddleware();
     }
 
     /**
@@ -22,9 +18,7 @@ class ZoneController
      */
     public function getZones($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         $branchId = $request['branch_id'] ?? null;
         $floorId = $request['floor_id'] ?? null;
         
@@ -38,10 +32,8 @@ class ZoneController
      */
     public function getZone($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $zoneId = $request['zone_id'] ?? null;
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         
         if (!$zoneId) {
             Response::error('Zone ID is required', 400);
@@ -61,11 +53,9 @@ class ZoneController
      */
     public function createZone($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $data = [
-            'tenant_id' => $user['tenant_id'],
-            'branch_id' => $request['branch_id'] ?? $user['branch_id'],
+            'tenant_id' => $request['tenant_id'],
+            'branch_id' => $request['branch_id'] ?? $request['branch_id'],
             'floor_id' => $request['floor_id'] ?? null,
             'zone_code' => $request['zone_code'] ?? null,
             'zone_name' => $request['zone_name'] ?? null,
@@ -91,10 +81,8 @@ class ZoneController
      */
     public function updateZone($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $zoneId = $request['zone_id'] ?? null;
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         
         if (!$zoneId) {
             Response::error('Zone ID is required', 400);
@@ -121,10 +109,8 @@ class ZoneController
      */
     public function deleteZone($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $zoneId = $request['zone_id'] ?? null;
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         
         if (!$zoneId) {
             Response::error('Zone ID is required', 400);
@@ -140,10 +126,8 @@ class ZoneController
      */
     public function getZoneTables($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $zoneId = $request['zone_id'] ?? null;
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         
         if (!$zoneId) {
             Response::error('Zone ID is required', 400);

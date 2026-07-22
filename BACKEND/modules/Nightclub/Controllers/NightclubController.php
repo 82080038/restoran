@@ -5,7 +5,7 @@ namespace App\Modules\Nightclub\Controllers;
 use App\Core\Response;
 use App\Modules\Nightclub\Services\NightclubService;
 
-class NightclubController
+class NightclubController extends BaseController
 {
     private $service;
 
@@ -19,7 +19,6 @@ class NightclubController
     public function getEvents($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $status = $request['query']['status'] ?? null;
@@ -34,7 +33,6 @@ class NightclubController
     public function getEvent($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $eventId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -51,7 +49,6 @@ class NightclubController
     public function createEvent($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $request['tenant_id'] = $request['tenant_id'];
             $request['created_by'] = $request['user_id'] ?? null;
 
@@ -70,7 +67,6 @@ class NightclubController
     public function updateEvent($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $eventId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -88,7 +84,6 @@ class NightclubController
     public function deleteEvent($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $eventId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -108,7 +103,6 @@ class NightclubController
     public function getEntranceFees($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $eventId = $request['query']['event_id'] ?? null;
 
@@ -122,8 +116,6 @@ class NightclubController
     public function createEntranceFee($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-
             if (empty($request['body']['fee_name']) || !isset($request['body']['price'])) {
                 return Response::error('fee_name and price are required', 400);
             }
@@ -139,7 +131,6 @@ class NightclubController
     public function updateEntranceFee($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $feeId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -153,7 +144,6 @@ class NightclubController
     public function deleteEntranceFee($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $feeId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -169,7 +159,6 @@ class NightclubController
     public function getEntranceTickets($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $eventId = $request['query']['event_id'] ?? null;
             $checkIn = $request['query']['check_in_status'] ?? null;
@@ -184,8 +173,6 @@ class NightclubController
     public function sellEntranceTicket($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-
             if (empty($request['body']['customer_name']) || !isset($request['body']['unit_price'])) {
                 return Response::error('customer_name and unit_price are required', 400);
             }
@@ -201,7 +188,6 @@ class NightclubController
     public function checkInTicket($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $ticketId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -220,7 +206,6 @@ class NightclubController
     public function getGuestList($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $eventId = $request['query']['event_id'] ?? null;
             $checkIn = $request['query']['check_in_status'] ?? null;
@@ -235,8 +220,6 @@ class NightclubController
     public function addGuestListEntry($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-
             if (empty($request['body']['guest_name'])) {
                 return Response::error('guest_name is required', 400);
             }
@@ -252,7 +235,6 @@ class NightclubController
     public function updateGuestListEntry($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $guestListId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -266,7 +248,6 @@ class NightclubController
     public function checkInGuest($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $guestListId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -283,7 +264,6 @@ class NightclubController
     public function deleteGuestListEntry($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $guestListId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -299,7 +279,6 @@ class NightclubController
     public function getBottleServiceReservations($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $eventId = $request['query']['event_id'] ?? null;
             $status = $request['query']['status'] ?? null;
@@ -314,8 +293,6 @@ class NightclubController
     public function createBottleServiceReservation($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-
             if (empty($request['body']['customer_name']) || empty($request['body']['package_name']) || empty($request['body']['reservation_date'])) {
                 return Response::error('customer_name, package_name, and reservation_date are required', 400);
             }
@@ -331,7 +308,6 @@ class NightclubController
     public function updateBottleServiceReservation($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $reservationId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -345,7 +321,6 @@ class NightclubController
     public function deleteBottleServiceReservation($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $reservationId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -361,7 +336,6 @@ class NightclubController
     public function getTableReservations($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $eventId = $request['query']['event_id'] ?? null;
             $status = $request['query']['status'] ?? null;
@@ -376,8 +350,6 @@ class NightclubController
     public function createTableReservation($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-
             if (empty($request['body']['customer_name']) || empty($request['body']['party_size']) || empty($request['body']['reservation_date'])) {
                 return Response::error('customer_name, party_size, and reservation_date are required', 400);
             }
@@ -393,7 +365,6 @@ class NightclubController
     public function updateTableReservation($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $reservationId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -407,7 +378,6 @@ class NightclubController
     public function deleteTableReservation($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $reservationId = $request['params']['id'] ?? $request['id'] ?? null;
             $tenantId = $request['tenant_id'];
 
@@ -423,7 +393,6 @@ class NightclubController
     public function getDashboardStats($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $eventId = $request['query']['event_id'] ?? null;
 
@@ -439,7 +408,6 @@ class NightclubController
     public function getRevenueReport($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $startDate = $request['query']['start_date'] ?? null;
             $endDate = $request['query']['end_date'] ?? null;

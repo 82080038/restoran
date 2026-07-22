@@ -5,7 +5,7 @@ namespace App\Modules\Currency\Controllers;
 use App\Modules\Currency\Services\MultiCurrencyService;
 use App\Core\Response;
 
-class MultiCurrencyController
+class MultiCurrencyController extends BaseController
 {
     private $service;
 

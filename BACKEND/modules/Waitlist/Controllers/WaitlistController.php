@@ -5,7 +5,7 @@ namespace App\Modules\Waitlist\Controllers;
 use App\Core\Response;
 use App\Modules\Waitlist\Services\WaitlistService;
 
-class WaitlistController
+class WaitlistController extends BaseController
 {
     private $waitlistService;
 
@@ -17,7 +17,6 @@ class WaitlistController
     public function getWaitlistEntries($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $status = $request['status'] ?? null;
@@ -32,7 +31,6 @@ class WaitlistController
     public function getWaitlistEntry($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $entryId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -49,8 +47,6 @@ class WaitlistController
     public function createWaitlistEntry($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-            
             $required = ['tenant_id', 'branch_id', 'customer_name', 'phone', 'party_size'];
             foreach ($required as $field) {
                 if (!isset($request[$field])) {
@@ -68,7 +64,6 @@ class WaitlistController
     public function updateWaitlistEntry($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $entryId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -87,7 +82,6 @@ class WaitlistController
     public function seatGuest($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $entryId = $request['id'];
             $tenantId = $request['tenant_id'];
             $tableId = $request['table_id'];
@@ -109,7 +103,6 @@ class WaitlistController
     public function deleteWaitlistEntry($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $entryId = $request['id'];
             $tenantId = $request['tenant_id'];
 

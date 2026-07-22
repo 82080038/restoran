@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class KitchenPerformanceController
+class KitchenPerformanceController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class KitchenPerformanceController
 
     public function recordChefPerformance($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class KitchenPerformanceController
 
     public function getKitchenMetrics($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $dateFrom = $request['params']['start_date'] ?? date('Y-m-01');
         $dateTo = $request['params']['end_date'] ?? date('Y-m-t');
 
@@ -54,9 +48,6 @@ class KitchenPerformanceController
 
     public function getChefPerformance($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $employeeId = $request['params']['employee_id'] ?? null;
         $dateFrom = $request['params']['start_date'] ?? date('Y-m-01');
         $dateTo = $request['params']['end_date'] ?? date('Y-m-t');
@@ -77,9 +68,6 @@ class KitchenPerformanceController
 
     public function getBottleneckAnalysis($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $dateFrom = $request['params']['start_date'] ?? date('Y-m-01');
         $dateTo = $request['params']['end_date'] ?? date('Y-m-t');
 

@@ -5,7 +5,7 @@ namespace App\Modules\Operations\Controllers;
 use App\Core\Response;
 use App\Modules\Operations\Services\PerformanceMonitoringService;
 
-class PerformanceMonitoringController
+class PerformanceMonitoringController extends BaseController
 {
     private $performanceService;
 
@@ -17,7 +17,6 @@ class PerformanceMonitoringController
     public function getPerformanceMetrics($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $date = $request['date'] ?? null;
@@ -33,8 +32,6 @@ class PerformanceMonitoringController
     public function recordOrderTiming($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-            
             $required = ['order_id', 'tenant_id', 'branch_id', 'order_placed_at'];
             foreach ($required as $field) {
                 if (!isset($request[$field])) {
@@ -63,7 +60,6 @@ class PerformanceMonitoringController
     public function calculateHourlyMetrics($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'];
             $date = $request['date'] ?? date('Y-m-d');
@@ -80,7 +76,6 @@ class PerformanceMonitoringController
     public function getBottlenecks($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $days = $request['days'] ?? 7;
@@ -95,7 +90,6 @@ class PerformanceMonitoringController
     public function getPerformanceSummary($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $days = $request['days'] ?? 30;

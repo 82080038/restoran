@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class EquipmentHistoryController
+class EquipmentHistoryController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class EquipmentHistoryController
 
     public function addHistory($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class EquipmentHistoryController
 
     public function getEquipmentHistory($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $assetId = $request['params']['id'] ?? null;
 
         if (!$assetId) {

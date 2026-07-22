@@ -5,7 +5,7 @@ namespace App\Modules\EventProposal\Controllers;
 use App\Core\Response;
 use App\Modules\EventProposal\Services\EventProposalService;
 
-class EventProposalController
+class EventProposalController extends BaseController
 {
     private $service;
 
@@ -17,7 +17,6 @@ class EventProposalController
     public function getProposals($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $status = $request['query']['status'] ?? null;
@@ -32,7 +31,6 @@ class EventProposalController
     public function getProposal($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $proposalId = $request['params']['id'] ?? $request['id'] ?? null;
 
             $result = $this->service->getProposalDetail($proposalId);
@@ -48,7 +46,6 @@ class EventProposalController
     public function createProposal($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -68,7 +65,6 @@ class EventProposalController
     public function updateProposalStatus($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $proposalId = $request['params']['id'] ?? $request['id'] ?? null;
             $status = $request['body']['status'] ?? null;
 
@@ -86,7 +82,6 @@ class EventProposalController
     public function recordDeposit($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $proposalId = $request['params']['id'] ?? $request['id'] ?? null;
             $amount = $request['body']['amount'] ?? null;
 
@@ -104,7 +99,6 @@ class EventProposalController
     public function convertToBEO($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $proposalId = $request['params']['id'] ?? $request['id'] ?? null;
             $createdBy = $request['user_id'] ?? null;
 
@@ -118,7 +112,6 @@ class EventProposalController
     public function getBEOs($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $status = $request['query']['status'] ?? null;
@@ -133,7 +126,6 @@ class EventProposalController
     public function getBEO($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $beoId = $request['params']['id'] ?? $request['id'] ?? null;
 
             $result = $this->service->getBEODetail($beoId);
@@ -149,7 +141,6 @@ class EventProposalController
     public function addBEOItem($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $beoId = $request['params']['id'] ?? $request['id'] ?? null;
             $item = $request['body'];
 
@@ -167,7 +158,6 @@ class EventProposalController
     public function completeBEOItem($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $itemId = $request['params']['item_id'] ?? $request['item_id'] ?? null;
 
             $result = $this->service->completeBEOItem($itemId);
@@ -180,7 +170,6 @@ class EventProposalController
     public function updateBEOStatus($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $beoId = $request['params']['id'] ?? $request['id'] ?? null;
             $status = $request['body']['status'] ?? null;
 

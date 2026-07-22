@@ -5,7 +5,7 @@ namespace App\Modules\KDS\Controllers;
 use App\Core\Response;
 use App\Modules\KDS\Services\KDSTicketService;
 
-class KDSTicketController
+class KDSTicketController extends BaseController
 {
     private $ticketService;
 
@@ -17,7 +17,6 @@ class KDSTicketController
     public function getTickets($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $stationId = $request['station_id'] ?? null;
@@ -33,7 +32,6 @@ class KDSTicketController
     public function getTicket($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $ticketId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -50,8 +48,6 @@ class KDSTicketController
     public function createTicket($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-            
             $required = ['tenant_id', 'branch_id', 'order_id', 'station_id', 'screen_id', 'ticket_number'];
             foreach ($required as $field) {
                 if (!isset($request[$field])) {
@@ -69,7 +65,6 @@ class KDSTicketController
     public function updateTicketStatus($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $ticketId = $request['id'];
             $tenantId = $request['tenant_id'];
             $status = $request['status'];
@@ -90,8 +85,6 @@ class KDSTicketController
     public function updateUrgencyLevels($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-            
             $this->ticketService->updateUrgencyLevels();
             return Response::success([], 'KDS ticket urgency levels updated successfully');
         } catch (\Exception $e) {
@@ -102,7 +95,6 @@ class KDSTicketController
     public function deleteTicket($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $ticketId = $request['id'];
             $tenantId = $request['tenant_id'];
 

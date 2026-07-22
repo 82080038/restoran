@@ -7,7 +7,7 @@ if (!class_exists('BusinessHoursService')) {
     require_once __DIR__ . '/../Services/BusinessHoursService.php';
 }
 
-class BusinessHoursController
+class BusinessHoursController extends \App\Core\BaseController
 {
     private $service;
 
@@ -21,9 +21,6 @@ class BusinessHoursController
      */
     public function setHours($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'BUSINESS_HOURS_MANAGE');
 
@@ -56,9 +53,6 @@ class BusinessHoursController
      */
     public function getHours($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $hours = $this->service->getBusinessHours($user['tenant_id'], $user['branch_id']);
         Response::success($hours, 'Business hours retrieved successfully');
     }
@@ -68,9 +62,6 @@ class BusinessHoursController
      */
     public function checkOpen($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $query = $request['query'] ?? [];
         $dateTime = $query['datetime'] ?? null;
 
@@ -87,9 +78,6 @@ class BusinessHoursController
      */
     public function createSpecialSchedule($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'BUSINESS_HOURS_MANAGE');
 
@@ -113,9 +101,6 @@ class BusinessHoursController
      */
     public function getSpecialSchedules($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $query = $request['query'] ?? [];
         $startDate = $query['start_date'] ?? null;
         $endDate = $query['end_date'] ?? null;
@@ -129,9 +114,6 @@ class BusinessHoursController
      */
     public function deleteSpecialSchedule($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'BUSINESS_HOURS_MANAGE');
 

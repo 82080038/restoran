@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class StockOpnameController
+class StockOpnameController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class StockOpnameController
 
     public function create($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class StockOpnameController
 
     public function addItem($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $opnameId = $request['params']['id'] ?? null;
@@ -56,9 +50,6 @@ class StockOpnameController
 
     public function complete($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $opnameId = $request['params']['id'] ?? null;
@@ -74,9 +65,6 @@ class StockOpnameController
 
     public function getAll($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getOpnames($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {

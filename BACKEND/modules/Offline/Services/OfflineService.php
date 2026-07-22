@@ -231,9 +231,34 @@ class OfflineService
      */
     private function processOrder($orderData, $restaurantId)
     {
-        // In real implementation, this would create/update the order
-        // For now, simulate success
-        return ['success' => true];
+        $pdo = $this->db->connect();
+        $orderNumber = $orderData['order_number'] ?? ('OFF-' . date('Ymd') . '-' . substr(uniqid(), -6));
+        $stmt = $pdo->prepare("
+            INSERT INTO orders (tenant_id, branch_id, order_number, user_id, table_id, status, order_type,
+                subtotal, tax, discount, service_charge, total_amount, paid_amount, payment_method, payment_status, notes)
+            VALUES (:tenant_id, :branch_id, :order_number, :user_id, :table_id, :status, :order_type,
+                :subtotal, :tax, :discount, :service_charge, :total_amount, :paid_amount, :payment_method, :payment_status, :notes)
+        ");
+        $stmt->execute([
+            ':tenant_id' => $restaurantId,
+            ':branch_id' => $orderData['branch_id'] ?? null,
+            ':order_number' => $orderNumber,
+            ':user_id' => $orderData['user_id'] ?? null,
+            ':table_id' => $orderData['table_id'] ?? null,
+            ':status' => $orderData['status'] ?? 'CONFIRMED',
+            ':order_type' => $orderData['order_type'] ?? 'DINE_IN',
+            ':subtotal' => $orderData['subtotal'] ?? 0,
+            ':tax' => $orderData['tax'] ?? 0,
+            ':discount' => $orderData['discount'] ?? 0,
+            ':service_charge' => $orderData['service_charge'] ?? 0,
+            ':total_amount' => $orderData['total_amount'] ?? 0,
+            ':paid_amount' => $orderData['paid_amount'] ?? 0,
+            ':payment_method' => $orderData['payment_method'] ?? null,
+            ':payment_status' => $orderData['payment_status'] ?? 'UNPAID',
+            ':notes' => $orderData['notes'] ?? null,
+        ]);
+        $orderId = $pdo->lastInsertId();
+        return ['success' => true, 'order_id' => $orderId, 'order_number' => $orderNumber];
     }
 
     /**
@@ -241,9 +266,35 @@ class OfflineService
      */
     private function processPayment($paymentData, $restaurantId)
     {
-        // In real implementation, this would create/update the payment
-        // For now, simulate success
-        return ['success' => true];
+        $pdo = $this->db->connect();
+        $orderId = $paymentData['order_id'] ?? null;
+        if (!$orderId) {
+            return ['success' => false, 'message' => 'order_id is required for payment processing'];
+        }
+        $stmt = $pdo->prepare("
+            INSERT INTO payments (order_id, split_bill_id, payment_method, amount, payment_status, reference_number, notes)
+            VALUES (:order_id, :split_bill_id, :payment_method, :amount, :payment_status, :reference_number, :notes)
+        ");
+        $stmt->execute([
+            ':order_id' => $orderId,
+            ':split_bill_id' => $paymentData['split_bill_id'] ?? null,
+            ':payment_method' => $paymentData['payment_method'] ?? 'CASH',
+            ':amount' => $paymentData['amount'] ?? 0,
+            ':payment_status' => $paymentData['payment_status'] ?? 'COMPLETED',
+            ':reference_number' => $paymentData['reference_number'] ?? null,
+            ':notes' => $paymentData['notes'] ?? 'Offline sync payment',
+        ]);
+        $paymentId = $pdo->lastInsertId();
+
+        // Update order payment status
+        $upd = $pdo->prepare("UPDATE orders SET paid_amount = paid_amount + :amount, payment_status = :status WHERE order_id = :order_id");
+        $upd->execute([
+            ':amount' => $paymentData['amount'] ?? 0,
+            ':status' => ($paymentData['payment_status'] ?? 'COMPLETED') === 'COMPLETED' ? 'PAID' : 'PARTIAL',
+            ':order_id' => $orderId,
+        ]);
+
+        return ['success' => true, 'payment_id' => $paymentId];
     }
 
     /**
@@ -251,9 +302,34 @@ class OfflineService
      */
     private function processInventory($inventoryData, $restaurantId)
     {
-        // In real implementation, this would update inventory
-        // For now, simulate success
-        return ['success' => true];
+        $pdo = $this->db->connect();
+        $branchId = $inventoryData['branch_id'] ?? null;
+        $productId = $inventoryData['product_id'] ?? null;
+        $adjustQty = (float)($inventoryData['quantity'] ?? 0);
+        $unit = $inventoryData['unit'] ?? 'pcs';
+
+        // Map to valid enum values: IN, OUT, ADJUSTMENT
+        $rawType = strtoupper($inventoryData['adjustment_type'] ?? 'ADJUSTMENT');
+        $adjustType = in_array($rawType, ['IN', 'OUT', 'ADJUSTMENT']) ? $rawType : 'ADJUSTMENT';
+
+        $stmt = $pdo->prepare("
+            INSERT INTO stock_transactions (tenant_id, branch_id, product_id, transaction_type, quantity, unit, reference_type, reference_id, notes)
+            VALUES (:tenant_id, :branch_id, :product_id, :transaction_type, :quantity, :unit, :reference_type, :reference_id, :notes)
+        ");
+        $stmt->execute([
+            ':tenant_id' => $restaurantId,
+            ':branch_id' => $branchId,
+            ':product_id' => $productId,
+            ':transaction_type' => $adjustType,
+            ':quantity' => $adjustQty,
+            ':unit' => $unit,
+            ':reference_type' => 'OFFLINE_SYNC',
+            ':reference_id' => $inventoryData['reference_id'] ?? null,
+            ':notes' => $inventoryData['notes'] ?? 'Offline inventory adjustment',
+        ]);
+        $txnId = $pdo->lastInsertId();
+
+        return ['success' => true, 'stock_transaction_id' => $txnId];
     }
 
     /**

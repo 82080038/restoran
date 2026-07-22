@@ -9,7 +9,7 @@ if (!class_exists('MenuService')) {
 require_once __DIR__ . '/../../../bootstrap.php';
 
 
-class MenuController
+class MenuController extends \App\Core\BaseController
 {
     private $menuService;
 

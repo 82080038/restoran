@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class SustainabilityController
+class SustainabilityController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class SustainabilityController
 
     public function recordWaste($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class SustainabilityController
 
     public function recordMetrics($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -55,9 +49,6 @@ class SustainabilityController
 
     public function getWasteTracking($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $startDate = $params['start_date'] ?? null;
         $endDate = $params['end_date'] ?? null;
@@ -73,9 +64,6 @@ class SustainabilityController
 
     public function getSustainabilityMetrics($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $startDate = $params['start_date'] ?? null;
         $endDate = $params['end_date'] ?? null;

@@ -8,9 +8,7 @@ use App\Core\Response;
 
 
 use App\Modules\Menu\Services\AllergenDietaryService;
-use Response;
-
-class AllergenDietaryController
+class AllergenDietaryController extends BaseController
 {
     private AllergenDietaryService $allergenDietaryService;
 

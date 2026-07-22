@@ -1,19 +1,19 @@
 <?php
 
 // Tax Calculation Routes
-$router->addRoute('POST', '/api/v1/accounting/tax-rates', function($request) use ($taxCalculationController) {
+$router->addRoute('POST', '/api/v1/accounting/tax-rates', withAuth(function($request) use ($taxCalculationController) {
     return $taxCalculationController->saveTaxRate($request);
-});
-$router->addRoute('GET', '/api/v1/accounting/tax-rates', function($request) use ($taxCalculationController) {
+}, $authMiddleware));
+$router->addRoute('GET', '/api/v1/accounting/tax-rates', withAuth(function($request) use ($taxCalculationController) {
     return $taxCalculationController->getTaxRate($request);
-});
-$router->addRoute('POST', '/api/v1/accounting/orders/{id}/tax', function($request) use ($taxCalculationController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/accounting/orders/{id}/tax', withAuth(function($request) use ($taxCalculationController) {
     return $taxCalculationController->calculateOrderTax($request);
-});
-$router->addRoute('GET', '/api/v1/accounting/tax/monthly', function($request) use ($taxCalculationController) {
+}, $authMiddleware));
+$router->addRoute('GET', '/api/v1/accounting/tax/monthly', withAuth(function($request) use ($taxCalculationController) {
     return $taxCalculationController->calculateMonthlyTax($request);
-});
-$router->addRoute('GET', '/api/v1/accounting/tax/report', function($request) use ($taxCalculationController) {
+}, $authMiddleware));
+$router->addRoute('GET', '/api/v1/accounting/tax/report', withAuth(function($request) use ($taxCalculationController) {
     return $taxCalculationController->generateTaxReport($request);
-});
+}, $authMiddleware));
 

@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class ComboController
+class ComboController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class ComboController
 
     public function create($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class ComboController
 
     public function getAll($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getCombos($user['tenant_id']);
 
         if ($result['success']) {
@@ -51,9 +45,6 @@ class ComboController
 
     public function calculatePrice($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $comboId = $request['params']['id'] ?? null;
         $data = $request['body'] ?? [];
         $selections = $data['selections'] ?? [];

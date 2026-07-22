@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../../core/Response.php';
 /**
  * Staff Scheduling Controller
  */
-class StaffSchedulingController
+class StaffSchedulingController extends \App\Core\BaseController
 {
     private $staffSchedulingService;
 

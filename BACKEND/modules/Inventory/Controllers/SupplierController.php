@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class SupplierController
+class SupplierController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class SupplierController
 
     public function create($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class SupplierController
 
     public function getAll($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getSuppliers($user['tenant_id']);
 
         if ($result['success']) {
@@ -51,9 +45,6 @@ class SupplierController
 
     public function update($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $supplierId = $request['params']['id'] ?? null;
@@ -70,9 +61,6 @@ class SupplierController
 
     public function delete($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $supplierId = $request['params']['id'] ?? null;

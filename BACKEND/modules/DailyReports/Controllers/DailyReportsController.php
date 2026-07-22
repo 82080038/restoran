@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../../core/Response.php';
 /**
  * Daily Reports Controller
  */
-class DailyReportsController
+class DailyReportsController extends \App\Core\BaseController
 {
     private $dailyReportsService;
 

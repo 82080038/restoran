@@ -7,7 +7,7 @@ if (!class_exists('ComboService')) {
     require_once __DIR__ . '/../Services/ComboService.php';
 }
 
-class ComboController
+class ComboController extends \App\Core\BaseController
 {
     private $service;
 
@@ -22,9 +22,6 @@ class ComboController
     public function create()
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $input = json_decode(file_get_contents("php://input"), true);
 
             if (!$input) {
@@ -50,9 +47,6 @@ class ComboController
     public function getAll($request)
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $params = $request['query'] ?? [];
             $isActive = $params['is_active'] ?? null;
 
@@ -74,9 +68,6 @@ class ComboController
     public function get($request)
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $comboId = $request['params']['id'] ?? null;
 
             if (!$comboId) {
@@ -102,9 +93,6 @@ class ComboController
     public function update($request)
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $comboId = $request['params']['id'] ?? null;
             $input = json_decode(file_get_contents("php://input"), true);
 
@@ -131,9 +119,6 @@ class ComboController
     public function delete($request)
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $comboId = $request['params']['id'] ?? null;
 
             if (!$comboId) {
@@ -159,9 +144,6 @@ class ComboController
     public function calculatePrice($request)
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $input = json_decode(file_get_contents("php://input"), true);
 
             if (!$input) {

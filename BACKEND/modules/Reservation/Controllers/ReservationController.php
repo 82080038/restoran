@@ -9,7 +9,7 @@ if (!class_exists('ReservationService')) {
 require_once __DIR__ . '/../../../bootstrap.php';
 
 
-class ReservationController
+class ReservationController extends \App\Core\BaseController
 {
     private $reservationService;
 

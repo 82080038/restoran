@@ -6,7 +6,7 @@ if (!class_exists('ReportQueueService')) {
 }
 $reportQueueService = new ReportQueueService();
 
-$router->addRoute('POST', '/api/v1/accounting/reports/enqueue', function($request) use ($reportQueueService) {
+$router->addRoute('POST', '/api/v1/accounting/reports/enqueue', withAuth(function($request) use ($reportQueueService) {
     $authMiddleware = new AuthMiddleware();
     $user = $authMiddleware->authenticate();
     $data = $request['body'] ?? [];
@@ -16,20 +16,20 @@ $router->addRoute('POST', '/api/v1/accounting/reports/enqueue', function($reques
     } else {
         Response::error($result['message']);
     }
-});
+}, $authMiddleware));
 
-$router->addRoute('GET', '/api/v1/accounting/reports/jobs', function($request) use ($reportQueueService) {
+$router->addRoute('GET', '/api/v1/accounting/reports/jobs', withAuth(function($request) use ($reportQueueService) {
     $authMiddleware = new AuthMiddleware();
     $user = $authMiddleware->authenticate();
     $jobs = $reportQueueService->getUserReportJobs($user['user_id']);
     Response::success($jobs, 'Report jobs retrieved successfully');
-});
+}, $authMiddleware));
 
-$router->addRoute('GET', '/api/v1/accounting/reports/jobs/{id}', function($request) use ($reportQueueService) {
+$router->addRoute('GET', '/api/v1/accounting/reports/jobs/{id}', withAuth(function($request) use ($reportQueueService) {
     $authMiddleware = new AuthMiddleware();
     $user = $authMiddleware->authenticate();
     $jobId = $request['params']['id'];
     $job = $reportQueueService->getReportJob($jobId);
     Response::success($job, 'Report job retrieved successfully');
-});
+}, $authMiddleware));
 

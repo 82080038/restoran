@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class AIController
+class AIController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class AIController
 
     public function generateSalesForecast($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $days = $params['days'] ?? 7;
 
@@ -36,9 +33,6 @@ class AIController
 
     public function generateInventoryPrediction($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $inventoryId = $request['params']['id'] ?? null;
 
         $result = $this->service->generateInventoryPrediction($user['tenant_id'], $user['branch_id'], $inventoryId);

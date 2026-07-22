@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class PurchaseOrderController
+class PurchaseOrderController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class PurchaseOrderController
 
     public function create($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class PurchaseOrderController
 
     public function approve($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $poId = $request['params']['id'] ?? null;
@@ -55,9 +49,6 @@ class PurchaseOrderController
 
     public function getAll($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getPurchaseOrders($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {

@@ -8,9 +8,7 @@ use App\Core\Response;
 
 
 use App\Modules\Menu\Services\MenuABTestService;
-use Response;
-
-class MenuABTestController
+class MenuABTestController extends BaseController
 {
     private MenuABTestService $abTestService;
 

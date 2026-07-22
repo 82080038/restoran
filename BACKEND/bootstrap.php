@@ -33,11 +33,11 @@ if (file_exists(__DIR__ . '/.env')) {
 
 // Set default values (only used if .env doesn't exist or doesn't have these values)
 if (!getenv('DB_HOST')) putenv('DB_HOST=localhost');
-if (!getenv('DB_SOCKET')) putenv('DB_SOCKET=/opt/lampp/var/mysql/mysql.sock');
-if (!getenv('DB_NAME')) putenv('DB_NAME=ebp_restaurant_db');
-if (!getenv('DB_USER')) putenv('DB_USER=ebp_app');
-if (!getenv('DB_PASSWORD')) putenv('DB_PASSWORD=ebp_secure_password_2026');
-if (!getenv('JWT_SECRET')) putenv('JWT_SECRET=ebp_secret_key_change_in_production');
+if (!getenv('DB_SOCKET')) putenv('DB_SOCKET=');
+if (!getenv('DB_NAME')) putenv('DB_NAME=');
+if (!getenv('DB_USER')) putenv('DB_USER=');
+if (!getenv('DB_PASSWORD')) putenv('DB_PASSWORD=');
+if (!getenv('JWT_SECRET')) putenv('JWT_SECRET=');
 if (!getenv('JWT_ALGORITHM')) putenv('JWT_ALGORITHM=HS256');
 if (!getenv('JWT_EXPIRATION')) putenv('JWT_EXPIRATION=3600');
 

@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class DynamicPricingController
+class DynamicPricingController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class DynamicPricingController
 
     public function generatePricing($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $productId = $request['params']['product_id'] ?? null;

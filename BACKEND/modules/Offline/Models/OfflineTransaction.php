@@ -39,7 +39,10 @@ class OfflineTransaction extends BaseModel
         }
         
         $sql = "SELECT * FROM {$this->table} {$where} ORDER BY created_at ASC LIMIT 100";
-        return $this->db->query($sql, $params)->fetchAll();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll();
+        return $stmt;
     }
 
     /**
@@ -56,7 +59,9 @@ class OfflineTransaction extends BaseModel
         }
         
         $sql = "SELECT COUNT(*) as count FROM {$this->table} {$where}";
-        $result = $this->db->query($sql, $params)->fetch();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $result = $stmt->fetch();
         return $result['count'] ?? 0;
     }
 
@@ -81,7 +86,9 @@ class OfflineTransaction extends BaseModel
         
         // Get total count
         $countSql = "SELECT COUNT(*) as total FROM {$this->table} {$where}";
-        $totalResult = $this->db->query($countSql, $params)->fetch();
+        $stmt = $this->db->prepare($countSql);
+        $stmt->execute($params);
+        $totalResult = $stmt->fetch();
         $total = $totalResult['total'] ?? 0;
         
         // Get data
@@ -89,7 +96,9 @@ class OfflineTransaction extends BaseModel
         $params[] = $limit;
         $params[] = $offset;
         
-        $data = $this->db->query($sql, $params)->fetchAll();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute($params);
+        $data = $stmt->fetchAll();
         
         return [
             'data' => $data,
@@ -106,7 +115,9 @@ class OfflineTransaction extends BaseModel
     public function findById($id)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ?";
-        $result = $this->db->query($sql, [$id])->fetch();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id]);
+        $result = $stmt->fetch();
         return $result ?: null;
     }
 }

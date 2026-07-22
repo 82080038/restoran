@@ -5,7 +5,7 @@ namespace App\Modules\KDS\Controllers;
 use App\Core\Response;
 use App\Modules\KDS\Services\KDSRoutingRuleService;
 
-class KDSRoutingRuleController
+class KDSRoutingRuleController extends BaseController
 {
     private $routingRuleService;
 
@@ -17,7 +17,6 @@ class KDSRoutingRuleController
     public function getRoutingRules($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
 
@@ -31,7 +30,6 @@ class KDSRoutingRuleController
     public function getRoutingRule($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $ruleId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -48,8 +46,6 @@ class KDSRoutingRuleController
     public function createRoutingRule($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-            
             $required = ['tenant_id', 'branch_id', 'rule_name', 'target_station_id'];
             foreach ($required as $field) {
                 if (!isset($request[$field])) {
@@ -67,7 +63,6 @@ class KDSRoutingRuleController
     public function updateRoutingRule($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $ruleId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -86,7 +81,6 @@ class KDSRoutingRuleController
     public function deleteRoutingRule($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $ruleId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -105,7 +99,6 @@ class KDSRoutingRuleController
     public function applyRoutingRules($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $orderId = $request['order_id'];
             $diningOption = $request['dining_option'] ?? 'DINE_IN';
 

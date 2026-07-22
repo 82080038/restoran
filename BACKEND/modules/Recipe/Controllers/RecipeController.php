@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../core/Response.php';
  * 
  * Handles HTTP requests for recipe management operations
  */
-class RecipeController
+class RecipeController extends \App\Core\BaseController
 {
     private $recipeService;
 

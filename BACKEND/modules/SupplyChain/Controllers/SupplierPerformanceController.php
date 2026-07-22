@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class SupplierPerformanceController
+class SupplierPerformanceController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class SupplierPerformanceController
 
     public function evaluateSupplier($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class SupplierPerformanceController
 
     public function getSupplierPerformance($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $supplierId = $request['params']['id'] ?? null;
         $dateFrom = $request['params']['start_date'] ?? null;
         $dateTo = $request['params']['end_date'] ?? null;
@@ -60,9 +54,6 @@ class SupplierPerformanceController
 
     public function getSupplierRanking($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $dateFrom = $request['params']['start_date'] ?? null;
         $dateTo = $request['params']['end_date'] ?? null;
 

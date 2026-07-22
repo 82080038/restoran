@@ -1,54 +1,54 @@
 <?php
 
 // Floor Plan Routes
-$router->addRoute('GET', '/api/v1/floor-plan/layout', function($request) use ($floorPlanController) {
+$router->addRoute('GET', '/api/v1/floor-plan/layout', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->getLayout($request);
-});
-$router->addRoute('POST', '/api/v1/floor-plan/layout/save', function($request) use ($floorPlanController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/floor-plan/layout/save', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->saveLayout($request);
-});
+}, $authMiddleware));
 
 // Floors
-$router->addRoute('GET', '/api/v1/floor-plan/floors', function($request) use ($floorPlanController) {
+$router->addRoute('GET', '/api/v1/floor-plan/floors', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->getFloors($request);
-});
-$router->addRoute('POST', '/api/v1/floor-plan/floors', function($request) use ($floorPlanController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/floor-plan/floors', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->createFloor($request);
-});
-$router->addRoute('PUT', '/api/v1/floor-plan/floors/{id}', function($request) use ($floorPlanController) {
+}, $authMiddleware));
+$router->addRoute('PUT', '/api/v1/floor-plan/floors/{id}', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->updateFloor($request);
-});
-$router->addRoute('DELETE', '/api/v1/floor-plan/floors/{id}', function($request) use ($floorPlanController) {
+}, $authMiddleware));
+$router->addRoute('DELETE', '/api/v1/floor-plan/floors/{id}', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->deleteFloor($request);
-});
+}, $authMiddleware));
 
 // Zones
-$router->addRoute('GET', '/api/v1/floor-plan/zones', function($request) use ($floorPlanController) {
+$router->addRoute('GET', '/api/v1/floor-plan/zones', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->getZones($request);
-});
-$router->addRoute('POST', '/api/v1/floor-plan/zones', function($request) use ($floorPlanController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/floor-plan/zones', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->createZone($request);
-});
-$router->addRoute('PUT', '/api/v1/floor-plan/zones/{id}', function($request) use ($floorPlanController) {
+}, $authMiddleware));
+$router->addRoute('PUT', '/api/v1/floor-plan/zones/{id}', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->updateZone($request);
-});
-$router->addRoute('DELETE', '/api/v1/floor-plan/zones/{id}', function($request) use ($floorPlanController) {
+}, $authMiddleware));
+$router->addRoute('DELETE', '/api/v1/floor-plan/zones/{id}', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->deleteZone($request);
-});
+}, $authMiddleware));
 
 // Tables (layout)
-$router->addRoute('GET', '/api/v1/floor-plan/tables', function($request) use ($floorPlanController) {
+$router->addRoute('GET', '/api/v1/floor-plan/tables', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->getTables($request);
-});
-$router->addRoute('POST', '/api/v1/floor-plan/tables', function($request) use ($floorPlanController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/floor-plan/tables', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->createTable($request);
-});
-$router->addRoute('PUT', '/api/v1/floor-plan/tables/{id}', function($request) use ($floorPlanController) {
+}, $authMiddleware));
+$router->addRoute('PUT', '/api/v1/floor-plan/tables/{id}', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->updateTable($request);
-});
-$router->addRoute('PUT', '/api/v1/floor-plan/tables/{id}/position', function($request) use ($floorPlanController) {
+}, $authMiddleware));
+$router->addRoute('PUT', '/api/v1/floor-plan/tables/{id}/position', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->updateTablePosition($request);
-});
-$router->addRoute('DELETE', '/api/v1/floor-plan/tables/{id}', function($request) use ($floorPlanController) {
+}, $authMiddleware));
+$router->addRoute('DELETE', '/api/v1/floor-plan/tables/{id}', withAuth(function($request) use ($floorPlanController) {
     return $floorPlanController->deleteTable($request);
-});
+}, $authMiddleware));

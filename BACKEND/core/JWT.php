@@ -21,7 +21,7 @@ class JWT
 
     public function __construct(?string $secret = null, string $algorithm = 'HS256')
     {
-        $this->secret = $secret ?? getenv('JWT_SECRET') ?? 'ebp_secret_key_change_in_production';
+        $this->secret = $secret ?? getenv('JWT_SECRET') ?? '';
         $this->algorithm = $algorithm;
     }
 
@@ -33,6 +33,17 @@ class JWT
      */
     public function encode(array $payload): string
     {
+        if ($this->secret === '') {
+            throw new \RuntimeException('JWT_SECRET must be configured before encoding tokens', 500);
+        }
+
+        if (!isset($payload['exp'])) {
+            $payload['exp'] = time() + (int)(getenv('JWT_EXPIRATION') ?: 3600);
+        }
+        if (!isset($payload['iat'])) {
+            $payload['iat'] = time();
+        }
+
         $header = json_encode([
             'typ' => 'JWT',
             'alg' => $this->algorithm
@@ -62,6 +73,10 @@ class JWT
      */
     public function decode(string $token): array|false
     {
+        if ($this->secret === '') {
+            return false;
+        }
+
         $tokenParts = explode('.', $token);
 
         if (count($tokenParts) !== 3) {
@@ -69,6 +84,12 @@ class JWT
         }
 
         list($header, $payload, $signature) = $tokenParts;
+
+        // Verify header algorithm to prevent 'alg: none' attack
+        $decodedHeader = json_decode($this->base64UrlDecode($header), true);
+        if (!is_array($decodedHeader) || ($decodedHeader['alg'] ?? '') !== $this->algorithm) {
+            return false;
+        }
 
         $validSignature = hash_hmac(
             'sha256',
@@ -79,7 +100,7 @@ class JWT
 
         $validSignature = $this->base64UrlEncode($validSignature);
 
-        if ($signature !== $validSignature) {
+        if (!hash_equals($validSignature, $signature)) {
             return false;
         }
 

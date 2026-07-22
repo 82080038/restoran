@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class GoodsReceiptController
+class GoodsReceiptController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class GoodsReceiptController
 
     public function create($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class GoodsReceiptController
 
     public function complete($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $receiptId = $request['params']['id'] ?? null;
@@ -55,9 +49,6 @@ class GoodsReceiptController
 
     public function getAll($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getGoodsReceipts($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {

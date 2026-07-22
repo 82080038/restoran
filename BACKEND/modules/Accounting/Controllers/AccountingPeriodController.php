@@ -6,7 +6,7 @@ if (!class_exists('AccountingPeriodService')) {
 // Load EBP Core and Backend Components
 require_once __DIR__ . '/../../../bootstrap.php';
 
-class AccountingPeriodController
+class AccountingPeriodController extends \App\Core\BaseController
 {
     private $service;
 
@@ -17,9 +17,6 @@ class AccountingPeriodController
 
     public function createPeriod($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'ACCOUNTING_CREATE');
 
@@ -36,9 +33,6 @@ class AccountingPeriodController
 
     public function getPeriods($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $params = $request['query'] ?? [];
@@ -56,9 +50,6 @@ class AccountingPeriodController
 
     public function getCurrentPeriod($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $result = $this->service->getCurrentPeriod($user['tenant_id'], $user['branch_id']);
@@ -72,9 +63,6 @@ class AccountingPeriodController
 
     public function closePeriod($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $params = $request['params'] ?? [];
@@ -95,9 +83,6 @@ class AccountingPeriodController
 
     public function reopenPeriod($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $params = $request['params'] ?? [];

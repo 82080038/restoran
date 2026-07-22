@@ -5,7 +5,7 @@ namespace App\Modules\Operations\Controllers;
 use App\Core\Response;
 use App\Modules\Operations\Services\LoadBalancingService;
 
-class LoadBalancingController
+class LoadBalancingController extends BaseController
 {
     private $loadBalancingService;
 
@@ -17,7 +17,6 @@ class LoadBalancingController
     public function recordStationLoad($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'];
             $stationId = $request['station_id'];
@@ -32,7 +31,6 @@ class LoadBalancingController
     public function getStationLoadMetrics($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $stationId = $request['station_id'] ?? null;
@@ -48,7 +46,6 @@ class LoadBalancingController
     public function getLeastLoadedStation($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $stationType = $request['station_type'] ?? null;
@@ -63,7 +60,6 @@ class LoadBalancingController
     public function recommendReroute($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'];
             $currentStationId = $request['station_id'];
@@ -78,7 +74,6 @@ class LoadBalancingController
     public function getBottleneckStations($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
 

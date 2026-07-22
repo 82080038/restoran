@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class CommissionController
+class CommissionController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class CommissionController
 
     public function createCommission($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class CommissionController
 
     public function approveCommission($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $commissionId = $request['params']['id'] ?? null;
@@ -60,9 +54,6 @@ class CommissionController
 
     public function payCommission($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $commissionId = $request['params']['id'] ?? null;
@@ -83,9 +74,6 @@ class CommissionController
 
     public function getEmployeeCommissions($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $employeeId = $request['params']['employee_id'] ?? null;
         $startDate = $request['params']['start_date'] ?? null;
         $endDate = $request['params']['end_date'] ?? null;
@@ -106,9 +94,6 @@ class CommissionController
 
     public function getPendingCommissions($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getPendingCommissions($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {

@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class BonusController
+class BonusController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class BonusController
 
     public function createBonus($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class BonusController
 
     public function approveBonus($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $bonusId = $request['params']['id'] ?? null;
@@ -60,9 +54,6 @@ class BonusController
 
     public function payBonus($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $bonusId = $request['params']['id'] ?? null;
@@ -83,9 +74,6 @@ class BonusController
 
     public function getEmployeeBonuses($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $employeeId = $request['params']['employee_id'] ?? null;
 
         if (!$employeeId) {
@@ -104,9 +92,6 @@ class BonusController
 
     public function getPendingBonuses($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getPendingBonuses($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {

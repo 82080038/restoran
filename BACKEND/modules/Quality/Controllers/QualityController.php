@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class QualityController
+class QualityController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class QualityController
 
     public function createCheck($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class QualityController
 
     public function createIncident($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -55,9 +49,6 @@ class QualityController
 
     public function resolveIncident($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $incidentId = $request['params']['id'] ?? null;
@@ -74,9 +65,6 @@ class QualityController
 
     public function getChecks($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getQualityChecks($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {
@@ -88,9 +76,6 @@ class QualityController
 
     public function getIncidents($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getIncidents($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {

@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class QualityControlController
+class QualityControlController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class QualityControlController
 
     public function createQualityCheck($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class QualityControlController
 
     public function updateQualityCheckResult($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $checkId = $request['params']['id'] ?? null;
@@ -61,9 +55,6 @@ class QualityControlController
 
     public function getQualityChecks($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $checkType = $request['params']['type'] ?? null;
         $status = $request['params']['status'] ?? null;
 
@@ -78,9 +69,6 @@ class QualityControlController
 
     public function getQualityReport($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $dateFrom = $request['params']['start_date'] ?? date('Y-m-01');
         $dateTo = $request['params']['end_date'] ?? date('Y-m-t');
 

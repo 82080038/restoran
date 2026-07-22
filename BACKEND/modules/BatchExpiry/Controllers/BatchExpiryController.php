@@ -5,7 +5,7 @@ namespace App\Modules\BatchExpiry\Controllers;
 use App\Core\Response;
 use App\Modules\BatchExpiry\Services\BatchExpiryService;
 
-class BatchExpiryController
+class BatchExpiryController extends BaseController
 {
     private $service;
 
@@ -17,7 +17,6 @@ class BatchExpiryController
     public function getBatches($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $status = $request['query']['status'] ?? null;
@@ -34,7 +33,6 @@ class BatchExpiryController
     public function getBatch($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $batchId = $request['params']['id'] ?? $request['id'] ?? null;
 
             $result = $this->service->getBatch($batchId);
@@ -50,7 +48,6 @@ class BatchExpiryController
     public function receiveBatch($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -69,7 +66,6 @@ class BatchExpiryController
     public function deductFromBatch($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $batchId = $request['params']['id'] ?? $request['id'] ?? null;
             $quantity = $request['body']['quantity'] ?? null;
 
@@ -87,7 +83,6 @@ class BatchExpiryController
     public function applyDiscount($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $batchId = $request['params']['id'] ?? $request['id'] ?? null;
             $discountPct = $request['body']['discount_percentage'] ?? null;
             $discountedPrice = $request['body']['discounted_price'] ?? null;
@@ -108,7 +103,6 @@ class BatchExpiryController
     public function discardBatch($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $batchId = $request['params']['id'] ?? $request['id'] ?? null;
             $reason = $request['body']['reason'] ?? '';
             $changedBy = $request['user_id'] ?? null;
@@ -123,7 +117,6 @@ class BatchExpiryController
     public function getNearExpiry($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $days = (int)($request['query']['days'] ?? 7);
@@ -138,7 +131,6 @@ class BatchExpiryController
     public function getExpiryDashboard($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
 
@@ -152,7 +144,6 @@ class BatchExpiryController
     public function updateBatchStatuses($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
 

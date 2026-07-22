@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class OfflineSyncController
+class OfflineSyncController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class OfflineSyncController
 
     public function queueOperation($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $data = $request['body'] ?? [];
         if (empty($data['operation_type']) || empty($data['entity_type']) || !is_array($data['entity_data'] ?? null)) {
             Response::error('operation_type, entity_type, and entity_data are required', 400);
@@ -39,9 +36,6 @@ class OfflineSyncController
 
     public function syncPending($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->syncPendingOperations($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {
@@ -53,9 +47,6 @@ class OfflineSyncController
 
     public function resolveConflict($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $syncId = $request['id'] ?? $request['params']['id'] ?? null;
         $resolution = $request['body']['resolution'] ?? null;
         $resolvedData = $request['body']['resolved_data'] ?? null;
@@ -76,9 +67,6 @@ class OfflineSyncController
 
     public function getSyncStatus($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getSyncStatus($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {
@@ -90,9 +78,6 @@ class OfflineSyncController
 
     public function getConflicts($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getConflicts($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {

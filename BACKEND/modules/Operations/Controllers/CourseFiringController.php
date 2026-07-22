@@ -5,7 +5,7 @@ namespace App\Modules\Operations\Controllers;
 use App\Core\Response;
 use App\Modules\Operations\Services\CourseFiringService;
 
-class CourseFiringController
+class CourseFiringController extends BaseController
 {
     private $courseFiringService;
 
@@ -17,7 +17,6 @@ class CourseFiringController
     public function getCourseSequences($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
 
@@ -31,8 +30,6 @@ class CourseFiringController
     public function createCourseSequence($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-            
             $required = ['tenant_id', 'branch_id', 'course_number', 'course_name'];
             foreach ($required as $field) {
                 if (!isset($request[$field])) {
@@ -50,7 +47,6 @@ class CourseFiringController
     public function updateCourseSequence($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $courseId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -64,7 +60,6 @@ class CourseFiringController
     public function deleteCourseSequence($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $courseId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -78,7 +73,6 @@ class CourseFiringController
     public function createOrderCourses($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $orderId = $request['order_id'];
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'];
@@ -93,7 +87,6 @@ class CourseFiringController
     public function fireCourse($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $orderCourseId = $request['id'];
             $tenantId = $request['tenant_id'];
             $firedBy = $request['fired_by'] ?? null;
@@ -108,7 +101,6 @@ class CourseFiringController
     public function completeCourse($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $orderCourseId = $request['id'];
             $tenantId = $request['tenant_id'];
 
@@ -122,7 +114,6 @@ class CourseFiringController
     public function getOrderCourses($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $orderId = $request['order_id'];
 
             $courses = $this->courseFiringService->getOrderCourses($orderId);
@@ -135,8 +126,6 @@ class CourseFiringController
     public function checkAutoFireCourses($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
-            
             $this->courseFiringService->checkAutoFireCourses();
             return Response::success([], 'Auto-fire courses checked successfully');
         } catch (\Exception $e) {

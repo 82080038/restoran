@@ -3,18 +3,14 @@
 namespace App\Modules\Facility\Controllers;
 
 use App\Modules\Facility\Services\KitchenStationService;
-use App\Core\AuthMiddleware;
 use App\Core\Response;
 
-class KitchenStationController
+class KitchenStationController extends BaseController
 {
     private $service;
-    private $authMiddleware;
-
     public function __construct()
     {
         $this->service = new KitchenStationService();
-        $this->authMiddleware = new AuthMiddleware();
     }
 
     /**
@@ -22,9 +18,7 @@ class KitchenStationController
      */
     public function getKitchenStations($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         $branchId = $request['branch_id'] ?? null;
         $floorId = $request['floor_id'] ?? null;
         
@@ -38,10 +32,8 @@ class KitchenStationController
      */
     public function getKitchenStation($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $stationId = $request['station_id'] ?? null;
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         
         if (!$stationId) {
             Response::error('Station ID is required', 400);
@@ -61,11 +53,9 @@ class KitchenStationController
      */
     public function createKitchenStation($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $data = [
-            'tenant_id' => $user['tenant_id'],
-            'branch_id' => $request['branch_id'] ?? $user['branch_id'],
+            'tenant_id' => $request['tenant_id'],
+            'branch_id' => $request['branch_id'] ?? $request['branch_id'],
             'floor_id' => $request['floor_id'] ?? null,
             'station_name' => $request['station_name'] ?? null,
             'station_type' => $request['station_type'] ?? 'PREPARATION',
@@ -92,10 +82,8 @@ class KitchenStationController
      */
     public function updateKitchenStation($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $stationId = $request['station_id'] ?? null;
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         
         if (!$stationId) {
             Response::error('Station ID is required', 400);
@@ -123,10 +111,8 @@ class KitchenStationController
      */
     public function deleteKitchenStation($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
         $stationId = $request['station_id'] ?? null;
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         
         if (!$stationId) {
             Response::error('Station ID is required', 400);
@@ -142,9 +128,7 @@ class KitchenStationController
      */
     public function getCentralKitchens($request)
     {
-        $user = $this->authMiddleware->authenticate();
-        
-        $tenantId = $user['tenant_id'];
+        $tenantId = $request['tenant_id'];
         $branchId = $request['branch_id'] ?? null;
         
         $kitchens = $this->service->getCentralKitchens($tenantId, $branchId);

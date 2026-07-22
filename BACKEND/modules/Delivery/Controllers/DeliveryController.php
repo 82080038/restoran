@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class DeliveryController
+class DeliveryController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class DeliveryController
 
     public function create($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $data = $request['body'] ?? [];
 
         $result = $this->service->createDeliveryOrder($data, $user['tenant_id'], $user['branch_id']);
@@ -35,9 +32,6 @@ class DeliveryController
 
     public function assignDriver($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $deliveryOrderId = $request['params']['id'] ?? null;
         $driverId = $request['body']['driver_id'] ?? null;
 
@@ -52,9 +46,6 @@ class DeliveryController
 
     public function updateStatus($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $deliveryOrderId = $request['params']['id'] ?? null;
         $status = $request['body']['status'] ?? null;
 
@@ -69,9 +60,6 @@ class DeliveryController
 
     public function getAll($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getDeliveryOrders($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {

@@ -31,12 +31,12 @@ class Database
 
     public function __construct(array $config = [])
     {
-        $this->host = $config['host'] ?? getenv('DB_HOST') ?? 'localhost';
-        $this->socket = $config['socket'] ?? getenv('DB_SOCKET') ?? '';
-        $this->port = $config['port'] ?? getenv('DB_PORT') ?? '3306';
-        $this->dbname = $config['dbname'] ?? getenv('DB_NAME') ?? 'ebp_platform_db';
-        $this->username = $config['username'] ?? getenv('DB_USER') ?? 'ebp_app';
-        $this->password = $config['password'] ?? getenv('DB_PASSWORD') ?? 'ebp_secure_password_2026';
+        $this->host = $config['host'] ?? getenv('DB_HOST') ?: 'localhost';
+        $this->socket = $config['socket'] ?? getenv('DB_SOCKET') ?: '';
+        $this->port = $config['port'] ?? getenv('DB_PORT') ?: '3306';
+        $this->dbname = $config['dbname'] ?? getenv('DB_NAME') ?: '';
+        $this->username = $config['username'] ?? getenv('DB_USER') ?: '';
+        $this->password = $config['password'] ?? getenv('DB_PASSWORD') ?: '';
         $this->charset = $config['charset'] ?? 'utf8mb4';
     }
 
@@ -176,5 +176,27 @@ class Database
                 'error' => $e->getMessage()
             ];
         }
+    }
+
+    /**
+     * Proxy undefined method calls to PDO instance
+     * Allows $db->query(), $db->prepare(), etc. without explicit connect() call
+     * 
+     * @param string $name Method name
+     * @param array $arguments Method arguments
+     * @return mixed PDO method result
+     */
+    public function __call($name, $arguments)
+    {
+        $pdo = $this->connect();
+        
+        // Handle query() with parameter array pattern: $db->query($sql, [$params])
+        if ($name === 'query' && count($arguments) >= 2 && is_array($arguments[1])) {
+            $stmt = $pdo->prepare($arguments[0]);
+            $stmt->execute($arguments[1]);
+            return $stmt;
+        }
+        
+        return call_user_func_array([$pdo, $name], $arguments);
     }
 }

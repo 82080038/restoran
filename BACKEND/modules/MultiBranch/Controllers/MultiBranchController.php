@@ -5,7 +5,7 @@ namespace App\Modules\MultiBranch\Controllers;
 use App\Modules\MultiBranch\Services\MultiBranchService;
 use App\Core\Response;
 
-class MultiBranchController
+class MultiBranchController extends BaseController
 {
     private $service;
 

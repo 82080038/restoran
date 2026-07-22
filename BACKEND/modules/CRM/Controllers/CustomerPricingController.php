@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class CustomerPricingController
+class CustomerPricingController extends \App\Core\BaseController
 {
     private $service;
 
@@ -20,9 +20,6 @@ class CustomerPricingController
 
     public function setCustomerPrice($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -38,9 +35,6 @@ class CustomerPricingController
 
     public function getCustomerPrice($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $customerId = $request['params']['customer_id'] ?? null;
         $productId = $request['params']['product_id'] ?? null;
 
@@ -60,9 +54,6 @@ class CustomerPricingController
 
     public function getCustomerPricings($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $customerId = $request['params']['customer_id'] ?? null;
 
         if (!$customerId) {

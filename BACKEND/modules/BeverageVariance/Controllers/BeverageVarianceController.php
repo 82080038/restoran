@@ -5,7 +5,7 @@ namespace App\Modules\BeverageVariance\Controllers;
 use App\Core\Response;
 use App\Modules\BeverageVariance\Services\BeverageVarianceService;
 
-class BeverageVarianceController
+class BeverageVarianceController extends BaseController
 {
     private $service;
 
@@ -17,7 +17,6 @@ class BeverageVarianceController
     public function getBarCounts($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $dateFrom = $request['query']['date_from'] ?? null;
@@ -34,7 +33,6 @@ class BeverageVarianceController
     public function getBarCount($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $countId = $request['params']['id'] ?? $request['id'] ?? null;
 
             $result = $this->service->getBarCountDetail($countId);
@@ -50,7 +48,6 @@ class BeverageVarianceController
     public function createBarCount($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -70,7 +67,6 @@ class BeverageVarianceController
     public function submitBarCount($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $countId = $request['params']['id'] ?? $request['id'] ?? null;
             $verifiedBy = $request['query']['verify'] ? ($request['user_id'] ?? null) : null;
 
@@ -84,7 +80,6 @@ class BeverageVarianceController
     public function getVarianceReports($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
 
@@ -98,7 +93,6 @@ class BeverageVarianceController
     public function generateVarianceReport($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $periodStart = $request['body']['period_start'] ?? $request['query']['period_start'] ?? null;
@@ -119,7 +113,6 @@ class BeverageVarianceController
     public function getKegs($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tenantId = $request['tenant_id'];
             $branchId = $request['branch_id'] ?? null;
             $status = $request['query']['status'] ?? null;
@@ -134,7 +127,6 @@ class BeverageVarianceController
     public function receiveKeg($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -153,7 +145,6 @@ class BeverageVarianceController
     public function tapKeg($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $kegId = $request['params']['id'] ?? $request['id'] ?? null;
             $tapHandle = $request['body']['tap_handle'] ?? null;
 
@@ -167,7 +158,6 @@ class BeverageVarianceController
     public function updateKegWeight($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $kegId = $request['params']['id'] ?? $request['id'] ?? null;
             $weight = $request['body']['current_weight_kg'] ?? null;
 

@@ -5,7 +5,7 @@ namespace App\Modules\OperationsAdvanced\Controllers;
 use App\Core\Response;
 use App\Modules\OperationsAdvanced\Services\OperationsAdvancedService;
 
-class OperationsAdvancedController
+class OperationsAdvancedController extends BaseController
 {
     private $service;
 
@@ -19,7 +19,6 @@ class OperationsAdvancedController
     public function get86Items($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $result = $this->service->get86Items($request['tenant_id'], $request['branch_id'] ?? null);
             return Response::success($result, '86-ed items retrieved');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -28,7 +27,6 @@ class OperationsAdvancedController
     public function set86Status($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $branchId = $request['branch_id'] ?? $data['branch_id'] ?? null;
             if (empty($data['product_id']) || empty($branchId)) return Response::error('product_id and branch_id are required', 400);
@@ -45,7 +43,6 @@ class OperationsAdvancedController
     public function restockItem($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $productId = $request['product_id'] ?? $request['params']['product_id'] ?? $request['body']['product_id'] ?? null;
             $branchId = $request['branch_id'] ?? $request['body']['branch_id'] ?? null;
             if (empty($productId) || empty($branchId)) return Response::error('product_id and branch_id are required', 400);
@@ -60,7 +57,6 @@ class OperationsAdvancedController
     public function getCustomOrders($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $result = $this->service->getCustomOrders($request['tenant_id'], $request['branch_id'] ?? null, $request['query']['status'] ?? null);
             return Response::success($result, 'Custom orders retrieved');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -69,7 +65,6 @@ class OperationsAdvancedController
     public function createCustomOrder($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -83,7 +78,6 @@ class OperationsAdvancedController
     public function updateCustomOrderStatus($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             $status = $request['body']['status'] ?? null;
             if (!$status) return Response::error('status is required', 400);
@@ -96,7 +90,6 @@ class OperationsAdvancedController
     public function getRoutes($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $result = $this->service->getRoutes($request['tenant_id'], $request['branch_id'] ?? null, $request['query']['date'] ?? null, $request['query']['status'] ?? null);
             return Response::success($result, 'Delivery routes retrieved');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -105,7 +98,6 @@ class OperationsAdvancedController
     public function getRoute($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             $result = $this->service->getRouteDetail($id);
             if (!$result['route']) return Response::notFound('Route not found');
@@ -116,7 +108,6 @@ class OperationsAdvancedController
     public function createRoute($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -128,7 +119,6 @@ class OperationsAdvancedController
     public function addRouteStop($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             $stop = $request['body'];
             if (empty($stop['delivery_address'])) return Response::error('delivery_address is required', 400);
@@ -139,7 +129,6 @@ class OperationsAdvancedController
     public function startRoute($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             return Response::success($this->service->startRoute($id), 'Route started');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -148,7 +137,6 @@ class OperationsAdvancedController
     public function completeRoute($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             return Response::success($this->service->completeRoute($id), 'Route completed');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -157,7 +145,6 @@ class OperationsAdvancedController
     public function updateStopStatus($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['stop_id'] ?? $request['id'] ?? null;
             $data = $request['body'];
             return Response::success($this->service->updateStopStatus($id, $data['status'] ?? 'DELIVERED', $data['proof_photo_path'] ?? null, $data['signature_path'] ?? null, $data['failure_reason'] ?? null), 'Stop status updated');
@@ -169,7 +156,6 @@ class OperationsAdvancedController
     public function getLeads($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $result = $this->service->getLeads($request['tenant_id'], $request['branch_id'] ?? null, $request['query']['stage'] ?? null, $request['query']['assigned_to'] ?? null);
             return Response::success($result, 'Leads retrieved');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -178,7 +164,6 @@ class OperationsAdvancedController
     public function createLead($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -190,7 +175,6 @@ class OperationsAdvancedController
     public function updateLeadStage($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             $stage = $request['body']['stage'] ?? null;
             $prob = $request['body']['probability_pct'] ?? null;
@@ -202,7 +186,6 @@ class OperationsAdvancedController
     public function getLeadPipelineSummary($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $result = $this->service->getLeadPipelineSummary($request['tenant_id'], $request['branch_id'] ?? null);
             return Response::success($result, 'Pipeline summary retrieved');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -213,7 +196,6 @@ class OperationsAdvancedController
     public function getAllergenInfo($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $productId = $request['params']['product_id'] ?? $request['query']['product_id'] ?? null;
             $result = $this->service->getAllergenInfo($request['tenant_id'], $productId);
             return Response::success($result ?: [], 'Allergen info retrieved');
@@ -223,7 +205,6 @@ class OperationsAdvancedController
     public function setAllergenInfo($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             if (empty($data['product_id'])) return Response::error('product_id is required', 400);
@@ -234,7 +215,6 @@ class OperationsAdvancedController
     public function filterByDietaryTag($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $tag = $request['params']['tag'] ?? $request['query']['tag'] ?? null;
             if (!$tag) return Response::error('tag is required', 400);
             $result = $this->service->filterByDietaryTag($request['tenant_id'], $tag);

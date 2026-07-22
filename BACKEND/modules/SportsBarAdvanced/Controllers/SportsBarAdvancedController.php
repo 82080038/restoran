@@ -5,7 +5,7 @@ namespace App\Modules\SportsBarAdvanced\Controllers;
 use App\Core\Response;
 use App\Modules\SportsBarAdvanced\Services\SportsBarAdvancedService;
 
-class SportsBarAdvancedController
+class SportsBarAdvancedController extends BaseController
 {
     private $service;
 
@@ -17,7 +17,6 @@ class SportsBarAdvancedController
     public function getTabs($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $result = $this->service->getTabs($request['tenant_id'], $request['branch_id'] ?? null, $request['query']['status'] ?? null);
             return Response::success($result, 'Bar tabs retrieved');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -26,7 +25,6 @@ class SportsBarAdvancedController
     public function getTab($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             $result = $this->service->getTab($id);
             if (!$result) return Response::notFound('Tab not found');
@@ -37,7 +35,6 @@ class SportsBarAdvancedController
     public function openTab($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -52,7 +49,6 @@ class SportsBarAdvancedController
     public function addToTab($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             return Response::success($this->service->addToTab($id, $request['body']['items'] ?? [], $request['body']['amount'] ?? 0), 'Items added to tab');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -61,7 +57,6 @@ class SportsBarAdvancedController
     public function closeTab($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             return Response::success($this->service->closeTab($id, $request['body']['tip_amount'] ?? 0), 'Tab closed');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -70,7 +65,6 @@ class SportsBarAdvancedController
     public function captureTab($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             return Response::success($this->service->captureTab($id), 'Tab captured');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -79,7 +73,6 @@ class SportsBarAdvancedController
     public function voidTab($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             return Response::success($this->service->voidTab($id, $request['body']['reason'] ?? ''), 'Tab voided');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }

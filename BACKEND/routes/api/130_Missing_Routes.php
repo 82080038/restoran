@@ -27,49 +27,49 @@ $router->addRoute('GET', '/api/v1/roles', function($request) {
 });
 
 // GET /api/v1/products - alias for /menu/products
-$router->addRoute('GET', '/api/v1/products', function($request) use ($simpleMenuController) {
+$router->addRoute('GET', '/api/v1/products', withAuth(function($request) use ($simpleMenuController) {
     return $simpleMenuController->getProducts($request);
-});
+}, $authMiddleware));
 
 // GET /api/v1/categories - alias for /menu/categories
-$router->addRoute('GET', '/api/v1/categories', function($request) use ($simpleMenuController) {
+$router->addRoute('GET', '/api/v1/categories', withAuth(function($request) use ($simpleMenuController) {
     return $simpleMenuController->getCategories($request);
-});
+}, $authMiddleware));
 
 // GET /api/v1/suppliers - alias for public/suppliers
-$router->addRoute('GET', '/api/v1/suppliers', function($request) use ($simpleSupplierController) {
+$router->addRoute('GET', '/api/v1/suppliers', withAuth(function($request) use ($simpleSupplierController) {
     return $simpleSupplierController->getSuppliers($request);
-});
+}, $authMiddleware));
 
 // GET /api/v1/employees - alias for public/employees
-$router->addRoute('GET', '/api/v1/employees', function($request) use ($simpleEmployeeController) {
+$router->addRoute('GET', '/api/v1/employees', withAuth(function($request) use ($simpleEmployeeController) {
     return $simpleEmployeeController->getEmployees($request);
-});
+}, $authMiddleware));
 
 // GET /api/v1/tables - alias for public/tables
-$router->addRoute('GET', '/api/v1/tables', function($request) use ($simpleTableController) {
+$router->addRoute('GET', '/api/v1/tables', withAuth(function($request) use ($simpleTableController) {
     return $simpleTableController->getTables($request);
-});
+}, $authMiddleware));
 
 // GET /api/v1/inventory - public alias (no auth needed)
-$router->addRoute('GET', '/api/v1/inventory', function($request) use ($simpleInventoryController) {
+$router->addRoute('GET', '/api/v1/inventory', withAuth(function($request) use ($simpleInventoryController) {
     return $simpleInventoryController->getInventory($request);
-});
+}, $authMiddleware));
 
 // GET /api/v1/inventory/low-stock - public alias
-$router->addRoute('GET', '/api/v1/inventory/low-stock', function($request) use ($simpleInventoryController) {
+$router->addRoute('GET', '/api/v1/inventory/low-stock', withAuth(function($request) use ($simpleInventoryController) {
     return $simpleInventoryController->getLowStock($request);
-});
+}, $authMiddleware));
 
 // GET /api/v1/deliveries - alias for public/deliveries
-$router->addRoute('GET', '/api/v1/deliveries', function($request) use ($simpleDeliveryController) {
+$router->addRoute('GET', '/api/v1/deliveries', withAuth(function($request) use ($simpleDeliveryController) {
     return $simpleDeliveryController->getDeliveries($request);
-});
+}, $authMiddleware));
 
 // GET /api/v1/users/{id}/roles - get user roles
-$router->addRoute('GET', '/api/v1/users/{id}/roles', function($request) use ($simpleUserController) {
+$router->addRoute('GET', '/api/v1/users/{id}/roles', withAuth(function($request) use ($simpleUserController) {
     return $simpleUserController->getUserRoles($request);
-});
+}, $authMiddleware));
 
 // GET /api/v1/accounting/periods/current - fallback if controller fails
 $router->addRoute('GET', '/api/v1/accounting/periods/current', function($request) {

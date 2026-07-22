@@ -6,7 +6,7 @@ if (!class_exists('AccountSuggestionService')) {
 }
 $accountSuggestionService = new AccountSuggestionService();
 
-$router->addRoute('GET', '/api/v1/accounting/suggest-accounts', function($request) use ($accountSuggestionService) {
+$router->addRoute('GET', '/api/v1/accounting/suggest-accounts', withAuth(function($request) use ($accountSuggestionService) {
     $authMiddleware = new AuthMiddleware();
     $user = $authMiddleware->authenticate();
     $transactionType = $_GET['transaction_type'] ?? null;
@@ -18,21 +18,21 @@ $router->addRoute('GET', '/api/v1/accounting/suggest-accounts', function($reques
     } else {
         Response::error($result['message'] ?? 'Failed to get account suggestions');
     }
-});
+}, $authMiddleware));
 
-$router->addRoute('GET', '/api/v1/accounting/accounts/search', function($request) use ($accountSuggestionService) {
+$router->addRoute('GET', '/api/v1/accounting/accounts/search', withAuth(function($request) use ($accountSuggestionService) {
     $authMiddleware = new AuthMiddleware();
     $user = $authMiddleware->authenticate();
     $searchTerm = $_GET['search_term'] ?? null;
     $accountType = $_GET['account_type'] ?? null;
     $result = $accountSuggestionService->searchAccounts($user['tenant_id'], $searchTerm, $accountType);
     Response::success($result, 'Accounts retrieved successfully');
-});
+}, $authMiddleware));
 
-$router->addRoute('GET', '/api/v1/accounting/journal-templates', function($request) use ($accountSuggestionService) {
+$router->addRoute('GET', '/api/v1/accounting/journal-templates', withAuth(function($request) use ($accountSuggestionService) {
     $authMiddleware = new AuthMiddleware();
     $user = $authMiddleware->authenticate();
     $templates = $accountSuggestionService->getJournalTemplates();
     Response::success($templates, 'Journal templates retrieved successfully');
-});
+}, $authMiddleware));
 

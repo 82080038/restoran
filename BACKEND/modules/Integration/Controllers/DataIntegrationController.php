@@ -6,7 +6,7 @@ if (!class_exists('IntegrationService')) {
 // Load EBP Core and Backend Components
 require_once __DIR__ . '/../../../bootstrap.php';
 
-class DataIntegrationController
+class DataIntegrationController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class DataIntegrationController
 
     public function getExternalSystems($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $systems = $this->service->getExternalSystems($user['tenant_id']);
@@ -31,9 +28,6 @@ class DataIntegrationController
 
     public function addExternalSystem($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -49,9 +43,6 @@ class DataIntegrationController
 
     public function updateExternalSystem($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $systemId = $request['params']['id'] ?? null;
@@ -73,9 +64,6 @@ class DataIntegrationController
 
     public function deleteExternalSystem($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $systemId = $request['params']['id'] ?? null;
@@ -96,9 +84,6 @@ class DataIntegrationController
 
     public function triggerSync($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $systemId = $request['body']['system_id'] ?? null;
@@ -120,9 +105,6 @@ class DataIntegrationController
 
     public function getSyncLogs($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $systemId = $request['params']['system_id'] ?? null;
@@ -136,9 +118,6 @@ class DataIntegrationController
 
     public function getDataMappings($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $systemId = $request['params']['system_id'] ?? null;
@@ -151,9 +130,6 @@ class DataIntegrationController
 
     public function addDataMapping($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -169,9 +145,6 @@ class DataIntegrationController
 
     public function getMonitoringData($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $systemId = $request['params']['system_id'] ?? null;

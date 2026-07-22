@@ -3,42 +3,42 @@
 // Bill Split Routes
 
 // Table groups
-$router->addRoute('GET', '/api/v1/bill-split/tables/{id}/groups', function($request) use ($billSplitController) {
+$router->addRoute('GET', '/api/v1/bill-split/tables/{id}/groups', withAuth(function($request) use ($billSplitController) {
     return $billSplitController->getTableGroups($request);
-});
-$router->addRoute('POST', '/api/v1/bill-split/groups', function($request) use ($billSplitController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/bill-split/groups', withAuth(function($request) use ($billSplitController) {
     return $billSplitController->createGroup($request);
-});
-$router->addRoute('PUT', '/api/v1/bill-split/groups/{id}', function($request) use ($billSplitController) {
+}, $authMiddleware));
+$router->addRoute('PUT', '/api/v1/bill-split/groups/{id}', withAuth(function($request) use ($billSplitController) {
     return $billSplitController->updateGroup($request);
-});
-$router->addRoute('DELETE', '/api/v1/bill-split/groups/{id}', function($request) use ($billSplitController) {
+}, $authMiddleware));
+$router->addRoute('DELETE', '/api/v1/bill-split/groups/{id}', withAuth(function($request) use ($billSplitController) {
     return $billSplitController->closeGroup($request);
-});
+}, $authMiddleware));
 
 // Bills
-$router->addRoute('GET', '/api/v1/bill-split/bills/{id}', function($request) use ($billSplitController) {
+$router->addRoute('GET', '/api/v1/bill-split/bills/{id}', withAuth(function($request) use ($billSplitController) {
     return $billSplitController->getBill($request);
-});
-$router->addRoute('POST', '/api/v1/bill-split/bills/{id}/items', function($request) use ($billSplitController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/bill-split/bills/{id}/items', withAuth(function($request) use ($billSplitController) {
     return $billSplitController->assignItemToBill($request);
-});
-$router->addRoute('DELETE', '/api/v1/bill-split/bills/{id}/items/{item_id}', function($request) use ($billSplitController) {
+}, $authMiddleware));
+$router->addRoute('DELETE', '/api/v1/bill-split/bills/{id}/items/{item_id}', withAuth(function($request) use ($billSplitController) {
     return $billSplitController->removeItemFromBill($request);
-});
-$router->addRoute('POST', '/api/v1/bill-split/bills/{id}/split', function($request) use ($billSplitController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/bill-split/bills/{id}/split', withAuth(function($request) use ($billSplitController) {
     return $billSplitController->splitBill($request);
-});
-$router->addRoute('PATCH', '/api/v1/bill-split/bills/{id}/payment', function($request) use ($billSplitController) {
+}, $authMiddleware));
+$router->addRoute('PATCH', '/api/v1/bill-split/bills/{id}/payment', withAuth(function($request) use ($billSplitController) {
     return $billSplitController->markBillPaid($request);
-});
+}, $authMiddleware));
 
 // Merge bills
-$router->addRoute('POST', '/api/v1/bill-split/merge', function($request) use ($billSplitController) {
+$router->addRoute('POST', '/api/v1/bill-split/merge', withAuth(function($request) use ($billSplitController) {
     return $billSplitController->mergeBills($request);
-});
+}, $authMiddleware));
 
 // Table summary
-$router->addRoute('GET', '/api/v1/bill-split/tables/{id}/summary', function($request) use ($billSplitController) {
+$router->addRoute('GET', '/api/v1/bill-split/tables/{id}/summary', withAuth(function($request) use ($billSplitController) {
     return $billSplitController->getTableSummary($request);
-});
+}, $authMiddleware));

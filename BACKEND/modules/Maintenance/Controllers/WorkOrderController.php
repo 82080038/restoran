@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class WorkOrderController
+class WorkOrderController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class WorkOrderController
 
     public function createWorkOrder($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class WorkOrderController
 
     public function updateWorkOrder($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $workOrderId = $request['params']['id'] ?? null;
@@ -61,9 +55,6 @@ class WorkOrderController
 
     public function getWorkOrders($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $status = $request['params']['status'] ?? null;
 
         $result = $this->service->getWorkOrders($user['tenant_id'], $user['branch_id'], $status);

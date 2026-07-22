@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class TipController
+class TipController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class TipController
 
     public function distributeTip($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class TipController
 
     public function getTipDistributions($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $date = $request['params']['date'] ?? null;
 
         $result = $this->service->getTipDistributions($user['tenant_id'], $user['branch_id'], $date);
@@ -53,9 +47,6 @@ class TipController
 
     public function getEmployeeTips($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $employeeId = $request['params']['employee_id'] ?? null;
         $startDate = $request['params']['start_date'] ?? null;
         $endDate = $request['params']['end_date'] ?? null;

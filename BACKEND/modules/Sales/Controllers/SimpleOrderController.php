@@ -7,7 +7,7 @@ if (!class_exists('OrderService')) {
     require_once __DIR__ . '/../Services/OrderService.php';
 }
 
-class SimpleOrderController
+class SimpleOrderController extends \App\Core\BaseController
 {
     private $service;
 

@@ -5,7 +5,7 @@ namespace App\Modules\VenueAdvanced\Controllers;
 use App\Core\Response;
 use App\Modules\VenueAdvanced\Services\VenueAdvancedService;
 
-class VenueAdvancedController
+class VenueAdvancedController extends BaseController
 {
     private $service;
 
@@ -19,7 +19,6 @@ class VenueAdvancedController
     public function getPricingRules($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $result = $this->service->getPricingRules($request['tenant_id'], $request['branch_id'] ?? null);
             return Response::success($result, 'Pricing rules retrieved');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -28,7 +27,6 @@ class VenueAdvancedController
     public function createPricingRule($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -42,7 +40,6 @@ class VenueAdvancedController
     public function calculatePrice($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $result = $this->service->calculateDynamicPrice(
                 $request['tenant_id'], $request['branch_id'] ?? null,
@@ -57,7 +54,6 @@ class VenueAdvancedController
     public function getMemberships($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $result = $this->service->getMemberships($request['tenant_id'], $request['branch_id'] ?? null, $request['query']['tier'] ?? null, $request['query']['status'] ?? null);
             return Response::success($result, 'Memberships retrieved');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -66,7 +62,6 @@ class VenueAdvancedController
     public function createMembership($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -78,7 +73,6 @@ class VenueAdvancedController
     public function earnPoints($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             $data = $request['body'];
             return Response::success($this->service->earnPoints($id, $data['points'] ?? 0, $data['order_id'] ?? null, $data['description'] ?? null), 'Points earned');
@@ -88,7 +82,6 @@ class VenueAdvancedController
     public function redeemPoints($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             $data = $request['body'];
             $result = $this->service->redeemPoints($id, $data['points'] ?? 0, $data['description'] ?? null);
@@ -102,7 +95,6 @@ class VenueAdvancedController
     public function scanTicket($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             if (empty($data['qr_code'])) return Response::error('qr_code is required', 400);
             $result = $this->service->scanTicket(
@@ -117,7 +109,6 @@ class VenueAdvancedController
     public function getScanStats($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $eventId = $request['params']['event_id'] ?? $request['query']['event_id'] ?? null;
             $result = $this->service->getScanStats($request['tenant_id'], $eventId);
             return Response::success($result, 'Scan stats retrieved');
@@ -129,7 +120,6 @@ class VenueAdvancedController
     public function getOccupancy($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $result = $this->service->getOccupancy($request['tenant_id'], $request['branch_id'] ?? null);
             return Response::success($result ?: [], 'Occupancy retrieved');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -138,7 +128,6 @@ class VenueAdvancedController
     public function recordEntry($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $count = (int)($request['body']['count'] ?? 1);
             $result = $this->service->recordEntry($request['tenant_id'], $request['branch_id'] ?? null, $count);
             return Response::success($result, 'Entry recorded');
@@ -148,7 +137,6 @@ class VenueAdvancedController
     public function recordExit($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $count = (int)($request['body']['count'] ?? 1);
             $result = $this->service->recordExit($request['tenant_id'], $request['branch_id'] ?? null, $count);
             return Response::success($result, 'Exit recorded');
@@ -158,7 +146,6 @@ class VenueAdvancedController
     public function setMaxCapacity($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $capacity = (int)($request['body']['max_capacity'] ?? 100);
             return Response::success($this->service->setMaxCapacity($request['tenant_id'], $request['branch_id'] ?? null, $capacity), 'Max capacity set');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -169,7 +156,6 @@ class VenueAdvancedController
     public function getRoomCalendar($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $roomId = $request['params']['room_id'] ?? $request['query']['room_id'] ?? null;
             $dateFrom = $request['query']['date_from'] ?? date('Y-m-d');
             $dateTo = $request['query']['date_to'] ?? date('Y-m-d', strtotime('+7 days'));
@@ -181,7 +167,6 @@ class VenueAdvancedController
     public function addCalendarBlock($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -197,7 +182,6 @@ class VenueAdvancedController
     public function calculateOvertime($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             if (empty($data['room_id']) || empty($data['booked_end_time']) || empty($data['actual_end_time'])) {
                 return Response::error('room_id, booked_end_time, and actual_end_time are required', 400);
@@ -215,7 +199,6 @@ class VenueAdvancedController
     public function waiveOvertime($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             return Response::success($this->service->waiveOvertime($id), 'Overtime waived');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -226,7 +209,6 @@ class VenueAdvancedController
     public function getHolds($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $result = $this->service->getHolds($request['tenant_id'], $request['branch_id'] ?? null, $request['query']['date'] ?? null);
             return Response::success($result, 'Holds retrieved');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -235,7 +217,6 @@ class VenueAdvancedController
     public function addHold($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -247,7 +228,6 @@ class VenueAdvancedController
     public function releaseHold($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             $rolledTo = $request['body']['rolled_to_date'] ?? null;
             return Response::success($this->service->releaseHold($id, $rolledTo), 'Hold released');
@@ -257,7 +237,6 @@ class VenueAdvancedController
     public function confirmHold($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             return Response::success($this->service->confirmHold($id), 'Hold confirmed');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }
@@ -268,7 +247,6 @@ class VenueAdvancedController
     public function getCompList($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $eventId = $request['params']['event_id'] ?? $request['query']['event_id'] ?? null;
             $listType = $request['query']['list_type'] ?? null;
             $result = $this->service->getCompList($request['tenant_id'], $eventId, $listType);
@@ -279,7 +257,6 @@ class VenueAdvancedController
     public function addCompGuest($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $data = $request['body'];
             $data['tenant_id'] = $request['tenant_id'];
             $data['branch_id'] = $request['branch_id'] ?? $data['branch_id'] ?? null;
@@ -294,7 +271,6 @@ class VenueAdvancedController
     public function checkInCompGuest($request)
     {
         try {
-            $request = (new \AuthMiddleware())->handle($request);
             $id = $request['params']['id'] ?? $request['id'] ?? null;
             return Response::success($this->service->checkInCompGuest($id), 'Comp guest checked in');
         } catch (\Exception $e) { return Response::error($e->getMessage(), 500); }

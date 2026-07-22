@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class TaxCalculationController
+class TaxCalculationController extends \App\Core\BaseController
 {
     private $service;
 
@@ -20,9 +20,6 @@ class TaxCalculationController
 
     public function calculateOrderTax($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $orderId = $request['params']['id'] ?? null;
@@ -43,9 +40,6 @@ class TaxCalculationController
 
     public function calculateMonthlyTax($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $year = $request['params']['year'] ?? date('Y');
@@ -62,9 +56,6 @@ class TaxCalculationController
 
     public function saveTaxRate($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -80,9 +71,6 @@ class TaxCalculationController
 
     public function getTaxRate($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getTaxRate($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {
@@ -94,9 +82,6 @@ class TaxCalculationController
 
     public function generateTaxReport($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $year = $request['params']['year'] ?? date('Y');

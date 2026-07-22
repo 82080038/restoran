@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class StockAdjustmentController
+class StockAdjustmentController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class StockAdjustmentController
 
     public function create($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class StockAdjustmentController
 
     public function getAll($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getAdjustments($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {
@@ -51,9 +45,6 @@ class StockAdjustmentController
 
     public function approve($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $adjustmentId = $request['params']['id'] ?? null;

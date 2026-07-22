@@ -7,7 +7,7 @@ if (!class_exists('EmergencyClosureService')) {
     require_once __DIR__ . '/../Services/EmergencyClosureService.php';
 }
 
-class EmergencyClosureController
+class EmergencyClosureController extends \App\Core\BaseController
 {
     private $service;
 
@@ -21,9 +21,6 @@ class EmergencyClosureController
      */
     public function create($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'EMERGENCY_MANAGE');
 
@@ -47,9 +44,6 @@ class EmergencyClosureController
      */
     public function getActive($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $closures = $this->service->getActiveClosures($user['tenant_id'], $user['branch_id']);
         Response::success($closures, 'Active closures retrieved successfully');
     }
@@ -59,9 +53,6 @@ class EmergencyClosureController
      */
     public function getAll($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $query = $request['query'] ?? [];
         $startDate = $query['start_date'] ?? null;
         $endDate = $query['end_date'] ?? null;
@@ -75,9 +66,6 @@ class EmergencyClosureController
      */
     public function update($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'EMERGENCY_MANAGE');
 
@@ -102,9 +90,6 @@ class EmergencyClosureController
      */
     public function close($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'EMERGENCY_MANAGE');
 
@@ -130,9 +115,6 @@ class EmergencyClosureController
      */
     public function updateNotification($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'EMERGENCY_MANAGE');
 
@@ -159,9 +141,6 @@ class EmergencyClosureController
      */
     public function checkStatus($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $query = $request['query'] ?? [];
         $dateTime = $query['datetime'] ?? null;
 

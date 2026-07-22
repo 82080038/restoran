@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../core/Middleware/AuthMiddleware.php';
  * Floor Plan Controller
  * Manages visual restaurant floor layout: floors, zones, tables, chairs
  */
-class FloorPlanController
+class FloorPlanController extends \App\Core\BaseController
 {
     private $db;
 
@@ -25,9 +25,8 @@ class FloorPlanController
     public function getFloors($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $branchId = $request['query']['branch_id'] ?? null;
 
             $sql = "SELECT * FROM floors WHERE tenant_id = ? AND LOWER(status) = 'active'";
@@ -51,10 +50,9 @@ class FloorPlanController
     public function createFloor($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $body = $request['body'] ?? [];
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             if (empty($body['floor_name'])) {
                 return Response::error('floor_name is required', 400);
@@ -91,10 +89,9 @@ class FloorPlanController
     public function updateFloor($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $floorId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
 
             $fields = [];
@@ -131,10 +128,9 @@ class FloorPlanController
     public function deleteFloor($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $floorId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             $stmt = $pdo->prepare("UPDATE floors SET status = 'inactive' WHERE floor_id = ? AND tenant_id = ?");
             $stmt->execute([$floorId, $tenantId]);
@@ -157,9 +153,8 @@ class FloorPlanController
     public function getZones($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $floorId = $request['query']['floor_id'] ?? null;
 
             $sql = "SELECT * FROM zones WHERE tenant_id = ?";
@@ -183,10 +178,9 @@ class FloorPlanController
     public function createZone($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $body = $request['body'] ?? [];
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             if (empty($body['zone_name']) || empty($body['floor_id'])) {
                 return Response::error('zone_name and floor_id are required', 400);
@@ -226,10 +220,9 @@ class FloorPlanController
     public function updateZone($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $zoneId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
 
             $fields = [];
@@ -266,10 +259,9 @@ class FloorPlanController
     public function deleteZone($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $zoneId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             $stmt = $pdo->prepare("UPDATE zones SET status = 'inactive' WHERE zone_id = ? AND tenant_id = ?");
             $stmt->execute([$zoneId, $tenantId]);
@@ -293,9 +285,8 @@ class FloorPlanController
     public function getTables($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $floorId = $request['query']['floor_id'] ?? null;
             $zoneId = $request['query']['zone_id'] ?? null;
             $branchId = $request['query']['branch_id'] ?? null;
@@ -341,10 +332,9 @@ class FloorPlanController
     public function createTable($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $body = $request['body'] ?? [];
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             if (empty($body['table_number'])) {
                 return Response::error('table_number is required', 400);
@@ -394,10 +384,9 @@ class FloorPlanController
     public function updateTable($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $tableId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
 
             $fields = [];
@@ -438,10 +427,9 @@ class FloorPlanController
     public function updateTablePosition($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $tableId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
 
             $stmt = $pdo->prepare("UPDATE tables SET pos_x = ?, pos_y = ?, table_rotation = ?, updated_at = NOW() WHERE table_id = ? AND tenant_id = ?");
@@ -465,10 +453,9 @@ class FloorPlanController
     public function deleteTable($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $tableId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             $stmt = $pdo->prepare("UPDATE tables SET deleted_at = NOW() WHERE table_id = ? AND tenant_id = ?");
             $stmt->execute([$tableId, $tenantId]);
@@ -489,9 +476,8 @@ class FloorPlanController
     public function getLayout($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $floorId = $request['query']['floor_id'] ?? null;
 
             if (!$floorId) {
@@ -550,9 +536,8 @@ class FloorPlanController
     public function saveLayout($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
             $floorId = $body['floor_id'] ?? 0;
 

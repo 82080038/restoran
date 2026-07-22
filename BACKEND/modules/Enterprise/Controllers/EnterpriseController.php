@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class EnterpriseController
+class EnterpriseController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class EnterpriseController
 
     public function createShiftSchedule($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class EnterpriseController
 
     public function createPerformanceEvaluation($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -55,9 +49,6 @@ class EnterpriseController
 
     public function recordCashFlow($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -73,9 +64,6 @@ class EnterpriseController
 
     public function createBudget($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -91,9 +79,6 @@ class EnterpriseController
 
     public function updateBudgetActuals($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -109,9 +94,6 @@ class EnterpriseController
 
     public function getShiftSchedules($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $date = $params['date'] ?? null;
 
@@ -126,9 +108,6 @@ class EnterpriseController
 
     public function getPerformanceEvaluations($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $employeeId = $params['employee_id'] ?? null;
 
@@ -143,9 +122,6 @@ class EnterpriseController
 
     public function getCashFlow($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $startDate = $params['start_date'] ?? null;
         $endDate = $params['end_date'] ?? null;
@@ -161,9 +137,6 @@ class EnterpriseController
 
     public function getBudgets($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $periodStart = $params['start_date'] ?? null;
         $periodEnd = $params['end_date'] ?? null;

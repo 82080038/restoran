@@ -7,7 +7,7 @@ if (!class_exists('OfflineStatusService')) {
 require_once __DIR__ . '/../../../bootstrap.php';
 
 
-class OfflineStatusController
+class OfflineStatusController extends \App\Core\BaseController
 {
     private $service;
 
@@ -18,9 +18,6 @@ class OfflineStatusController
 
     public function getStatus($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getOfflineStatus($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {

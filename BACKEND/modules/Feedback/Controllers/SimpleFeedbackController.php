@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../core/Middleware/AuthMiddleware.php';
  * Simple Feedback Controller (compatible with current router pattern)
  * Manages customer reviews, feedback, and ratings
  */
-class SimpleFeedbackController
+class SimpleFeedbackController extends \App\Core\BaseController
 {
     private $db;
 
@@ -24,9 +24,8 @@ class SimpleFeedbackController
     public function getReviews($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $status = $request['query']['status'] ?? null;
             $rating = $request['query']['rating'] ?? null;
             $source = $request['query']['source'] ?? null;
@@ -83,10 +82,9 @@ class SimpleFeedbackController
     public function getReview($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $reviewId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             $stmt = $pdo->prepare("
                 SELECT r.*, c.name AS customer_name, c.email AS customer_email
@@ -174,10 +172,9 @@ class SimpleFeedbackController
     public function updateReviewStatus($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $reviewId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
             $status = $body['status'] ?? '';
 
@@ -206,10 +203,9 @@ class SimpleFeedbackController
     public function respondToReview($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $reviewId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
             $responseText = $body['response_text'] ?? '';
 
@@ -230,7 +226,7 @@ class SimpleFeedbackController
                 VALUES (?, ?, ?, NOW())
                 ON DUPLICATE KEY UPDATE response_text = VALUES(response_text), responded_by = VALUES(responded_by), responded_at = NOW()
             ");
-            $stmt->execute([$reviewId, $responseText, $payload['user_id']]);
+            $stmt->execute([$reviewId, $responseText, $request['user_id']]);
 
             return Response::success([
                 'review_id' => (int)$reviewId,
@@ -248,9 +244,8 @@ class SimpleFeedbackController
     public function getFeedback($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $type = $request['query']['type'] ?? null;
             $status = $request['query']['status'] ?? null;
             $priority = $request['query']['priority'] ?? null;
@@ -329,10 +324,9 @@ class SimpleFeedbackController
     public function updateFeedbackStatus($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
             $feedbackId = $request['id'] ?? 0;
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
             $body = $request['body'] ?? [];
             $status = $body['status'] ?? '';
 
@@ -362,9 +356,8 @@ class SimpleFeedbackController
     public function getStatistics($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             // Review stats
             $stmt = $pdo->prepare("
@@ -435,9 +428,8 @@ class SimpleFeedbackController
     public function getReviewCategories($request)
     {
         try {
-            $payload = AuthMiddleware::handle($request);
             $pdo = $this->db->connect();
-            $tenantId = $payload['tenant_id'] ?? 1;
+            $tenantId = $request['tenant_id'] ?? 1;
 
             $stmt = $pdo->prepare("SELECT * FROM review_categories WHERE tenant_id = ? OR tenant_id IS NULL ORDER BY category_name");
             $stmt->execute([$tenantId]);

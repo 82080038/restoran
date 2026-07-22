@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class ProductModifierController
+class ProductModifierController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class ProductModifierController
 
     public function createGroup($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class ProductModifierController
 
     public function createModifier($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -55,9 +49,6 @@ class ProductModifierController
 
     public function assignToProduct($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -73,9 +64,6 @@ class ProductModifierController
 
     public function getGroups($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getModifierGroups($user['tenant_id']);
 
         if ($result['success']) {
@@ -87,9 +75,6 @@ class ProductModifierController
 
     public function getModifiersByGroup($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $groupId = $request['params']['id'] ?? null;
 
         $result = $this->service->getModifiersByGroup($groupId, $user['tenant_id']);
@@ -103,9 +88,6 @@ class ProductModifierController
 
     public function getProductModifiers($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $productId = $request['params']['id'] ?? null;
 
         $result = $this->service->getProductModifiers($productId, $user['tenant_id']);

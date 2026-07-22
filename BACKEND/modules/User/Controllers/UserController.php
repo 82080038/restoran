@@ -9,7 +9,7 @@ if (!class_exists('UserService')) {
 require_once __DIR__ . '/../../../bootstrap.php';
 
 
-class UserController
+class UserController extends \App\Core\BaseController
 {
     private $userService;
 

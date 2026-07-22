@@ -29,7 +29,9 @@ class DeviceRegistration extends BaseModel
     public function findById($id, $restaurantId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE id = ? AND restaurant_id = ?";
-        $result = $this->db->query($sql, [$id, $restaurantId])->fetch();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$id, $restaurantId]);
+        $result = $stmt->fetch();
         return $result ?: null;
     }
 
@@ -39,7 +41,9 @@ class DeviceRegistration extends BaseModel
     public function findByDeviceId($deviceId, $restaurantId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE device_id = ? AND restaurant_id = ?";
-        $result = $this->db->query($sql, [$deviceId, $restaurantId])->fetch();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$deviceId, $restaurantId]);
+        $result = $stmt->fetch();
         return $result ?: null;
     }
 
@@ -49,7 +53,10 @@ class DeviceRegistration extends BaseModel
     public function getByRestaurant($restaurantId)
     {
         $sql = "SELECT * FROM {$this->table} WHERE restaurant_id = ? ORDER BY last_seen_at DESC";
-        return $this->db->query($sql, [$restaurantId])->fetchAll();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$restaurantId]);
+        return $stmt->fetchAll();
+        return $stmt;
     }
 
     /**
@@ -59,7 +66,9 @@ class DeviceRegistration extends BaseModel
     {
         $sql = "UPDATE {$this->table} SET last_seen_at = NOW(), updated_at = NOW() 
                 WHERE device_id = ? AND restaurant_id = ?";
-        return $this->db->query($sql, [$deviceId, $restaurantId]);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$deviceId, $restaurantId]);
+        return $stmt;
     }
 
     /**
@@ -70,6 +79,9 @@ class DeviceRegistration extends BaseModel
         $sql = "SELECT * FROM {$this->table} 
                 WHERE restaurant_id = ? AND is_active = TRUE 
                 ORDER BY last_seen_at DESC";
-        return $this->db->query($sql, [$restaurantId])->fetchAll();
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([$restaurantId]);
+        return $stmt->fetchAll();
+        return $stmt;
     }
 }

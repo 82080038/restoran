@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class AdvancedAIController
+class AdvancedAIController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class AdvancedAIController
 
     public function analyzeMenu($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $date = $params['date'] ?? date('Y-m-d');
 
@@ -36,9 +33,6 @@ class AdvancedAIController
 
     public function optimizeStaff($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $date = $params['date'] ?? date('Y-m-d');
 
@@ -53,9 +47,6 @@ class AdvancedAIController
 
     public function detectFraud($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $date = $params['date'] ?? date('Y-m-d');
 
@@ -70,9 +61,6 @@ class AdvancedAIController
 
     public function generateInsights($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $date = $params['date'] ?? date('Y-m-d');
 
@@ -87,9 +75,6 @@ class AdvancedAIController
 
     public function getMenuAnalysis($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $date = $params['date'] ?? date('Y-m-d');
 
@@ -100,9 +85,6 @@ class AdvancedAIController
 
     public function getFraudAlerts($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $status = $params['status'] ?? null;
 
@@ -113,9 +95,6 @@ class AdvancedAIController
 
     public function getExecutiveInsights($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $status = $params['status'] ?? null;
 

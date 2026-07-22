@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class PaymentManagementController
+class PaymentManagementController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class PaymentManagementController
 
     public function createCreditNote($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class PaymentManagementController
 
     public function createVoucher($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -55,9 +49,6 @@ class PaymentManagementController
 
     public function applyVoucher($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $data = $request['body'] ?? [];
         $voucherCode = $data['voucher_code'] ?? null;
         $orderAmount = $data['order_amount'] ?? 0;
@@ -73,9 +64,6 @@ class PaymentManagementController
 
     public function openCashDrawer($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $drawerId = $request['id'] ?? $request['params']['id'] ?? null;
@@ -92,9 +80,6 @@ class PaymentManagementController
 
     public function closeCashDrawer($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $drawerId = $request['id'] ?? $request['params']['id'] ?? null;

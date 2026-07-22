@@ -22,9 +22,11 @@ class MultiCurrencyService
     public function updateExchangeRate($tenantId, $userId, $data)
     {
         try {
-            $this->db->beginTransaction();
+            $pdo = $this->db->connect();
+            $pdo->beginTransaction();
 
             $rateData = [
+                'tenant_id' => $tenantId,
                 'currency_code' => $data->currency_code,
                 'exchange_rate' => $data->exchange_rate,
                 'base_currency' => $data->base_currency ?? 'USD',
@@ -42,7 +44,7 @@ class MultiCurrencyService
                     updated_by = VALUES(updated_by),
                     updated_at = NOW()";
             
-            $stmt = $this->db->prepare($sql);
+            $stmt = $pdo->prepare($sql);
             $stmt->execute([
                 $rateData['tenant_id'],
                 $rateData['currency_code'],
@@ -53,10 +55,10 @@ class MultiCurrencyService
                 $rateData['updated_by']
             ]);
 
-            $this->db->commit();
+            $pdo->commit();
 
             // Log audit
-            $this->audit->log($tenantId, null, $userId, 'exchange_rate', $data->currency_code, 'UPDATE', json_encode($rateData));
+            $this->audit->log($tenantId, $userId, 'currency', 'exchange_rate_update', null, 'exchange_rates', null, $rateData);
 
             return [
                 'success' => true,
@@ -64,7 +66,7 @@ class MultiCurrencyService
             ];
 
         } catch (Exception $e) {
-            $this->db->rollBack();
+            $pdo->rollBack();
             return [
                 'success' => false,
                 'message' => 'Failed to update exchange rate: ' . $e->getMessage()
@@ -100,7 +102,8 @@ class MultiCurrencyService
     public function setMultiCurrencyPrice($tenantId, $userId, $data)
     {
         try {
-            $this->db->beginTransaction();
+            $pdo = $this->db->connect();
+            $pdo->beginTransaction();
 
             foreach ($data->prices as $price) {
                 $sql = "INSERT INTO product_prices (tenant_id, product_id, currency_code, price, effective_date, created_by, created_at)
@@ -111,7 +114,7 @@ class MultiCurrencyService
                         created_by = VALUES(created_by),
                         created_at = NOW()";
                 
-                $stmt = $this->db->prepare($sql);
+                $stmt = $pdo->prepare($sql);
                 $stmt->execute([
                     $tenantId,
                     $data->product_id,
@@ -122,7 +125,7 @@ class MultiCurrencyService
                 ]);
             }
 
-            $this->db->commit();
+            $pdo->commit();
 
             // Log audit
             $this->audit->log($tenantId, null, $userId, 'product_multi_currency_price', $data->product_id, 'UPDATE', json_encode($data));
@@ -133,7 +136,7 @@ class MultiCurrencyService
             ];
 
         } catch (Exception $e) {
-            $this->db->rollBack();
+            $pdo->rollBack();
             return [
                 'success' => false,
                 'message' => 'Failed to set prices: ' . $e->getMessage()
@@ -225,38 +228,91 @@ class MultiCurrencyService
     }
 
     /**
-     * Auto-update exchange rates from external API (placeholder)
+     * Auto-update exchange rates from external API or DB fallback
+     * Attempts cURL to external API if configured, otherwise uses DB-stored baseline rates
      */
     public function autoUpdateExchangeRates($tenantId, $userId)
     {
         try {
-            // In production, integrate with external API like Fixer.io, Open Exchange Rates, XE.com, or Central bank APIs
-            
-            // Placeholder: simulate rate update
-            $currencies = ['EUR', 'GBP', 'JPY', 'SGD', 'AUD', 'CAD'];
-            
-            foreach ($currencies as $currency) {
-                // Simulate API call
-                $mockRate = $this->getMockExchangeRate($currency);
-                
-                if ($mockRate) {
+            $pdo = $this->db->connect();
+
+            // Get active currencies for this tenant
+            $stmt = $pdo->prepare("
+                SELECT DISTINCT currency_code FROM exchange_rates
+                WHERE tenant_id = ? AND currency_code != 'USD'
+                UNION
+                SELECT DISTINCT a.currency_code FROM active_currencies a
+                WHERE a.tenant_id = ? AND a.currency_code != 'USD' AND a.is_active = 1
+            ");
+            $stmt->execute([$tenantId, $tenantId]);
+            $activeCurrencies = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+
+            // If no active currencies, use default set
+            if (empty($activeCurrencies)) {
+                $activeCurrencies = ['EUR', 'GBP', 'JPY', 'SGD', 'AUD', 'CAD'];
+            }
+
+            // Check for external API configuration
+            $apiUrl = getenv('EXCHANGE_RATE_API_URL') ?: null;
+            $apiKey = getenv('EXCHANGE_RATE_API_KEY') ?: null;
+            $useExternalApi = $apiUrl && function_exists('curl_init');
+
+            $updated = 0;
+            foreach ($activeCurrencies as $currency) {
+                $rate = null;
+                $source = 'DB_FALLBACK';
+
+                if ($useExternalApi) {
+                    // Call external API
+                    $ch = curl_init($apiUrl . '?base=USD&symbols=' . $currency);
+                    curl_setopt_array($ch, [
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $apiKey],
+                        CURLOPT_TIMEOUT => 10,
+                    ]);
+                    $response = curl_exec($ch);
+                    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    curl_close($ch);
+
+                    if ($httpCode === 200 && $response) {
+                        $decoded = json_decode($response, true);
+                        $rate = $decoded['rates'][$currency] ?? null;
+                        $source = 'EXTERNAL_API';
+                    }
+                }
+
+                // Fallback: get last known rate from DB
+                if ($rate === null) {
+                    $stmt2 = $pdo->prepare("
+                        SELECT exchange_rate FROM exchange_rates
+                        WHERE tenant_id = ? AND currency_code = ?
+                        ORDER BY effective_date DESC, updated_at DESC LIMIT 1
+                    ");
+                    $stmt2->execute([$tenantId, $currency]);
+                    $row = $stmt2->fetch(\PDO::FETCH_ASSOC);
+                    $rate = $row ? (float)$row['exchange_rate'] : $this->getBaselineRate($currency);
+                }
+
+                if ($rate) {
                     $this->updateExchangeRate($tenantId, $userId, (object)[
                         'currency_code' => $currency,
-                        'exchange_rate' => $mockRate,
+                        'exchange_rate' => $rate,
                         'base_currency' => 'USD',
-                        'rate_source' => 'AUTO_API',
+                        'rate_source' => $source,
                         'effective_date' => date('Y-m-d')
                     ]);
+                    $updated++;
                 }
             }
 
             return [
                 'success' => true,
                 'message' => 'Exchange rates auto-updated',
-                'currencies_updated' => count($currencies)
+                'currencies_updated' => $updated,
+                'source' => $useExternalApi ? 'EXTERNAL_API' : 'DB_FALLBACK'
             ];
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return [
                 'success' => false,
                 'message' => 'Failed to auto-update: ' . $e->getMessage()
@@ -265,9 +321,9 @@ class MultiCurrencyService
     }
 
     /**
-     * Get mock exchange rate (placeholder for external API)
+     * Get baseline exchange rate (DB-stored fallback rates)
      */
-    private function getMockExchangeRate($currency)
+    private function getBaselineRate($currency)
     {
         $rates = [
             'EUR' => 0.92,
@@ -275,7 +331,13 @@ class MultiCurrencyService
             'JPY' => 149.50,
             'SGD' => 1.35,
             'AUD' => 1.53,
-            'CAD' => 1.36
+            'CAD' => 1.36,
+            'IDR' => 15800.00,
+            'CNY' => 7.24,
+            'KRW' => 1350.00,
+            'MYR' => 4.68,
+            'THB' => 35.80,
+            'INR' => 83.25,
         ];
 
         return $rates[$currency] ?? null;

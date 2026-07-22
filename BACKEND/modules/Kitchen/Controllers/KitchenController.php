@@ -9,7 +9,7 @@ if (!class_exists('KitchenService')) {
 require_once __DIR__ . '/../../../bootstrap.php';
 
 
-class KitchenController
+class KitchenController extends \App\Core\BaseController
 {
     private $kitchenService;
 

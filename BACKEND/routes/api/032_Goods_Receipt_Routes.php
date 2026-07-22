@@ -1,13 +1,13 @@
 <?php
 
 // Goods Receipt Routes
-$router->addRoute('POST', '/api/v1/inventory/goods-receipts', function($request) use ($goodsReceiptController) {
+$router->addRoute('POST', '/api/v1/inventory/goods-receipts', withAuth(function($request) use ($goodsReceiptController) {
     return $goodsReceiptController->create($request);
-});
-$router->addRoute('GET', '/api/v1/inventory/goods-receipts', function($request) use ($goodsReceiptController) {
+}, $authMiddleware));
+$router->addRoute('GET', '/api/v1/inventory/goods-receipts', withAuth(function($request) use ($goodsReceiptController) {
     return $goodsReceiptController->getAll($request);
-});
-$router->addRoute('POST', '/api/v1/inventory/goods-receipts/{id}/complete', function($request) use ($goodsReceiptController) {
+}, $authMiddleware));
+$router->addRoute('POST', '/api/v1/inventory/goods-receipts/{id}/complete', withAuth(function($request) use ($goodsReceiptController) {
     return $goodsReceiptController->complete($request);
-});
+}, $authMiddleware));
 

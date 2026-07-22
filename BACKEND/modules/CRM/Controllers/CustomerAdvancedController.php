@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class CustomerAdvancedController
+class CustomerAdvancedController extends \App\Core\BaseController
 {
     private $service;
 
@@ -20,9 +20,6 @@ class CustomerAdvancedController
 
     public function addFavoriteProduct($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $customerId = $request['params']['customer_id'] ?? null;
@@ -44,9 +41,6 @@ class CustomerAdvancedController
 
     public function getCustomerFavorites($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $customerId = $request['params']['customer_id'] ?? null;
 
         if (!$customerId) {
@@ -65,9 +59,6 @@ class CustomerAdvancedController
 
     public function getCustomerHabitAnalysis($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $customerId = $request['params']['customer_id'] ?? null;
 
         if (!$customerId) {
@@ -86,9 +77,6 @@ class CustomerAdvancedController
 
     public function createBirthdayPromotion($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -104,9 +92,6 @@ class CustomerAdvancedController
 
     public function getBirthdayPromotions($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $customerId = $request['params']['customer_id'] ?? null;
 
         $result = $this->service->getBirthdayPromotions($user['tenant_id'], $user['branch_id'], $customerId);
@@ -120,9 +105,6 @@ class CustomerAdvancedController
 
     public function useBirthdayPromotion($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $promotionId = $request['params']['id'] ?? null;

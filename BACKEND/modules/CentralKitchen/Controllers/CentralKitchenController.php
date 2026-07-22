@@ -5,7 +5,7 @@ namespace App\Modules\CentralKitchen\Controllers;
 use App\Modules\CentralKitchen\Services\CentralKitchenService;
 use App\Core\Response;
 
-class CentralKitchenController
+class CentralKitchenController extends BaseController
 {
     private $service;
 

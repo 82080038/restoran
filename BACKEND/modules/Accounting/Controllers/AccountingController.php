@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class AccountingController
+class AccountingController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class AccountingController
 
     public function createJournalEntry($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
         // $permissionMiddleware->check($user['user_id'], 'ACCOUNTING_MANAGE');
 
@@ -38,9 +35,6 @@ class AccountingController
 
     public function getTrialBalance($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $asOfDate = $params['date'] ?? date('Y-m-d');
 
@@ -55,9 +49,6 @@ class AccountingController
 
     public function getBalanceSheet($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $asOfDate = $params['date'] ?? date('Y-m-d');
 
@@ -72,9 +63,6 @@ class AccountingController
 
     public function getProfitLoss($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $params = $request['params'] ?? [];
         $periodStart = $params['start_date'] ?? date('Y-m-01');
         $periodEnd = $params['end_date'] ?? date('Y-m-t');

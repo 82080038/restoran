@@ -7,7 +7,7 @@ if (!class_exists('OrderService')) {
     require_once __DIR__ . '/../Services/OrderService.php';
 }
 
-class OrderController
+class OrderController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class OrderController
     public function create(array $request = [])
     {
         try {
-            $authMiddleware = new AuthMiddleware();
-            $user = $authMiddleware->authenticate();
-
             $input = $request['body'] ?? json_decode(file_get_contents('php://input'), true);
 
             if (!$input) {
@@ -75,9 +72,6 @@ class OrderController
 
     public function get($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $orderId = $request['id'] ?? $request['params']['id'] ?? null;
 
         $result = $this->service->getOrder($orderId, $user['tenant_id']);
@@ -91,9 +85,6 @@ class OrderController
 
     public function update($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $orderId = $request['id'] ?? $request['params']['id'] ?? null;
@@ -110,9 +101,6 @@ class OrderController
 
     public function close($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $orderId = $request['id'] ?? $request['params']['id'] ?? null;
@@ -128,9 +116,6 @@ class OrderController
 
     public function hold($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $orderId = $request['id'] ?? $request['params']['id'] ?? null;
@@ -148,9 +133,6 @@ class OrderController
 
     public function recall($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $orderId = $request['id'] ?? $request['params']['id'] ?? null;
@@ -166,9 +148,6 @@ class OrderController
 
     public function setPriority($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $orderId = $request['id'] ?? $request['params']['id'] ?? null;
@@ -186,9 +165,6 @@ class OrderController
 
     public function splitBill($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $orderId = $request['id'] ?? $request['params']['id'] ?? null;
@@ -208,9 +184,6 @@ class OrderController
 
     public function addPayment($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $orderId = $request['id'] ?? $request['params']['id'] ?? null;

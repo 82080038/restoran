@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class EmployeeController
+class EmployeeController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class EmployeeController
 
     public function create($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -37,9 +34,6 @@ class EmployeeController
 
     public function recordAttendance($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $employeeId = $request['params']['id'] ?? null;
@@ -56,9 +50,6 @@ class EmployeeController
 
     public function calculatePayroll($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $data = $request['body'] ?? [];
@@ -74,9 +65,6 @@ class EmployeeController
 
     public function getAll($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $result = $this->service->getEmployees($user['tenant_id'], $user['branch_id']);
 
         if ($result['success']) {

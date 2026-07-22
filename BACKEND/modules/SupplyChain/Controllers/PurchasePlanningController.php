@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 
 
 
-class PurchasePlanningController
+class PurchasePlanningController extends \App\Core\BaseController
 {
     private $service;
 
@@ -19,9 +19,6 @@ class PurchasePlanningController
 
     public function generatePurchasePlan($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $planningDate = $request['body']['planning_date'] ?? date('Y-m-d');
@@ -37,9 +34,6 @@ class PurchasePlanningController
 
     public function approvePurchasePlan($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         // $permissionMiddleware = new PermissionMiddleware();
 
         $planId = $request['params']['id'] ?? null;
@@ -60,9 +54,6 @@ class PurchasePlanningController
 
     public function getPurchasePlans($request)
     {
-        $authMiddleware = new AuthMiddleware();
-        $user = $authMiddleware->authenticate();
-
         $status = $request['params']['status'] ?? null;
 
         $result = $this->service->getPurchasePlans($user['tenant_id'], $user['branch_id'], $status);
